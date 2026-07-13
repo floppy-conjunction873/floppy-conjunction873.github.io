@@ -307,7 +307,7 @@ class="article article-type-post"
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>解决使用Jupyter Notebook打开ipynb文件时报错’500 : Internal Server Error’的问题，亲测可用。</p>
+        <p>解决使用Jupyter Notebook打开ipynb文件时报错&#39;500 : Internal Server Error&#39;的问题，亲测可用。</p>
         
     </div>
     </div>
@@ -741,6 +741,21 @@ class="article article-type-post"
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

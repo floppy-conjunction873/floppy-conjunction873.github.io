@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidOWDZVaTyjmPlQK89xkhrE" class="article article-type-post" itemscope
+    <article id="post-cuiduh17H_KRNVgFLoa1ZLpwi" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,20 +210,11 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>这篇文章介绍了Python-Cython-C三种语言的简单耦合，以Cython为中间接口，实现Python数据传到C语言的后端执行相关计算。这就相当于可以在Python中调用C语言中的指针功能来进行跨维度的数组运算，至于性能依然存在优化空间，这里仅仅做一个简单的功能演示。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18320419/cython-osc">博客</a>中，我们介绍了使用Cython加速谐振势计算的方法。有了Cython对于计算过程更加灵活的配置（本质上是时间占用和空间占用的一种均衡），及其接近于C的性能，并且还最大程度上的保留了Python的编程语法特点，因此Cython确实是值得Python编程爱好者学习的一种加速手段。这里我们要介绍的是Cython与C语言相结合的一种方案，可以直接在pyx文件中加载C语言代码。</p>
-<h1 id="测试场景"><a href="#测试场景" class="headerlink" title="测试场景"></a>测试场景</h1><p>我们测一个非常简单的场景————归约求和：<br>$$<br>S&#x3D;\sum_{i,j}A_{i,j}<br>$$<br>当然了，像这种基本运算，在Numpy中已经优化的非常极致了。所以，这里我们并不是要展现Cython在性能上的优势，而是Cython对于C语言和Python语言两者的兼容性。首先我们用C语言实现一个归约求和的简单函数：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// array_sum.c</span></span><br><span class="line"><span class="type">double</span> <span class="title function_">reduce_sum</span><span class="params">(<span class="type">int</span> arr_len, <span class="type">double</span>* arr)</span>&#123;</span><br><span class="line">    <span class="type">double</span> s=<span class="number">0.0</span>;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;arr_len; i++)&#123;</span><br><span class="line">        s = s + *arr;</span><br><span class="line">        arr++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里我们使用了一个指针数组，然后用for循环进行遍历计算。在Cython中，我们可以使用extern来直接加载C语言中的这个函数：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test_pointer.pyx</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">cimport numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">cdef extern <span class="keyword">from</span> <span class="string">&quot;array_sum.c&quot;</span>:</span><br><span class="line">    double reduce_sum(<span class="built_in">int</span> arr_len, double* arr)</span><br><span class="line"></span><br><span class="line">cpdef rsum(<span class="built_in">int</span> arr_len, np.ndarray[np.float64_t, ndim=<span class="number">2</span>, mode=<span class="string">&quot;c&quot;</span>] arr):</span><br><span class="line">    cdef:</span><br><span class="line">        double* arr_ptr = &lt;double *&gt;arr.data</span><br><span class="line">        double res = <span class="number">0.0</span></span><br><span class="line">    res = reduce_sum(arr_len, arr_ptr)</span><br><span class="line">    <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
-<p>这里加载了C语言中的<code>reduce_sum</code>函数，然后以Cython中定义的<code>rsum</code>函数作为一个接口，将传入的numpy数组的内存地址作为指针传给C语言中写好的函数。然后需要对这个pyx文件进行编译构建：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cythonize -i test_pointer.pyx</span><br></pre></td></tr></table></figure>
-<p>编译完成后会在当前路径下生成<code>*.c</code>文件和<code>*.so</code>文件：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ ll | grep test_pointer  </span><br><span class="line">-rw-r--r-- 1 root root  374450 Jul 25 14:52 test_pointer.c</span><br><span class="line">-rwxr-xr-x 1 root root  234848 Jul 25 14:52 test_pointer.cpython-37m-x86_64-linux-gnu.so*</span><br><span class="line">-rw-r--r-- 1 root root     347 Jul 25 15:02 test_pointer.pyx</span><br></pre></td></tr></table></figure>
-
-<h1 id="调用Cython函数"><a href="#调用Cython函数" class="headerlink" title="调用Cython函数"></a>调用Cython函数</h1><p>我们可以开启一个Ipython，或者直接在Python脚本文件中调用Cython函数：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">from</span> test_pointer <span class="keyword">import</span> rsum</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: num=<span class="number">10000</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: x=np.random.random((num,num))</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: x.shape</span><br><span class="line">Out[<span class="number">5</span>]: (<span class="number">10000</span>, <span class="number">10000</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: %timeit s=np.<span class="built_in">sum</span>(x)</span><br><span class="line"><span class="number">38.3</span> ms ± <span class="number">254</span> µs per loop (mean ± std. dev. of <span class="number">7</span> runs, <span class="number">10</span> loops each)</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: %timeit rs=rsum(num*num,x)</span><br><span class="line"><span class="number">51.7</span> ms ± <span class="number">302</span> µs per loop (mean ± std. dev. of <span class="number">7</span> runs, <span class="number">10</span> loops each)</span><br><span class="line"></span><br><span class="line">In [<span class="number">15</span>]: np.<span class="built_in">sum</span>(x)</span><br><span class="line">Out[<span class="number">15</span>]: <span class="number">50003980.32921535</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">17</span>]: rsum(num*num, x)</span><br><span class="line">Out[<span class="number">17</span>]: <span class="number">50003980.32921728</span></span><br></pre></td></tr></table></figure>
-<p>经过测试，确实可以在Python中调用这个C语言实现的函数。当然，前面也提到过，Numpy对于这个简单的求和计算已经优化的非常好了，所以这里没有体现出性能上的优势，这里更多的是演示一个方法。</p>
+<h1 id="测试场景"><a href="#测试场景" class="headerlink" title="测试场景"></a>测试场景</h1><p>我们测一个非常简单的场景————归约求和：</p>
+<script type="math/tex; mode=display">
+S=\sum_{i,j}A_{i,j}</script><p>当然了，像这种基本运算，在Numpy中已经优化的非常极致了。所以，这里我们并不是要展现Cython在性能上的优势，而是Cython对于C语言和Python语言两者的兼容性。首先我们用C语言实现一个归约求和的简单函数：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// array_sum.c</span></span><br><span class="line"><span class="type">double</span> <span class="title function_">reduce_sum</span><span class="params">(<span class="type">int</span> arr_len, <span class="type">double</span>* arr)</span>&#123;</span><br><span class="line">    <span class="type">double</span> s=<span class="number">0.0</span>;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;arr_len; i++)&#123;</span><br><span class="line">        s = s + *arr;</span><br><span class="line">        arr++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>这里我们使用了一个指针数组，然后用for循环进行遍历计算。在Cython中，我们可以使用extern来直接加载C语言中的这个函数：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test_pointer.pyx</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">cimport numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">cdef extern <span class="keyword">from</span> <span class="string">&quot;array_sum.c&quot;</span>:</span><br><span class="line">    double reduce_sum(<span class="built_in">int</span> arr_len, double* arr)</span><br><span class="line"></span><br><span class="line">cpdef rsum(<span class="built_in">int</span> arr_len, np.ndarray[np.float64_t, ndim=<span class="number">2</span>, mode=<span class="string">&quot;c&quot;</span>] arr):</span><br><span class="line">    cdef:</span><br><span class="line">        double* arr_ptr = &lt;double *&gt;arr.data</span><br><span class="line">        double res = <span class="number">0.0</span></span><br><span class="line">    res = reduce_sum(arr_len, arr_ptr)</span><br><span class="line">    <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure><br>这里加载了C语言中的<code>reduce_sum</code>函数，然后以Cython中定义的<code>rsum</code>函数作为一个接口，将传入的numpy数组的内存地址作为指针传给C语言中写好的函数。然后需要对这个pyx文件进行编译构建：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cythonize -i test_pointer.pyx</span><br></pre></td></tr></table></figure><br>编译完成后会在当前路径下生成<code>*.c</code>文件和<code>*.so</code>文件：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ ll | grep test_pointer  </span><br><span class="line">-rw-r--r-- 1 root root  374450 Jul 25 14:52 test_pointer.c</span><br><span class="line">-rwxr-xr-x 1 root root  234848 Jul 25 14:52 test_pointer.cpython-37m-x86_64-linux-gnu.so*</span><br><span class="line">-rw-r--r-- 1 root root     347 Jul 25 15:02 test_pointer.pyx</span><br></pre></td></tr></table></figure></p>
+<h1 id="调用Cython函数"><a href="#调用Cython函数" class="headerlink" title="调用Cython函数"></a>调用Cython函数</h1><p>我们可以开启一个Ipython，或者直接在Python脚本文件中调用Cython函数：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">from</span> test_pointer <span class="keyword">import</span> rsum</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: num=<span class="number">10000</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: x=np.random.random((num,num))</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: x.shape</span><br><span class="line">Out[<span class="number">5</span>]: (<span class="number">10000</span>, <span class="number">10000</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: %timeit s=np.<span class="built_in">sum</span>(x)</span><br><span class="line"><span class="number">38.3</span> ms ± <span class="number">254</span> µs per loop (mean ± std. dev. of <span class="number">7</span> runs, <span class="number">10</span> loops each)</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: %timeit rs=rsum(num*num,x)</span><br><span class="line"><span class="number">51.7</span> ms ± <span class="number">302</span> µs per loop (mean ± std. dev. of <span class="number">7</span> runs, <span class="number">10</span> loops each)</span><br><span class="line"></span><br><span class="line">In [<span class="number">15</span>]: np.<span class="built_in">sum</span>(x)</span><br><span class="line">Out[<span class="number">15</span>]: <span class="number">50003980.32921535</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">17</span>]: rsum(num*num, x)</span><br><span class="line">Out[<span class="number">17</span>]: <span class="number">50003980.32921728</span></span><br></pre></td></tr></table></figure><br>经过测试，确实可以在Python中调用这个C语言实现的函数。当然，前面也提到过，Numpy对于这个简单的求和计算已经优化的非常好了，所以这里没有体现出性能上的优势，这里更多的是演示一个方法。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>这篇文章介绍了Python-Cython-C三种语言的简单耦合，以Cython为中间接口，实现Python数据传到C语言的后端执行相关计算。这就相当于可以在Python中调用C语言中的指针功能来进行跨维度的数组运算，至于性能依然存在优化空间，这里仅仅做一个简单的功能演示。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cython-c.html">https://www.cnblogs.com/dechinphy/p/cython-c.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -243,7 +234,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -254,7 +245,7 @@
 <nav class="article-nav">
   
     <a href="/2024/07/29/h5py%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E4%B9%8B%E2%80%94%E2%80%94flush%E5%92%8Cupdate/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           h5py文件写入之——flush和update
@@ -264,7 +255,7 @@
   
   
     <a href="/2024/07/24/%E4%BD%BF%E7%94%A8Cython%E5%8A%A0%E9%80%9F%E8%B0%90%E6%8C%AF%E5%8A%BF%E7%9A%84%E8%AE%A1%E7%AE%97/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">使用Cython加速谐振势的计算</div>
     </a>
   
@@ -272,7 +263,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Cython与C函数的结合 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F07%2F25%2FCython%25E4%25B8%258EC%25E5%2587%25BD%25E6%2595%25B0%25E7%259A%2584%25E7%25BB%2593%25E5%2590%2588%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -427,6 +418,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

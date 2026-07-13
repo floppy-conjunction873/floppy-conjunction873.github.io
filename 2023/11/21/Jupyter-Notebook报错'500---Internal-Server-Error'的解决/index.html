@@ -8,7 +8,7 @@
     
     <title>Jupyter Notebook报错&#39;500 : Internal Server Error&#39;的解决方法 | Hexo</title>
 
-    <meta name="description" content="&lt;p&gt;解决使用Jupyter Notebook打开ipynb文件时报错’500 : Internal Server Error’的问题，亲测可用。&lt;/p&gt;">
+    <meta name="description" content="&lt;p&gt;解决使用Jupyter Notebook打开ipynb文件时报错&amp;#39;500 : Internal Server Error&amp;#39;的问题，亲测可用。&lt;/p&gt;">
     <meta name="keywords" content="">
 
     
@@ -16,17 +16,17 @@
     <meta property="og:locale" content="en" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content= "Jupyter Notebook报错&#39;500 : Internal Server Error&#39;的解决方法 | Hexo"  />
-    <meta property="og:description" content= "&lt;p&gt;解决使用Jupyter Notebook打开ipynb文件时报错’500 : Internal Server Error’的问题，亲测可用。&lt;/p&gt;" />
+    <meta property="og:description" content= "&lt;p&gt;解决使用Jupyter Notebook打开ipynb文件时报错&amp;#39;500 : Internal Server Error&amp;#39;的问题，亲测可用。&lt;/p&gt;" />
     <meta property="og:url" content="http://dechinphy.github.io/2023/11/21/Jupyter-Notebook%E6%8A%A5%E9%94%99&#39;500---Internal-Server-Error&#39;%E7%9A%84%E8%A7%A3%E5%86%B3/index.html" />
     <meta property="og:site_name" content="" />
     <meta property="article:author" content="John Doe" />
     <meta property="article:publisher" content="" />
-    <meta property="og:description" content="&lt;p&gt;解决使用Jupyter Notebook打开ipynb文件时报错’500 : Internal Server Error’的问题，亲测可用。&lt;/p&gt;" />
+    <meta property="og:description" content="&lt;p&gt;解决使用Jupyter Notebook打开ipynb文件时报错&amp;#39;500 : Internal Server Error&amp;#39;的问题，亲测可用。&lt;/p&gt;" />
     <meta name="twitter:title" content="Jupyter Notebook报错&#39;500 : Internal Server Error&#39;的解决方法 | Hexo"/>
-    <meta name="twitter:description" content="&lt;p&gt;解决使用Jupyter Notebook打开ipynb文件时报错’500 : Internal Server Error’的问题，亲测可用。&lt;/p&gt;"/>
+    <meta name="twitter:description" content="&lt;p&gt;解决使用Jupyter Notebook打开ipynb文件时报错&amp;#39;500 : Internal Server Error&amp;#39;的问题，亲测可用。&lt;/p&gt;"/>
     <script type="application/ld+json">
         {
-            "description": "&lt;p&gt;解决使用Jupyter Notebook打开ipynb文件时报错’500 : Internal Server Error’的问题，亲测可用。&lt;/p&gt;",
+            "description": "&lt;p&gt;解决使用Jupyter Notebook打开ipynb文件时报错&amp;#39;500 : Internal Server Error&amp;#39;的问题，亲测可用。&lt;/p&gt;",
             "author": { "@type": "Person", "name": "John Doe" },
             "@type": "BlogPosting",
             "url": "http://dechinphy.github.io/2023/11/21/Jupyter-Notebook%E6%8A%A5%E9%94%99&#39;500---Internal-Server-Error&#39;%E7%9A%84%E8%A7%A3%E5%86%B3/index.html",
@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuideu5hvYfNC3yzYn07orHAm" class="article article-type-post" itemscope
+    <article id="post-cuidqMKZ1d1AKEBCf5tiDwzs5" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,20 +201,17 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
         </div>
 
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
-            <p>解决使用Jupyter Notebook打开ipynb文件时报错’500 : Internal Server Error’的问题，亲测可用。</p>
+            <p>解决使用Jupyter Notebook打开ipynb文件时报错&#39;500 : Internal Server Error&#39;的问题，亲测可用。</p>
 <span id="more"></span>
-
 <h1 id="问题根因"><a href="#问题根因" class="headerlink" title="问题根因"></a>问题根因</h1><p>Jupyter相关的软件包版本匹配存在问题，或者历史上安装过Jupyter相关的配套软件但是有残留。大部分网上的博客都是推荐用pip重装jupyter或者nbconvert，亲测无法解决该问题。</p>
-<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>按照指定的匹配版本，全部重装ipython、jupyter和notebook等软件，目前来说，另一篇博客中推荐的这个版本配套是可以正常使用的：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install ipykernel==6.20.0 ipywidgets==8.1.1 jupyter_client==8.1.0 jupyter_core==5.4.0 jupyter_server==2.7.3 jupyterlab==4.0.7 nbclient==0.6.0 nbconvert==6.5.4 nbformat==5.7.0 notebook==6.5.4 ipython==7.34.0</span><br></pre></td></tr></table></figure>
-<p>重装完成后，重新运行jupyter notebook，可以正常打开ipynb的文件。</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>按照指定的匹配版本，全部重装ipython、jupyter和notebook等软件，目前来说，另一篇博客中推荐的这个版本配套是可以正常使用的：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install ipykernel==6.20.0 ipywidgets==8.1.1 jupyter_client==8.1.0 jupyter_core==5.4.0 jupyter_server==2.7.3 jupyterlab==4.0.7 nbclient==0.6.0 nbconvert==6.5.4 nbformat==5.7.0 notebook==6.5.4 ipython==7.34.0</span><br></pre></td></tr></table></figure><br>重装完成后，重新运行jupyter notebook，可以正常打开ipynb的文件。</p>
 <h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42896263/article/details/133821053">https://blog.csdn.net/weixin_42896263/article/details/133821053</a></li>
 </ol>
@@ -236,7 +233,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -247,7 +244,7 @@
 <nav class="article-nav">
   
     <a href="/2023/12/05/%E5%8F%8C%E4%BA%8C%E9%9D%A2%E8%A7%92%E8%80%A6%E5%90%88%E5%8A%9B%E5%9C%BA%E9%A1%B9%E7%9A%84%E8%AE%A1%E7%AE%97/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           双二面角耦合力场项的计算
@@ -257,7 +254,7 @@
   
   
     <a href="/2023/09/11/MindSpore%E7%AE%80%E8%A6%81%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">MindSpore简要性能分析</div>
     </a>
   
@@ -265,7 +262,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Jupyter Notebook报错'500 : Internal Server Error'的解决方法 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2023%2F11%2F21%2FJupyter-Notebook%25E6%258A%25A5%25E9%2594%2599'500---Internal-Server-Error'%25E7%259A%2584%25E8%25A7%25A3%25E5%2586%25B3%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -420,6 +417,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

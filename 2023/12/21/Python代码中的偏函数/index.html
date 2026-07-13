@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidkwmDuBVJFPOeEBWZKjFY5" class="article article-type-post" itemscope
+    <article id="post-cuidT_LhIqqnRhp2R4nwaar1q" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,29 +210,20 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文介绍了在Python中使用偏函数partial的方法，并且介绍了两个使用partial函数的案例，分别是concurrent并行场景和基于jax的自动微分场景。在这些相关的场景下，我们用partial函数更多时候可以使得代码的可读性更好，在性能上其实并没有什么提升。如果不想使用partial函数，类似的功能也可以使用参考链接中所介绍的方法，实现一个装饰器，也可以做到一样的功能。</p>
 <span id="more"></span>
-
-<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在数学中我们都学过偏导数$\frac{\partial f(x,y)}{\partial x}$，而这里我们提到的偏函数，指的是$f(y)(x)$。也就是说，在代码实现的过程中，虽然我们实现的一个函数可能带有很多个变量，但是可以用偏函数的形式把其中一些不需要拆分和变化的变量转变为固有变量。比较典型的两个例子是计算偏导数和多进程优化。虽然大部分支持自动微分的框架都有相应的支持偏导数的接口，多进程操作中也可以指定额外的args，但是这些自带的方法在形式上都是比较tricky的，感觉并不如使用偏函数优雅和简洁。这里我们主要介绍python中可能会用到的偏函数功能–<code>partial</code>。</p>
-<h1 id="Partial简单案例"><a href="#Partial简单案例" class="headerlink" title="Partial简单案例"></a>Partial简单案例</h1><p>我们先来一个最简单的乘法函数$f(x,y)&#x3D;xy$。假如说我们想得到该函数关于y的偏导数，注意，这里y是第二个输入的变量，不是第一个位置，一般自动微分框架都默认都第一个位置的变量计算偏导数。相关代码实现如下所示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> partial</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mul</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="built_in">print</span> (<span class="built_in">locals</span>())</span><br><span class="line">    <span class="keyword">return</span> x * y</span><br><span class="line"></span><br><span class="line">x = <span class="number">2</span></span><br><span class="line">y = <span class="number">3</span></span><br><span class="line">res_0 = mul(x, y)</span><br><span class="line">partial_mul = partial(mul, x=x)</span><br><span class="line">res_1 = partial_mul(y=<span class="number">3</span>)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;The result is: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(res_0))</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;The result is: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(res_1))</span><br></pre></td></tr></table></figure>
-<p>这段代码的运行结果为：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">&#x27;x&#x27;</span>: 2, <span class="string">&#x27;y&#x27;</span>: 3&#125;</span><br><span class="line">&#123;<span class="string">&#x27;x&#x27;</span>: 2, <span class="string">&#x27;y&#x27;</span>: 3&#125;</span><br><span class="line">The result is: 6</span><br><span class="line">The result is: 6</span><br></pre></td></tr></table></figure>
-<p>我们现在来分析一下上面这个案例中所体现的信息：</p>
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在数学中我们都学过偏导数$\frac{\partial f(x,y)}{\partial x}$，而这里我们提到的偏函数，指的是$f(y)(x)$。也就是说，在代码实现的过程中，虽然我们实现的一个函数可能带有很多个变量，但是可以用偏函数的形式把其中一些不需要拆分和变化的变量转变为固有变量。比较典型的两个例子是计算偏导数和多进程优化。虽然大部分支持自动微分的框架都有相应的支持偏导数的接口，多进程操作中也可以指定额外的args，但是这些自带的方法在形式上都是比较tricky的，感觉并不如使用偏函数优雅和简洁。这里我们主要介绍python中可能会用到的偏函数功能--<code>partial</code>。</p>
+<h1 id="Partial简单案例"><a href="#Partial简单案例" class="headerlink" title="Partial简单案例"></a>Partial简单案例</h1><p>我们先来一个最简单的乘法函数$f(x,y)=xy$。假如说我们想得到该函数关于y的偏导数，注意，这里y是第二个输入的变量，不是第一个位置，一般自动微分框架都默认都第一个位置的变量计算偏导数。相关代码实现如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> partial</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mul</span>(<span class="params">x, y</span>):</span><br><span class="line">    <span class="built_in">print</span> (<span class="built_in">locals</span>())</span><br><span class="line">    <span class="keyword">return</span> x * y</span><br><span class="line"></span><br><span class="line">x = <span class="number">2</span></span><br><span class="line">y = <span class="number">3</span></span><br><span class="line">res_0 = mul(x, y)</span><br><span class="line">partial_mul = partial(mul, x=x)</span><br><span class="line">res_1 = partial_mul(y=<span class="number">3</span>)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;The result is: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(res_0))</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;The result is: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(res_1))</span><br></pre></td></tr></table></figure><br>这段代码的运行结果为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">&#x27;x&#x27;</span>: 2, <span class="string">&#x27;y&#x27;</span>: 3&#125;</span><br><span class="line">&#123;<span class="string">&#x27;x&#x27;</span>: 2, <span class="string">&#x27;y&#x27;</span>: 3&#125;</span><br><span class="line">The result is: 6</span><br><span class="line">The result is: 6</span><br></pre></td></tr></table></figure><br>我们现在来分析一下上面这个案例中所体现的信息：</p>
 <ol>
 <li>在使用partial函数时使用的是关键字参数，即时原本的变量不是一个关键字参数，而是一个位置参数。</li>
 <li>虽然得到的偏函数partial_mul运行的方式跟函数一致，但其实它是一个partial的对象类型。</li>
 <li>在生成partial_mul对象时已经执行过一遍函数，因此函数中的打印语句被打印了两次。</li>
 <li>偏函数的计算结果肯定是跟原函数保持一致的，但是在一些特殊场景下，我们可能会用到这种单变量的偏函数。</li>
 </ol>
-<h1 id="Concurrent多核并行场景"><a href="#Concurrent多核并行场景" class="headerlink" title="Concurrent多核并行场景"></a>Concurrent多核并行场景</h1><p>现在我们稍微修改一下上面的案例，我们要用concurrent这个并行工具去分别执行上述乘法任务，同时输入的x也变成了一个多维的数组。然后为了验证并行算法，这里每计算一次元素乘法，我们都用<code>time.sleep</code>方法让进程休眠2秒钟时间。由于此时的参数y还是一个标量，但是每次乘法计算我们都需要输入这个标量，因此我们直接将其封装到一个partial偏函数中，使得函数变成：$f(x,y)&#x3D;f(y)(x)&#x3D;P(x)$，然后对x这个入参进行并行化操作：</p>
+<h1 id="Concurrent多核并行场景"><a href="#Concurrent多核并行场景" class="headerlink" title="Concurrent多核并行场景"></a>Concurrent多核并行场景</h1><p>现在我们稍微修改一下上面的案例，我们要用concurrent这个并行工具去分别执行上述乘法任务，同时输入的x也变成了一个多维的数组。然后为了验证并行算法，这里每计算一次元素乘法，我们都用<code>time.sleep</code>方法让进程休眠2秒钟时间。由于此时的参数y还是一个标量，但是每次乘法计算我们都需要输入这个标量，因此我们直接将其封装到一个partial偏函数中，使得函数变成：$f(x,y)=f(y)(x)=P(x)$，然后对x这个入参进行并行化操作：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> concurrent.futures</span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> partial</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="comment"># 定义休眠函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mul</span>(<span class="params">x, y</span>):</span><br><span class="line">    time.sleep(<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> x * y</span><br><span class="line"><span class="comment"># 定义入参</span></span><br><span class="line">x = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], np.float32)</span><br><span class="line">y = <span class="number">3.</span></span><br><span class="line"><span class="comment"># 有阻塞计算</span></span><br><span class="line">time_0 = time.time()</span><br><span class="line">res_0 = []</span><br><span class="line"><span class="keyword">for</span> _x <span class="keyword">in</span> x:</span><br><span class="line">    res_0.append(mul(_x, y))</span><br><span class="line">res_0 = np.array(res_0, np.float32)</span><br><span class="line">time_1 = time.time()</span><br><span class="line"><span class="comment"># 并行计算</span></span><br><span class="line">partial_mul = partial(mul, y=y)</span><br><span class="line">time_2 = time.time()</span><br><span class="line"><span class="keyword">with</span> concurrent.futures.ProcessPoolExecutor(max_workers=x.shape[<span class="number">0</span>]) <span class="keyword">as</span> executor:</span><br><span class="line">    res = executor.<span class="built_in">map</span>(partial_mul, x)</span><br><span class="line">res_1 = np.array(<span class="built_in">list</span>(res), np.float32)</span><br><span class="line">time_3 = time.time()</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;The result is: &#123;&#125;, and for loop time cost is: &#123;&#125;s&#x27;</span>.<span class="built_in">format</span>(res_0, time_1 - time_0))</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;The result is: &#123;&#125;, and concurrent time cost is : &#123;&#125;s&#x27;</span>.<span class="built_in">format</span>(res_1, time_3 - time_2))</span><br></pre></td></tr></table></figure>
-<p>如果有感兴趣的童鞋也可以去尝试一下，在这种场景下的并行运算，如果参量y不是一个可迭代式的变量，是无法用zip压缩传到map函数中去的。上述代码的运行结果如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">The result is: [3. 6. 9.], and <span class="keyword">for</span> loop <span class="keyword">time</span> cost is: 6.005392789840698s</span><br><span class="line">The result is: [3. 6. 9.], and concurrent <span class="keyword">time</span> cost is : 2.0451698303222656s</span><br></pre></td></tr></table></figure>
-<p>这个计算时长其实就约等于休眠时长，因为这里我们开启了3个进程来进行休眠，因此并行时长是2s。</p>
+<p>如果有感兴趣的童鞋也可以去尝试一下，在这种场景下的并行运算，如果参量y不是一个可迭代式的变量，是无法用zip压缩传到map函数中去的。上述代码的运行结果如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">The result is: [3. 6. 9.], and <span class="keyword">for</span> loop <span class="keyword">time</span> cost is: 6.005392789840698s</span><br><span class="line">The result is: [3. 6. 9.], and concurrent <span class="keyword">time</span> cost is : 2.0451698303222656s</span><br></pre></td></tr></table></figure><br>这个计算时长其实就约等于休眠时长，因为这里我们开启了3个进程来进行休眠，因此并行时长是2s。</p>
 <h1 id="Jax自动微分场景"><a href="#Jax自动微分场景" class="headerlink" title="Jax自动微分场景"></a>Jax自动微分场景</h1><p>这里我们用Jax的自动微分框架做一个示例，没有安装Jax和Jaxlib的想运行需要自行安装相关软件。虽然在Jax的grad函数中，支持argnums这样的参数配置，但从代码层面角度来说，总是显得可读性并不好。正常情况下我们算偏导数$\frac{\partial f(x,y)}{\partial x}$其实更合理的表述应该是$\frac{\partial P(x)}{\partial x}$。而如果按照Jax这种写法，更像是从$[\frac{\partial f(x, y)}{\partial x}, \frac{\partial f(x, y)}{\partial y}]$两个元素中取了第一个元素。当然，这只是表述上的问题，也是我个人的理解，其实并不影响程序的正确性。这里使用partial偏函数的相关案例如下所示：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> partial</span><br><span class="line"><span class="keyword">from</span> jax <span class="keyword">import</span> grad</span><br><span class="line"><span class="keyword">from</span> jax <span class="keyword">import</span> numpy <span class="keyword">as</span> jnp</span><br><span class="line"><span class="comment"># Jax要求grad函数输出结果为标量，所以要加一项求和</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mul</span>(<span class="params">x, y</span>):</span><br><span class="line">    f = x * y</span><br><span class="line">    <span class="keyword">return</span> f.<span class="built_in">sum</span>()</span><br><span class="line"><span class="comment"># 定义输入变量</span></span><br><span class="line">x = jnp.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], jnp.float32)</span><br><span class="line">y = <span class="number">3.</span></span><br><span class="line"><span class="comment"># 定义偏函数和对应偏导数</span></span><br><span class="line">partial_mul = partial(mul, y=y)</span><br><span class="line">grad_mul = grad(partial_mul)</span><br><span class="line"><span class="built_in">print</span> (grad_mul(x))</span><br></pre></td></tr></table></figure>
-<p>执行结果如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[3. 3. 3.]</span><br></pre></td></tr></table></figure>
-
+<p>执行结果如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[3. 3. 3.]</span><br></pre></td></tr></table></figure></p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了在Python中使用偏函数partial的方法，并且介绍了两个使用partial函数的案例，分别是concurrent并行场景和基于jax的自动微分场景。在这些相关的场景下，我们用partial函数更多时候可以使得代码的可读性更好，在性能上其实并没有什么提升。如果不想使用partial函数，类似的功能也可以使用参考链接中所介绍的方法，实现一个装饰器，也可以做到一样的功能。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/partial.html">https://www.cnblogs.com/dechinphy/p/partial.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -255,7 +246,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -266,7 +257,7 @@
 <nav class="article-nav">
   
     <a href="/2024/01/02/Python%E8%AE%BE%E7%BD%AE%E8%BF%9B%E7%A8%8B%E5%90%8D%E7%A7%B0/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Python设置进程名称
@@ -276,7 +267,7 @@
   
   
     <a href="/2023/12/20/Python%E8%BF%BD%E8%B8%AA%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">Python追踪内存占用</div>
     </a>
   
@@ -284,7 +275,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Python代码中的偏函数 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2023%2F12%2F21%2FPython%25E4%25BB%25A3%25E7%25A0%2581%25E4%25B8%25AD%25E7%259A%2584%25E5%2581%258F%25E5%2587%25BD%25E6%2595%25B0%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -439,6 +430,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

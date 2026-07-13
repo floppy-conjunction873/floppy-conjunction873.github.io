@@ -168,7 +168,6 @@ class="article article-type-post"
         
         <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在各大深度学习框架中，对于自动微分这项技术有了比较广泛的应用。但在使用自动微分时，一定要注意不同框架下对于非可导函数，或者是可导函数的非可导区域的特殊处理。最典型的就是本文将要提到的，向下取整的函数。</p>
 <h1 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> torch <span class="keyword">as</span> tc</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: a = tc.arange(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: a</span><br><span class="line">Out[<span class="number">3</span>]: tensor([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: a//<span class="number">2</span></span><br><span class="line">Out[<span class="number">4</span>]: tensor([<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: b = tc.tensor([<span class="number">0.1</span>, <span class="number">0.3</span>, <span class="number">0.5</span>, <span class="number">0.7</span>, <span class="number">0.9</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: c = a+b</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: c</span><br><span class="line">Out[<span class="number">7</span>]: tensor([<span class="number">0.1000</span>, <span class="number">1.3000</span>, <span class="number">2.5000</span>, <span class="number">3.7000</span>, <span class="number">4.9000</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: c//<span class="number">2</span></span><br><span class="line">Out[<span class="number">8</span>]: tensor([<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">2.</span>])</span><br></pre></td></tr></table></figure>
-
 <p><img src="https://img2024.cnblogs.com/blog/2277440/202509/2277440-20250929133945020-1404916418.png" alt="2025-09-29 13-39-07 的屏幕截图"></p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/floor_divide.html">https://www.cnblogs.com/dechinphy/p/floor_divide.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -749,6 +748,21 @@ class="article article-type-post"
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

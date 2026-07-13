@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidzDUBp-wLuG4EF-7MaWq-I" class="article article-type-post" itemscope
+    <article id="post-cuid_5s3Baa-xIaS7VDCPJSoX" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,25 +210,14 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>通常来说，一个Git仓库由内部组织者和外部协作者共同维护。对于内部开发者而言，他们可以通过master-develop-feature模型进行代码开发，在仓库中创建相应的特性分支和开发分支，最后再合入到主分支供大家使用。而对于外部开发者而言，最好的方式是Fork一个仓库到自己本地，然后使用本文介绍的方法二去定期跟远程remote仓库进行同步，避免在长时间的开发周期中遇到一些冲突。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在Git的操作过程中，一般的组织内部工作模式可以在同一个仓库上的master-develop-feature不同分支上进行开发，也有一些人和外部协作者会通过Fork到自己本地的仓库进行更新的方案。但是对于Fork仓库的更新有一个问题是，如果长期在自己本地更新，有可能会逐渐脱离原始的分支，甚至会产生众多的冲突。那么为了避免在开发过程中遇到众多的冲突，建议大家在开发的过程中定期从远程的原始仓库同步过来。本文要探讨的是，如何跟远程的上游仓库进行同步。</p>
 <h1 id="方法一：强制拉取"><a href="#方法一：强制拉取" class="headerlink" title="方法一：强制拉取"></a>方法一：强制拉取</h1><p>第一种方法非常的简单粗暴，其实不建议使用，但是如果确实嫌麻烦的人，可以点击下图中的圈圈按钮，直接从原始仓库强制拉取。</p>
 <div align=center>
-	<img src="https://img2023.cnblogs.com/blog/2277440/202304/2277440-20230404165903213-1577380099.png">
+    <img src="https://img2023.cnblogs.com/blog/2277440/202304/2277440-20230404165903213-1577380099.png">
 </div>
 
 <p>之所以不推荐这种方法，是因为在远程拉取的过程中有可能出现冲突，但是因为采取了强制性拉取的策略，所以实际上本地开发的一些内容有可能会在拉取的过程中被覆盖。</p>
-<h1 id="方法二：创建远程同步"><a href="#方法二：创建远程同步" class="headerlink" title="方法二：创建远程同步"></a>方法二：创建远程同步</h1><p>以下详细介绍下远程仓库同步的方法。首先我们从远程clone一个我们自己Fork的仓库到本地来：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://gitee.com/dechin/mindsponge.git</span><br><span class="line">正克隆到 <span class="string">&#x27;mindsponge&#x27;</span>...</span><br><span class="line">Username <span class="keyword">for</span> <span class="string">&#x27;https://gitee.com&#x27;</span>: dechin</span><br><span class="line">Password <span class="keyword">for</span> <span class="string">&#x27;https://dechin@gitee.com&#x27;</span>: </span><br><span class="line">remote: Enumerating objects: 7869, <span class="keyword">done</span>.</span><br><span class="line">remote: Counting objects: 100% (7869/7869), <span class="keyword">done</span>.</span><br><span class="line">remote: Compressing objects: 100% (2198/2198), <span class="keyword">done</span>.</span><br><span class="line">remote: Total 7869 (delta 5653), reused 7869 (delta 5653), pack-reused 0</span><br><span class="line">接收对象中: 100% (7869/7869), 34.72 MiB | 1.15 MiB/s, 完成.</span><br><span class="line">处理 delta 中: 100% (5653/5653), 完成.</span><br></pre></td></tr></table></figure>
-<p>进入本地目录，查看远程链接：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> mindsponge/</span><br><span class="line">$ git remote -v</span><br><span class="line">origin	https://gitee.com/dechin/mindsponge.git (fetch)</span><br><span class="line">origin	https://gitee.com/dechin/mindsponge.git (push)</span><br></pre></td></tr></table></figure>
-<p>可以看到，此时只跟自己Fork的两个仓库有链接，也就是只能pull或者push到origin的这个仓库上面。然后可以使用<code>git remote add</code>的方法添加原始仓库的链接：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add -t develop remote https://gitee.com/helloyesterday/mindsponge.git</span><br></pre></td></tr></table></figure>
-<p>上一步的操作中我们甚至可以使用<code>-t</code>来配置与远程仓库构建链接的指定分支。此时我们再次查看远程链接：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v</span><br><span class="line">origin	https://gitee.com/dechin/mindsponge.git (fetch)</span><br><span class="line">origin	https://gitee.com/dechin/mindsponge.git (push)</span><br><span class="line">remote	https://gitee.com/helloyesterday/mindsponge.git (fetch)</span><br><span class="line">remote	https://gitee.com/helloyesterday/mindsponge.git (push)</span><br></pre></td></tr></table></figure>
-<p>我们发现多了两个名为remote的链接，这个就是我们Fork来的原始仓库。当然，要构建这种远程的链接，需要拥有远程仓库的相关操作权限，如push和fetch等。完成上述操作后，如果我们在本地执行了一些更新，并且已经<code>add</code>和<code>commit</code>过了，那么我们就可以向远程仓库进行push：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git push origin develop</span><br><span class="line">$ git push remote develop</span><br></pre></td></tr></table></figure>
-<p>只要有权限，就两边都可以pull和push。这样一来，我们在本地开发了一定的时间之后，也可以从remote上pull下来最新的代码，在本地解决好相关的冲突之后，push到自己Fork的分支。最后在完成特性的开发之后，再提交一个Pull Request到远程remote的分支上，这样是一个比较合理的Git操作。</p>
+<h1 id="方法二：创建远程同步"><a href="#方法二：创建远程同步" class="headerlink" title="方法二：创建远程同步"></a>方法二：创建远程同步</h1><p>以下详细介绍下远程仓库同步的方法。首先我们从远程clone一个我们自己Fork的仓库到本地来：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://gitee.com/dechin/mindsponge.git</span><br><span class="line">正克隆到 <span class="string">&#x27;mindsponge&#x27;</span>...</span><br><span class="line">Username <span class="keyword">for</span> <span class="string">&#x27;https://gitee.com&#x27;</span>: dechin</span><br><span class="line">Password <span class="keyword">for</span> <span class="string">&#x27;https://dechin@gitee.com&#x27;</span>: </span><br><span class="line">remote: Enumerating objects: 7869, <span class="keyword">done</span>.</span><br><span class="line">remote: Counting objects: 100% (7869/7869), <span class="keyword">done</span>.</span><br><span class="line">remote: Compressing objects: 100% (2198/2198), <span class="keyword">done</span>.</span><br><span class="line">remote: Total 7869 (delta 5653), reused 7869 (delta 5653), pack-reused 0</span><br><span class="line">接收对象中: 100% (7869/7869), 34.72 MiB | 1.15 MiB/s, 完成.</span><br><span class="line">处理 delta 中: 100% (5653/5653), 完成.</span><br></pre></td></tr></table></figure><br>进入本地目录，查看远程链接：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> mindsponge/</span><br><span class="line">$ git remote -v</span><br><span class="line">origin	https://gitee.com/dechin/mindsponge.git (fetch)</span><br><span class="line">origin	https://gitee.com/dechin/mindsponge.git (push)</span><br></pre></td></tr></table></figure><br>可以看到，此时只跟自己Fork的两个仓库有链接，也就是只能pull或者push到origin的这个仓库上面。然后可以使用<code>git remote add</code>的方法添加原始仓库的链接：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add -t develop remote https://gitee.com/helloyesterday/mindsponge.git</span><br></pre></td></tr></table></figure><br>上一步的操作中我们甚至可以使用<code>-t</code>来配置与远程仓库构建链接的指定分支。此时我们再次查看远程链接：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v</span><br><span class="line">origin	https://gitee.com/dechin/mindsponge.git (fetch)</span><br><span class="line">origin	https://gitee.com/dechin/mindsponge.git (push)</span><br><span class="line">remote	https://gitee.com/helloyesterday/mindsponge.git (fetch)</span><br><span class="line">remote	https://gitee.com/helloyesterday/mindsponge.git (push)</span><br></pre></td></tr></table></figure><br>我们发现多了两个名为remote的链接，这个就是我们Fork来的原始仓库。当然，要构建这种远程的链接，需要拥有远程仓库的相关操作权限，如push和fetch等。完成上述操作后，如果我们在本地执行了一些更新，并且已经<code>add</code>和<code>commit</code>过了，那么我们就可以向远程仓库进行push：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git push origin develop</span><br><span class="line">$ git push remote develop</span><br></pre></td></tr></table></figure><br>只要有权限，就两边都可以pull和push。这样一来，我们在本地开发了一定的时间之后，也可以从remote上pull下来最新的代码，在本地解决好相关的冲突之后，push到自己Fork的分支。最后在完成特性的开发之后，再提交一个Pull Request到远程remote的分支上，这样是一个比较合理的Git操作。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>通常来说，一个Git仓库由内部组织者和外部协作者共同维护。对于内部开发者而言，他们可以通过master-develop-feature模型进行代码开发，在仓库中创建相应的特性分支和开发分支，最后再合入到主分支供大家使用。而对于外部开发者而言，最好的方式是Fork一个仓库到自己本地，然后使用本文介绍的方法二去定期跟远程remote仓库进行同步，避免在长时间的开发周期中遇到一些冲突。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/git-remote.html">https://www.cnblogs.com/dechinphy/p/git-remote.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -251,7 +240,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -262,7 +251,7 @@
 <nav class="article-nav">
   
     <a href="/2023/04/06/PyCharm%E8%A7%A3%E5%86%B3Git%E5%86%B2%E7%AA%81/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           PyCharm解决Git冲突
@@ -272,7 +261,7 @@
   
   
     <a href="/2023/03/23/AlphaFold2%E4%B8%AD%E7%9A%84%E6%AE%8B%E5%9F%BA%E5%88%9A%E4%BD%93%E8%A1%A8%E7%A4%BA/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">AlphaFold2中的残基刚体表示</div>
     </a>
   
@@ -280,7 +269,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Git链接上游仓库 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2023%2F04%2F04%2FGit%25E9%2593%25BE%25E6%258E%25A5%25E4%25B8%258A%25E6%25B8%25B8%25E4%25BB%2593%25E5%25BA%2593%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -435,6 +424,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

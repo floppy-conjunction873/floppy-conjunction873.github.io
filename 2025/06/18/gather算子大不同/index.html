@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuid8N9asOeAV-kc8Ve-0zq6-" class="article article-type-post" itemscope
+    <article id="post-cuidl9NhT4fbmEduxHs5FnOW7" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,11 +210,8 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文通过2个实际的案例，演示了一下gather算子在MindSpore框架下PyTorch框架下的异同点。两者的输入都是tensor-axis-index，一个是输入顺序上略有区别，另一个是对于输入的张量索引维度的要求。在PyTorch中，如果我们要实现类似于MindSpore中的gather功能，需要手动对输入索引的维度操作一下。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在MindSpore和PyTorch框架中都有关于gather算子的实现。其实gather算子就是根据张量的索引，在指定维度下提取元素。但是gather算子在两个框架中的实现又有所不同，本文用几个示例来展开介绍一下。</p>
-<h1 id="MindSpore示例"><a href="#MindSpore示例" class="headerlink" title="MindSpore示例"></a>MindSpore示例</h1><p>在MindSpore中的gather实现，可以支持多维度的index：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> mindspore <span class="keyword">as</span> ms</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: arr = ms.numpy.ones((<span class="number">1</span>,<span class="number">27</span>), dtype=ms.float32)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: idx = ms.numpy.zeros((<span class="number">27</span>,<span class="number">26</span>), dtype=ms.int32)</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: res = ms.ops.gather(arr, idx, -<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: res.shape</span><br><span class="line">Out[<span class="number">5</span>]: (<span class="number">1</span>, <span class="number">27</span>, <span class="number">26</span>)</span><br></pre></td></tr></table></figure>
-<p>这里index的维度是<code>(27,26)</code>，而我们去索引的只有<code>-1</code>这个维度。其实在MindSpore中应该是通过内部实现，把index展平之后进行索引在做一个reshape，而这些内容都不在用户层去操作。</p>
+<h1 id="MindSpore示例"><a href="#MindSpore示例" class="headerlink" title="MindSpore示例"></a>MindSpore示例</h1><p>在MindSpore中的gather实现，可以支持多维度的index：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> mindspore <span class="keyword">as</span> ms</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: arr = ms.numpy.ones((<span class="number">1</span>,<span class="number">27</span>), dtype=ms.float32)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: idx = ms.numpy.zeros((<span class="number">27</span>,<span class="number">26</span>), dtype=ms.int32)</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: res = ms.ops.gather(arr, idx, -<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: res.shape</span><br><span class="line">Out[<span class="number">5</span>]: (<span class="number">1</span>, <span class="number">27</span>, <span class="number">26</span>)</span><br></pre></td></tr></table></figure><br>这里index的维度是<code>(27,26)</code>，而我们去索引的只有<code>-1</code>这个维度。其实在MindSpore中应该是通过内部实现，把index展平之后进行索引在做一个reshape，而这些内容都不在用户层去操作。</p>
 <h1 id="PyTorch示例"><a href="#PyTorch示例" class="headerlink" title="PyTorch示例"></a>PyTorch示例</h1><p>在PyTorch中，index维度必须跟输入的维度数量一致，否则就会发生RuntimeError，例如：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> torch <span class="keyword">as</span> tc</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: arr = tc.ones((<span class="number">1</span>,<span class="number">27</span>),dtype=tc.float32)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: idx = tc.zeros((<span class="number">27</span>,<span class="number">26</span>),dtype=tc.int64)</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: res = tc.gather(arr, -<span class="number">1</span>, idx)</span><br><span class="line">--------------------------------------------------------------------------</span><br><span class="line">RuntimeError                             Traceback (most recent call last)</span><br><span class="line">Cell In[<span class="number">4</span>], line <span class="number">1</span></span><br><span class="line">----&gt; <span class="number">1</span> res = tc.gather(arr, -<span class="number">1</span>, idx)</span><br><span class="line"></span><br><span class="line">RuntimeError: Size does <span class="keyword">not</span> <span class="keyword">match</span> at dimension <span class="number">0</span> expected index [<span class="number">27</span>, <span class="number">26</span>] to be smaller than <span class="variable language_">self</span> [<span class="number">1</span>, <span class="number">27</span>] apart <span class="keyword">from</span> dimension <span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: res = tc.gather(arr,-<span class="number">1</span>,idx.reshape((<span class="number">1</span>,-<span class="number">1</span>))).reshape(idx.shape)</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: res.shape</span><br><span class="line">Out[<span class="number">6</span>]: torch.Size([<span class="number">27</span>, <span class="number">26</span>])</span><br></pre></td></tr></table></figure>
 <p>在这个示例中我们可以看到，在PyTorch里面不能支持跟输入的维度数量不同的索引张量，要进行手动的展开，最后再手动的reshape回去。</p>
@@ -237,7 +234,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -248,7 +245,7 @@
 <nav class="article-nav">
   
     <a href="/2025/06/19/tensor_scatter_add%E7%AE%97%E5%AD%90%E5%BC%82%E5%90%8C%E7%82%B9/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           tensor_scatter_add算子异同点
@@ -258,7 +255,7 @@
   
   
     <a href="/2025/06/16/MindSpore%E4%B8%AD%E7%9A%84ReduceMax%E5%92%8Cmax%E6%93%8D%E4%BD%9C%E7%9A%84%E5%8C%BA%E5%88%AB/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">MindSpore中的ReduceMax和max操作的区别</div>
     </a>
   
@@ -266,7 +263,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=gather算子大不同 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2025%2F06%2F18%2Fgather%25E7%25AE%2597%25E5%25AD%2590%25E5%25A4%25A7%25E4%25B8%258D%25E5%2590%258C%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -421,6 +418,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

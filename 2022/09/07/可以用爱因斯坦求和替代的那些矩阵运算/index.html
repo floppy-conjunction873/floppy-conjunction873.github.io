@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidNnW3TtQ187XMPOCLf_k4C" class="article article-type-post" itemscope
+    <article id="post-cuidRr7pWgDl5ppUynClEMz8k" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,45 +210,118 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文主要基于Python的Numpy库，介绍一些爱因斯坦求和算子Einsum的应用场景，包括求和、求内外积、求转置等等。我们需要明确的是，爱因斯坦求和算子的意义主要在于矩阵的多重运算时，可以通过爱因斯坦求和约定将这种复杂问题定义成一个张量网络，通过图模型去找到一个更好的缩并路径，以得到更好的算法复杂度。而如果只是普通的点乘求和之类的运算，其实并不是Einsum的主要功能。但是这些功能也可以用爱因斯坦求和的形式来实现，也说明了这个约定的先进性。当然，也有众多的矩阵运算功能是无法直接通过爱因斯坦求和算子来实现的，比如矩阵求逆、求本征值、矩阵扩维、矩阵重构还有向量叉乘等等。只有在合适的地方使用Einsum，才能体现它的真正价值。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面的几篇文章中我们分别介绍过numpy中的爱因斯坦求和函数<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/tensor.html">Einsum</a>和MindSpore框架中的爱因斯坦求和算子<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/mseinsum.html">Einsum</a>的基本用法。而我们需要知道，爱因斯坦求和其实还可以实现非常多的功能，甚至可以替代大部分的矩阵运算，比如常见的点乘、元素乘、求和等等这些都是可以的。那我们就逐一看一下可以用爱因斯坦求和来替代的那些函数和方法。</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220505101906303-43026949.png" style="zoom:70%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220505101906303-43026949.png" style="zoom:70%">
 </div>
 
-<h1 id="案例演示"><a href="#案例演示" class="headerlink" title="案例演示"></a>案例演示</h1><p>在numpy、Jax框架和MindSpore框架中都是支持爱因斯坦求和算符的，那么这里为了方便演示，我们采用的是numpy来做一些参考案例:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: x = np.arange(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: x</span><br><span class="line">Out[<span class="number">3</span>]: array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: y = np.arange(<span class="number">3</span>, <span class="number">6</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: y</span><br><span class="line">Out[<span class="number">5</span>]: array([<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: P = np.arange(<span class="number">1</span>, <span class="number">10</span>).reshape(<span class="number">3</span>,<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: P</span><br><span class="line">Out[<span class="number">7</span>]: </span><br><span class="line">array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">       [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>],</span><br><span class="line">       [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]])</span><br></pre></td></tr></table></figure>
-
-<h2 id="矩阵转置"><a href="#矩阵转置" class="headerlink" title="矩阵转置"></a>矩阵转置</h2><p>矩阵转置，或者是调换矩阵的某两个维度，这个功能用爱因斯坦求和来做是非常清晰的，我们先看一下相应的公式：<br>$$<br>P^T&#x3D;\left[<br>\begin{matrix}<br>P_{00}&amp;P_{01}&amp;P_{02}\<br>P_{10}&amp;P_{11}&amp;P_{12}\<br>P_{20}&amp;P_{21}&amp;P_{22}<br>\end{matrix}<br>\right]^T&#x3D;<br>\left[<br>\begin{matrix}<br>P_{00}&amp;P_{10}&amp;P_{20}\<br>P_{01}&amp;P_{11}&amp;P_{21}\<br>P_{02}&amp;P_{12}&amp;P_{22}<br>\end{matrix}<br>\right]<br>$$<br>一般矩阵转置我们如果用numpy来操作的话，只需要使用<code>P=P.T</code>就可以了，而这个功能用爱因斯坦求和算子也是可以实现的：</p>
+<h1 id="案例演示"><a href="#案例演示" class="headerlink" title="案例演示"></a>案例演示</h1><p>在numpy、Jax框架和MindSpore框架中都是支持爱因斯坦求和算符的，那么这里为了方便演示，我们采用的是numpy来做一些参考案例:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: x = np.arange(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: x</span><br><span class="line">Out[<span class="number">3</span>]: array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: y = np.arange(<span class="number">3</span>, <span class="number">6</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: y</span><br><span class="line">Out[<span class="number">5</span>]: array([<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: P = np.arange(<span class="number">1</span>, <span class="number">10</span>).reshape(<span class="number">3</span>,<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: P</span><br><span class="line">Out[<span class="number">7</span>]: </span><br><span class="line">array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">       [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>],</span><br><span class="line">       [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]])</span><br></pre></td></tr></table></figure></p>
+<h2 id="矩阵转置"><a href="#矩阵转置" class="headerlink" title="矩阵转置"></a>矩阵转置</h2><p>矩阵转置，或者是调换矩阵的某两个维度，这个功能用爱因斯坦求和来做是非常清晰的，我们先看一下相应的公式：</p>
+<script type="math/tex; mode=display">
+P^T=\left[
+\begin{matrix}
+P_{00}&P_{01}&P_{02}\\
+P_{10}&P_{11}&P_{12}\\
+P_{20}&P_{21}&P_{22}
+\end{matrix}
+\right]^T=
+\left[
+\begin{matrix}
+P_{00}&P_{10}&P_{20}\\
+P_{01}&P_{11}&P_{21}\\
+P_{02}&P_{12}&P_{22}
+\end{matrix}
+\right]</script><p>一般矩阵转置我们如果用numpy来操作的话，只需要使用<code>P=P.T</code>就可以了，而这个功能用爱因斯坦求和算子也是可以实现的：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">40</span>]: np.allclose(P.T, np.einsum(<span class="string">&#x27;kl-&gt;lk&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">40</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
-
 <p>这里有一个比较有意思的事情是，如果不指定生成的序号，但是给定的爱因斯坦算符顺序如果前面的大于后面的，也可以实现矩阵转置的功能，比如下面的一个案例：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">41</span>]: np.allclose(P.T, np.einsum(<span class="string">&#x27;ji&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">41</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="元素乘"><a href="#元素乘" class="headerlink" title="元素乘"></a>元素乘</h2><p>对应于两个矩阵（矢量、张量）之间的元素乘法，普通操作我们可以直接用$x<em>y$来实现（假定维度大小为3）：<br>$$<br>x</em>y &#x3D;<br>\left[<br>\begin{matrix}<br>x_0\x_1\x_2<br>\end{matrix}<br>\right]*<br>\left[<br>\begin{matrix}<br>y_0\y_1\y_2<br>\end{matrix}<br>\right]&#x3D;\left[<br>\begin{matrix}<br>x_0y_0\x_1y_1\x_2y_2<br>\end{matrix}<br>\right]<br>$$<br>对应于代码实现：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">8</span>]: np.allclose(x*y, np.einsum(<span class="string">&#x27;k,k-&gt;k&#x27;</span>, x, y))</span><br><span class="line">Out[<span class="number">8</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
-
+<h2 id="元素乘"><a href="#元素乘" class="headerlink" title="元素乘"></a>元素乘</h2><p>对应于两个矩阵（矢量、张量）之间的元素乘法，普通操作我们可以直接用$x*y$来实现（假定维度大小为3）：</p>
+<script type="math/tex; mode=display">
+x*y = 
+\left[
+\begin{matrix}
+x_0\\x_1\\x_2
+\end{matrix}
+\right]*
+\left[
+\begin{matrix}
+y_0\\y_1\\y_2
+\end{matrix}
+\right]=\left[
+\begin{matrix}
+x_0y_0\\x_1y_1\\x_2y_2
+\end{matrix}
+\right]</script><p>对应于代码实现：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">8</span>]: np.allclose(x*y, np.einsum(<span class="string">&#x27;k,k-&gt;k&#x27;</span>, x, y))</span><br><span class="line">Out[<span class="number">8</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure></p>
 <h2 id="矩阵内求和"><a href="#矩阵内求和" class="headerlink" title="矩阵内求和"></a>矩阵内求和</h2><p>把矩阵中的所有元素相加：</p>
-<p>$$<br>SUM(x)&#x3D;SUM(\left[<br>\begin{matrix}<br>x_0\x_1\x_2<br>\end{matrix}<br>\right])&#x3D;x_0+x_1+x_2<br>$$</p>
-<p>对应于Python代码实现为：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">9</span>]: np.allclose(np.<span class="built_in">sum</span>(x), np.einsum(<span class="string">&#x27;k-&gt;&#x27;</span>, x))</span><br><span class="line">Out[<span class="number">9</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">12</span>]: np.allclose(np.<span class="built_in">sum</span>(P), np.einsum(<span class="string">&#x27;kl-&gt;&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">12</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: np.allclose(np.<span class="built_in">sum</span>(P, axis=-<span class="number">1</span>), np.einsum(<span class="string">&#x27;kl-&gt;k&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">13</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: np.allclose(np.<span class="built_in">sum</span>(P, axis=<span class="number">0</span>), np.einsum(<span class="string">&#x27;kl-&gt;l&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">14</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
-<p>那么，既然求和能算，同样的<code>平均值</code>也是可以计算的，这里就不展开介绍了。</p>
-<h2 id="矩阵点乘"><a href="#矩阵点乘" class="headerlink" title="矩阵点乘"></a>矩阵点乘</h2><p>这个应用场景很多，比如当我们需要计算两个向量之间的夹角的时候，就会用到矩阵点乘。矩阵点乘的定义如下：<br>$$<br>x\cdot y &#x3D;<br>\left[<br>\begin{matrix}<br>x_0\x_1\x_2<br>\end{matrix}<br>\right]\cdot<br>\left[<br>\begin{matrix}<br>y_0\y_1\y_2<br>\end{matrix}<br>\right]&#x3D;x_0y_0+x_1y_1+x_2y_2<br>$$<br>对应的Python代码实现如下所示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">15</span>]: np.allclose(np.dot(x, y), np.einsum(<span class="string">&#x27;k,k-&gt;&#x27;</span>, x, y))</span><br><span class="line">Out[<span class="number">15</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="矩阵向量乘"><a href="#矩阵向量乘" class="headerlink" title="矩阵向量乘"></a>矩阵向量乘</h2><p>这个应用场景也非常多，比如我们经常所用到的向量的伸缩、旋转等，都可以用一系列的矩阵作用在一个向量上来表示，相关的计算公式为：<br>$$<br>P\cdot x&#x3D;\left[<br>\begin{matrix}<br>P_{00}&amp;P_{01}&amp;P_{02}\<br>P_{10}&amp;P_{11}&amp;P_{12}\<br>P_{20}&amp;P_{21}&amp;P_{22}<br>\end{matrix}<br>\right]\cdot \left[<br>\begin{matrix}<br>x_0\x_1\x_2<br>\end{matrix}<br>\right]&#x3D;<br>\left[<br>\begin{matrix}<br>P_{00}x_0+P_{01}x_1+P_{02}x_2\P_{10}x_0+P_{11}x_1+P_{12}x_2\P_{20}x_0+P_{21}x_1+P_{22}x_2<br>\end{matrix}<br>\right]<br>$$<br>对应的Python代码如下所示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">16</span>]: np.allclose(np.dot(P, x), np.einsum(<span class="string">&#x27;kl,l-&gt;k&#x27;</span>, P, x))</span><br><span class="line">Out[<span class="number">16</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">25</span>]: np.allclose(np.dot(P, x[:, <span class="literal">None</span>]), np.einsum(<span class="string">&#x27;kl,lm-&gt;km&#x27;</span>, P, x[:, <span class="literal">None</span>]))</span><br><span class="line">Out[<span class="number">25</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">31</span>]: np.allclose(np.dot(P, P.T), np.einsum(<span class="string">&#x27;kl,lm-&gt;km&#x27;</span>, P, P.T))</span><br><span class="line">Out[<span class="number">31</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
-<p>在上述案例中我们还包含了矩阵跟矩阵之间的乘法，这些基本运算都是可以通用的。</p>
-<h2 id="克罗内克积"><a href="#克罗内克积" class="headerlink" title="克罗内克积"></a>克罗内克积</h2><p>克罗内克积，又叫张量积，比如两个矢量或者矩阵之间没有耦合关系，那么可以用一个克罗内克积来总体表示这两个矢量或者矩阵组成的矢量或者矩阵，该运算被定义为：<br>$$<br>x\otimes y^{T}&#x3D;\left[<br>\begin{matrix}<br>x_0\x_1\x_2<br>\end{matrix}<br>\right]\otimes \left[y_0, y_1, y_2\right]&#x3D;\left[<br>\begin{matrix}<br>x_0y_0&amp;x_0y_1&amp;x_0y_2\<br>x_1y_0&amp;x_1y_1&amp;x_1y_2\<br>x_2y_0&amp;x_2y_1&amp;x_2y_2<br>\end{matrix}<br>\right]<br>$$<br>对应Python代码实现如下所示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">36</span>]: np.allclose(np.kron(x[:, <span class="literal">None</span>], y), np.einsum(<span class="string">&#x27;kl,l-&gt;kl&#x27;</span>, x[:, <span class="literal">None</span>], y))</span><br><span class="line">Out[<span class="number">36</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">37</span>]: np.allclose(np.kron(x, y), np.einsum(<span class="string">&#x27;kl,l-&gt;kl&#x27;</span>, x[:, <span class="literal">None</span>], y).reshape(<span class="number">9</span>))</span><br><span class="line">Out[<span class="number">37</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
-<p>需要注意的是，爱因斯坦求和运算只能减少总的维度数量，但是不可改变维度大小，因此有时候会需要用到reshape的功能配合使用。</p>
-<h2 id="取对角元"><a href="#取对角元" class="headerlink" title="取对角元"></a>取对角元</h2><p>这个应用也好理解，就是把矩阵的每一个对角元素取出来，用公式描述就是：<br>$$<br>diag(P)&#x3D;diag(\left[<br>\begin{matrix}<br>P_{00}&amp;P_{01}&amp;P_{02}\<br>P_{10}&amp;P_{11}&amp;P_{12}\<br>P_{20}&amp;P_{21}&amp;P_{22}<br>\end{matrix}<br>\right])&#x3D;\left[P_{00}, P_{11}, P_{22}\right]<br>$$<br>相关的Python代码实现如下所示：</p>
+<script type="math/tex; mode=display">
+SUM(x)=SUM(\left[
+\begin{matrix}
+x_0\\x_1\\x_2
+\end{matrix}
+\right])=x_0+x_1+x_2</script><p>对应于Python代码实现为：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">9</span>]: np.allclose(np.<span class="built_in">sum</span>(x), np.einsum(<span class="string">&#x27;k-&gt;&#x27;</span>, x))</span><br><span class="line">Out[<span class="number">9</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">12</span>]: np.allclose(np.<span class="built_in">sum</span>(P), np.einsum(<span class="string">&#x27;kl-&gt;&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">12</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: np.allclose(np.<span class="built_in">sum</span>(P, axis=-<span class="number">1</span>), np.einsum(<span class="string">&#x27;kl-&gt;k&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">13</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: np.allclose(np.<span class="built_in">sum</span>(P, axis=<span class="number">0</span>), np.einsum(<span class="string">&#x27;kl-&gt;l&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">14</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure><br>那么，既然求和能算，同样的<code>平均值</code>也是可以计算的，这里就不展开介绍了。</p>
+<h2 id="矩阵点乘"><a href="#矩阵点乘" class="headerlink" title="矩阵点乘"></a>矩阵点乘</h2><p>这个应用场景很多，比如当我们需要计算两个向量之间的夹角的时候，就会用到矩阵点乘。矩阵点乘的定义如下：</p>
+<script type="math/tex; mode=display">
+x\cdot y = 
+\left[
+\begin{matrix}
+x_0\\x_1\\x_2
+\end{matrix}
+\right]\cdot
+\left[
+\begin{matrix}
+y_0\\y_1\\y_2
+\end{matrix}
+\right]=x_0y_0+x_1y_1+x_2y_2</script><p>对应的Python代码实现如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">15</span>]: np.allclose(np.dot(x, y), np.einsum(<span class="string">&#x27;k,k-&gt;&#x27;</span>, x, y))</span><br><span class="line">Out[<span class="number">15</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="矩阵向量乘"><a href="#矩阵向量乘" class="headerlink" title="矩阵向量乘"></a>矩阵向量乘</h2><p>这个应用场景也非常多，比如我们经常所用到的向量的伸缩、旋转等，都可以用一系列的矩阵作用在一个向量上来表示，相关的计算公式为：</p>
+<script type="math/tex; mode=display">
+P\cdot x=\left[
+\begin{matrix}
+P_{00}&P_{01}&P_{02}\\
+P_{10}&P_{11}&P_{12}\\
+P_{20}&P_{21}&P_{22}
+\end{matrix}
+\right]\cdot \left[
+\begin{matrix}
+x_0\\x_1\\x_2
+\end{matrix}
+\right]=
+\left[
+\begin{matrix}
+P_{00}x_0+P_{01}x_1+P_{02}x_2\\P_{10}x_0+P_{11}x_1+P_{12}x_2\\P_{20}x_0+P_{21}x_1+P_{22}x_2
+\end{matrix}
+\right]</script><p>对应的Python代码如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">16</span>]: np.allclose(np.dot(P, x), np.einsum(<span class="string">&#x27;kl,l-&gt;k&#x27;</span>, P, x))</span><br><span class="line">Out[<span class="number">16</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">25</span>]: np.allclose(np.dot(P, x[:, <span class="literal">None</span>]), np.einsum(<span class="string">&#x27;kl,lm-&gt;km&#x27;</span>, P, x[:, <span class="literal">None</span>]))</span><br><span class="line">Out[<span class="number">25</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">31</span>]: np.allclose(np.dot(P, P.T), np.einsum(<span class="string">&#x27;kl,lm-&gt;km&#x27;</span>, P, P.T))</span><br><span class="line">Out[<span class="number">31</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure><br>在上述案例中我们还包含了矩阵跟矩阵之间的乘法，这些基本运算都是可以通用的。</p>
+<h2 id="克罗内克积"><a href="#克罗内克积" class="headerlink" title="克罗内克积"></a>克罗内克积</h2><p>克罗内克积，又叫张量积，比如两个矢量或者矩阵之间没有耦合关系，那么可以用一个克罗内克积来总体表示这两个矢量或者矩阵组成的矢量或者矩阵，该运算被定义为：</p>
+<script type="math/tex; mode=display">
+x\otimes y^{T}=\left[
+\begin{matrix}
+x_0\\x_1\\x_2
+\end{matrix}
+\right]\otimes \left[y_0, y_1, y_2\right]=\left[
+\begin{matrix}
+x_0y_0&x_0y_1&x_0y_2\\
+x_1y_0&x_1y_1&x_1y_2\\
+x_2y_0&x_2y_1&x_2y_2
+\end{matrix}
+\right]</script><p>对应Python代码实现如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">36</span>]: np.allclose(np.kron(x[:, <span class="literal">None</span>], y), np.einsum(<span class="string">&#x27;kl,l-&gt;kl&#x27;</span>, x[:, <span class="literal">None</span>], y))</span><br><span class="line">Out[<span class="number">36</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">37</span>]: np.allclose(np.kron(x, y), np.einsum(<span class="string">&#x27;kl,l-&gt;kl&#x27;</span>, x[:, <span class="literal">None</span>], y).reshape(<span class="number">9</span>))</span><br><span class="line">Out[<span class="number">37</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure><br>需要注意的是，爱因斯坦求和运算只能减少总的维度数量，但是不可改变维度大小，因此有时候会需要用到reshape的功能配合使用。</p>
+<h2 id="取对角元"><a href="#取对角元" class="headerlink" title="取对角元"></a>取对角元</h2><p>这个应用也好理解，就是把矩阵的每一个对角元素取出来，用公式描述就是：</p>
+<script type="math/tex; mode=display">
+diag(P)=diag(\left[
+\begin{matrix}
+P_{00}&P_{01}&P_{02}\\
+P_{10}&P_{11}&P_{12}\\
+P_{20}&P_{21}&P_{22}
+\end{matrix}
+\right])=\left[P_{00}, P_{11}, P_{22}\right]</script><p>相关的Python代码实现如下所示：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">46</span>]: np.allclose(np.diag(P), np.einsum(<span class="string">&#x27;ii-&gt;i&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">46</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="求矩阵迹"><a href="#求矩阵迹" class="headerlink" title="求矩阵迹"></a>求矩阵迹</h2><p>矩阵的迹（Trace），就是对所有的对角元进行求和，那么有了上一步使用爱因斯坦求和函数提取所有的对角元之后，其实我们可以稍微调整一下，就能得到求矩阵迹的方法。首先看下矩阵迹的公式定义：<br>$$<br>Tr(P) &#x3D; Tr(\left[<br>\begin{matrix}<br>P_{00}&amp;P_{01}&amp;P_{02}\<br>P_{10}&amp;P_{11}&amp;P_{12}\<br>P_{20}&amp;P_{21}&amp;P_{22}<br>\end{matrix}<br>\right])&#x3D;P_{00}+P_{11}+P_{22}<br>$$</p>
-<p>相关的Python代码实现如下所示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">47</span>]: np.allclose(np.trace(P), np.einsum(<span class="string">&#x27;ii-&gt;&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">47</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
-
+<h2 id="求矩阵迹"><a href="#求矩阵迹" class="headerlink" title="求矩阵迹"></a>求矩阵迹</h2><p>矩阵的迹（Trace），就是对所有的对角元进行求和，那么有了上一步使用爱因斯坦求和函数提取所有的对角元之后，其实我们可以稍微调整一下，就能得到求矩阵迹的方法。首先看下矩阵迹的公式定义：</p>
+<script type="math/tex; mode=display">
+Tr(P) = Tr(\left[
+\begin{matrix}
+P_{00}&P_{01}&P_{02}\\
+P_{10}&P_{11}&P_{12}\\
+P_{20}&P_{21}&P_{22}
+\end{matrix}
+\right])=P_{00}+P_{11}+P_{22}</script><p>相关的Python代码实现如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">47</span>]: np.allclose(np.trace(P), np.einsum(<span class="string">&#x27;ii-&gt;&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">47</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure></p>
 <h2 id="多重运算"><a href="#多重运算" class="headerlink" title="多重运算"></a>多重运算</h2><p>有时候会涉及到一系列的矩阵按照顺序作用在一个向量上，如果从张量的角度来考虑的话，其中的维度还可以非常灵活的变化，不一定全都是方阵。应该说，这也是爱因斯坦求和算子的重大意义所在。如果不使用爱因斯坦求和算子，那么要计算$A\cdot B\cdot C\cdot x$这样的一个过程，可以多次嵌套使用numpy的dot点乘函数。但是这样比较麻烦，一般推荐可以使用numpy中的另外一个函数：<code>multi_dot</code>，相关的Python代码实现如下所示：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">39</span>]: np.allclose(np.linalg.multi_dot((P, P, P, x)), np.einsum(<span class="string">&#x27;ij,jk,kl,l-&gt;i&#x27;</span>, P, P, P, x))</span><br><span class="line">Out[<span class="number">39</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
 <p>在这种多重运算的过程中，可以使用einsum_path去找到一条更好的归并路径，以达到提升算法性能的效果。</p>
@@ -274,7 +347,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -285,7 +358,7 @@
 <nav class="article-nav">
   
     <a href="/2022/09/19/%E5%9B%9B%E5%85%83%E6%95%B0Quaternion%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           四元数Quaternion的基本运算
@@ -295,7 +368,7 @@
   
   
     <a href="/2022/09/05/Gimbal-Lock%E6%AC%A7%E6%8B%89%E8%A7%92%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">Gimbal Lock欧拉角死锁问题</div>
     </a>
   
@@ -303,7 +376,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=可以用爱因斯坦求和替代的那些矩阵运算 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F09%2F07%2F%25E5%258F%25AF%25E4%25BB%25A5%25E7%2594%25A8%25E7%2588%25B1%25E5%259B%25A0%25E6%2596%25AF%25E5%259D%25A6%25E6%25B1%2582%25E5%2592%258C%25E6%259B%25BF%25E4%25BB%25A3%25E7%259A%2584%25E9%2582%25A3%25E4%25BA%259B%25E7%259F%25A9%25E9%2598%25B5%25E8%25BF%2590%25E7%25AE%2597%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -458,6 +531,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

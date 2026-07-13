@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidwLh98CpjfiuVniqdYFlRj" class="article article-type-post" itemscope
+    <article id="post-cuidw6PaO5gfpVYJuzIJjn6ww" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,26 +210,79 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>量子计算机，是由基本单元量子比特所组成的新型计算体系，通过量子叠加和量子纠缠的特性，来完成对量子态的操纵，最终再通过量子测量获得到想要的计算结果。而在量子计算机上面执行量子化学的任务，被认为是一个非常promising的应用场景，不论是从最初费曼的想法与设计，还是这几年所发展起来的近期量子计算（NISQ）的技术，都对量子计算化学这一新兴研究方向进行了阐述。本文通过最基础的谐振波，讲解到薛定谔方程和动量算符的由来，最终介绍了两种量子化的变换。其实所谓的量子化，都是对表征体系进行了调整。一次量子化将哈密顿量从电子的粒子性带到了量子力学中的波粒二象性，引入了动量算符。二次量子化将动量表象和位置表象变换到粒子数表象，通过统计平均的方法去研究电子在不同轨道之间跃迁时的能量吸收与产生，用于表示体系总能量。</p>
 <span id="more"></span>
-
-<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>二次量子化是量子化学（Quantum Chemistry）&#x2F;量子计算化学（Quantum Computational Chemistry）中常用的一个模型，可以用于计算电子分布的本征能量和本征波函数。有一部分的物理学教材会认为二次量子化的这个叫法不大妥当，因为其本质是一种独立的正则变换，所以应该被称为第一种量子化（First Quantization）和第二种量子化（Second Quantization）。但是由于历史原因，就一直称呼为二次量子化。而如果认真去追究起来，称为二次量子化，可以理解为经历了两次的正则变换得到的结果，也并无不妥。本文将从比较原始的电子模型和启发式的薛定谔方程的推导讲起，尝试理解二次量子化发展过程中的各种物理图像。</p>
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>二次量子化是量子化学（Quantum Chemistry）/量子计算化学（Quantum Computational Chemistry）中常用的一个模型，可以用于计算电子分布的本征能量和本征波函数。有一部分的物理学教材会认为二次量子化的这个叫法不大妥当，因为其本质是一种独立的正则变换，所以应该被称为第一种量子化（First Quantization）和第二种量子化（Second Quantization）。但是由于历史原因，就一直称呼为二次量子化。而如果认真去追究起来，称为二次量子化，可以理解为经历了两次的正则变换得到的结果，也并无不妥。本文将从比较原始的电子模型和启发式的薛定谔方程的推导讲起，尝试理解二次量子化发展过程中的各种物理图像。</p>
 <h1 id="一维无限长谐振子模型"><a href="#一维无限长谐振子模型" class="headerlink" title="一维无限长谐振子模型"></a>一维无限长谐振子模型</h1><p>在一个处于本征态的稳定的原子核-电子系统，如果把电子理解为一个粒子，那么所有的电子都处于围绕一个中心来回振动的状态，大致运动过程如下动态图（图片来自于参考链接1）所示：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202204/2277440-20220405084155787-1606282881.gif">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202204/2277440-20220405084155787-1606282881.gif">
 </div>
 
-<p>这就是一个平面简谐波，在横轴上进行传播，而给定一个时刻$\tau$，又可以完整的描述其每一个位置所处的波形。如果给定一个位置进行观测，又可以得到任意时刻的振幅，即一维谐振子的运动方程：<br>$$<br>y(t)&#x3D;Acos(\omega t+\phi_0)<br>$$<br>完整的一维简谐波运动方程可以表示为：<br>$$<br>y(x,t)&#x3D;Acos(kx-\omega t+\phi_0)<br>$$<br>之所以这里取了一个负号，是由于考虑了$v&#x3D;\frac{\partial y}{\partial t}$，即粒子运动速度的方向性。考虑完电子的粒子性，再考虑其波动性，我们不在把电子当做是在空间中来回运动的粒子，而是一个飘忽不定的“幽灵”。我们无法确定电子在空间中运动的轨迹，但是可以通过不断的测量，最终得到电子在空间中的一个分布图像，类似于下图的这种电子云的形式：</p>
+<p>这就是一个平面简谐波，在横轴上进行传播，而给定一个时刻$\tau$，又可以完整的描述其每一个位置所处的波形。如果给定一个位置进行观测，又可以得到任意时刻的振幅，即一维谐振子的运动方程：</p>
+<script type="math/tex; mode=display">
+y(t)=Acos(\omega t+\phi_0)</script><p>完整的一维简谐波运动方程可以表示为：</p>
+<script type="math/tex; mode=display">
+y(x,t)=Acos(kx-\omega t+\phi_0)</script><p>之所以这里取了一个负号，是由于考虑了$v=\frac{\partial y}{\partial t}$，即粒子运动速度的方向性。考虑完电子的粒子性，再考虑其波动性，我们不在把电子当做是在空间中来回运动的粒子，而是一个飘忽不定的“幽灵”。我们无法确定电子在空间中运动的轨迹，但是可以通过不断的测量，最终得到电子在空间中的一个分布图像，类似于下图的这种电子云的形式：</p>
 <div align=center>
-	<img src="https://tse1-mm.cn.bing.net/th/id/R-C.f43707b8fd3c25781cd26a245155c209?rik=Py0D94II2ljz9A&riu=http%3a%2f%2fpic.baike.soso.com%2fp%2f20090711%2fbki-20090711224733-31368909.jpg&ehk=pLM8stIL9ZjqHafscVf3Ut5K7e4nC%2fULaz9CvmqNqFQ%3d&risl=&pid=ImgRaw&r=0">
+    <img src="https://tse1-mm.cn.bing.net/th/id/R-C.f43707b8fd3c25781cd26a245155c209?rik=Py0D94II2ljz9A&riu=http%3a%2f%2fpic.baike.soso.com%2fp%2f20090711%2fbki-20090711224733-31368909.jpg&ehk=pLM8stIL9ZjqHafscVf3Ut5K7e4nC%2fULaz9CvmqNqFQ%3d&risl=&pid=ImgRaw&r=0">
 </div>
 
-<p>考虑波动性时，我们相当于在粒子性的基础之上施加两条约束：1. 得到的电子云的统计结果，要符合粒子性特征的密度分布，这就要保障实空间运动方程一致；2. 由于粒子性运动的范围有上下限，因此电子在粒子性运动空间内被观测到的总概率为1，也就是不可能在给定的运动空间之外检测到该电子。那么，基于波动性的要求，我们应当如此重写电子波函数：<br>$$<br>\left|\psi\right&gt;&#x3D;\psi(x,t)&#x3D;Ae^{i(kx-\omega t+\phi_0)}&#x3D;Acos(kx-\omega t+\phi_0)+iAsin(kx-\omega t+\phi_0)<br>$$<br>如果是考虑三维的情况，把上式中的$x$替换为$\bold{r}$即可。</p>
-<h1 id="薛定谔方程的启发式推导"><a href="#薛定谔方程的启发式推导" class="headerlink" title="薛定谔方程的启发式推导"></a>薛定谔方程的启发式推导</h1><p>根据上一个章节中所给定的电子波函数，我们可以有如下的结论：<br>$$<br>\frac{\partial \psi}{\partial t}&#x3D;-i\omega\psi,\frac{\partial \psi}{\partial x}&#x3D;ik\psi,\frac{\partial^2\psi}{\partial x^2}&#x3D;-k^2\psi<br>$$<br>应用这些结论，我们可以逐一做推断，首先代入波函数的能量：$E_{wave}&#x3D;h\mu&#x3D;\hbar\omega$得到：<br>$$<br>i\hbar\frac{\partial\psi}{\partial t}&#x3D;\hbar\omega\psi&#x3D;E_{wave}\psi<br>$$<br>再考虑物质波的总能量：$E_{wave}&#x3D;\frac{p^2}{2m}+U$和德布罗意波的动量表达式：$p&#x3D;\hbar k$，代入上式后得到：<br>$$<br>p\psi&#x3D;\hbar k\psi&#x3D;-i\hbar\frac{\partial}{\partial x}\psi\<br>p^2\psi&#x3D;\hbar^2 k^2\psi&#x3D;-\hbar^2\frac{\partial^2}{\partial x^2}\psi\<br>i\hbar\frac{\partial}{\partial t}\psi&#x3D;-\frac{\hbar^2}{2m}\nabla^2\psi+U(x)\psi<br>$$<br>其中拉普拉斯算子$\nabla^2f&#x3D;\sum^n_{i&#x3D;1}\frac{\partial^2}{\partial x_i^2}f$，这样就完成了一个薛定谔方程的启发式推导。据说薛定谔最早就是这么想的，实际上这个推导过程有太多的限制条件，并不是一个通用的推导，但是推导出来的结果，也就是<strong>定态薛定谔方程</strong>，在各种实验结果下都得到了很好的验证。</p>
-<h1 id="量子力学算符"><a href="#量子力学算符" class="headerlink" title="量子力学算符"></a>量子力学算符</h1><p>在上面关于动量的式子中，我们经过整理之后可以得到：<br>$$<br>\hat{p}&#x3D;-i\hbar\frac{\partial}{\partial x}<br>$$<br>这里之所以把动量写成了$\hat{p}$，是因为其不再是一个表征具体系统特性的一个量，而是一个量子力学的操作算符。得到动量算符的表达式之后，我们可以计算这样的一对对易子：<br>$$<br>\begin{align*}<br>[x,p]f(x)&amp;&#x3D;x\hat{p}f(x)-\hat{p}xf(x)\<br>&amp;&#x3D;-i\hbar\frac{\partial f(x)}{\partial x}+i\hbar\frac{\partial(xf(x))}{\partial x}\<br>&amp;&#x3D;-i\hbar\frac{\partial f(x)}{\partial x}+i\hbar f(x)+i\hbar\frac{\partial f(x)}{\partial x}\<br>&amp;&#x3D;i\hbar f(x)\Rightarrow[x,p]&#x3D;i\hbar<br>\end{align*}<br>$$<br>这个推论称之为<strong>正则对易关系</strong>，很多量子力学算符都有类似的特性，如果从矩阵的角度来理解，就是两个不满足交换律的矩阵的乘法。在上一个章节中，如果去掉两边的波函数，我们发现等式右边虽然形式发生了变化，但实际上还是表征体系总能量的特性，即：<br>$$<br>H&#x3D;\frac{p^2}{2m}+U(x)\Rightarrow\hat{H}&#x3D;-\frac{\hbar^2}{2m}\nabla^2+U(x)&#x3D;i\hbar\frac{\partial}{\partial t}<br>$$<br>这是哈密顿算符的由来，关于哈密顿算符的更多特性，这里先不展开介绍。但是我们可以根据非算符形式的哈密顿量，回顾一下先前的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/legendre.html">博客</a>中介绍过的拉格朗日力学和哈密顿力学，我们可以计算得：<br>$$<br>\frac{\partial H}{\partial p}&#x3D;\frac{p}{m}&#x3D;\dot{x},\frac{\partial H}{\partial x}&#x3D;\frac{\partial U(x)}{\partial x}&#x3D;-F&#x3D;-m\ddot{x}&#x3D;-\dot{p}<br>$$<br>此即哈密顿量在动量和坐标表象下的<strong>哈密顿正则方程</strong>。</p>
-<h1 id="通用电子结构问题与BO近似"><a href="#通用电子结构问题与BO近似" class="headerlink" title="通用电子结构问题与BO近似"></a>通用电子结构问题与BO近似</h1><p>对于一个有$K$个原子核与$N$个电子的系统而言，其系统哈密顿量（总能量）可以表示为：<br>$$<br>H_{total}&#x3D;\sum_{i&#x3D;1}^K\frac{p_i^2}{2M_i}+\sum_{i&#x3D;1}^N\frac{p_i^2}{2m_e}-\sum_{i,j}\frac{e^2}{4\pi\epsilon_0}\frac{Z_j}{\left|r_i-R_j\right|}+\frac{1}{2}\sum_{i\neq j}\frac{e^2}{4\pi\epsilon_0}\frac{1}{\left|r_i-r_j\right|}+\frac{1}{2}\sum_{i\neq j}\frac{e^2}{4\pi\epsilon_0}\frac{Z_iZ_j}{\left|r_i-r_j\right|}<br>$$<br>其中大写的代表原子核的参数，小写的代表电子的参数。为了简化模型，我们引入<strong>玻恩-奥本海默近似</strong>（Born-Oppenheimer approximation，简称BO近似）：<br>$$<br>\psi(r,R)&#x3D;\chi(R)\psi(R;r)<br>$$<br>通俗的说就是，<strong>由于原子核与电子的质量不在同一个量级，可以近似的将系统波函数看做是原子核波函数与电子波函数的乘积</strong>。而通常我们在量子化学中所考虑的问题都是给定的构象，也就是固定了原子核的位置，则原子核之间的势能可以看做是一个常数。这就使得，我们可以只关注电子这一块的哈密顿量与波函数，简化后得到的哈密顿量形式如下：<br>$$<br>H(p,r)&#x3D;\sum_{i&#x3D;1}^N\frac{p_i^2}{2m_e}-\sum_{i,j}\frac{e^2}{4\pi\epsilon_0}\frac{Z_j}{\left|r_i-R_j\right|}+\frac{1}{2}\sum_{i\neq j}\frac{e^2}{4\pi\epsilon_0}\frac{1}{\left|r_i-r_j\right|}<br>$$</p>
-<h1 id="一次量子化"><a href="#一次量子化" class="headerlink" title="一次量子化"></a>一次量子化</h1><p>上一个章节中所得到的电子哈密顿量，只能用于表征其粒子性，为了同时满足电子的波粒二象性，我们需要对其参量进行正则变换。但是第一步我们可以仅简单的对变量（动量表象和位置表象）做等价变换：直接将动量算符$\hat{p}&#x3D;-i\hbar\frac{\partial}{\partial x}$代入其中。而位置表象虽然从绝对位置表象$r_i$变换到了相对位置表象$r_i-r_j$，但是我们可以发现其偏导数保持不变，则维持了哈密顿正则方程的不变性，是一个正则变换。最终我们得到的一次量子化（或者叫第一类量子化，First Quantization）的电子哈密顿量结果为：<br>$$<br>H&#x3D;-\sum_i\frac{\nabla^2_i}{2}-\sum_{i,j}\frac{Z_j}{\left|r_i-R_j\right|}+\frac{1}{2}\sum_{i\neq j}\frac{1}{\left|r_i-r_j\right|}<br>$$<br>需要注意的是，这里同时做了无量纲化：坐标取波尔长度，能量取Hartree能量。一次量子化的波函数，一般通过<strong>Slater行列式</strong>来表示：<br>$$<br>\psi(\bold{x_0},…,\bold{x_{N-1}})&#x3D;<br>\frac{1}{\sqrt{N!}}\left|\begin{matrix}<br>\phi_0(\bold{x_0})&amp;\phi_1(\bold{x_0})&amp;…&amp;\psi_{M-1}(\bold{x_0})\<br>\phi_0(\bold{x_1})&amp;\phi_1(\bold{x_1})&amp;…&amp;\psi_{M-1}(\bold{x_1})\<br>.&amp;.&amp;.&amp;.\<br>.&amp;.&amp;.&amp;.\<br>.&amp;.&amp;.&amp;.\<br>\phi_0(\bold{x_{N-1}})&amp;\phi_1(\bold{x_{N-1}})&amp;…&amp;\psi_{M-1}(\bold{x_{N-1}})<br>\end{matrix}<br>\right|<br>$$<br>其中$M$表示电子轨道数（其实每一个电子轨道都可以理解成一个能级），$\phi_0(\bold{x_1})$所表示的物理含义是第1个电子处于第0个电子轨道。这种波函数表征形式的好处在于，保证了每一个轨道上最多只有一个电子（电子的自旋上下被划分为两个电子轨道）。而且由于行列式的特性，Slater行列式还具有反演对称性（任意交换两个电子所处的位置，会使得符号取反）：<br>$$<br>\psi(\bold{x_0},\bold{x_1},…,\bold{x_{N-1}})&#x3D;-\psi(\bold{x_1},\bold{x_0},…,\bold{x_{N-1}})<br>$$<br>但是看这个哈密顿量和波函数的形式我们就知道，如果我们想处理这种连续空间的变量是比较困难的，要尽可能的将其转换成离散化的变量，因此就产生了第二种量子化的方法。</p>
-<h1 id="二次量子化"><a href="#二次量子化" class="headerlink" title="二次量子化"></a>二次量子化</h1><p>二次量子化（Second Quantization），也称为第二种量子化，将动量与相对位置表象变换到了离散化的粒子数表象，通过产生算符$a^{\dagger}$和湮灭算符$a$来控制给定能级&#x2F;电子轨道的粒子数（0或1）。按照这种方法，我们可以将哈密顿量写为如下的单体相互作用和两体相互作用形式：<br>$$<br>H&#x3D;\sum_{p,q}h_{pq}a^{\dagger}<em>pa_q+\frac{1}{2}\sum</em>{p,q,r,s}h_{pqrs}a^{\dagger}<em>pq^{\dagger}<em>qa_ra_s<br>$$<br>其中单体相互作用参数和两体相互作用参数分别为：<br>$$<br>h</em>{pq}&#x3D;\left&lt;\phi_p\right|\left(-\sum_i\frac{\nabla^2_i}{2}-\sum_{j}\frac{Z_j}{\left|r-R_j\right|}\right)\left|\phi_q\right&gt;&#x3D;<br>\int d\bold{x}\phi_p^*(\bold{x})\left(-\sum_i\frac{\nabla^2_i}{2}-\sum</em>{j}\frac{Z_j}{\left|r-R_j\right|}\right)\phi_q(\bold{x})\<br>h_{pqrs}&#x3D;\left&lt;\phi_p\right|\left&lt;\phi_q\right|\frac{1}{\left|r_i-r_j\right|}\left|\phi_r\right&gt;\left|\phi_s\right&gt;&#x3D;<br>\int d\bold{x_1}d\bold{x_2}\frac{\phi_p^<em>(\bold{x_1})\phi_q^</em>(\bold{x_2})\phi_r(\bold{x_2})\phi_s(\bold{x_1})}{\left|r_i-r_j\right|}<br>$$<br>这两个参数分别所表征的物理含义为：电子从q轨道跃迁到p轨道的动能和原子核势能增减总和，在紧束缚模型下又称为hopping energy（电子跳跃能），以及两个电子分别从r、s轨道跃迁到q、p轨道的电子之间相互作用势能的变化（单体动能和原子核势能在前面一项中已经考虑到了）。关于对位置的积分，可以理解为给定的轨道占据一定的空间，空间上的任一位置的跃迁都被认为是该轨道所发生的跃迁，因此要遍历轨道所占据的空间。如下图所示是一个电子跃迁示意（图片来自于参考链接3）：</p>
+<p>考虑波动性时，我们相当于在粒子性的基础之上施加两条约束：1. 得到的电子云的统计结果，要符合粒子性特征的密度分布，这就要保障实空间运动方程一致；2. 由于粒子性运动的范围有上下限，因此电子在粒子性运动空间内被观测到的总概率为1，也就是不可能在给定的运动空间之外检测到该电子。那么，基于波动性的要求，我们应当如此重写电子波函数：</p>
+<script type="math/tex; mode=display">
+\left|\psi\right>=\psi(x,t)=Ae^{i(kx-\omega t+\phi_0)}=Acos(kx-\omega t+\phi_0)+iAsin(kx-\omega t+\phi_0)</script><p>如果是考虑三维的情况，把上式中的$x$替换为$\bold{r}$即可。</p>
+<h1 id="薛定谔方程的启发式推导"><a href="#薛定谔方程的启发式推导" class="headerlink" title="薛定谔方程的启发式推导"></a>薛定谔方程的启发式推导</h1><p>根据上一个章节中所给定的电子波函数，我们可以有如下的结论：</p>
+<script type="math/tex; mode=display">
+\frac{\partial \psi}{\partial t}=-i\omega\psi,\frac{\partial \psi}{\partial x}=ik\psi,\frac{\partial^2\psi}{\partial x^2}=-k^2\psi</script><p>应用这些结论，我们可以逐一做推断，首先代入波函数的能量：$E_{wave}=h\mu=\hbar\omega$得到：</p>
+<script type="math/tex; mode=display">
+i\hbar\frac{\partial\psi}{\partial t}=\hbar\omega\psi=E_{wave}\psi</script><p>再考虑物质波的总能量：$E_{wave}=\frac{p^2}{2m}+U$和德布罗意波的动量表达式：$p=\hbar k$，代入上式后得到：</p>
+<script type="math/tex; mode=display">
+p\psi=\hbar k\psi=-i\hbar\frac{\partial}{\partial x}\psi\\
+p^2\psi=\hbar^2 k^2\psi=-\hbar^2\frac{\partial^2}{\partial x^2}\psi\\
+i\hbar\frac{\partial}{\partial t}\psi=-\frac{\hbar^2}{2m}\nabla^2\psi+U(x)\psi</script><p>其中拉普拉斯算子$\nabla^2f=\sum^n_{i=1}\frac{\partial^2}{\partial x_i^2}f$，这样就完成了一个薛定谔方程的启发式推导。据说薛定谔最早就是这么想的，实际上这个推导过程有太多的限制条件，并不是一个通用的推导，但是推导出来的结果，也就是<strong>定态薛定谔方程</strong>，在各种实验结果下都得到了很好的验证。</p>
+<h1 id="量子力学算符"><a href="#量子力学算符" class="headerlink" title="量子力学算符"></a>量子力学算符</h1><p>在上面关于动量的式子中，我们经过整理之后可以得到：</p>
+<script type="math/tex; mode=display">
+\hat{p}=-i\hbar\frac{\partial}{\partial x}</script><p>这里之所以把动量写成了$\hat{p}$，是因为其不再是一个表征具体系统特性的一个量，而是一个量子力学的操作算符。得到动量算符的表达式之后，我们可以计算这样的一对对易子：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+[x,p]f(x)&=x\hat{p}f(x)-\hat{p}xf(x)\\
+&=-i\hbar\frac{\partial f(x)}{\partial x}+i\hbar\frac{\partial(xf(x))}{\partial x}\\
+&=-i\hbar\frac{\partial f(x)}{\partial x}+i\hbar f(x)+i\hbar\frac{\partial f(x)}{\partial x}\\
+&=i\hbar f(x)\Rightarrow[x,p]=i\hbar
+\end{align*}</script><p>这个推论称之为<strong>正则对易关系</strong>，很多量子力学算符都有类似的特性，如果从矩阵的角度来理解，就是两个不满足交换律的矩阵的乘法。在上一个章节中，如果去掉两边的波函数，我们发现等式右边虽然形式发生了变化，但实际上还是表征体系总能量的特性，即：</p>
+<script type="math/tex; mode=display">
+H=\frac{p^2}{2m}+U(x)\Rightarrow\hat{H}=-\frac{\hbar^2}{2m}\nabla^2+U(x)=i\hbar\frac{\partial}{\partial t}</script><p>这是哈密顿算符的由来，关于哈密顿算符的更多特性，这里先不展开介绍。但是我们可以根据非算符形式的哈密顿量，回顾一下先前的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/legendre.html">博客</a>中介绍过的拉格朗日力学和哈密顿力学，我们可以计算得：</p>
+<script type="math/tex; mode=display">
+\frac{\partial H}{\partial p}=\frac{p}{m}=\dot{x},\frac{\partial H}{\partial x}=\frac{\partial U(x)}{\partial x}=-F=-m\ddot{x}=-\dot{p}</script><p>此即哈密顿量在动量和坐标表象下的<strong>哈密顿正则方程</strong>。</p>
+<h1 id="通用电子结构问题与BO近似"><a href="#通用电子结构问题与BO近似" class="headerlink" title="通用电子结构问题与BO近似"></a>通用电子结构问题与BO近似</h1><p>对于一个有$K$个原子核与$N$个电子的系统而言，其系统哈密顿量（总能量）可以表示为：</p>
+<script type="math/tex; mode=display">
+H_{total}=\sum_{i=1}^K\frac{p_i^2}{2M_i}+\sum_{i=1}^N\frac{p_i^2}{2m_e}-\sum_{i,j}\frac{e^2}{4\pi\epsilon_0}\frac{Z_j}{\left|r_i-R_j\right|}+\frac{1}{2}\sum_{i\neq j}\frac{e^2}{4\pi\epsilon_0}\frac{1}{\left|r_i-r_j\right|}+\frac{1}{2}\sum_{i\neq j}\frac{e^2}{4\pi\epsilon_0}\frac{Z_iZ_j}{\left|r_i-r_j\right|}</script><p>其中大写的代表原子核的参数，小写的代表电子的参数。为了简化模型，我们引入<strong>玻恩-奥本海默近似</strong>（Born-Oppenheimer approximation，简称BO近似）：</p>
+<script type="math/tex; mode=display">
+\psi(r,R)=\chi(R)\psi(R;r)</script><p>通俗的说就是，<strong>由于原子核与电子的质量不在同一个量级，可以近似的将系统波函数看做是原子核波函数与电子波函数的乘积</strong>。而通常我们在量子化学中所考虑的问题都是给定的构象，也就是固定了原子核的位置，则原子核之间的势能可以看做是一个常数。这就使得，我们可以只关注电子这一块的哈密顿量与波函数，简化后得到的哈密顿量形式如下：</p>
+<script type="math/tex; mode=display">
+H(p,r)=\sum_{i=1}^N\frac{p_i^2}{2m_e}-\sum_{i,j}\frac{e^2}{4\pi\epsilon_0}\frac{Z_j}{\left|r_i-R_j\right|}+\frac{1}{2}\sum_{i\neq j}\frac{e^2}{4\pi\epsilon_0}\frac{1}{\left|r_i-r_j\right|}</script><h1 id="一次量子化"><a href="#一次量子化" class="headerlink" title="一次量子化"></a>一次量子化</h1><p>上一个章节中所得到的电子哈密顿量，只能用于表征其粒子性，为了同时满足电子的波粒二象性，我们需要对其参量进行正则变换。但是第一步我们可以仅简单的对变量（动量表象和位置表象）做等价变换：直接将动量算符$\hat{p}=-i\hbar\frac{\partial}{\partial x}$代入其中。而位置表象虽然从绝对位置表象$r_i$变换到了相对位置表象$r_i-r_j$，但是我们可以发现其偏导数保持不变，则维持了哈密顿正则方程的不变性，是一个正则变换。最终我们得到的一次量子化（或者叫第一类量子化，First Quantization）的电子哈密顿量结果为：</p>
+<script type="math/tex; mode=display">
+H=-\sum_i\frac{\nabla^2_i}{2}-\sum_{i,j}\frac{Z_j}{\left|r_i-R_j\right|}+\frac{1}{2}\sum_{i\neq j}\frac{1}{\left|r_i-r_j\right|}</script><p>需要注意的是，这里同时做了无量纲化：坐标取波尔长度，能量取Hartree能量。一次量子化的波函数，一般通过<strong>Slater行列式</strong>来表示：</p>
+<script type="math/tex; mode=display">
+\psi(\bold{x_0},...,\bold{x_{N-1}})=
+\frac{1}{\sqrt{N!}}\left|\begin{matrix}
+\phi_0(\bold{x_0})&\phi_1(\bold{x_0})&...&\psi_{M-1}(\bold{x_0})\\
+\phi_0(\bold{x_1})&\phi_1(\bold{x_1})&...&\psi_{M-1}(\bold{x_1})\\
+.&.&.&.\\
+.&.&.&.\\
+.&.&.&.\\
+\phi_0(\bold{x_{N-1}})&\phi_1(\bold{x_{N-1}})&...&\psi_{M-1}(\bold{x_{N-1}})
+\end{matrix}
+\right|</script><p>其中$M$表示电子轨道数（其实每一个电子轨道都可以理解成一个能级），$\phi_0(\bold{x_1})$所表示的物理含义是第1个电子处于第0个电子轨道。这种波函数表征形式的好处在于，保证了每一个轨道上最多只有一个电子（电子的自旋上下被划分为两个电子轨道）。而且由于行列式的特性，Slater行列式还具有反演对称性（任意交换两个电子所处的位置，会使得符号取反）：</p>
+<script type="math/tex; mode=display">
+\psi(\bold{x_0},\bold{x_1},...,\bold{x_{N-1}})=-\psi(\bold{x_1},\bold{x_0},...,\bold{x_{N-1}})</script><p>但是看这个哈密顿量和波函数的形式我们就知道，如果我们想处理这种连续空间的变量是比较困难的，要尽可能的将其转换成离散化的变量，因此就产生了第二种量子化的方法。</p>
+<h1 id="二次量子化"><a href="#二次量子化" class="headerlink" title="二次量子化"></a>二次量子化</h1><p>二次量子化（Second Quantization），也称为第二种量子化，将动量与相对位置表象变换到了离散化的粒子数表象，通过产生算符$a^{\dagger}$和湮灭算符$a$来控制给定能级/电子轨道的粒子数（0或1）。按照这种方法，我们可以将哈密顿量写为如下的单体相互作用和两体相互作用形式：</p>
+<script type="math/tex; mode=display">
+H=\sum_{p,q}h_{pq}a^{\dagger}_pa_q+\frac{1}{2}\sum_{p,q,r,s}h_{pqrs}a^{\dagger}_pq^{\dagger}_qa_ra_s</script><p>其中单体相互作用参数和两体相互作用参数分别为：</p>
+<script type="math/tex; mode=display">
+h_{pq}=\left<\phi_p\right|\left(-\sum_i\frac{\nabla^2_i}{2}-\sum_{j}\frac{Z_j}{\left|r-R_j\right|}\right)\left|\phi_q\right>=
+\int d\bold{x}\phi_p^*(\bold{x})\left(-\sum_i\frac{\nabla^2_i}{2}-\sum_{j}\frac{Z_j}{\left|r-R_j\right|}\right)\phi_q(\bold{x})\\
+h_{pqrs}=\left<\phi_p\right|\left<\phi_q\right|\frac{1}{\left|r_i-r_j\right|}\left|\phi_r\right>\left|\phi_s\right>=
+\int d\bold{x_1}d\bold{x_2}\frac{\phi_p^*(\bold{x_1})\phi_q^*(\bold{x_2})\phi_r(\bold{x_2})\phi_s(\bold{x_1})}{\left|r_i-r_j\right|}</script><p>这两个参数分别所表征的物理含义为：电子从q轨道跃迁到p轨道的动能和原子核势能增减总和，在紧束缚模型下又称为hopping energy（电子跳跃能），以及两个电子分别从r、s轨道跃迁到q、p轨道的电子之间相互作用势能的变化（单体动能和原子核势能在前面一项中已经考虑到了）。关于对位置的积分，可以理解为给定的轨道占据一定的空间，空间上的任一位置的跃迁都被认为是该轨道所发生的跃迁，因此要遍历轨道所占据的空间。如下图所示是一个电子跃迁示意（图片来自于参考链接3）：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202204/2277440-20220405233010869-1989351062.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202204/2277440-20220405233010869-1989351062.png">
 </div>
 
 <p>如此一来，我们就可以<strong>将一个量子比特定义成一个电子轨道，从而实现在量子计算机上面完成量子化学计算的任务</strong>。</p>
@@ -258,7 +311,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -269,7 +322,7 @@
 <nav class="article-nav">
   
     <a href="/2022/04/06/%E6%8E%A7%E5%88%B6Python%E6%B5%AE%E7%82%B9%E6%95%B0%E8%BE%93%E5%87%BA%E4%BD%8D%E6%95%B0/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           控制Python浮点数输出位数
@@ -279,7 +332,7 @@
   
   
     <a href="/2022/04/02/%E5%8F%98%E5%88%86%E9%87%8F%E5%AD%90%E6%9C%AC%E5%BE%81%E6%B1%82%E8%A7%A3%E5%99%A8/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">变分量子本征求解器</div>
     </a>
   
@@ -287,7 +340,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=二次量子化与量子计算化学 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F04%2F05%2F%25E4%25BA%258C%25E6%25AC%25A1%25E9%2587%258F%25E5%25AD%2590%25E5%258C%2596%25E4%25B8%258E%25E9%2587%258F%25E5%25AD%2590%25E8%25AE%25A1%25E7%25AE%2597%25E5%258C%2596%25E5%25AD%25A6%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -442,6 +495,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidVNe18wJZGFNQJFbLtlZb1" class="article article-type-post" itemscope
+    <article id="post-cuidShdVU1jQFS_kt4JnsNToU" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,344 +210,22 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文通过对Xponge+VMD的工具对蛋白质进行建模，然后总结了20种氨基酸的具体信息，也就是蛋白质的基本组成单元。通过对这些氨基酸的组合，就可以得到一个具有生物活性的蛋白质。同时本文还介绍了常用的存储蛋白质结构的文件格式pdb的具体格式化定义，总体来说是一个总结性的文章。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>了解蛋白质的基本组成单元和结构，有助于了解蛋白质的特性。对于蛋白质结构的研究，在医药领域是非常核心的重要工作。这里我们仅仅介绍一些蛋白质的基本组成单元——20种氨基酸的种类，以及可以用于蛋白质建模的一些工具。</p>
-<h1 id="Xponge的安装和使用"><a href="#Xponge的安装和使用" class="headerlink" title="Xponge的安装和使用"></a>Xponge的安装和使用</h1><p>Xponge是一款基于python开发的可以用于蛋白质建模的软件，可以用pip进行安装和管理：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install xponge --upgrade</span><br><span class="line">Requirement already satisfied: xponge <span class="keyword">in</span> /home/dechin/anaconda3/envs/mindspore16/lib/python3.9/site-packages (1.2.5.9)</span><br><span class="line">Requirement already satisfied: NetCDF4 <span class="keyword">in</span> /home/dechin/anaconda3/envs/mindspore16/lib/python3.9/site-packages (from xponge) (1.5.8)</span><br><span class="line">Requirement already satisfied: pubchempy <span class="keyword">in</span> /home/dechin/anaconda3/envs/mindspore16/lib/python3.9/site-packages (from xponge) (1.0.4)</span><br><span class="line">Requirement already satisfied: numpy <span class="keyword">in</span> /home/dechin/anaconda3/envs/mindspore16/lib/python3.9/site-packages (from xponge) (1.20.3)</span><br><span class="line">Requirement already satisfied: cftime <span class="keyword">in</span> /home/dechin/anaconda3/envs/mindspore16/lib/python3.9/site-packages (from NetCDF4-&gt;xponge) (1.6.0)</span><br></pre></td></tr></table></figure>
-<p>使用的方法是在python文件或者python终端窗口中导入xponge和相关力场之后直接调用相关接口：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ python3</span><br><span class="line">Python 3.9.12 (main, Apr  5 2022, 06:56:58) </span><br><span class="line">[GCC 7.5.0] :: Anaconda, Inc. on linux</span><br><span class="line">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span><br><span class="line">&gt;&gt;&gt; import Xponge</span><br><span class="line">&gt;&gt;&gt; import Xponge.forcefield.AMBER.ff14SB</span><br><span class="line">Reference for ff14SB:</span><br><span class="line">  James A. Maier, Carmenza Martinez, Koushik Kasavajhala, Lauren Wickstrom, Kevin E. Hauser, and Carlos Simmerling</span><br><span class="line">    ff14SB: Improving the accuracy of protein side chain and backbone parameters from ff99SB</span><br><span class="line">    Journal of Chemical Theory and Computation 2015 11 (8), 3696-3713</span><br><span class="line">    DOI: 10.1021/acs.jctc.5b00255</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; Save_PDB(ALA,&#x27;ALA.pdb&#x27;) # 内置了所有的氨基酸种类，注意开头结尾的氨基酸名称有所变化</span><br><span class="line">&gt;&gt;&gt; exit()</span><br></pre></td></tr></table></figure>
-<p>执行完Save之后，就会在当前的路径下生成一个<code>ALA.pdb</code>的文件：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> ALA.pdb </span><br><span class="line">REMARK   Generated By Xponge (Molecule)</span><br><span class="line">ATOM      1    N ALA     1      -3.801  -7.214   0.158                   </span><br><span class="line">ATOM      2    H ALA     1      -2.791  -7.214   0.158                   </span><br><span class="line">ATOM      3   CA ALA     1      -4.487  -5.938   0.158                   </span><br><span class="line">ATOM      4   HA ALA     1      -5.112  -5.861  -0.732                   </span><br><span class="line">ATOM      5   CB ALA     1      -5.374  -5.792   1.390                   </span><br><span class="line">ATOM      6  HB1 ALA     1      -4.761  -5.858   2.289                   </span><br><span class="line">ATOM      7  HB2 ALA     1      -5.877  -4.826   1.363                   </span><br><span class="line">ATOM      8  HB3 ALA     1      -6.118  -6.588   1.399                   </span><br><span class="line">ATOM      9    C ALA     1      -3.497  -4.783   0.158                   </span><br><span class="line">ATOM     10    O ALA     1      -2.287  -4.998   0.158</span><br></pre></td></tr></table></figure>
-<p>可以用VMD之类的软件打开pdb文件，看一下其分子结构：</p>
+<h1 id="Xponge的安装和使用"><a href="#Xponge的安装和使用" class="headerlink" title="Xponge的安装和使用"></a>Xponge的安装和使用</h1><p>Xponge是一款基于python开发的可以用于蛋白质建模的软件，可以用pip进行安装和管理：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install xponge --upgrade</span><br><span class="line">Requirement already satisfied: xponge <span class="keyword">in</span> /home/dechin/anaconda3/envs/mindspore16/lib/python3.9/site-packages (1.2.5.9)</span><br><span class="line">Requirement already satisfied: NetCDF4 <span class="keyword">in</span> /home/dechin/anaconda3/envs/mindspore16/lib/python3.9/site-packages (from xponge) (1.5.8)</span><br><span class="line">Requirement already satisfied: pubchempy <span class="keyword">in</span> /home/dechin/anaconda3/envs/mindspore16/lib/python3.9/site-packages (from xponge) (1.0.4)</span><br><span class="line">Requirement already satisfied: numpy <span class="keyword">in</span> /home/dechin/anaconda3/envs/mindspore16/lib/python3.9/site-packages (from xponge) (1.20.3)</span><br><span class="line">Requirement already satisfied: cftime <span class="keyword">in</span> /home/dechin/anaconda3/envs/mindspore16/lib/python3.9/site-packages (from NetCDF4-&gt;xponge) (1.6.0)</span><br></pre></td></tr></table></figure><br>使用的方法是在python文件或者python终端窗口中导入xponge和相关力场之后直接调用相关接口：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ python3</span><br><span class="line">Python 3.9.12 (main, Apr  5 2022, 06:56:58) </span><br><span class="line">[GCC 7.5.0] :: Anaconda, Inc. on linux</span><br><span class="line">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span><br><span class="line">&gt;&gt;&gt; import Xponge</span><br><span class="line">&gt;&gt;&gt; import Xponge.forcefield.AMBER.ff14SB</span><br><span class="line">Reference for ff14SB:</span><br><span class="line">  James A. Maier, Carmenza Martinez, Koushik Kasavajhala, Lauren Wickstrom, Kevin E. Hauser, and Carlos Simmerling</span><br><span class="line">    ff14SB: Improving the accuracy of protein side chain and backbone parameters from ff99SB</span><br><span class="line">    Journal of Chemical Theory and Computation 2015 11 (8), 3696-3713</span><br><span class="line">    DOI: 10.1021/acs.jctc.5b00255</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; Save_PDB(ALA,&#x27;ALA.pdb&#x27;) # 内置了所有的氨基酸种类，注意开头结尾的氨基酸名称有所变化</span><br><span class="line">&gt;&gt;&gt; exit()</span><br></pre></td></tr></table></figure><br>执行完Save之后，就会在当前的路径下生成一个<code>ALA.pdb</code>的文件：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> ALA.pdb </span><br><span class="line">REMARK   Generated By Xponge (Molecule)</span><br><span class="line">ATOM      1    N ALA     1      -3.801  -7.214   0.158                   </span><br><span class="line">ATOM      2    H ALA     1      -2.791  -7.214   0.158                   </span><br><span class="line">ATOM      3   CA ALA     1      -4.487  -5.938   0.158                   </span><br><span class="line">ATOM      4   HA ALA     1      -5.112  -5.861  -0.732                   </span><br><span class="line">ATOM      5   CB ALA     1      -5.374  -5.792   1.390                   </span><br><span class="line">ATOM      6  HB1 ALA     1      -4.761  -5.858   2.289                   </span><br><span class="line">ATOM      7  HB2 ALA     1      -5.877  -4.826   1.363                   </span><br><span class="line">ATOM      8  HB3 ALA     1      -6.118  -6.588   1.399                   </span><br><span class="line">ATOM      9    C ALA     1      -3.497  -4.783   0.158                   </span><br><span class="line">ATOM     10    O ALA     1      -2.287  -4.998   0.158</span><br></pre></td></tr></table></figure><br>可以用VMD之类的软件打开pdb文件，看一下其分子结构：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507103756204-1090144941.png" style="zoom:50%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507103756204-1090144941.png" style="zoom:50%">
 </div>
 
 <p>这里面需要注意的是，使用Xponge生成的氨基酸是以及去掉了一个$H_2O$的，分别是开头与$N$相连的$H$和结尾与$C$相连的$OH$。这种操作的合理之处在于，我们很少关注单个氨基酸的作用，如果要组装成一个蛋白质的模型，生成肽键的过程会脱水，因此在构建氨基酸的时候直接去掉$H_2O$可以在一定程度上提升计算的性能。另外就是，除了<code>ACE</code>和<code>NME</code>之外，氨基酸放在开头和结尾处时，分别要加上N和C作为标识。比如，当ALA放在蛋白质chain的开头时，其名称应为NALA，以此类推。还有一个值得提醒的点是，组氨酸本身包含了多种结构，在使用时需要指定特定的结构名称，否则默认就是HIS。</p>
-<p>类似的方法，我们还可以用Xponge建立一个更加大型的模型：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> Xponge</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">import</span> Xponge.forcefield.AMBER.ff14SB</span><br><span class="line">Reference <span class="keyword">for</span> ff14SB.py:</span><br><span class="line">  James A. Maier, Carmenza Martinez, Koushik Kasavajhala, Lauren Wickstrom, Kevin E. Hauser, <span class="keyword">and</span> Carlos Simmerling</span><br><span class="line">    ff14SB: Improving the accuracy of protein side chain <span class="keyword">and</span> backbone parameters <span class="keyword">from</span> ff99SB</span><br><span class="line">    Journal of Chemical Theory <span class="keyword">and</span> Computation <span class="number">2015</span> <span class="number">11</span> (<span class="number">8</span>), <span class="number">3696</span>-<span class="number">3713</span></span><br><span class="line">    DOI: <span class="number">10.1021</span>/acs.jctc<span class="number">.5</span>b00255</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: Save_PDB(ACE+ALA*<span class="number">10</span>+NME,<span class="string">&#x27;multi_ALA.pdb&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p>生成的pdb文件，用vmd打开之后显示如下：</p>
+<p>类似的方法，我们还可以用Xponge建立一个更加大型的模型：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> Xponge</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">import</span> Xponge.forcefield.AMBER.ff14SB</span><br><span class="line">Reference <span class="keyword">for</span> ff14SB.py:</span><br><span class="line">  James A. Maier, Carmenza Martinez, Koushik Kasavajhala, Lauren Wickstrom, Kevin E. Hauser, <span class="keyword">and</span> Carlos Simmerling</span><br><span class="line">    ff14SB: Improving the accuracy of protein side chain <span class="keyword">and</span> backbone parameters <span class="keyword">from</span> ff99SB</span><br><span class="line">    Journal of Chemical Theory <span class="keyword">and</span> Computation <span class="number">2015</span> <span class="number">11</span> (<span class="number">8</span>), <span class="number">3696</span>-<span class="number">3713</span></span><br><span class="line">    DOI: <span class="number">10.1021</span>/acs.jctc<span class="number">.5</span>b00255</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: Save_PDB(ACE+ALA*<span class="number">10</span>+NME,<span class="string">&#x27;multi_ALA.pdb&#x27;</span>)</span><br></pre></td></tr></table></figure><br>生成的pdb文件，用vmd打开之后显示如下：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507142701070-18198809.png" style="zoom:50%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507142701070-18198809.png" style="zoom:50%">
 </div>
 
 <p>使用还是非常的方便。</p>
-<h1 id="氨基酸种类"><a href="#氨基酸种类" class="headerlink" title="氨基酸种类"></a>氨基酸种类</h1><p>这里是从参考链接2中整理出来的数据，以及用xponge和vmd画出来的三维结构图，主要是总结记录一下这些基本的组成单元。</p>
-<table>
-<thead>
-<tr>
-<th align="center">英文名</th>
-<th align="center">中文名</th>
-<th align="center">三字母缩写</th>
-<th align="center">单字母缩写</th>
-<th align="center">结构式</th>
-<th align="center">等电点pI</th>
-<th align="center">三维结构图</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">Alanine</td>
-<td align="center">丙氨酸</td>
-<td align="center">Ala</td>
-<td align="center">A</td>
-<td align="center">CH3-CH(NH2)-COOH</td>
-<td align="center">6.0</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104356551-163091046.png"></td>
-</tr>
-<tr>
-<td align="center">Arginine</td>
-<td align="center">精氨酸</td>
-<td align="center">Arg</td>
-<td align="center">R</td>
-<td align="center">HN&#x3D;C(NH2)-NH-(CH2)3-CH(NH2)-COOH</td>
-<td align="center">10.76</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104617173-1258258958.png"></td>
-</tr>
-<tr>
-<td align="center">Asparagine</td>
-<td align="center">天冬酰胺</td>
-<td align="center">Asn</td>
-<td align="center">N</td>
-<td align="center">H2N-CO-CH2-CH(NH2)-COOH</td>
-<td align="center">5.41</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104930400-829906203.png"></td>
-</tr>
-<tr>
-<td align="center">Asparticacid</td>
-<td align="center">天冬氨酸</td>
-<td align="center">Asp</td>
-<td align="center">D</td>
-<td align="center">HOOC-CH2-CH(NH2)-COOH</td>
-<td align="center">2.77</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105029669-1063806573.png"></td>
-</tr>
-<tr>
-<td align="center">Cysteine</td>
-<td align="center">半胱氨酸</td>
-<td align="center">Cys</td>
-<td align="center">C</td>
-<td align="center">HS-CH2-CH(NH2)-COOH</td>
-<td align="center">5.05</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105354587-147198142.png"></td>
-</tr>
-<tr>
-<td align="center">Glutamine</td>
-<td align="center">谷氨酰胺</td>
-<td align="center">Gln</td>
-<td align="center">Q</td>
-<td align="center">H2N-CO-(CH2)2-CH(NH2)-COOH</td>
-<td align="center">5.41</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105528619-1856489452.png"></td>
-</tr>
-<tr>
-<td align="center">Glutamicacid</td>
-<td align="center">谷氨酸</td>
-<td align="center">Glu</td>
-<td align="center">E</td>
-<td align="center">HOOC-(CH2)2-CH(NH2)-COOH</td>
-<td align="center">3.22</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105627423-681216789.png"></td>
-</tr>
-<tr>
-<td align="center">Glycine</td>
-<td align="center">甘氨酸</td>
-<td align="center">Gly</td>
-<td align="center">G</td>
-<td align="center">NH2-CH2-COOH</td>
-<td align="center">5.97</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105711942-1717438535.png"></td>
-</tr>
-<tr>
-<td align="center">Histidine</td>
-<td align="center">组氨酸</td>
-<td align="center">His</td>
-<td align="center">H</td>
-<td align="center">*NH-CH&#x3D;N-CH&#x3D;*C-CH2-CH(NH2)-COOH</td>
-<td align="center">7.59</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105816547-2046245703.png"></td>
-</tr>
-<tr>
-<td align="center">Isoleucine</td>
-<td align="center">异亮氨酸</td>
-<td align="center">Ile</td>
-<td align="center">I</td>
-<td align="center">CH3-CH2-CH(CH3)-CH(NH2)-COOH</td>
-<td align="center">6.02</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105857553-539582156.png"></td>
-</tr>
-<tr>
-<td align="center">Leucine</td>
-<td align="center">亮氨酸</td>
-<td align="center">Leu</td>
-<td align="center">L</td>
-<td align="center">(CH3)2CH-CH2-CH(NH2)-COOH</td>
-<td align="center">5.98</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105949218-1194449475.png"></td>
-</tr>
-<tr>
-<td align="center">Lysine</td>
-<td align="center">赖氨酸</td>
-<td align="center">Lys</td>
-<td align="center">K</td>
-<td align="center">H2N-(CH2)4-CH(NH2)-COOH</td>
-<td align="center">9.74</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110033488-1761911638.png"></td>
-</tr>
-<tr>
-<td align="center">Methionine</td>
-<td align="center">甲硫氨酸（蛋氨酸）</td>
-<td align="center">Met</td>
-<td align="center">M</td>
-<td align="center">CH3-S-(CH2)2-CH(NH2)-COOH</td>
-<td align="center">5.74</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110115808-434808146.png"></td>
-</tr>
-<tr>
-<td align="center">Phenylalanine</td>
-<td align="center">苯丙氨酸</td>
-<td align="center">Phe</td>
-<td align="center">F</td>
-<td align="center">Ph-CH2-CH(NH2)-COOH</td>
-<td align="center">5.48</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110155932-940361433.png"></td>
-</tr>
-<tr>
-<td align="center">Proline</td>
-<td align="center">脯氨酸</td>
-<td align="center">Pro</td>
-<td align="center">P</td>
-<td align="center">*NH-(CH2)3-*CH-COOH</td>
-<td align="center">6.30</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110248741-2145369047.png"></td>
-</tr>
-<tr>
-<td align="center">Serine</td>
-<td align="center">丝氨酸</td>
-<td align="center">Ser</td>
-<td align="center">S</td>
-<td align="center">HO-CH2-CH(NH2)-COOH</td>
-<td align="center">5.68</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110322349-52703156.png"></td>
-</tr>
-<tr>
-<td align="center">Threonine</td>
-<td align="center">苏氨酸</td>
-<td align="center">Thr</td>
-<td align="center">T</td>
-<td align="center">CH3-CH(OH)-CH(NH2)-COOH</td>
-<td align="center">6.16</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110400266-17020800.png"></td>
-</tr>
-<tr>
-<td align="center">Tryptophan</td>
-<td align="center">色氨酸</td>
-<td align="center">Trp</td>
-<td align="center">W</td>
-<td align="center">*Ph-NH-CH&#x3D;*C-CH2-CH(NH2)-COOH</td>
-<td align="center">5.89</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110437821-709539527.png"></td>
-</tr>
-<tr>
-<td align="center">Tyrosine</td>
-<td align="center">酪氨酸</td>
-<td align="center">Tyr</td>
-<td align="center">Y</td>
-<td align="center">HO-p-Ph-CH2-CH(NH2)-COOH</td>
-<td align="center">5.66</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110512569-739475348.png"></td>
-</tr>
-<tr>
-<td align="center">Valine</td>
-<td align="center">缬氨酸</td>
-<td align="center">Val</td>
-<td align="center">V</td>
-<td align="center">(CH3)2CH-CH(NH2)-COOH</td>
-<td align="center">5.96</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110556757-964057686.png"></td>
-</tr>
-</tbody></table>
-<h1 id="PDB文件基本格式"><a href="#PDB文件基本格式" class="headerlink" title="PDB文件基本格式"></a>PDB文件基本格式</h1><p><code>pdb</code>是最常用的一种存储蛋白质结构的文本文件格式，但是pdb本身又是一个严格的结构化的文本文件，其对应位置的内容为：</p>
-<table>
-<thead>
-<tr>
-<th align="center">列</th>
-<th align="center">数据</th>
-<th align="center">格式, 对齐</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1-4</td>
-<td align="center">ATOM</td>
-<td align="center">字符, 左</td>
-<td align="center">Record Type 记录类型</td>
-</tr>
-<tr>
-<td align="center">7-11</td>
-<td align="center">serial</td>
-<td align="center">整数, 右</td>
-<td align="center">Atom serial number 原子序号.PDB文件对分子结构处理为segment,<br> chain, residue, atom四个层次(一般并不用到chain),<br>因此此数位限定了一个残基中的最大原子数为为99999</td>
-</tr>
-<tr>
-<td align="center">13-16</td>
-<td align="center">name</td>
-<td align="center">字符, 左</td>
-<td align="center">Atom name 原子名称.原子的元素符号在13-14列中右对齐一般从14列开始写,<br> 占四个字符的原子名称才会从13列开始写.如, <br>铁原子FE写在13-14列, 而碳原子C只写在14列.</td>
-</tr>
-<tr>
-<td align="center">17</td>
-<td align="center">altLoc</td>
-<td align="center">字符</td>
-<td align="center">Alternate location indicator 可替位置标示符</td>
-</tr>
-<tr>
-<td align="center">18-20</td>
-<td align="center">resName</td>
-<td align="center">字符</td>
-<td align="center">Residue name 残基名称</td>
-</tr>
-<tr>
-<td align="center">22</td>
-<td align="center">chainID</td>
-<td align="center">字符</td>
-<td align="center">Chain identifier 链标识符</td>
-</tr>
-<tr>
-<td align="center">23-26</td>
-<td align="center">resSeq</td>
-<td align="center">整数, 右</td>
-<td align="center">Residue sequence number 残基序列号</td>
-</tr>
-<tr>
-<td align="center">27</td>
-<td align="center">iCode</td>
-<td align="center">字符</td>
-<td align="center">Code for insertion of residues 残基插入码</td>
-</tr>
-<tr>
-<td align="center">28-30</td>
-<td align="center">留空</td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">31-38</td>
-<td align="center">x</td>
-<td align="center">浮点, 右</td>
-<td align="center">Orthogonal coordinates for X in Angstroms 直角x坐标(埃)</td>
-</tr>
-<tr>
-<td align="center">39-46</td>
-<td align="center">y</td>
-<td align="center">浮点, 右</td>
-<td align="center">Orthogonal coordinates for Y in Angstroms 直角y坐标(埃)</td>
-</tr>
-<tr>
-<td align="center">47-54</td>
-<td align="center">z</td>
-<td align="center">浮点, 右</td>
-<td align="center">Orthogonal coordinates for Z in Angstroms 直角z坐标(埃)</td>
-</tr>
-<tr>
-<td align="center">55-60</td>
-<td align="center">occupancy</td>
-<td align="center">浮点, 右</td>
-<td align="center">Occupancy 占有率</td>
-</tr>
-<tr>
-<td align="center">61-66</td>
-<td align="center">tempFactor</td>
-<td align="center">浮点, 右</td>
-<td align="center">Temperature factor 温度因子</td>
-</tr>
-<tr>
-<td align="center">67-72</td>
-<td align="center">留空</td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">73-76</td>
-<td align="center">segID</td>
-<td align="center">字符, 左</td>
-<td align="center">Segment identifier(optional) 可选的片段标识符，<br>VMD会使用此数据</td>
-</tr>
-<tr>
-<td align="center">77-78</td>
-<td align="center">element</td>
-<td align="center">字符, 右</td>
-<td align="center">Element symbol 元素符号</td>
-</tr>
-<tr>
-<td align="center">79-80</td>
-<td align="center">charge</td>
-<td align="center">字符</td>
-<td align="center">Charge on the atom(optional) 可选的原子电荷.<br>实际分子模拟中往往重新定义电荷, <br>故此列往往不用.<br>VMD写出的PDB文件中无此列.</td>
-</tr>
-</tbody></table>
-<p>这个格式里面有一个比较坑的点是，<code>atom_name</code>占位符长度会影响对齐位置。为了方便操作，这里用一个python的脚本来写pdb文件，也可以作为理解上述结构化参数的出发点：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">def write_pdb(crd, atom_names, res_names, res_ids, pdb_name=&#x27;temp.pdb&#x27;):</span><br><span class="line">    &quot;&quot;&quot;Write protein crd information into pdb format files.</span><br><span class="line">    Args:</span><br><span class="line">        crd(numpy.float32): The coordinates of protein atoms.</span><br><span class="line">        atom_names(numpy.str_): The atom names differ from aminos.</span><br><span class="line">        res_names(numpy.str_): The residue names of amino names.</span><br><span class="line">        res_ids(numpy.int32): A unique mask each same residue.</span><br><span class="line">        pdb_name(str): The path to save the pdb file, absolute path is suggested.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    success = 1</span><br><span class="line">    with open(pdb_name, &#x27;w&#x27;) as pdb:</span><br><span class="line">        pdb.write(&#x27;MODEL     1\n&#x27;)</span><br><span class="line">        for i,c in enumerate(crd[0]):</span><br><span class="line">            pdb.write(&#x27;ATOM&#x27;.ljust(6))</span><br><span class="line">            pdb.write(&#x27;&#123;&#125;&#x27;.format(i + 1).rjust(5))</span><br><span class="line">            if len(atom_names[i])&lt;4:</span><br><span class="line">                pdb.write(&#x27;  &#x27;)</span><br><span class="line">                pdb.write(atom_names[i].ljust(3))</span><br><span class="line">            else:</span><br><span class="line">                pdb.write(&#x27; &#x27;)</span><br><span class="line">                pdb.write(atom_names[i].ljust(4))</span><br><span class="line">            pdb.write(res_names[i].rjust(4))</span><br><span class="line">            pdb.write(&#x27;A&#x27;.rjust(2))</span><br><span class="line">            pdb.write(&#x27;&#123;&#125;&#x27;.format(res_ids[i]).rjust(4))</span><br><span class="line">            pdb.write(&#x27;    &#x27;)</span><br><span class="line">            pdb.write(&#x27;&#123;:.3f&#125;&#x27;.format(c[0]).rjust(8))</span><br><span class="line">            pdb.write(&#x27;&#123;:.3f&#125;&#x27;.format(c[1]).rjust(8))</span><br><span class="line">            pdb.write(&#x27;&#123;:.3f&#125;&#x27;.format(c[2]).rjust(8))</span><br><span class="line">            pdb.write(&#x27;1.0&#x27;.rjust(6))</span><br><span class="line">            pdb.write(&#x27;0.0&#x27;.rjust(6))</span><br><span class="line">            pdb.write(&#x27;&#123;&#125;&#x27;.format(atom_names[i][0]).rjust(12))</span><br><span class="line">            pdb.write(&#x27;\n&#x27;)</span><br><span class="line">        pdb.write(&#x27;TER\n&#x27;)</span><br><span class="line">        pdb.write(&#x27;ENDMDL\n&#x27;)</span><br><span class="line">        pdb.write(&#x27;END\n&#x27;)</span><br><span class="line">    return success</span><br></pre></td></tr></table></figure>
-<p>这样只要给定crd（原子坐标），atom_names（原子名称），res_names（残基&#x2F;氨基酸名称），res_ids（残基位置编号）这几个参数，就可以生成一个符合格式要求的pdb文件。如果不严格按照这个pdb格式写入，有可能存在其他工具无法读取的情况，比如<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/ln.html">上一篇博客</a>中所介绍的TMscore软件就要求非常严格。</p>
+<h1 id="氨基酸种类"><a href="#氨基酸种类" class="headerlink" title="氨基酸种类"></a>氨基酸种类</h1><p>这里是从参考链接2中整理出来的数据，以及用xponge和vmd画出来的三维结构图，主要是总结记录一下这些基本的组成单元。<br>|英文名|中文名|三字母缩写|单字母缩写|结构式|等电点pI|三维结构图|<br>|:---:|:---:|:---:|:---:|:---:|:---:|:---:|<br>|Alanine|丙氨酸|Ala|A|CH3-CH(NH2)-COOH|6.0|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104356551-163091046.png" alt="">|<br>|Arginine|精氨酸|Arg|R|HN=C(NH2)-NH-(CH2)3-CH(NH2)-COOH|10.76|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104617173-1258258958.png" alt="">|<br>|Asparagine|天冬酰胺|Asn|N|H2N-CO-CH2-CH(NH2)-COOH|5.41|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104930400-829906203.png" alt="">|<br>|Asparticacid|天冬氨酸|Asp|D|HOOC-CH2-CH(NH2)-COOH|2.77|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105029669-1063806573.png" alt="">|<br>|Cysteine|半胱氨酸|Cys|C|HS-CH2-CH(NH2)-COOH|5.05|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105354587-147198142.png" alt="">|<br>|Glutamine|谷氨酰胺|Gln|Q|H2N-CO-(CH2)2-CH(NH2)-COOH|5.41|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105528619-1856489452.png" alt="">|<br>|Glutamicacid|谷氨酸|Glu|E|HOOC-(CH2)2-CH(NH2)-COOH|3.22|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105627423-681216789.png" alt="">|<br>|Glycine|甘氨酸|Gly|G|NH2-CH2-COOH|5.97|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105711942-1717438535.png" alt="">|<br>|Histidine|组氨酸|His|H|<em>NH-CH=N-CH=</em>C-CH2-CH(NH2)-COOH|7.59|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105816547-2046245703.png" alt="">|<br>|Isoleucine|异亮氨酸|Ile|I|CH3-CH2-CH(CH3)-CH(NH2)-COOH|6.02|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105857553-539582156.png" alt="">|<br>|Leucine|亮氨酸|Leu|L|(CH3)2CH-CH2-CH(NH2)-COOH|5.98|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105949218-1194449475.png" alt="">|<br>|Lysine|赖氨酸|Lys|K|H2N-(CH2)4-CH(NH2)-COOH|9.74|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110033488-1761911638.png" alt="">|<br>|Methionine|甲硫氨酸（蛋氨酸）|Met|M|CH3-S-(CH2)2-CH(NH2)-COOH|5.74|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110115808-434808146.png" alt="">|<br>|Phenylalanine|苯丙氨酸|Phe|F|Ph-CH2-CH(NH2)-COOH|5.48|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110155932-940361433.png" alt="">|<br>|Proline|脯氨酸|Pro|P|<em>NH-(CH2)3-</em>CH-COOH|6.30|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110248741-2145369047.png" alt="">|<br>|Serine|丝氨酸|Ser|S|HO-CH2-CH(NH2)-COOH|5.68|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110322349-52703156.png" alt="">|<br>|Threonine|苏氨酸|Thr|T|CH3-CH(OH)-CH(NH2)-COOH|6.16|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110400266-17020800.png" alt="">|<br>|Tryptophan|色氨酸|Trp|W|<em>Ph-NH-CH=</em>C-CH2-CH(NH2)-COOH|5.89|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110437821-709539527.png" alt="">|<br>|Tyrosine|酪氨酸|Tyr|Y|HO-p-Ph-CH2-CH(NH2)-COOH|5.66|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110512569-739475348.png" alt="">|<br>|Valine|缬氨酸|Val|V|(CH3)2CH-CH(NH2)-COOH|5.96|<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110556757-964057686.png" alt="">|</p>
+<h1 id="PDB文件基本格式"><a href="#PDB文件基本格式" class="headerlink" title="PDB文件基本格式"></a>PDB文件基本格式</h1><p><code>pdb</code>是最常用的一种存储蛋白质结构的文本文件格式，但是pdb本身又是一个严格的结构化的文本文件，其对应位置的内容为：<br>|列    |数据    |格式, 对齐    |说明|<br>|:---:|:-----:|:------:|:------------:|<br>|1-4    |ATOM    |字符, 左    |Record Type 记录类型|<br>|7-11    |serial    |整数, 右    |Atom serial number 原子序号.PDB文件对分子结构处理为segment,<br> chain, residue, atom四个层次(一般并不用到chain),<br>因此此数位限定了一个残基中的最大原子数为为99999|<br>|13-16    |name    |字符, 左    |Atom name 原子名称.原子的元素符号在13-14列中右对齐一般从14列开始写,<br> 占四个字符的原子名称才会从13列开始写.如, <br>铁原子FE写在13-14列, 而碳原子C只写在14列.|<br>|17    |altLoc    |字符    |Alternate location indicator 可替位置标示符|<br>|18-20    |resName    |字符    |Residue name 残基名称|<br>|22    |chainID    |字符    |Chain identifier 链标识符|<br>|23-26    |resSeq    |整数, 右    |Residue sequence number 残基序列号|<br>|27    |iCode    |字符    |Code for insertion of residues 残基插入码|<br>|28-30    |留空|<br>|31-38    |x    |浮点, 右    |Orthogonal coordinates for X in Angstroms 直角x坐标(埃)|<br>|39-46    |y    |浮点, 右    |Orthogonal coordinates for Y in Angstroms 直角y坐标(埃)|<br>|47-54    |z    |浮点, 右    |Orthogonal coordinates for Z in Angstroms 直角z坐标(埃)|<br>|55-60    |occupancy    |浮点, 右    |Occupancy 占有率|<br>|61-66    |tempFactor    |浮点, 右    |Temperature factor 温度因子|<br>|67-72    |留空|<br>|73-76    |segID    |字符, 左    |Segment identifier(optional) 可选的片段标识符，<br>VMD会使用此数据|<br>|77-78    |element    |字符, 右    |Element symbol 元素符号|<br>|79-80    |charge    |字符    |Charge on the atom(optional) 可选的原子电荷.<br>实际分子模拟中往往重新定义电荷, <br>故此列往往不用.<br>VMD写出的PDB文件中无此列.|</p>
+<p>这个格式里面有一个比较坑的点是，<code>atom_name</code>占位符长度会影响对齐位置。为了方便操作，这里用一个python的脚本来写pdb文件，也可以作为理解上述结构化参数的出发点：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">def write_pdb(crd, atom_names, res_names, res_ids, pdb_name=&#x27;temp.pdb&#x27;):</span><br><span class="line">    &quot;&quot;&quot;Write protein crd information into pdb format files.</span><br><span class="line">    Args:</span><br><span class="line">        crd(numpy.float32): The coordinates of protein atoms.</span><br><span class="line">        atom_names(numpy.str_): The atom names differ from aminos.</span><br><span class="line">        res_names(numpy.str_): The residue names of amino names.</span><br><span class="line">        res_ids(numpy.int32): A unique mask each same residue.</span><br><span class="line">        pdb_name(str): The path to save the pdb file, absolute path is suggested.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    success = 1</span><br><span class="line">    with open(pdb_name, &#x27;w&#x27;) as pdb:</span><br><span class="line">        pdb.write(&#x27;MODEL     1\n&#x27;)</span><br><span class="line">        for i,c in enumerate(crd[0]):</span><br><span class="line">            pdb.write(&#x27;ATOM&#x27;.ljust(6))</span><br><span class="line">            pdb.write(&#x27;&#123;&#125;&#x27;.format(i + 1).rjust(5))</span><br><span class="line">            if len(atom_names[i])&lt;4:</span><br><span class="line">                pdb.write(&#x27;  &#x27;)</span><br><span class="line">                pdb.write(atom_names[i].ljust(3))</span><br><span class="line">            else:</span><br><span class="line">                pdb.write(&#x27; &#x27;)</span><br><span class="line">                pdb.write(atom_names[i].ljust(4))</span><br><span class="line">            pdb.write(res_names[i].rjust(4))</span><br><span class="line">            pdb.write(&#x27;A&#x27;.rjust(2))</span><br><span class="line">            pdb.write(&#x27;&#123;&#125;&#x27;.format(res_ids[i]).rjust(4))</span><br><span class="line">            pdb.write(&#x27;    &#x27;)</span><br><span class="line">            pdb.write(&#x27;&#123;:.3f&#125;&#x27;.format(c[0]).rjust(8))</span><br><span class="line">            pdb.write(&#x27;&#123;:.3f&#125;&#x27;.format(c[1]).rjust(8))</span><br><span class="line">            pdb.write(&#x27;&#123;:.3f&#125;&#x27;.format(c[2]).rjust(8))</span><br><span class="line">            pdb.write(&#x27;1.0&#x27;.rjust(6))</span><br><span class="line">            pdb.write(&#x27;0.0&#x27;.rjust(6))</span><br><span class="line">            pdb.write(&#x27;&#123;&#125;&#x27;.format(atom_names[i][0]).rjust(12))</span><br><span class="line">            pdb.write(&#x27;\n&#x27;)</span><br><span class="line">        pdb.write(&#x27;TER\n&#x27;)</span><br><span class="line">        pdb.write(&#x27;ENDMDL\n&#x27;)</span><br><span class="line">        pdb.write(&#x27;END\n&#x27;)</span><br><span class="line">    return success</span><br></pre></td></tr></table></figure><br>这样只要给定crd（原子坐标），atom_names（原子名称），res_names（残基/氨基酸名称），res_ids（残基位置编号）这几个参数，就可以生成一个符合格式要求的pdb文件。如果不严格按照这个pdb格式写入，有可能存在其他工具无法读取的情况，比如<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/ln.html">上一篇博客</a>中所介绍的TMscore软件就要求非常严格。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文通过对Xponge+VMD的工具对蛋白质进行建模，然后总结了20种氨基酸的具体信息，也就是蛋白质的基本组成单元。通过对这些氨基酸的组合，就可以得到一个具有生物活性的蛋白质。同时本文还介绍了常用的存储蛋白质结构的文件格式pdb的具体格式化定义，总体来说是一个总结性的文章。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/pdb.html">https://www.cnblogs.com/dechinphy/p/pdb.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -574,7 +252,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -585,7 +263,7 @@
 <nav class="article-nav">
   
     <a href="/2022/05/07/%E5%9F%BA%E4%BA%8E%E5%BC%A0%E9%87%8F%E7%BC%A9%E5%B9%B6%E7%9A%84%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97%E7%AE%80%E5%8D%95%E6%A8%A1%E6%8B%9F/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           基于张量缩并的量子计算简单模拟
@@ -595,7 +273,7 @@
   
   
     <a href="/2022/05/06/Linux%E7%B3%BB%E7%BB%9F%E5%88%9B%E5%BB%BA%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E8%BD%AF%E9%93%BE%E6%8E%A5/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">Linux系统创建可执行文件软链接</div>
     </a>
   
@@ -603,7 +281,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=蛋白质基础组成结构 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F05%2F06%2F%25E8%259B%258B%25E7%2599%25BD%25E8%25B4%25A8%25E5%259F%25BA%25E7%25A1%2580%25E7%25BB%2584%25E6%2588%2590%25E7%25BB%2593%25E6%259E%2584%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -758,6 +436,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidUjm7aAy-qwnidAwOOczLK" class="article article-type-post" itemscope
+    <article id="post-cuidWmCl1mZHkQBGfyRcmt9dH" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,14 +210,10 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文重点介绍了一下如何在PyTorch中去计算一个高维tensor的大小，也就是元素的总数。在其他框架中我们需要使用size函数来获取，而在PyTorch框架中这个接口被调整为numel，本文给出了两个具体代码示例。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>其实对于市面上大多数的深度学习框架来说，或者只是一个numpy来说，要获取一个高维度矩阵的大小，只需要调用其size函数即可。但是PyTorch框架中有所不同，所以这里单独介绍一下如何在PyTorch中获取一个高维tensor的大小，或者说元素总数。</p>
-<h1 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h1><p>首先我们演示一下普通的numpy框架下如何去获取高维tensor的大小：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: a = np.arange(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: a.size</span><br><span class="line">Out[<span class="number">3</span>]: <span class="number">10</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: <span class="keyword">import</span> torch <span class="keyword">as</span> tc</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: b = tc.arange(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: b.size</span><br><span class="line">Out[<span class="number">6</span>]: &lt;function Tensor.size&gt;</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: b.size()</span><br><span class="line">Out[<span class="number">7</span>]: torch.Size([<span class="number">10</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: b.size(dim=<span class="number">0</span>)</span><br><span class="line">Out[<span class="number">8</span>]: <span class="number">10</span></span><br></pre></td></tr></table></figure>
-
+<h1 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h1><p>首先我们演示一下普通的numpy框架下如何去获取高维tensor的大小：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: a = np.arange(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: a.size</span><br><span class="line">Out[<span class="number">3</span>]: <span class="number">10</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: <span class="keyword">import</span> torch <span class="keyword">as</span> tc</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: b = tc.arange(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: b.size</span><br><span class="line">Out[<span class="number">6</span>]: &lt;function Tensor.size&gt;</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: b.size()</span><br><span class="line">Out[<span class="number">7</span>]: torch.Size([<span class="number">10</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: b.size(dim=<span class="number">0</span>)</span><br><span class="line">Out[<span class="number">8</span>]: <span class="number">10</span></span><br></pre></td></tr></table></figure></p>
 <p>在这个例子中我们发现，如果在PyTorch中去调用同样的size函数的时候，只能逐个维度的进行输出。也就是说，PyTorch所理解的size，是基于维度的size。那么如果我们需要在PyTorch中去获取一个高维tensor的大小，应该如何操作呢？如果不知道的情况下，只能用size函数获取每一个维度的大小之后，去做一个累计乘积。但其实PyTorch提供了一个numel函数，可以像其他框架的size一样去获取一个高维tensor的大小：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> torch <span class="keyword">as</span> tc</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: b = tc.arange(<span class="number">60</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: b = b.reshape((<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>))</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: b.shape</span><br><span class="line">Out[<span class="number">4</span>]: torch.Size([<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: b.numel()</span><br><span class="line">Out[<span class="number">6</span>]: <span class="number">60</span></span><br></pre></td></tr></table></figure>
-
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文重点介绍了一下如何在PyTorch中去计算一个高维tensor的大小，也就是元素的总数。在其他框架中我们需要使用size函数来获取，而在PyTorch框架中这个接口被调整为numel，本文给出了两个具体代码示例。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/tensor-size.html">https://www.cnblogs.com/dechinphy/p/tensor-size.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -237,7 +233,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -248,7 +244,7 @@
 <nav class="article-nav">
   
     <a href="/2025/08/08/%E5%85%B3%E9%97%ADOllama%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E9%A1%B9/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           关闭Ollama开机启动项
@@ -258,7 +254,7 @@
   
   
     <a href="/2025/08/01/PyTorch%E4%B8%AD%E7%9A%84floor_divide/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">PyTorch中的floor_divide</div>
     </a>
   
@@ -266,7 +262,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Torch中的tensor size - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2025%2F08%2F04%2FTorch%25E4%25B8%25AD%25E7%259A%2584tensor-size%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -421,6 +417,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

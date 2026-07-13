@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidG3xLOuX3qr3fnPtU__JSB" class="article article-type-post" itemscope
+    <article id="post-cuid8sZ48vAXWdnmv4QC-XPo6" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,18 +210,24 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>线性插值和三次样条插值都是非常常用的插值算法，使用插值法，可以帮助我们对离散的样本信息进行扩展，得到样本信息中所不包含的样本点的信息。插值法有着非常广泛的应用场景，就比如某手机厂商所号称的x千万像素拍照，其中插值法就发挥了重要作用。在python的scipy这个库中实现了线性插值算法和三次样条插值算法，而numpy库中实现了线性插值的算法，我们通过这两者的不同使用方式，来看下所得到的插值的结果。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>插值法在图像处理和信号处理、科学计算等领域中是非常常用的一项技术。不同的插值函数，可以根据给定的数据点构造出来一系列的分段函数。这一点有别于函数拟合，函数拟合一般是指用一个给定形式的连续函数，来使得给定的离散数据点距离函数曲线的总垂直距离最短，不一定会经过所有的函数点。比如在二维坐标系内，用一条直线去拟合一个平面三角形所对应的三个顶点，那么至少有一个顶点是不会落在拟合出来的直线上的。而根据插值法所得到的结果，一定是经过所有给定的离散点的。本文针对scipy和numpy这两个python库的插值算法接口，来看下两者的不同实现方案。</p>
-<h1 id="插值算法"><a href="#插值算法" class="headerlink" title="插值算法"></a>插值算法</h1><p>常用的插值算法比如线性插值，原理非常简单。给定两个点$(X_{t_0},Y_{t_0})$和$(X_{t_1},Y_{t_1})$，其中$t_0&lt;&#x3D;t_1$，假如需要计算点$(X_{t_2},Y_{t_2})$的值，其中$t_0&lt;&#x3D;t_2&lt;&#x3D;t_1$，那么给定的插值公式就是：<br>$$<br>\begin{align}<br>X_{t_2}&amp;&#x3D;(X_{t_1}-X_{t_0})<em>\frac{t_2-t_0}{t_1-t_0}+X_{t_0}\<br>Y_{t_2}&amp;&#x3D;(Y_{t_1}-Y_{t_0})</em>\frac{t_2-t_0}{t_1-t_0}+Y_{t_0}<br>\end{align}<br>$$<br>而还有一种比较常用的算法是三次样条插值（cubic spline），其原理是在所有给定的$n$个离散点之间构建$n-1$个三次函数：<br>$$<br>y_i&#x3D;a_i+b_ix_i+c_ix_i^2+d_ix_i^3<br>$$<br>三次样条插值的约束条件是给定的函数在端点处连续、给定函数的一次导数在端点处连续、给定函数的二次导数在端点处连续，再根据边界条件的不同取法，可以构造出不同的三次样条插值函数。如下图所示就是三种不同的边界条件取法（图片来自于参考链接3）：</p>
+<h1 id="插值算法"><a href="#插值算法" class="headerlink" title="插值算法"></a>插值算法</h1><p>常用的插值算法比如线性插值，原理非常简单。给定两个点$(X<em>{t_0},Y</em>{t<em>0})$和$(X</em>{t<em>1},Y</em>{t<em>1})$，其中$t_0&lt;=t_1$，假如需要计算点$(X</em>{t<em>2},Y</em>{t_2})$的值，其中$t_0&lt;=t_2&lt;=t_1$，那么给定的插值公式就是：</p>
+<script type="math/tex; mode=display">
+\begin{align}
+X_{t_2}&=(X_{t_1}-X_{t_0})*\frac{t_2-t_0}{t_1-t_0}+X_{t_0}\\
+Y_{t_2}&=(Y_{t_1}-Y_{t_0})*\frac{t_2-t_0}{t_1-t_0}+Y_{t_0}
+\end{align}</script><p>而还有一种比较常用的算法是三次样条插值（cubic spline），其原理是在所有给定的$n$个离散点之间构建$n-1$个三次函数：</p>
+<script type="math/tex; mode=display">
+y_i=a_i+b_ix_i+c_ix_i^2+d_ix_i^3</script><p>三次样条插值的约束条件是给定的函数在端点处连续、给定函数的一次导数在端点处连续、给定函数的二次导数在端点处连续，再根据边界条件的不同取法，可以构造出不同的三次样条插值函数。如下图所示就是三种不同的边界条件取法（图片来自于参考链接3）：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220308175328193-48062836.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220308175328193-48062836.png">
 </div>
 
 <p>接下来看下scipy中的线性插值和三次样条插值的接口调用方式，以及numpy中实现的线性插值的调用方式（numpy中未实现三次样条插值算法）：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> interpolate</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">x = np.linspace(<span class="number">0</span>, <span class="number">4</span>, <span class="number">12</span>)</span><br><span class="line">y = np.cos(x**<span class="number">2</span>/<span class="number">3</span>+<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">int1 = interpolate.interp1d(x,y,kind=<span class="string">&#x27;linear&#x27;</span>)</span><br><span class="line">int2 = interpolate.interp1d(x,y,kind=<span class="string">&#x27;cubic&#x27;</span>)</span><br><span class="line">new_x = np.linspace(<span class="number">0</span>, <span class="number">4</span>, <span class="number">30</span>)</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.plot(x,y,<span class="string">&#x27;o&#x27;</span>,color=<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line">plt.plot(new_x,int1(new_x),<span class="string">&#x27;-&#x27;</span>,color=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">plt.plot(new_x,int2(new_x),<span class="string">&#x27;--&#x27;</span>,color=<span class="string">&#x27;orange&#x27;</span>)</span><br><span class="line">plt.plot(new_x,np.interp(new_x,x,y),<span class="string">&#x27;x&#x27;</span>,color=<span class="string">&#x27;red&#x27;</span>)</span><br><span class="line">plt.legend([<span class="string">&#x27;data&#x27;</span>,<span class="string">&#x27;linear&#x27;</span>,<span class="string">&#x27;cubic&#x27;</span>,<span class="string">&#x27;numpy&#x27;</span>],loc=<span class="string">&#x27;best&#x27;</span>)</span><br><span class="line">plt.savefig(<span class="string">&#x27;_interpolate.png&#x27;</span>)</span><br></pre></td></tr></table></figure>
 <p>得到的结果如下图所示：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220308172844079-473356401.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220308172844079-473356401.png">
 </div>
 
 <p>在这个结果中我们发现，numpy的线性插值和scipy的线性插值所得到的结果是一样的，而scipy的三次样条插值的曲线显然要比线性插值更加平滑一些，这也跟三次样条插值算法本身的约束条件有关系。</p>
@@ -250,7 +256,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -261,7 +267,7 @@
 <nav class="article-nav">
   
     <a href="/2022/03/09/SETTLE%E7%BA%A6%E6%9D%9F%E7%AE%97%E6%B3%95%E7%9A%84%E6%89%B9%E9%87%8F%E5%8C%96%E5%A4%84%E7%90%86/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           SETTLE约束算法的批量化处理
@@ -271,7 +277,7 @@
   
   
     <a href="/2022/03/02/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6%E6%A8%A1%E6%8B%9F%E4%B9%8BSETTLE%E7%BA%A6%E6%9D%9F%E7%AE%97%E6%B3%95/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">分子动力学模拟之SETTLE约束算法</div>
     </a>
   
@@ -279,7 +285,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Scipy和Numpy的插值对比 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F03%2F08%2FScipy%25E5%2592%258CNumpy%25E7%259A%2584%25E6%258F%2592%25E5%2580%25BC%25E5%25AF%25B9%25E6%25AF%2594%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -434,6 +440,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidWFYZ9mPWf_gy5pMQD3Q5T" class="article article-type-post" itemscope
+    <article id="post-cuidIlC_fZYwdLk3R9Bb5EqnX" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,47 +210,47 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>接前一篇关于PySAGES结合CudaSPONGE使用方法的文章，本文主要还是使用了一样的测试案例。仅通过不同的测试步长，来定性的分析PySAGES的MetaDynamics实现方案结合MD软件之后的性能数据。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面的一篇博客中，我们介绍过<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18572403/cudasponge">CudaSPONGE的基础使用方法</a>、<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18573762/sponge-python">CudaSPONGE调用Python接口函数</a>以及<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18615556/pysages-sponge">CudaSPONGE结合增强采样软件PySAGES的使用方法</a>。在这篇文章中，我们将介绍CudaSPONGE和PySAGES相结合的初步性能测试结果。</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120154603670-881094536.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120154603670-881094536.png">
 </div>
 
 <h1 id="测试案例"><a href="#测试案例" class="headerlink" title="测试案例"></a>测试案例</h1><p>我们沿用<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18615556/pysages-sponge">这一篇文章</a>中的测试案例，对一个简单的多肽体系的两个二面角参数空间执行MetaDynamics增强采样方法：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120110904747-252270899.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120110904747-252270899.png">
 </div>
 
 <p>我们的预期结果，在普通的NVT下，二面角的采样空间较为集中：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120111123859-361557245.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120111123859-361557245.png">
 </div>
 
 <p>而加上PySAEGES的增强采样之后，理论上采样点可以均匀的遍布在整个采样空间：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120111448246-54983946.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120111448246-54983946.png">
 </div>
 
 <p>这是我们对于这个采样结果的预期，其实图片内容也就是实际结果。但是本文主要侧重于性能测试，而我们的性能测试，就基于这个案例来开展。</p>
 <h1 id="调用逻辑"><a href="#调用逻辑" class="headerlink" title="调用逻辑"></a>调用逻辑</h1><p>其实对于PySAGES来说，他们有自己的一套函数调用逻辑：把不同的MD软件作为Backend，由PySAGES来进行封装和调用，并且用于控制MD模拟的进行。所以如果按照PySAGES的调用逻辑来说，应该用这么一个框架来结合PySAGES和CudaSPONGE：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120111908752-1373851574.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120111908752-1373851574.png">
 </div>
 
 <p>但是因为CudaSPONGE主要基于CUDA-C开发，为了发挥更多的性能优势，CudaSPONGE也有自己的一套调用逻辑，结合PySAGES之后是这样的：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120112051733-799269886.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120112051733-799269886.png">
 </div>
 
 <p>其实这个问题的本质就在于，以哪一种软件为核心。如果以PySAGES为核心，就是采用上面的一种交互形式。如果是以MD软件为核心，就是采用下面的这种形式。不过对于CudaSPONGE v1.4版本来说，因为提供的API有限，其实只能使用下面的这种调用形式，也就是以MD软件为核心的调用形式。本文所使用到的测试案例代码，都可以参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18615556/pysages-sponge">参考链接1</a>中的内容。</p>
-<h1 id="MetaDynamics说明"><a href="#MetaDynamics说明" class="headerlink" title="MetaDynamics说明"></a>MetaDynamics说明</h1><p>关于MetaDynamics的原理，建议还是翻阅一下Parrinello组的原始文章《Escaping free-energy minima》。简单的来说就是，我们在一个定义好的序参量空间，每隔固定的MD步数，就施加一个高斯势，这部分的总和组成一个偏置势：<br>$$<br>V(s,t)&#x3D;\int_0^td\tau w G\left[s,s(\tau)\right]<br>$$<br>如果使用一个well-tempered来加速自由能面的收敛，那这个参数$\omega$需要从一个常数变成一个随偏置势增长而逐渐减小的一个可变量：<br>$$<br>w(t)&#x3D;\omega e^{-\frac{1}{\gamma -1}\beta V(s,t)}<br>$$<br>这里PySAGES中的MetaDynamics就是用的这个增强采样方法，也是我们重点测试的方法对象。需要提及的是，虽然每隔固定的步数我们才会施加一个高斯势，但其实历史累积的高斯势的作用力一直都存在。所以，只要在MD过程中添加了MetaDynamics方法，就意味着每一步都需要计算一个序参量的值，及其对应的偏置势产生的偏置作用力。在很多情况下，偏置作用力的计算有可能会成为整个分子模拟过程的瓶颈部分。因此，MetaDynamics方法的性能至关重要。</p>
+<h1 id="MetaDynamics说明"><a href="#MetaDynamics说明" class="headerlink" title="MetaDynamics说明"></a>MetaDynamics说明</h1><p>关于MetaDynamics的原理，建议还是翻阅一下Parrinello组的原始文章《Escaping free-energy minima》。简单的来说就是，我们在一个定义好的序参量空间，每隔固定的MD步数，就施加一个高斯势，这部分的总和组成一个偏置势：</p>
+<script type="math/tex; mode=display">
+V(s,t)=\int_0^td\tau w G\left[s,s(\tau)\right]</script><p>如果使用一个well-tempered来加速自由能面的收敛，那这个参数$\omega$需要从一个常数变成一个随偏置势增长而逐渐减小的一个可变量：</p>
+<script type="math/tex; mode=display">
+w(t)=\omega e^{-\frac{1}{\gamma -1}\beta V(s,t)}</script><p>这里PySAGES中的MetaDynamics就是用的这个增强采样方法，也是我们重点测试的方法对象。需要提及的是，虽然每隔固定的步数我们才会施加一个高斯势，但其实历史累积的高斯势的作用力一直都存在。所以，只要在MD过程中添加了MetaDynamics方法，就意味着每一步都需要计算一个序参量的值，及其对应的偏置势产生的偏置作用力。在很多情况下，偏置作用力的计算有可能会成为整个分子模拟过程的瓶颈部分。因此，MetaDynamics方法的性能至关重要。</p>
 <h1 id="初步测试数据"><a href="#初步测试数据" class="headerlink" title="初步测试数据"></a>初步测试数据</h1><p>经过初步的测试，分别运行了2000、4000、6000、8000、10000个Step的NVT和Meta NVT，运行时长和Meta时长占比如下：</p>
-<div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120152816877-374743689.png">
-</div>
-可以看到的是，Meta的运行时长目前可能要达到90%左右。当然，这里面影响的因素有很多，暂时还不确定性能表现与文章中描述不同的原因在哪里。因为这里面的数据传输都是使用的Dlpack进行转换，理论上可以做到Zero-Copy。不过性能后续可以再慢慢优化，就目前来说，使用PySAGES去开发一个增强采样方法，然后使用CudaSPONGE来运行分子动力学模拟的部分，开发成本相对来说是比较低的，并且获得的性能增益也不错。测试平台信息如下：
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GPU: RTX 3080Ti</span><br><span class="line">Jax: 0.3.25</span><br><span class="line">Jaxlib: 0.3.25+cuda11.cudnn82</span><br><span class="line">nvcc: 11.6.124</span><br></pre></td></tr></table></figure>
-
+<p><div align=center>
+    <img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120152816877-374743689.png">
+</div><br>可以看到的是，Meta的运行时长目前可能要达到90%左右。当然，这里面影响的因素有很多，暂时还不确定性能表现与文章中描述不同的原因在哪里。因为这里面的数据传输都是使用的Dlpack进行转换，理论上可以做到Zero-Copy。不过性能后续可以再慢慢优化，就目前来说，使用PySAGES去开发一个增强采样方法，然后使用CudaSPONGE来运行分子动力学模拟的部分，开发成本相对来说是比较低的，并且获得的性能增益也不错。测试平台信息如下：<br><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GPU: RTX 3080Ti</span><br><span class="line">Jax: 0.3.25</span><br><span class="line">Jaxlib: 0.3.25+cuda11.cudnn82</span><br><span class="line">nvcc: 11.6.124</span><br></pre></td></tr></table></figure></p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>接前一篇关于PySAGES结合CudaSPONGE使用方法的文章，本文主要还是使用了一样的测试案例。仅通过不同的测试步长，来定性的分析PySAGES的MetaDynamics实现方案结合MD软件之后的性能数据。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/sponge_ext_01.html">https://www.cnblogs.com/dechinphy/p/sponge_ext_01.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -273,7 +273,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -284,7 +284,7 @@
 <nav class="article-nav">
   
     <a href="/2025/01/20/Markdown%E8%BD%ACBeamer%E8%BF%9B%E9%98%B6/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Markdown转Beamer进阶
@@ -294,7 +294,7 @@
   
   
     <a href="/2024/12/25/Markdown%E8%BD%ACBeamer/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">Markdown转Beamer</div>
     </a>
   
@@ -302,7 +302,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=CudaSPONGE与PySAGES初步性能测试 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2025%2F01%2F20%2FCudaSPONGE%25E4%25B8%258EPySAGES%25E5%2588%259D%25E6%25AD%25A5%25E6%2580%25A7%25E8%2583%25BD%25E6%25B5%258B%25E8%25AF%2595%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -457,6 +457,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

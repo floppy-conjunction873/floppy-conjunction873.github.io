@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidCg1ZWQBaVtdTDJAPTvpcz" class="article article-type-post" itemscope
+    <article id="post-cuidxElv8iqT3biSAwOCzla5y" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,24 +210,10 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文主要介绍了python自带的临时文件操作库tempfile的一些基本用法，包括创建用完删除的或者持久化保存的临时文件，也可以支持指定后缀进行临时的文件的创建。</p>
 <span id="more"></span>
-
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>临时文件在python项目中时常会被使用到，其作用在于随机化的创建不重名的文件，路径一般都是放在Linux系统下的<code>/tmp</code>目录。如果项目中并不需要持久化的存储一个文件，就可以采用临时文件的形式进行存储和读取，在使用之后可以自行决定是删除还是保留。</p>
-<h1 id="tempfile库的使用"><a href="#tempfile库的使用" class="headerlink" title="tempfile库的使用"></a>tempfile库的使用</h1><p><code>tempfile</code>一般是python内置的一个函数库，不需要单独安装，这里我们直接介绍一下其常规使用方法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tempfile_test.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tempfile</span><br><span class="line"></span><br><span class="line">file = tempfile.NamedTemporaryFile()</span><br><span class="line">name = <span class="built_in">str</span>(file.name)</span><br><span class="line">file.write(<span class="string">&#x27;This is the first tmp file!&#x27;</span>.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">file.close()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (name)</span><br></pre></td></tr></table></figure>
-<p>上述代码执行的任务为：使用<code>tempfile.NamedTemporaryFile</code>创建一个临时文件，其文件名采用的是随机化的字符串格式，作为<code>name</code>这样的一个属性来调用。通过执行这个任务，我们可以查看一般是生成什么样格式的临时文件：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro tmp_file]$ python3 tempfile_test.py </span><br><span class="line">/tmp/tmppetcksa8</span><br><span class="line">[dechin@dechin-manjaro tmp_file]$ ll</span><br><span class="line">总用量 4</span><br><span class="line">-rw-r--r-- 1 dechin dechin 181  1月 27 21:39 tempfile_test.py</span><br><span class="line">[dechin@dechin-manjaro tmp_file]$ <span class="built_in">cat</span> /tmp/tmppetcksa8</span><br><span class="line"><span class="built_in">cat</span>: /tmp/tmppetcksa8: 没有那个文件或目录</span><br></pre></td></tr></table></figure>
-<p>在这个python代码的执行过程中，产生了<code>tmppetcksa8</code>这样的一个文件，我们可以向这个文件中直接<code>write</code>一些字符串。这个临时文件被存储在<code>tmp</code>目录下，与当前的执行路径无关。同时执行结束之后我们发现，产生的这个临时文件被删除了，这是<code>NamedTemporaryFile</code>自带的一个<code>delete</code>的属性，默认配置是关闭临时文件后直接删除。</p>
-<h1 id="持久化保存临时文件"><a href="#持久化保存临时文件" class="headerlink" title="持久化保存临时文件"></a>持久化保存临时文件</h1><p>需要持久化保存临时文件是非常容易的，只需要将上述章节中的<code>delete</code>属性设置为<code>False</code>即可：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tempfile_test.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tempfile</span><br><span class="line"></span><br><span class="line">file = tempfile.NamedTemporaryFile(delete=<span class="literal">False</span>)</span><br><span class="line">name = <span class="built_in">str</span>(file.name)</span><br><span class="line">file.write(<span class="string">&#x27;This is the first tmp file!&#x27;</span>.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">file.close()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (name)</span><br></pre></td></tr></table></figure>
-<p>这里我们唯一的变动，只是在括号中加上了<code>delete=True</code>这一设定，这个设定可以允许我们持久化的存储临时文件：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro tmp_file]$ python3 tempfile_test.py </span><br><span class="line">/tmp/tmpwlt27ryk</span><br><span class="line">[dechin@dechin-manjaro tmp_file]$ <span class="built_in">cat</span> /tmp/tmpwlt27ryk</span><br><span class="line">This is the first tmp file!</span><br></pre></td></tr></table></figure>
-
-<h1 id="设置临时文件后缀"><a href="#设置临时文件后缀" class="headerlink" title="设置临时文件后缀"></a>设置临时文件后缀</h1><p>在有些场景下对于临时文件的存储有一定的格式要求，比如后缀等，这里我们将临时文件的后缀设置为常用的<code>txt</code>格式，同样的，只需要在<code>NamedTemporaryFile</code>的参数中进行配置即可：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tempfile_test.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tempfile</span><br><span class="line"></span><br><span class="line">file = tempfile.NamedTemporaryFile(delete=<span class="literal">False</span>, suffix=<span class="string">&#x27;.txt&#x27;</span>)</span><br><span class="line">name = <span class="built_in">str</span>(file.name)</span><br><span class="line">file.write(<span class="string">&#x27;This is the first tmp file!&#x27;</span>.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">file.close()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (name)</span><br></pre></td></tr></table></figure>
-<p>由于还是设置了<code>delete=True</code>参数，因此该临时<code>txt</code>文件被持久化的保存在系统中的<code>/tmp</code>目录下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro tmp_file]$ python3 tempfile_test.py </span><br><span class="line">/tmp/tmpk0ct_kzs.txt</span><br><span class="line">[dechin@dechin-manjaro tmp_file]$ <span class="built_in">cat</span> /tmp/tmpk0ct_kzs.txt</span><br><span class="line">This is the first tmp file!</span><br></pre></td></tr></table></figure>
-
+<h1 id="tempfile库的使用"><a href="#tempfile库的使用" class="headerlink" title="tempfile库的使用"></a>tempfile库的使用</h1><p><code>tempfile</code>一般是python内置的一个函数库，不需要单独安装，这里我们直接介绍一下其常规使用方法：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tempfile_test.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tempfile</span><br><span class="line"></span><br><span class="line">file = tempfile.NamedTemporaryFile()</span><br><span class="line">name = <span class="built_in">str</span>(file.name)</span><br><span class="line">file.write(<span class="string">&#x27;This is the first tmp file!&#x27;</span>.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">file.close()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (name)</span><br></pre></td></tr></table></figure><br>上述代码执行的任务为：使用<code>tempfile.NamedTemporaryFile</code>创建一个临时文件，其文件名采用的是随机化的字符串格式，作为<code>name</code>这样的一个属性来调用。通过执行这个任务，我们可以查看一般是生成什么样格式的临时文件：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro tmp_file]$ python3 tempfile_test.py </span><br><span class="line">/tmp/tmppetcksa8</span><br><span class="line">[dechin@dechin-manjaro tmp_file]$ ll</span><br><span class="line">总用量 4</span><br><span class="line">-rw-r--r-- 1 dechin dechin 181  1月 27 21:39 tempfile_test.py</span><br><span class="line">[dechin@dechin-manjaro tmp_file]$ <span class="built_in">cat</span> /tmp/tmppetcksa8</span><br><span class="line"><span class="built_in">cat</span>: /tmp/tmppetcksa8: 没有那个文件或目录</span><br></pre></td></tr></table></figure><br>在这个python代码的执行过程中，产生了<code>tmppetcksa8</code>这样的一个文件，我们可以向这个文件中直接<code>write</code>一些字符串。这个临时文件被存储在<code>tmp</code>目录下，与当前的执行路径无关。同时执行结束之后我们发现，产生的这个临时文件被删除了，这是<code>NamedTemporaryFile</code>自带的一个<code>delete</code>的属性，默认配置是关闭临时文件后直接删除。</p>
+<h1 id="持久化保存临时文件"><a href="#持久化保存临时文件" class="headerlink" title="持久化保存临时文件"></a>持久化保存临时文件</h1><p>需要持久化保存临时文件是非常容易的，只需要将上述章节中的<code>delete</code>属性设置为<code>False</code>即可：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tempfile_test.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tempfile</span><br><span class="line"></span><br><span class="line">file = tempfile.NamedTemporaryFile(delete=<span class="literal">False</span>)</span><br><span class="line">name = <span class="built_in">str</span>(file.name)</span><br><span class="line">file.write(<span class="string">&#x27;This is the first tmp file!&#x27;</span>.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">file.close()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (name)</span><br></pre></td></tr></table></figure><br>这里我们唯一的变动，只是在括号中加上了<code>delete=True</code>这一设定，这个设定可以允许我们持久化的存储临时文件：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro tmp_file]$ python3 tempfile_test.py </span><br><span class="line">/tmp/tmpwlt27ryk</span><br><span class="line">[dechin@dechin-manjaro tmp_file]$ <span class="built_in">cat</span> /tmp/tmpwlt27ryk</span><br><span class="line">This is the first tmp file!</span><br></pre></td></tr></table></figure></p>
+<h1 id="设置临时文件后缀"><a href="#设置临时文件后缀" class="headerlink" title="设置临时文件后缀"></a>设置临时文件后缀</h1><p>在有些场景下对于临时文件的存储有一定的格式要求，比如后缀等，这里我们将临时文件的后缀设置为常用的<code>txt</code>格式，同样的，只需要在<code>NamedTemporaryFile</code>的参数中进行配置即可：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tempfile_test.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tempfile</span><br><span class="line"></span><br><span class="line">file = tempfile.NamedTemporaryFile(delete=<span class="literal">False</span>, suffix=<span class="string">&#x27;.txt&#x27;</span>)</span><br><span class="line">name = <span class="built_in">str</span>(file.name)</span><br><span class="line">file.write(<span class="string">&#x27;This is the first tmp file!&#x27;</span>.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">file.close()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (name)</span><br></pre></td></tr></table></figure><br>由于还是设置了<code>delete=True</code>参数，因此该临时<code>txt</code>文件被持久化的保存在系统中的<code>/tmp</code>目录下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro tmp_file]$ python3 tempfile_test.py </span><br><span class="line">/tmp/tmpk0ct_kzs.txt</span><br><span class="line">[dechin@dechin-manjaro tmp_file]$ <span class="built_in">cat</span> /tmp/tmpk0ct_kzs.txt</span><br><span class="line">This is the first tmp file!</span><br></pre></td></tr></table></figure></p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文主要介绍了python中自带的tempfile库对临时文件的操作，通过tempfile库我们可以创建自动删除的或者持久化存储的临时文件，存储路径为Linux系统下的<code>/tmp</code>目录，而我们还可以根据不同的场景需要对产生的临时文件的后缀进行配置。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/tempfile.html">https://www.cnblogs.com/dechinphy/p/tempfile.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
 
@@ -244,7 +230,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -255,7 +241,7 @@
 <nav class="article-nav">
   
     <a href="/2021/01/30/%E5%AD%A6%E4%B9%A0%E7%8E%87%E8%A1%B0%E5%87%8F%E5%8A%A0%E5%86%B2%E9%87%8F%E4%BC%98%E5%8C%96%E7%9A%84%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Python%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           学习率衰减加冲量优化的梯度下降法Python实现方案
@@ -265,7 +251,7 @@
   
   
     <a href="/2021/01/27/%E4%BD%BF%E7%94%A8bandit%E5%AF%B9%E7%9B%AE%E6%A0%87python%E4%BB%A3%E7%A0%81%E8%BF%9B%E8%A1%8C%E5%AE%89%E5%85%A8%E5%87%BD%E6%95%B0%E6%89%AB%E6%8F%8F/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">使用bandit对目标python代码进行安全函数扫描</div>
     </a>
   
@@ -273,7 +259,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=善用tempfile库创建python进程中的临时文件 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F01%2F27%2F%25E5%2596%2584%25E7%2594%25A8tempfile%25E5%25BA%2593%25E5%2588%259B%25E5%25BB%25BApython%25E8%25BF%259B%25E7%25A8%258B%25E4%25B8%25AD%25E7%259A%2584%25E4%25B8%25B4%25E6%2597%25B6%25E6%2596%2587%25E4%25BB%25B6%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -428,6 +414,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

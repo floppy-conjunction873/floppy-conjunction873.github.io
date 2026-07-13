@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidE4Kib-2pfg2GHXZqZbMWW" class="article article-type-post" itemscope
+    <article id="post-cuidlcZaEMX-dBObfc_G5Wkrl" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,29 +210,38 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文介绍了华为推出的深度学习框架MindSpore中最新支持的vmap功能函数，可以用于向量化的计算，本质上的主要作用是替代并加速python中的for循环的操作。最早是在numba和pytroch、jax中对vmap功能进行了支持，其实numpy中的底层计算也用到了向量化的运算，因此速度才如此之快。vmap在python中更多的是与即时编译功能jit一同使用，能够起到简化编程的同时对性能进行极大程度的优化，尤其是python中的for循环的优化。但是对于一些numpy、jax或者MindSpore中已有的算子而言，还是建议直接使用其已经实现的算子，而不是vmap再手写一个。</p>
 <span id="more"></span>
-
-<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>Vmap是一种在python里面经常提到的向量化运算的功能，比如之前大家常用的就是numba和jax中的向量化运算的接口。虽然numpy中也使用到了向量化的运算，比如计算两个numpy数组的加和，就是一种向量化的运算。但是在numpy中模块封装的较好，定制化程度低，但是使用便捷，只需要调用最上层的接口即可。现在最新版本的mindspore也已经推出了vmap的功能，像mindspore、numba还有jax，与numpy的最大区别就是，需要在使用过程中对需要向量化运算的函数额外嵌套一层vmap的函数，这样就可以实现只对需要向量化运算的模块进行扩展。用一个公式来理解向量化运算的话就是：<br>$$<br>a_1+b_1&#x3D;c_1\<br>a_2+b_2&#x3D;c_2\<br>.\<br>.\<br>.\<br>a_n+b_n&#x3D;c_n\<br>\Downarrow\<br>\vec{a}+\vec{b}&#x3D;\vec{c}<br>$$</p>
-<h1 id="安装最新版MindSpore"><a href="#安装最新版MindSpore" class="headerlink" title="安装最新版MindSpore"></a>安装最新版MindSpore</h1><p>关于jax中的vmap使用案例，可以参考前面介绍的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/lincs.html">LINCS约束算法实现</a>和<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/batch-settle.html">SETTLE约束算法批量化实现</a>这两篇文章，都有使用到jax的vmap功能，这里我们着重介绍的是MindSpore中最新实现的vmap功能。首先我们需要安装mindspore最新的Nightly版本，其对应的是MindSpore的Gitee仓库中的master分支，具体安装指令可以参考其<a target="_blank" rel="noopener" href="https://www.mindspore.cn/install">官方链接</a>：</p>
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>Vmap是一种在python里面经常提到的向量化运算的功能，比如之前大家常用的就是numba和jax中的向量化运算的接口。虽然numpy中也使用到了向量化的运算，比如计算两个numpy数组的加和，就是一种向量化的运算。但是在numpy中模块封装的较好，定制化程度低，但是使用便捷，只需要调用最上层的接口即可。现在最新版本的mindspore也已经推出了vmap的功能，像mindspore、numba还有jax，与numpy的最大区别就是，需要在使用过程中对需要向量化运算的函数额外嵌套一层vmap的函数，这样就可以实现只对需要向量化运算的模块进行扩展。用一个公式来理解向量化运算的话就是：</p>
+<script type="math/tex; mode=display">
+a_1+b_1=c_1\\
+a_2+b_2=c_2\\
+.\\
+.\\
+.\\
+a_n+b_n=c_n\\
+\Downarrow\\
+\vec{a}+\vec{b}=\vec{c}</script><h1 id="安装最新版MindSpore"><a href="#安装最新版MindSpore" class="headerlink" title="安装最新版MindSpore"></a>安装最新版MindSpore</h1><p>关于jax中的vmap使用案例，可以参考前面介绍的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/lincs.html">LINCS约束算法实现</a>和<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/batch-settle.html">SETTLE约束算法批量化实现</a>这两篇文章，都有使用到jax的vmap功能，这里我们着重介绍的是MindSpore中最新实现的vmap功能。首先我们需要安装mindspore最新的Nightly版本，其对应的是MindSpore的Gitee仓库中的master分支，具体安装指令可以参考其<a target="_blank" rel="noopener" href="https://www.mindspore.cn/install">官方链接</a>：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220328101903594-893605013.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220328101903594-893605013.png">
 </div>
 
-<p>因为我们本地已经安装过Mindspore的旧版本，因此还需要在安装指令之后加上<code>--upgrade</code>操作，否则会导致系统误以为本地已经安装成功，不会执行安装的操作：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install mindspore-cuda11-dev -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade</span><br></pre></td></tr></table></figure>
-
-<h1 id="Vmap功能测试"><a href="#Vmap功能测试" class="headerlink" title="Vmap功能测试"></a>Vmap功能测试</h1><p>这里我们先来看一个比较简单的示例：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> mindspore <span class="keyword">import</span> Tensor</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">from</span> mindspore.ops.functional <span class="keyword">import</span> vmap</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: y = <span class="keyword">lambda</span> a,b: a+b</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: A = Tensor([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: B = Tensor([<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: vmap_y = vmap(y,in_axes=(<span class="number">0</span>,<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: y(A[<span class="number">0</span>],B[<span class="number">0</span>]) <span class="comment"># 元素加和</span></span><br><span class="line">Out[<span class="number">7</span>]: Tensor(shape=[], dtype=Int64, value= <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: vmap_y(A,B) <span class="comment"># 矢量加和</span></span><br><span class="line">Out[<span class="number">8</span>]: Tensor(shape=[<span class="number">3</span>], dtype=Int64, value= [<span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>])</span><br></pre></td></tr></table></figure>
-<p>在上面的这个示例中，我们定义了一个加法函数<code>y</code>，作用就是把输入的两个对象相加。这里需要注意的是，如果输入给y的是两个Mindspore的Tensor对象，那么会直接返回两个Tensor对应位置相加的结果。但是如果输入给y的是两个普通python的list，则输出的结果会是两个list的拼接，这跟不同类型的加法的实现方式有关，在文末总结中会进行解释。这里我们只是想说明：<code>y本身是一个元素加和的函数，可以通过vmap使其称为矢量加和的函数</code>。关于输入的<code>in_axes</code>参数，指的是扩展的维度。比如我们写了一个支持$(A,A)\times(A,1)$维度的函数，如果把<code>in_axes</code>参数设置为<code>0</code>，那么就可以得到一个支持计算$(B,A,A)\times(B,A,1)$维度的函数。其中in_axes参数，决定的是被扩展的维度<code>B</code>所在的位置。这一点我们可以看一下vmap的官方示例：</p>
+<p>因为我们本地已经安装过Mindspore的旧版本，因此还需要在安装指令之后加上<code>--upgrade</code>操作，否则会导致系统误以为本地已经安装成功，不会执行安装的操作：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install mindspore-cuda11-dev -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade</span><br></pre></td></tr></table></figure></p>
+<h1 id="Vmap功能测试"><a href="#Vmap功能测试" class="headerlink" title="Vmap功能测试"></a>Vmap功能测试</h1><p>这里我们先来看一个比较简单的示例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> mindspore <span class="keyword">import</span> Tensor</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">from</span> mindspore.ops.functional <span class="keyword">import</span> vmap</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: y = <span class="keyword">lambda</span> a,b: a+b</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: A = Tensor([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: B = Tensor([<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: vmap_y = vmap(y,in_axes=(<span class="number">0</span>,<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: y(A[<span class="number">0</span>],B[<span class="number">0</span>]) <span class="comment"># 元素加和</span></span><br><span class="line">Out[<span class="number">7</span>]: Tensor(shape=[], dtype=Int64, value= <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: vmap_y(A,B) <span class="comment"># 矢量加和</span></span><br><span class="line">Out[<span class="number">8</span>]: Tensor(shape=[<span class="number">3</span>], dtype=Int64, value= [<span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>])</span><br></pre></td></tr></table></figure><br>在上面的这个示例中，我们定义了一个加法函数<code>y</code>，作用就是把输入的两个对象相加。这里需要注意的是，如果输入给y的是两个Mindspore的Tensor对象，那么会直接返回两个Tensor对应位置相加的结果。但是如果输入给y的是两个普通python的list，则输出的结果会是两个list的拼接，这跟不同类型的加法的实现方式有关，在文末总结中会进行解释。这里我们只是想说明：<code>y本身是一个元素加和的函数，可以通过vmap使其称为矢量加和的函数</code>。关于输入的<code>in_axes</code>参数，指的是扩展的维度。比如我们写了一个支持$(A,A)\times(A,1)$维度的函数，如果把<code>in_axes</code>参数设置为<code>0</code>，那么就可以得到一个支持计算$(B,A,A)\times(B,A,1)$维度的函数。其中in_axes参数，决定的是被扩展的维度<code>B</code>所在的位置。这一点我们可以看一下vmap的官方示例：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220328102306328-1819120809.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220328102306328-1819120809.png">
 </div>
 
-<p>在这个案例中，也是定义了一个普通的加和函数，通过vmap去扩展不同的维度，大致的计算逻辑为：<br>$$<br>(A,)+(A,)+(A,)\<br>\Downarrow^{in_axes&#x3D;(0,1,None)}\<br>(B,A)+(A,B)+(A,)&#x3D;(B,A)+(B,A)+(1,A)&#x3D;(B,A)\<br>\Downarrow^{out_axes&#x3D;1}\<br>(A,B)<br>$$<br>其实这个过程中关于<code>in_axes</code>是比较容易可以理解的，但是这个<code>out_axes</code>有时候会让人难以捉摸，在github上专门有人提出了这个<a target="_blank" rel="noopener" href="https://github.com/google/jax/issues/1368">issue</a>并有人做出了解释：</p>
+<p>在这个案例中，也是定义了一个普通的加和函数，通过vmap去扩展不同的维度，大致的计算逻辑为：</p>
+<script type="math/tex; mode=display">
+(A,)+(A,)+(A,)\\
+\Downarrow^{in\_axes=(0,1,None)}\\
+(B,A)+(A,B)+(A,)=(B,A)+(B,A)+(1,A)=(B,A)\\
+\Downarrow^{out\_axes=1}\\
+(A,B)</script><p>其实这个过程中关于<code>in_axes</code>是比较容易可以理解的，但是这个<code>out_axes</code>有时候会让人难以捉摸，在github上专门有人提出了这个<a target="_blank" rel="noopener" href="https://github.com/google/jax/issues/1368">issue</a>并有人做出了解释：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220328105118530-663573120.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220328105118530-663573120.png">
 </div>
 
-<p>结合上面的案例，其实<code>out_axes</code>就是决定了扩展的维度B在结果中的位置，比如out_axes&#x3D;1，所对应的结果中就是$(x,B,x,…x)$。也就是说，其不影响计算的结果，但是有可能会对计算结果进行转置操作，在MindSpore和Numpy中称为<code>swap_axes</code>。</p>
+<p>结合上面的案例，其实<code>out_axes</code>就是决定了扩展的维度B在结果中的位置，比如out_axes=1，所对应的结果中就是$(x,B,x,...x)$。也就是说，其不影响计算的结果，但是有可能会对计算结果进行转置操作，在MindSpore和Numpy中称为<code>swap_axes</code>。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了华为推出的深度学习框架MindSpore中最新支持的vmap功能函数，可以用于向量化的计算，本质上的主要作用是替代并加速python中的for循环的操作。最早是在numba和pytroch、jax中对vmap功能进行了支持，其实numpy中的底层计算也用到了向量化的运算，因此速度才如此之快。vmap在python中更多的是与即时编译功能jit一同使用，能够起到简化编程的同时对性能进行极大程度的优化，尤其是python中的for循环的优化。但是对于一些numpy、jax或者MindSpore中已有的算子而言，还是建议直接使用其已经实现的算子，而不是vmap再手写一个。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/ms-vmap.html">https://www.cnblogs.com/dechinphy/p/ms-vmap.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -256,7 +265,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -267,7 +276,7 @@
 <nav class="article-nav">
   
     <a href="/2022/03/28/Python%E4%B8%AD%E5%B0%86%E5%AD%97%E5%85%B8%E8%BD%AC%E4%B8%BA%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Python中将字典转为成员变量
@@ -277,7 +286,7 @@
   
   
     <a href="/2022/03/22/python%E4%B8%AD%E7%9A%84super%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">python中的super是什么？</div>
     </a>
   
@@ -285,7 +294,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=MindSpore尝鲜之Vmap功能 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F03%2F24%2FMindSpore%25E5%25B0%259D%25E9%25B2%259C%25E4%25B9%258BVmap%25E5%258A%259F%25E8%2583%25BD%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -440,6 +449,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

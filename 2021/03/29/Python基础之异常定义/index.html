@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidc9L-dsMuMtyV6vLG6gX5w" class="article article-type-post" itemscope
+    <article id="post-cuidOo22TJd9u5KhOgq6Ime9Y" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,17 +210,10 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文中介绍了常规python中的异常的定义方法，可以在自己的python项目中定制化的实现一些异常类。在定制化的类中我们可以给打印信息加上一些醒目的颜色，用于提醒用户以促进问题的修改。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在各类python的项目中，总会涉及到项目自身相关的一些约束条件。这些约束条件体现在，当用户输入的参数或者文件不符合项目要求时，就拒绝这个参数的输入并且播报出来，提醒用户自行修改，而这一过程就是python的异常定义与捕获所提供的功能。python的异常捕获与定义，是一个比较基础的话题，在其他的编程语言中也会有涉及到类似的操作。</p>
-<h1 id="异常定义实例"><a href="#异常定义实例" class="headerlink" title="异常定义实例"></a>异常定义实例</h1><p>这里我们直接给出一个定义异常的实例：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># exception.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">NewError</span>(<span class="title class_ inherited__">BaseException</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, args</span>):</span><br><span class="line">        <span class="variable language_">self</span>.args = <span class="built_in">list</span>(args)</span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&#x27;\033[1;31m NewError Raised: \033[0m&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">raise</span> NewError(<span class="string">&quot;Test Error&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> NewError <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span> (e.args)</span><br></pre></td></tr></table></figure>
-<p>在这个实例中，我们定义了一个新的异常<code>NewError</code>，这个类继承自<code>BaseException</code>，是所有异常的基类。关于更多的异常类，可以参考本文的参考链接2,其中有比较详细的介绍。回到上面的这个案例，我们定义了一个有入参的异常类，也就是说可以跟用户的输入参数进行关联，以提醒是哪一个用户输入的参数导致了这个异常的出现。在这个异常中我们可以打印一些基础信息，这里我们简单的用<code>NewError Raised</code>来描述，同时我们给这个print输出加上了红色，大致效果如下：</p>
-<p><img src="https://img2020.cnblogs.com/blog/2277440/202103/2277440-20210329215206672-1513232840.png"><br>这里的<code>31</code>就是定义的红色的意思，关于其他颜色的定义可以参考如下的表格（表格来源于参考链接1）：<br><img src="https://img2020.cnblogs.com/blog/2277440/202103/2277440-20210329215243199-340387862.png"></p>
-<h1 id="打印完整异常信息"><a href="#打印完整异常信息" class="headerlink" title="打印完整异常信息"></a>打印完整异常信息</h1><p>上述的实例中由于捕获了异常信息，其实同时也对这个异常进行了抑制，如果不进行抑制就会弹出Traceback之类的信息并且中断程序的运行。这里我们参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/smtp.html">博客</a>中所演示的一个方案，采用traceback类来播报异常信息，但不终止程序的运行。针对上述代码修改后如下所示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># exception.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">NewError</span>(<span class="title class_ inherited__">BaseException</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, args</span>):</span><br><span class="line">        <span class="variable language_">self</span>.args = <span class="built_in">list</span>(args)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">raise</span> NewError(<span class="string">&quot;Test Error&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> NewError <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">import</span> traceback</span><br><span class="line">        traceback.print_exc()</span><br></pre></td></tr></table></figure>
-<p>在修改的实例中我们去掉了异常类内部的打印以及原来在except下的打印，采用traceback来包含所有的异常信息，输出如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin-20n2s01200 exception]# python3 exception.py </span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;exception.py&quot;</span>, line 9, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    raise NewError(<span class="string">&quot;Test Error&quot;</span>)</span><br><span class="line">NewError: (<span class="string">&#x27;T&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;t&#x27;</span>, <span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;E&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;o&#x27;</span>, <span class="string">&#x27;r&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p>当然，这里我们需要再次提醒的是，虽然看起来异常信息播报与程序出现异常一致，但是由于这里先用try的方法进行了捕获和抑制，因此程序后面的部分还是会继续执行的。</p>
+<h1 id="异常定义实例"><a href="#异常定义实例" class="headerlink" title="异常定义实例"></a>异常定义实例</h1><p>这里我们直接给出一个定义异常的实例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># exception.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">NewError</span>(<span class="title class_ inherited__">BaseException</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, args</span>):</span><br><span class="line">        <span class="variable language_">self</span>.args = <span class="built_in">list</span>(args)</span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&#x27;\033[1;31m NewError Raised: \033[0m&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">raise</span> NewError(<span class="string">&quot;Test Error&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> NewError <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span> (e.args)</span><br></pre></td></tr></table></figure><br>在这个实例中，我们定义了一个新的异常<code>NewError</code>，这个类继承自<code>BaseException</code>，是所有异常的基类。关于更多的异常类，可以参考本文的参考链接2,其中有比较详细的介绍。回到上面的这个案例，我们定义了一个有入参的异常类，也就是说可以跟用户的输入参数进行关联，以提醒是哪一个用户输入的参数导致了这个异常的出现。在这个异常中我们可以打印一些基础信息，这里我们简单的用<code>NewError Raised</code>来描述，同时我们给这个print输出加上了红色，大致效果如下：</p>
+<p><img src="https://img2020.cnblogs.com/blog/2277440/202103/2277440-20210329215206672-1513232840.png" alt=""><br>这里的<code>31</code>就是定义的红色的意思，关于其他颜色的定义可以参考如下的表格（表格来源于参考链接1）：<br><img src="https://img2020.cnblogs.com/blog/2277440/202103/2277440-20210329215243199-340387862.png" alt=""></p>
+<h1 id="打印完整异常信息"><a href="#打印完整异常信息" class="headerlink" title="打印完整异常信息"></a>打印完整异常信息</h1><p>上述的实例中由于捕获了异常信息，其实同时也对这个异常进行了抑制，如果不进行抑制就会弹出Traceback之类的信息并且中断程序的运行。这里我们参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/smtp.html">博客</a>中所演示的一个方案，采用traceback类来播报异常信息，但不终止程序的运行。针对上述代码修改后如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># exception.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">NewError</span>(<span class="title class_ inherited__">BaseException</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, args</span>):</span><br><span class="line">        <span class="variable language_">self</span>.args = <span class="built_in">list</span>(args)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">raise</span> NewError(<span class="string">&quot;Test Error&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> NewError <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">import</span> traceback</span><br><span class="line">        traceback.print_exc()</span><br></pre></td></tr></table></figure><br>在修改的实例中我们去掉了异常类内部的打印以及原来在except下的打印，采用traceback来包含所有的异常信息，输出如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin-20n2s01200 exception]# python3 exception.py </span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;exception.py&quot;</span>, line 9, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    raise NewError(<span class="string">&quot;Test Error&quot;</span>)</span><br><span class="line">NewError: (<span class="string">&#x27;T&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;t&#x27;</span>, <span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;E&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;o&#x27;</span>, <span class="string">&#x27;r&#x27;</span>)</span><br></pre></td></tr></table></figure><br>当然，这里我们需要再次提醒的是，虽然看起来异常信息播报与程序出现异常一致，但是由于这里先用try的方法进行了捕获和抑制，因此程序后面的部分还是会继续执行的。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文中介绍了常规python中的异常的定义方法，可以在自己的python项目中定制化的实现一些异常类。在定制化的类中我们可以给打印信息加上一些醒目的颜色，用于提醒用户以促进问题的修改。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/exception.html">https://www.cnblogs.com/dechinphy/p/exception.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
 <h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
@@ -241,7 +234,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -252,7 +245,7 @@
 <nav class="article-nav">
   
     <a href="/2021/03/29/Manjaro-Linux%E5%B9%B3%E5%8F%B0%E7%94%A8pyinstaller%E6%89%93%E5%8C%85python%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Manjaro Linux平台用pyinstaller打包python可执行文件
@@ -262,7 +255,7 @@
   
   
     <a href="/2021/03/29/%E5%88%9B%E5%BB%BAortools%E7%9A%84Dockerfile/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">创建ortools的Dockerfile</div>
     </a>
   
@@ -270,7 +263,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Python基础之异常定义 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F03%2F29%2FPython%25E5%259F%25BA%25E7%25A1%2580%25E4%25B9%258B%25E5%25BC%2582%25E5%25B8%25B8%25E5%25AE%259A%25E4%25B9%2589%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -425,6 +418,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

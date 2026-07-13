@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidE-RXfuRhg-e5NpcHCAhKg" class="article article-type-post" itemscope
+    <article id="post-cuidkktlRi8Yj9A9MzSdoxh46" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,29 +210,26 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文介绍了使用Docker从DockerHub上下载容器镜像时很有可能出现的网络中断的问题。默认情况下，如果Docker下载镜像的过程中被中断了，是要从头开始下载的，而且再次下载也有可能受到网络波动的影响。这里提供了一种配置docker参数文件的方法，以及在该方案不生效的情况下的手动操作方法，最后实现了docker pull的断点续传。</p>
 <span id="more"></span>
-
 <h1 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h1><p>在使用Docker拉取DockerHub的镜像时，经常会出现网络不稳定的问题，这就导致拉取到一半的镜像会重新拉取，浪费时间。例如下面这种情况：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202408/2277440-20240809103711438-282309924.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202408/2277440-20240809103711438-282309924.png">
 </div>
 
 <p>第二次拉取</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202408/2277440-20240809103718261-819665635.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202408/2277440-20240809103718261-819665635.png">
 </div>
 
 <p>这是一个网络中断的场景，第二次重新拉取的时候，同样是d103这个部分，又重新下载了一次。而且在不稳定的网络情况下（大概率），有可能继续中断，这就需要一个断点续传的配置。</p>
-<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>首先在docker的配置文件中加上这么一条：</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;features&quot;: &#123;</span><br><span class="line">    &quot;buildkit&quot;: true,</span><br><span class="line">    &quot;containerd-snapshotter&quot;: true</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>如果是windows系统下的桌面版docker，可以直接在Docker Engine中修改配置文件：</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>首先在docker的配置文件中加上这么一条：<br><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;features&quot;: &#123;</span><br><span class="line">    &quot;buildkit&quot;: true,</span><br><span class="line">    &quot;containerd-snapshotter&quot;: true</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure><br>如果是windows系统下的桌面版docker，可以直接在Docker Engine中修改配置文件：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202408/2277440-20240809104043832-1170695306.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202408/2277440-20240809104043832-1170695306.png">
 </div>
 
 <p>如果是Linux系统，可以修改<code>/etc/docker/daemon.json</code>文件，然后重启docker服务。</p>
 <h1 id="问题未解决？"><a href="#问题未解决？" class="headerlink" title="问题未解决？"></a>问题未解决？</h1><p>如果发现重启docker服务以后再次下载，还是从头开始下载的，那么可以在第一次下载的过程中<code>手动终止docker pull</code>，例如使用<code>ctrl+c</code>，然后再重启命令，此时我们发现，又重新从刚才终止前的断点开始下载了。而且，后续如果继续因为网络原因被中断，再次pull也可以继续从断点开始下载：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202408/2277440-20240809104657359-1972351207.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202408/2277440-20240809104657359-1972351207.png">
 </div>
 
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了使用Docker从DockerHub上下载容器镜像时很有可能出现的网络中断的问题。默认情况下，如果Docker下载镜像的过程中被中断了，是要从头开始下载的，而且再次下载也有可能受到网络波动的影响。这里提供了一种配置docker参数文件的方法，以及在该方案不生效的情况下的手动操作方法，最后实现了docker pull的断点续传。</p>
@@ -254,7 +251,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -265,7 +262,7 @@
 <nav class="article-nav">
   
     <a href="/2024/08/13/%E8%A7%A3%E5%86%B3pypi%E4%B8%8A%E4%BC%A0%E8%BD%AE%E5%AD%90unsupported-platform-tag-'linux_x86_64'%E9%97%AE/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           解决pypi上传轮子unsupported platform tag &#39;linux_x86_64&#39;问题
@@ -275,7 +272,7 @@
   
   
     <a href="/2024/08/07/Cython%E5%B0%86Numpy%E6%95%B0%E7%BB%84%E8%BD%AC%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%93%E6%9E%84%E4%BD%93/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">Cython将Numpy数组转为自定义结构体</div>
     </a>
   
@@ -283,7 +280,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=docker pull实现断点续传 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F08%2F09%2Fdocker-pull%25E5%25AE%259E%25E7%258E%25B0%25E6%2596%25AD%25E7%2582%25B9%25E7%25BB%25AD%25E4%25BC%25A0%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -438,6 +435,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

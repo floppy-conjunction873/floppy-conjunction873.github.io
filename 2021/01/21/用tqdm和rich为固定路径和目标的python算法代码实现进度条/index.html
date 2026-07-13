@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuiddMd-cPQuRhxNEsCEPPqSo" class="article article-type-post" itemscope
+    <article id="post-cuid8uv5x2r_GfIl-7H4ya9en" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,22 +210,9 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>使用tqdm和rich这两个进度条实现工具，可以使得python实现的算法过程可视化，这对于算法执行的过程判断有着重要的意义。</p>
 <span id="more"></span>
-
 <h1 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h1><p>在存在固定长度的算法中可以可视化算法执行的过程，比如对一个固定长度的数组的遍历，就是一种适合使用进度条来进行可视化的场景。而一些条件循环，比如<code>while</code>循环，不一定适合使用进度条来对算法执行过程进行可视化，典型的一个场景就是自洽的优化算法。</p>
-<h1 id="tqdm进度条的使用方法与效果"><a href="#tqdm进度条的使用方法与效果" class="headerlink" title="tqdm进度条的使用方法与效果"></a><code>tqdm</code>进度条的使用方法与效果</h1><p>调用的方法也非常的容易，只需要将我们常用的<code>range</code>函数替换成<code>tqdm</code>中自带的<code>trange</code>即可。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test_tqdm.py</span></span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> trange</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> trange(<span class="number">10</span>):</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-<p>以下是运行中间过程的一个显示场景</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro progressbar]$ python3 test_tqdm.py </span><br><span class="line"> 40%|████████████████                        | 4/10 [00:04&lt;00:06,  1.00s/it]</span><br></pre></td></tr></table></figure>
-<p>通过多次引用<code>trange</code>，还可以实现多个进度条打印的功能，但是这里如果第一层的数量较多，会导致屏幕输出过于复杂：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test_tqdm.py</span></span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> trange</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> trange(<span class="number">10</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> trange(<span class="number">10</span>):</span><br><span class="line">        time.sleep(<span class="number">0.1</span>)</span><br></pre></td></tr></table></figure>
-<p>以下是执行过程中的输出：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-20n2s01200 progressbar]$ python3 test_tqdm.py </span><br><span class="line">100%|███████████████████████████████████████| 10/10 [00:01&lt;00:00,  9.88it/s]</span><br><span class="line">100%|███████████████████████████████████████| 10/10 [00:01&lt;00:00,  9.88it/s]</span><br><span class="line">100%|███████████████████████████████████████| 10/10 [00:01&lt;00:00,  9.88it/s]</span><br><span class="line"> 30%|████████████                            | 3/10 [00:03&lt;00:07,  1.01s/it]</span><br></pre></td></tr></table></figure>
-
-<h1 id="rich进度条的使用方法与效果"><a href="#rich进度条的使用方法与效果" class="headerlink" title="rich进度条的使用方法与效果"></a><code>rich</code>进度条的使用方法与效果</h1><p>使用的方法与tqdm有些类似的，也是直接调用<code>rich</code>中的<code>track</code>对<code>range</code>函数进行封装：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test_rich.py</span></span><br><span class="line"><span class="keyword">from</span> rich.progress <span class="keyword">import</span> track</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> track(<span class="built_in">range</span>(<span class="number">15</span>)):</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-<p>与简单的tqdm不同的是，rich支持种类众多的色彩，下面粘贴的执行过程显示，其实是带有彩色的：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro progressbar]$ python3 test_rich.py </span><br><span class="line">Working... ━━━━━━━━━━╸━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  27% 0:00:12</span><br></pre></td></tr></table></figure>
-
+<h1 id="tqdm进度条的使用方法与效果"><a href="#tqdm进度条的使用方法与效果" class="headerlink" title="tqdm进度条的使用方法与效果"></a><code>tqdm</code>进度条的使用方法与效果</h1><p>调用的方法也非常的容易，只需要将我们常用的<code>range</code>函数替换成<code>tqdm</code>中自带的<code>trange</code>即可。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test_tqdm.py</span></span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> trange</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> trange(<span class="number">10</span>):</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br></pre></td></tr></table></figure><br>以下是运行中间过程的一个显示场景<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro progressbar]$ python3 test_tqdm.py </span><br><span class="line"> 40%|████████████████                        | 4/10 [00:04&lt;00:06,  1.00s/it]</span><br></pre></td></tr></table></figure><br>通过多次引用<code>trange</code>，还可以实现多个进度条打印的功能，但是这里如果第一层的数量较多，会导致屏幕输出过于复杂：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test_tqdm.py</span></span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> trange</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> trange(<span class="number">10</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> trange(<span class="number">10</span>):</span><br><span class="line">        time.sleep(<span class="number">0.1</span>)</span><br></pre></td></tr></table></figure><br>以下是执行过程中的输出：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-20n2s01200 progressbar]$ python3 test_tqdm.py </span><br><span class="line">100%|███████████████████████████████████████| 10/10 [00:01&lt;00:00,  9.88it/s]</span><br><span class="line">100%|███████████████████████████████████████| 10/10 [00:01&lt;00:00,  9.88it/s]</span><br><span class="line">100%|███████████████████████████████████████| 10/10 [00:01&lt;00:00,  9.88it/s]</span><br><span class="line"> 30%|████████████                            | 3/10 [00:03&lt;00:07,  1.01s/it]</span><br></pre></td></tr></table></figure></p>
+<h1 id="rich进度条的使用方法与效果"><a href="#rich进度条的使用方法与效果" class="headerlink" title="rich进度条的使用方法与效果"></a><code>rich</code>进度条的使用方法与效果</h1><p>使用的方法与tqdm有些类似的，也是直接调用<code>rich</code>中的<code>track</code>对<code>range</code>函数进行封装：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test_rich.py</span></span><br><span class="line"><span class="keyword">from</span> rich.progress <span class="keyword">import</span> track</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> track(<span class="built_in">range</span>(<span class="number">15</span>)):</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br></pre></td></tr></table></figure><br>与简单的tqdm不同的是，rich支持种类众多的色彩，下面粘贴的执行过程显示，其实是带有彩色的：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro progressbar]$ python3 test_rich.py </span><br><span class="line">Working... ━━━━━━━━━━╸━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  27% 0:00:12</span><br></pre></td></tr></table></figure></p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/progress-bar.html">https://www.cnblogs.com/dechinphy/p/progress-bar.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
 
         </div>
@@ -241,7 +228,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -252,7 +239,7 @@
 <nav class="article-nav">
   
     <a href="/2021/01/25/%E4%BD%BF%E7%94%A8fdopen%E5%AF%B9python%E8%BF%9B%E7%A8%8B%E4%BA%A7%E7%94%9F%E7%9A%84%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8C%E6%9D%83%E9%99%90%E6%9C%80%E5%B0%8F%E5%8C%96%E9%85%8D%E7%BD%AE/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           使用fdopen对python进程产生的文件进行权限最小化配置
@@ -262,7 +249,7 @@
   
   
     <a href="/2021/01/20/%E4%BD%BF%E7%94%A8line_profiler%E5%AF%B9python%E4%BB%A3%E7%A0%81%E6%80%A7%E8%83%BD%E8%BF%9B%E8%A1%8C%E8%AF%84%E4%BC%B0%E4%BC%98%E5%8C%96/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">使用line_profiler对python代码性能进行评估优化</div>
     </a>
   
@@ -270,7 +257,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=用tqdm和rich为固定路径和目标的python算法代码实现进度条 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F01%2F21%2F%25E7%2594%25A8tqdm%25E5%2592%258Crich%25E4%25B8%25BA%25E5%259B%25BA%25E5%25AE%259A%25E8%25B7%25AF%25E5%25BE%2584%25E5%2592%258C%25E7%259B%25AE%25E6%25A0%2587%25E7%259A%2584python%25E7%25AE%2597%25E6%25B3%2595%25E4%25BB%25A3%25E7%25A0%2581%25E5%25AE%259E%25E7%258E%25B0%25E8%25BF%259B%25E5%25BA%25A6%25E6%259D%25A1%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -425,6 +412,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

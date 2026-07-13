@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidumQYVOVf5OswzODPl93zm" class="article article-type-post" itemscope
+    <article id="post-cuidT7VBEW_ohJrgdhothBQrW" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,13 +210,12 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>我们知道GPU加速在可并行化程度比较高的算法中，能够发挥出比较大的作用，展示出明显的加速效果，而对于一些线程之间存在依赖这样的场景就不一定能够起到很大的加速作用。CUDA官方针对此类问题，提供了atomic的内置函数解决方案，包含有求和、求最大值等常用函数。而这些函数的特点就在于，线程与线程之间需要有一个时序的依赖关系。就比如说求最大值的函数，它会涉及到不同线程之间的轮询。经过测试，CUDA的这种atomic的方案，实现起来非常方便，性能也很乐观，相比于自己动手实现一个不断切割、递归的规约函数，还是要容易快捷的多。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面的几篇博客中我们介绍了在Python中使用Numba来写CUDA程序的一些基本操作和方法，并且展示了GPU加速的实际效果。在可并行化的算法中，比如计算两个矢量的加和，或者是在分子动力学模拟领域中的查找近邻表等等，都是可以直接并行的算法，而且实现起来难度不大。而有一种情况是，如果我们要计算的内容的线程之间互相存在依赖，比方说最常见的，计算一个矩阵所有元素的和。</p>
-<h1 id="CUDA的atomic运算"><a href="#CUDA的atomic运算" class="headerlink" title="CUDA的atomic运算"></a>CUDA的atomic运算</h1><p>正如前面所提到的问题，如何去计算一个矩阵所有元素之和呢？具体问题可以表述为：<br>$$<br>S&#x3D;\sum_{i,j}A_{i,j}<br>$$<br>对于此类的问题，如果我们像普通的CUDA并行操作一样，直接创建一个S变量，然后直接在线程和分块上直接把每一个矩阵元素加到这个S变量中，那么会出现一种情况：在线程同步时，存在冲突的线程是无法同时加和成功的，也就是说，这种情况下虽然程序不会报错，但是得到的结果是完全错误的。对于此类情况，CUDA官方给出了atomic运算这样的方案，可以保障线程之间不被干扰：</p>
+<h1 id="CUDA的atomic运算"><a href="#CUDA的atomic运算" class="headerlink" title="CUDA的atomic运算"></a>CUDA的atomic运算</h1><p>正如前面所提到的问题，如何去计算一个矩阵所有元素之和呢？具体问题可以表述为：</p>
+<script type="math/tex; mode=display">
+S=\sum_{i,j}A_{i,j}</script><p>对于此类的问题，如果我们像普通的CUDA并行操作一样，直接创建一个S变量，然后直接在线程和分块上直接把每一个矩阵元素加到这个S变量中，那么会出现一种情况：在线程同步时，存在冲突的线程是无法同时加和成功的，也就是说，这种情况下虽然程序不会报错，但是得到的结果是完全错误的。对于此类情况，CUDA官方给出了atomic运算这样的方案，可以保障线程之间不被干扰：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> numba <span class="keyword">import</span> cuda</span><br><span class="line"><span class="keyword">from</span> numba <span class="keyword">import</span> vectorize</span><br><span class="line">cuda.select_device(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@cuda.jit</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">ReducedSum</span>(<span class="params">arr, result</span>):</span><br><span class="line">    i, j = cuda.grid(<span class="number">2</span>)</span><br><span class="line">    cuda.atomic.add(result, <span class="number">0</span>, arr[i][j])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">import</span> time</span><br><span class="line">    np.random.seed(<span class="number">2</span>)</span><br><span class="line">    data_length = <span class="number">2</span>**<span class="number">10</span></span><br><span class="line">    arr = np.random.random((data_length,data_length)).astype(np.float32)</span><br><span class="line">    <span class="built_in">print</span> (arr)</span><br><span class="line">    arr_cuda = cuda.to_device(arr)</span><br><span class="line">    np_time = <span class="number">0.0</span></span><br><span class="line">    nb_time = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">        res = np.array([<span class="number">0</span>],dtype=np.float32)</span><br><span class="line">        res_cuda = cuda.to_device(res)</span><br><span class="line">        time0 = time.time()</span><br><span class="line">        ReducedSum[(data_length,data_length),(<span class="number">1</span>,<span class="number">1</span>)](arr_cuda,res_cuda)</span><br><span class="line">        time1 = time.time()</span><br><span class="line">        res = res_cuda.copy_to_host()[<span class="number">0</span>]</span><br><span class="line">        time2 = time.time()</span><br><span class="line">        np_res = np.<span class="built_in">sum</span>(arr)</span><br><span class="line">        time3 = time.time()</span><br><span class="line">        <span class="keyword">if</span> i == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span> (<span class="string">&#x27;The error rate is: &#x27;</span>, <span class="built_in">abs</span>(np_res-res)/res)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        np_time += time3 - time2</span><br><span class="line">        nb_time += time1 - time0</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;The time cost of numpy is: &#123;&#125;s&#x27;</span>.<span class="built_in">format</span>(np_time))</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;The time cost of numba is: &#123;&#125;s&#x27;</span>.<span class="built_in">format</span>(nb_time))</span><br></pre></td></tr></table></figure>
-<p>这里需要重点关注的就是用CUDA实现的简单函数<code>ReducedSum</code>，这个函数中调用了CUDA的<code>atomic.add</code>方法，用这个方法直接替代系统内置的加法，就完成了所有的操作。我们将这个函数的运行时间去跟<code>np.sum</code>函数做一个对比，结果如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ python3 cuda_reduced_sum.py </span><br><span class="line">[[0.4359949  0.02592623 0.5496625  ... 0.3810055  0.6834749  0.5225032 ]</span><br><span class="line"> [0.62763107 0.3184925  0.5822277  ... 0.89322233 0.7845663  0.4595605 ]</span><br><span class="line"> [0.9666947  0.16615923 0.6931703  ... 0.29497907 0.63724256 0.06265242]</span><br><span class="line"> ...</span><br><span class="line"> [0.96224505 0.36741972 0.6673239  ... 0.3115176  0.7561843  0.9396167 ]</span><br><span class="line"> [0.781736   0.28829736 0.38047555 ... 0.15837361 0.00392629 0.6236886 ]</span><br><span class="line"> [0.03247315 0.3664344  0.00369871 ... 0.0205253  0.15924706 0.8655231 ]]</span><br><span class="line">The error rate is:  4.177044e-06</span><br><span class="line">The <span class="keyword">time</span> cost of numpy is: 0.027491092681884766s</span><br><span class="line">The <span class="keyword">time</span> cost of numba is: 0.01042938232421875s</span><br></pre></td></tr></table></figure>
-<p>在GPU的计算中，会有一定的精度损失，比如这里的误差率就在1e-06级别，但是运行的速度要比numpy的实现快上2倍！</p>
+<p>这里需要重点关注的就是用CUDA实现的简单函数<code>ReducedSum</code>，这个函数中调用了CUDA的<code>atomic.add</code>方法，用这个方法直接替代系统内置的加法，就完成了所有的操作。我们将这个函数的运行时间去跟<code>np.sum</code>函数做一个对比，结果如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ python3 cuda_reduced_sum.py </span><br><span class="line">[[0.4359949  0.02592623 0.5496625  ... 0.3810055  0.6834749  0.5225032 ]</span><br><span class="line"> [0.62763107 0.3184925  0.5822277  ... 0.89322233 0.7845663  0.4595605 ]</span><br><span class="line"> [0.9666947  0.16615923 0.6931703  ... 0.29497907 0.63724256 0.06265242]</span><br><span class="line"> ...</span><br><span class="line"> [0.96224505 0.36741972 0.6673239  ... 0.3115176  0.7561843  0.9396167 ]</span><br><span class="line"> [0.781736   0.28829736 0.38047555 ... 0.15837361 0.00392629 0.6236886 ]</span><br><span class="line"> [0.03247315 0.3664344  0.00369871 ... 0.0205253  0.15924706 0.8655231 ]]</span><br><span class="line">The error rate is:  4.177044e-06</span><br><span class="line">The <span class="keyword">time</span> cost of numpy is: 0.027491092681884766s</span><br><span class="line">The <span class="keyword">time</span> cost of numba is: 0.01042938232421875s</span><br></pre></td></tr></table></figure><br>在GPU的计算中，会有一定的精度损失，比如这里的误差率就在1e-06级别，但是运行的速度要比numpy的实现快上2倍！</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>我们知道GPU加速在可并行化程度比较高的算法中，能够发挥出比较大的作用，展示出明显的加速效果，而对于一些线程之间存在依赖这样的场景就不一定能够起到很大的加速作用。CUDA官方针对此类问题，提供了atomic的内置函数解决方案，包含有求和、求最大值等常用函数。而这些函数的特点就在于，线程与线程之间需要有一个时序的依赖关系。就比如说求最大值的函数，它会涉及到不同线程之间的轮询。经过测试，CUDA的这种atomic的方案，实现起来非常方便，性能也很乐观，相比于自己动手实现一个不断切割、递归的规约函数，还是要容易快捷的多。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/gpu-sum.html">https://www.cnblogs.com/dechinphy/p/gpu-sum.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -237,7 +236,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -248,7 +247,7 @@
 <nav class="article-nav">
   
     <a href="/2021/09/02/Python3%E5%AE%9E%E7%8E%B0%E6%89%93%E6%A0%BC%E7%82%B9%E7%AE%97%E6%B3%95%E7%9A%84GPU%E5%8A%A0%E9%80%9F/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Python3实现打格点算法的GPU加速
@@ -258,7 +257,7 @@
   
   
     <a href="/2021/08/30/Python%E7%9A%84GPU%E7%BC%96%E7%A8%8B%E5%AE%9E%E4%BE%8B%E2%80%94%E2%80%94%E8%BF%91%E9%82%BB%E8%A1%A8%E8%AE%A1%E7%AE%97/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">Python的GPU编程实例——近邻表计算</div>
     </a>
   
@@ -266,7 +265,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=用CUDA写出比Numpy更快的规约求和函数 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F08%2F31%2F%25E7%2594%25A8CUDA%25E5%2586%2599%25E5%2587%25BA%25E6%25AF%2594Numpy%25E6%259B%25B4%25E5%25BF%25AB%25E7%259A%2584%25E8%25A7%2584%25E7%25BA%25A6%25E6%25B1%2582%25E5%2592%258C%25E5%2587%25BD%25E6%2595%25B0%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -421,6 +420,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

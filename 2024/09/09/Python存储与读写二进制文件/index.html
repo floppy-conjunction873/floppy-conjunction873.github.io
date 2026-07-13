@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidBvKtB-NFXijILHjOIzaDQ" class="article article-type-post" itemscope
+    <article id="post-cuid-H4oYtfpNX_8wna2gMW2r" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,13 +210,9 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文介绍了一种在Python中将Numpy数组转存为一个紧凑的二进制格式的文件，及其使用内存映射的形式进行读取的方案。一个二进制的数据流，不仅可以更加方便页形式的内存映射，相比于传统的Numpy单精度浮点数数组还有一个可哈希的特性。总体来说是一个对于高性能计算十分友好的存储格式，在cudaSPONGE中作为一个分子动力学模拟轨迹输出的格式使用。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>一般情况下我们会选择使用明文形式来存储数据，如json、txt、csv等等。如果是需要压缩率较高的存储格式，还可以选择使用hdf5或者npz等格式。还有一种比较紧凑的数据存储格式，就是直接按照二进制格式存储。这种格式下，存储的数据之间没有间隔符，在没有压缩的情况下应该是体积最小的存储类型。</p>
-<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><p>在Python中，我们可以使用numpy.tofile()功能，直接将numpy数组类型存储到一个二进制文件中。读取的时候，虽然可以直接使用open(file_name, ‘rb’)来进行读取，但是为了适配大量IO的场景，这里我们使用内存映射mmap的形式来进行数据读取。</p>
-<h1 id="完整示例"><a href="#完整示例" class="headerlink" title="完整示例"></a>完整示例</h1><p>如下是一个完整的示例代码，相关的功能直接用注释的形式在代码中标记：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> mmap</span><br><span class="line"><span class="keyword">import</span> resource</span><br><span class="line"><span class="comment"># 获取页数据量大小（单位：字节）</span></span><br><span class="line">PAGE_SIZE = resource.getpagesize()</span><br><span class="line"><span class="comment"># 定义单精度浮点数数据占用字节（单位：字节）</span></span><br><span class="line">DATA_SIZE = <span class="number">4</span></span><br><span class="line"><span class="comment"># 计算页存储数据数量（num_float32）</span></span><br><span class="line">PAGE_FNUM = <span class="built_in">int</span>(PAGE_SIZE/DATA_SIZE)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&quot;The PAGE_SIZE is: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(PAGE_SIZE))</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&quot;Corresponding float32 numbers should be: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(PAGE_FNUM))</span><br><span class="line"><span class="comment"># 生成示例数据，使用PAGE_FNUM+4大小的数据量定义两页数据</span></span><br><span class="line">tmp_arr = np.arange(PAGE_FNUM+<span class="number">4</span>).astype(np.float32)</span><br><span class="line"><span class="comment"># 数据存储路径</span></span><br><span class="line">tmp_file = <span class="string">&#x27;/tmp/tmp.dat&#x27;</span></span><br><span class="line"><span class="comment"># 将数组存储到二进制文件中</span></span><br><span class="line">tmp_arr.tofile(tmp_file)</span><br><span class="line"><span class="comment"># 每次从二进制文件中读取4个数据</span></span><br><span class="line">READ_NUM = <span class="number">4</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(tmp_file, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> file:</span><br><span class="line">    <span class="comment"># 第一页数据的内存映射</span></span><br><span class="line">    mm = mmap.mmap(file.fileno(), <span class="number">0</span>, access=mmap.ACCESS_READ, offset=<span class="number">0</span>)</span><br><span class="line">    <span class="comment"># 第一页数据的1、2、3、4位数据</span></span><br><span class="line">    <span class="built_in">print</span> (np.frombuffer(mm.read(DATA_SIZE*READ_NUM), dtype=<span class="string">&#x27;&lt;f4&#x27;</span>))</span><br><span class="line">    <span class="comment"># 第一页数据的5、6、7、8位数据</span></span><br><span class="line">    <span class="built_in">print</span> (np.frombuffer(mm.read(DATA_SIZE*READ_NUM), dtype=<span class="string">&#x27;&lt;f4&#x27;</span>))</span><br><span class="line">    <span class="comment"># 第二页数据的内存映射</span></span><br><span class="line">    mm = mmap.mmap(file.fileno(), <span class="number">0</span>, access=mmap.ACCESS_READ, offset=PAGE_SIZE)</span><br><span class="line">    <span class="comment"># 第二页数据的1~4位数据</span></span><br><span class="line">    <span class="built_in">print</span> (np.frombuffer(mm.read(DATA_SIZE*READ_NUM), dtype=<span class="string">&#x27;&lt;f4&#x27;</span>))</span><br><span class="line">    <span class="comment"># 第二页数据的5~8位数据</span></span><br><span class="line">    <span class="built_in">print</span> (np.frombuffer(mm.read(DATA_SIZE*READ_NUM), dtype=<span class="string">&#x27;&lt;f4&#x27;</span>))</span><br><span class="line">    <span class="comment"># 关闭内存映射</span></span><br><span class="line">    mm.close()</span><br><span class="line"><span class="comment"># 退出文件IO</span></span><br></pre></td></tr></table></figure>
-<p>该脚本的输出结果为：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">The PAGE_SIZE is: 4096</span><br><span class="line">Corresponding float32 numbers should be: 1024</span><br><span class="line">[0. 1. 2. 3.]</span><br><span class="line">[4. 5. 6. 7.]</span><br><span class="line">[1024. 1025. 1026. 1027.]</span><br><span class="line">[]</span><br></pre></td></tr></table></figure>
+<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><p>在Python中，我们可以使用numpy.tofile()功能，直接将numpy数组类型存储到一个二进制文件中。读取的时候，虽然可以直接使用open(file_name, &#39;rb&#39;)来进行读取，但是为了适配大量IO的场景，这里我们使用内存映射mmap的形式来进行数据读取。</p>
+<h1 id="完整示例"><a href="#完整示例" class="headerlink" title="完整示例"></a>完整示例</h1><p>如下是一个完整的示例代码，相关的功能直接用注释的形式在代码中标记：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> mmap</span><br><span class="line"><span class="keyword">import</span> resource</span><br><span class="line"><span class="comment"># 获取页数据量大小（单位：字节）</span></span><br><span class="line">PAGE_SIZE = resource.getpagesize()</span><br><span class="line"><span class="comment"># 定义单精度浮点数数据占用字节（单位：字节）</span></span><br><span class="line">DATA_SIZE = <span class="number">4</span></span><br><span class="line"><span class="comment"># 计算页存储数据数量（num_float32）</span></span><br><span class="line">PAGE_FNUM = <span class="built_in">int</span>(PAGE_SIZE/DATA_SIZE)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&quot;The PAGE_SIZE is: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(PAGE_SIZE))</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&quot;Corresponding float32 numbers should be: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(PAGE_FNUM))</span><br><span class="line"><span class="comment"># 生成示例数据，使用PAGE_FNUM+4大小的数据量定义两页数据</span></span><br><span class="line">tmp_arr = np.arange(PAGE_FNUM+<span class="number">4</span>).astype(np.float32)</span><br><span class="line"><span class="comment"># 数据存储路径</span></span><br><span class="line">tmp_file = <span class="string">&#x27;/tmp/tmp.dat&#x27;</span></span><br><span class="line"><span class="comment"># 将数组存储到二进制文件中</span></span><br><span class="line">tmp_arr.tofile(tmp_file)</span><br><span class="line"><span class="comment"># 每次从二进制文件中读取4个数据</span></span><br><span class="line">READ_NUM = <span class="number">4</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(tmp_file, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> file:</span><br><span class="line">    <span class="comment"># 第一页数据的内存映射</span></span><br><span class="line">    mm = mmap.mmap(file.fileno(), <span class="number">0</span>, access=mmap.ACCESS_READ, offset=<span class="number">0</span>)</span><br><span class="line">    <span class="comment"># 第一页数据的1、2、3、4位数据</span></span><br><span class="line">    <span class="built_in">print</span> (np.frombuffer(mm.read(DATA_SIZE*READ_NUM), dtype=<span class="string">&#x27;&lt;f4&#x27;</span>))</span><br><span class="line">    <span class="comment"># 第一页数据的5、6、7、8位数据</span></span><br><span class="line">    <span class="built_in">print</span> (np.frombuffer(mm.read(DATA_SIZE*READ_NUM), dtype=<span class="string">&#x27;&lt;f4&#x27;</span>))</span><br><span class="line">    <span class="comment"># 第二页数据的内存映射</span></span><br><span class="line">    mm = mmap.mmap(file.fileno(), <span class="number">0</span>, access=mmap.ACCESS_READ, offset=PAGE_SIZE)</span><br><span class="line">    <span class="comment"># 第二页数据的1~4位数据</span></span><br><span class="line">    <span class="built_in">print</span> (np.frombuffer(mm.read(DATA_SIZE*READ_NUM), dtype=<span class="string">&#x27;&lt;f4&#x27;</span>))</span><br><span class="line">    <span class="comment"># 第二页数据的5~8位数据</span></span><br><span class="line">    <span class="built_in">print</span> (np.frombuffer(mm.read(DATA_SIZE*READ_NUM), dtype=<span class="string">&#x27;&lt;f4&#x27;</span>))</span><br><span class="line">    <span class="comment"># 关闭内存映射</span></span><br><span class="line">    mm.close()</span><br><span class="line"><span class="comment"># 退出文件IO</span></span><br></pre></td></tr></table></figure><br>该脚本的输出结果为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">The PAGE_SIZE is: 4096</span><br><span class="line">Corresponding float32 numbers should be: 1024</span><br><span class="line">[0. 1. 2. 3.]</span><br><span class="line">[4. 5. 6. 7.]</span><br><span class="line">[1024. 1025. 1026. 1027.]</span><br><span class="line">[]</span><br></pre></td></tr></table></figure></p>
 <h1 id="结果解析"><a href="#结果解析" class="headerlink" title="结果解析"></a>结果解析</h1><p>我们打印的第一个数据是页大小，这里显示是4096个字节。而一个单精度浮点数占4个字节，所以一页存了1024个单精度浮点数，也就是第二个打印输出的结果。由于我们定义的numpy数组是一个从0开始的递增数组，因此第一页数据的前8位数字就是从0到7。而第二页的数据是1024~1027一共4个浮点数，占16个字节。所以我们在第二页第二次使用numpy.frombuffer()去读取数据的时候，得到的是一个空的数组。此外我们可以查看一下这个二进制文件的大小：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: os.path.getsize(<span class="string">&#x27;/tmp/tmp.dat&#x27;</span>)</span><br><span class="line">Out[<span class="number">2</span>]: <span class="number">4112</span></span><br></pre></td></tr></table></figure>
 <p>一共是4112个字节，刚好是4096+16个字节。</p>
@@ -239,7 +235,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -250,7 +246,7 @@
 <nav class="article-nav">
   
     <a href="/2024/09/12/Edge%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BE%E7%BD%AE%E5%A4%9C%E9%97%B4%E6%A8%A1%E5%BC%8F-%E6%B7%B1%E8%89%B2%E6%A8%A1%E5%BC%8F/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Edge浏览器设置夜间模式/深色模式
@@ -260,7 +256,7 @@
   
   
     <a href="/2024/09/03/%E8%A7%A3%E5%86%B3auditwheel-repair%E8%BF%87%E7%A8%8Brpath%E8%A2%AB%E4%BF%AE%E6%94%B9%E7%9A%84%E9%97%AE%E9%A2%98/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">解决auditwheel repair过程rpath被修改的问题</div>
     </a>
   
@@ -268,7 +264,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Python存储与读写二进制文件 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F09%2F09%2FPython%25E5%25AD%2598%25E5%2582%25A8%25E4%25B8%258E%25E8%25AF%25BB%25E5%2586%2599%25E4%25BA%258C%25E8%25BF%259B%25E5%2588%25B6%25E6%2596%2587%25E4%25BB%25B6%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -423,6 +419,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

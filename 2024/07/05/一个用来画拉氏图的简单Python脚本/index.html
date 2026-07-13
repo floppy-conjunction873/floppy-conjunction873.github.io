@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidZS7SteP4GZvBJZY3L0nC7" class="article article-type-post" itemscope
+    <article id="post-cuide0tF71GHsv9tmkgMbVR8j" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,43 +210,42 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>这里我提供了一个用于画拉氏图的Python脚本源代码，供大家免费使用。虽然现在也有很多免费的平台和工具可以用，但很多都是黑箱，有需要的开发者可以直接在这个脚本基础上二次开发，定制自己的拉氏图绘制方法。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>关于拉氏图的更多介绍，可以参考下<a target="_blank" rel="noopener" href="https://blog.csdn.net/MCANDML/article/details/80672174">这篇博客</a>，这里简单引述一部分内容：</p>
 <blockquote>
 <p>Ramachandran plot（拉氏图）是由G. N. Ramachandran等人于1963年开发的，用来描述蛋白质结构中氨基酸残基二面角$\psi$和$\phi$是否在合理区域的一种可视化方法。同时也可以反映出该蛋白质的构象是否合理。</p>
 </blockquote>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202410/2277440-20241022110822599-201275399.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202410/2277440-20241022110822599-201275399.png">
 </div>
 
 <p>思路是比较简单的，就是找到一个蛋白质主链中的C,C$_{\alpha}$,N,O这几种原子，然后计算对应共价键的二面角即可。计算相关内容可以参考我之前写过的这两篇文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/rigid-res.html">AlphaFold2中的残基刚体表示
 </a>和<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/inner_crd.html">使用numpy计算分子内坐标</a>。这里我们就简单的做一个Python的脚本，可以用来读取pdb文件，生成对应的拉氏图，用来判断对应的蛋白质构象是否合理，也可以用来比较两个同类蛋白之间的构型差异。</p>
-<h1 id="脚本与使用方法"><a href="#脚本与使用方法" class="headerlink" title="脚本与使用方法"></a>脚本与使用方法</h1><p>先把下面这个Python脚本文件保存到本地为<code>rplot.py</code>：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># rplot.py</span></span><br><span class="line"><span class="string">&quot;&quot;&quot; </span></span><br><span class="line"><span class="string">README</span></span><br><span class="line"><span class="string">    Run this script with command:</span></span><br><span class="line"><span class="string">    ```bash</span></span><br><span class="line"><span class="string">    $ python3 rplot.py --input ../tutorials/pdb/case5.pdb --levels 8 --sigma 0.2 --grids 30</span></span><br></pre></td></tr></table></figure>
-<p>Requirements<br>    hadder, numpy, matplotlib<br>“””<br>try:<br>    from hadder.parsers import read_pdb<br>except ImportError:<br>    import os<br>    os.system(‘python3 -m pip install hadder –upgrade’)<br>    from hadder.parsers import read_pdb<br>import matplotlib.pyplot as plt<br>import numpy as np</p>
-<p>import argparse<br>parser &#x3D; argparse.ArgumentParser()</p>
-<p>parser.add_argument(“–input”, help&#x3D;”Set the input pdb filename. Absolute file path is recommended.”)<br>parser.add_argument(“–levels”, help&#x3D;”Contour levels.”, default&#x3D;’8’)<br>parser.add_argument(“–sigma”, help&#x3D;”KDE band width.”, default&#x3D;’0.2’)<br>parser.add_argument(“–grids”, help&#x3D;”Number of grids.”, default&#x3D;’30’)</p>
-<p>args &#x3D; parser.parse_args()<br>pdb_name &#x3D; args.input<br>num_levels &#x3D; int(args.levels)<br>sigma &#x3D; float(args.sigma)<br>num_grids &#x3D; int(args.grids)</p>
-<p>def plot(fig, X, Y, Z, num_levels&#x3D;8):<br>    plt.xlabel(r’$\psi$’)<br>    plt.ylabel(r’$\phi$’)<br>    levels &#x3D; np.linspace(np.min(Z), np.max(Z), num_levels)<br>    fc &#x3D; plt.contourf(X, Y, Z, cmap&#x3D;’Greens’, levels&#x3D;levels)<br>    plt.colorbar(fc)<br>    return fig</p>
-<p>def torsion(crds, index1, index2, index3, index4):<br>    crd1 &#x3D; crds[index1]<br>    crd2 &#x3D; crds[index2]<br>    crd3 &#x3D; crds[index3]<br>    crd4 &#x3D; crds[index4]<br>    vector1 &#x3D; crd1 - crd2<br>    vector2 &#x3D; crd4 - crd3<br>    axis_vector &#x3D; crd3 - crd2<br>    vec_a &#x3D; np.cross(vector1, axis_vector)<br>    vec_b &#x3D; np.cross(vector2, axis_vector)<br>    cross_ab &#x3D; np.cross(vec_a, vec_b)<br>    axis_vector &#x2F;&#x3D; np.linalg.norm(axis_vector, axis&#x3D;-1, keepdims&#x3D;True)<br>    sin_phi &#x3D; np.sum(axis_vector * cross_ab, axis&#x3D;-1)<br>    cos_phi &#x3D; np.sum(vec_a * vec_b, axis&#x3D;-1)<br>    phi &#x3D; np.arctan(sin_phi &#x2F; cos_phi)<br>    return phi</p>
-<p>def psi_phi_from_pdb(pdb_name):<br>    pdb_obj &#x3D; read_pdb(pdb_name)<br>    atom_names &#x3D; pdb_obj.flatten_atoms<br>    crds &#x3D; pdb_obj.flatten_crds<br>    c_index &#x3D; np.where(atom_names&#x3D;&#x3D;’C’)[0]<br>    n_index &#x3D; np.where(atom_names&#x3D;&#x3D;’N’)[0]<br>    ca_index &#x3D; np.where(atom_names&#x3D;&#x3D;’CA’)[0]<br>    psi &#x3D; torsion(crds, n_index[:-1], ca_index[:-1], c_index[:-1], n_index[1:])<br>    phi &#x3D; torsion(crds, c_index[:-1], n_index[1:], ca_index[1:], c_index[1:])<br>    return psi, phi</p>
-<p>def gaussian2(x1, x2, sigma1&#x3D;1.0, sigma2&#x3D;1.0, A&#x3D;0.5):<br>    return np.sum(A<em>np.exp(-0.5</em>(x1<strong>2&#x2F;sigma1</strong>2+x2<strong>2&#x2F;sigma2</strong>2))&#x2F;np.pi&#x2F;sigma1&#x2F;sigma2, axis&#x3D;-1)</p>
-<p>def potential_energy(position, psi, phi, sigma1, sigma2):<br>    # (A, )<br>    psi_, phi_ &#x3D; position[:, 0], position[:, 1]<br>    # (A, R)<br>    delta_psi &#x3D; psi_[:, None] - psi[None]<br>    delta_phi &#x3D; phi_[:, None] - phi[None]<br>    # (A, )<br>    Z &#x3D; -np.log(gaussian2(delta_psi, delta_phi, sigma1&#x3D;sigma1, sigma2&#x3D;sigma2, A&#x3D;2.0)+1)<br>    return Z</p>
-<p>psi_grids &#x3D; np.linspace(-np.pi, np.pi, num_grids)<br>phi_grids &#x3D; np.linspace(-np.pi, np.pi, num_grids)<br>grids &#x3D; np.array(np.meshgrid(psi_grids, phi_grids)).T.reshape((-1, 2))<br>psi, phi &#x3D; psi_phi_from_pdb(pdb_name)<br>Z &#x3D; potential_energy(grids, psi, phi, sigma, sigma).reshape((psi_grids.shape[0], phi_grids.shape[0])).T<br>X,Y &#x3D; np.meshgrid(psi_grids, phi_grids)</p>
-<p>fig &#x3D; plt.figure()<br>plt.title(‘Ramachandran plot for {}’.format(pdb_name.split(‘&#x2F;‘)[-1]))<br>plot(fig, X, Y, Z, num_levels&#x3D;num_levels)<br>plt.plot(psi, phi, ‘.’, color&#x3D;’black’)<br>plt.show()</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">然后加载一个本地pdb文件：</span><br><span class="line">```bash</span><br><span class="line">$ python rplot.py case2.pdb</span><br></pre></td></tr></table></figure>
-<p>生成图像效果如下：</p>
+<h1 id="脚本与使用方法"><a href="#脚本与使用方法" class="headerlink" title="脚本与使用方法"></a>脚本与使用方法</h1><p>先把下面这个Python脚本文件保存到本地为<code>rplot.py</code>：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># rplot.py</span></span><br><span class="line"><span class="string">&quot;&quot;&quot; </span></span><br><span class="line"><span class="string">README</span></span><br><span class="line"><span class="string">    Run this script with command:</span></span><br><span class="line"><span class="string">    ```bash</span></span><br><span class="line"><span class="string">    $ python3 rplot.py --input ../tutorials/pdb/case5.pdb --levels 8 --sigma 0.2 --grids 30</span></span><br></pre></td></tr></table></figure><br>Requirements<br>    hadder, numpy, matplotlib<br>&quot;&quot;&quot;<br>try:<br>    from hadder.parsers import read_pdb<br>except ImportError:<br>    import os<br>    os.system(&#39;python3 -m pip install hadder --upgrade&#39;)<br>    from hadder.parsers import read_pdb<br>import matplotlib.pyplot as plt<br>import numpy as np</p>
+<p>import argparse<br>parser = argparse.ArgumentParser()</p>
+<p>parser.add_argument(&quot;--input&quot;, help=&quot;Set the input pdb filename. Absolute file path is recommended.&quot;)<br>parser.add_argument(&quot;--levels&quot;, help=&quot;Contour levels.&quot;, default=&#39;8&#39;)<br>parser.add_argument(&quot;--sigma&quot;, help=&quot;KDE band width.&quot;, default=&#39;0.2&#39;)<br>parser.add_argument(&quot;--grids&quot;, help=&quot;Number of grids.&quot;, default=&#39;30&#39;)</p>
+<p>args = parser.parse_args()<br>pdb_name = args.input<br>num_levels = int(args.levels)<br>sigma = float(args.sigma)<br>num_grids = int(args.grids)</p>
+<p>def plot(fig, X, Y, Z, num_levels=8):<br>    plt.xlabel(r&#39;$\psi$&#39;)<br>    plt.ylabel(r&#39;$\phi$&#39;)<br>    levels = np.linspace(np.min(Z), np.max(Z), num_levels)<br>    fc = plt.contourf(X, Y, Z, cmap=&#39;Greens&#39;, levels=levels)<br>    plt.colorbar(fc)<br>    return fig</p>
+<p>def torsion(crds, index1, index2, index3, index4):<br>    crd1 = crds[index1]<br>    crd2 = crds[index2]<br>    crd3 = crds[index3]<br>    crd4 = crds[index4]<br>    vector1 = crd1 - crd2<br>    vector2 = crd4 - crd3<br>    axis_vector = crd3 - crd2<br>    vec_a = np.cross(vector1, axis_vector)<br>    vec_b = np.cross(vector2, axis_vector)<br>    cross_ab = np.cross(vec_a, vec_b)<br>    axis_vector /= np.linalg.norm(axis_vector, axis=-1, keepdims=True)<br>    sin_phi = np.sum(axis_vector <em> cross_ab, axis=-1)<br>    cos_phi = np.sum(vec_a </em> vec_b, axis=-1)<br>    phi = np.arctan(sin_phi / cos_phi)<br>    return phi</p>
+<p>def psi_phi_from_pdb(pdb_name):<br>    pdb_obj = read_pdb(pdb_name)<br>    atom_names = pdb_obj.flatten_atoms<br>    crds = pdb_obj.flatten_crds<br>    c_index = np.where(atom_names==&#39;C&#39;)[0]<br>    n_index = np.where(atom_names==&#39;N&#39;)[0]<br>    ca_index = np.where(atom_names==&#39;CA&#39;)[0]<br>    psi = torsion(crds, n_index[:-1], ca_index[:-1], c_index[:-1], n_index[1:])<br>    phi = torsion(crds, c_index[:-1], n_index[1:], ca_index[1:], c_index[1:])<br>    return psi, phi</p>
+<p>def gaussian2(x1, x2, sigma1=1.0, sigma2=1.0, A=0.5):<br>    return np.sum(A<em>np.exp(-0.5</em>(x1<strong>2/sigma1</strong>2+x2<strong>2/sigma2</strong>2))/np.pi/sigma1/sigma2, axis=-1)</p>
+<p>def potential_energy(position, psi, phi, sigma1, sigma2):</p>
+<pre><code># (A, )
+psi_, phi_ = position[:, 0], position[:, 1]
+# (A, R)
+delta_psi = psi_[:, None] - psi[None]
+delta_phi = phi_[:, None] - phi[None]
+# (A, )
+Z = -np.log(gaussian2(delta_psi, delta_phi, sigma1=sigma1, sigma2=sigma2, A=2.0)+1)
+return Z
+</code></pre><p>psi_grids = np.linspace(-np.pi, np.pi, num_grids)<br>phi_grids = np.linspace(-np.pi, np.pi, num_grids)<br>grids = np.array(np.meshgrid(psi_grids, phi_grids)).T.reshape((-1, 2))<br>psi, phi = psi_phi_from_pdb(pdb_name)<br>Z = potential_energy(grids, psi, phi, sigma, sigma).reshape((psi_grids.shape[0], phi_grids.shape[0])).T<br>X,Y = np.meshgrid(psi_grids, phi_grids)</p>
+<p>fig = plt.figure()<br>plt.title(&#39;Ramachandran plot for {}&#39;.format(pdb_name.split(&#39;/&#39;)[-1]))<br>plot(fig, X, Y, Z, num_levels=num_levels)<br>plt.plot(psi, phi, &#39;.&#39;, color=&#39;black&#39;)<br>plt.show()<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">然后加载一个本地pdb文件：</span><br><span class="line">```bash</span><br><span class="line">$ python rplot.py case2.pdb</span><br></pre></td></tr></table></figure><br>生成图像效果如下：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202407/2277440-20240705154225054-316485631.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202407/2277440-20240705154225054-316485631.png">
 </div>
 
-<p>关于这个脚本还有一些常量可以配置：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ python3 rplot.py --<span class="built_in">help</span></span><br><span class="line">usage: rplot.py [-h] [--input INPUT] [--levels LEVELS] [--sigma SIGMA]</span><br><span class="line">                [--grids GRIDS]</span><br><span class="line"></span><br><span class="line">optional arguments:</span><br><span class="line">  -h, --<span class="built_in">help</span>       show this <span class="built_in">help</span> message and <span class="built_in">exit</span></span><br><span class="line">  --input INPUT    Set the input pdb filename. Absolute file path is</span><br><span class="line">                   recommended.</span><br><span class="line">  --levels LEVELS  Contour levels.</span><br><span class="line">  --sigma SIGMA    KDE band width.</span><br><span class="line">  --grids GRIDS    Number of grids.</span><br></pre></td></tr></table></figure>
-<p>例如说，我们可以把KDE中高斯波包的sigma值配置的更小一点（默认值为0.2），这样图像显示的会更集中，还可以把levels调多一点（默认值为8），这样显示的等高线会更密一些：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 rplot.py --input ../tutorials/pdb/case2.pdb --sigma 0.1 --levels 10</span><br></pre></td></tr></table></figure>
-<p>效果如下：</p>
+<p>关于这个脚本还有一些常量可以配置：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ python3 rplot.py --<span class="built_in">help</span></span><br><span class="line">usage: rplot.py [-h] [--input INPUT] [--levels LEVELS] [--sigma SIGMA]</span><br><span class="line">                [--grids GRIDS]</span><br><span class="line"></span><br><span class="line">optional arguments:</span><br><span class="line">  -h, --<span class="built_in">help</span>       show this <span class="built_in">help</span> message and <span class="built_in">exit</span></span><br><span class="line">  --input INPUT    Set the input pdb filename. Absolute file path is</span><br><span class="line">                   recommended.</span><br><span class="line">  --levels LEVELS  Contour levels.</span><br><span class="line">  --sigma SIGMA    KDE band width.</span><br><span class="line">  --grids GRIDS    Number of grids.</span><br></pre></td></tr></table></figure><br>例如说，我们可以把KDE中高斯波包的sigma值配置的更小一点（默认值为0.2），这样图像显示的会更集中，还可以把levels调多一点（默认值为8），这样显示的等高线会更密一些：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 rplot.py --input ../tutorials/pdb/case2.pdb --sigma 0.1 --levels 10</span><br></pre></td></tr></table></figure><br>效果如下：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202407/2277440-20240705154629673-417247962.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202407/2277440-20240705154629673-417247962.png">
 </div>
 
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>这里我提供了一个用于画拉氏图的Python脚本源代码，供大家免费使用。虽然现在也有很多免费的平台和工具可以用，但很多都是黑箱，有需要的开发者可以直接在这个脚本基础上二次开发，定制自己的拉氏图绘制方法。</p>
@@ -271,7 +270,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -282,7 +281,7 @@
 <nav class="article-nav">
   
     <a href="/2024/07/09/Pypi%E9%85%8D%E7%BD%AEAPI-Token/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Pypi配置API Token
@@ -292,7 +291,7 @@
   
   
     <a href="/2024/06/26/Cython%E7%BC%96%E8%AF%91%E6%8A%A5%E9%94%99%E2%80%9Cnumpy-arrayobject.h--No-such-file-or-di/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">Cython编译报错“numpy/arrayobject.h: No such file or directory”解决方案</div>
     </a>
   
@@ -300,7 +299,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=一个用来画拉氏图的简单Python脚本 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F07%2F05%2F%25E4%25B8%2580%25E4%25B8%25AA%25E7%2594%25A8%25E6%259D%25A5%25E7%2594%25BB%25E6%258B%2589%25E6%25B0%258F%25E5%259B%25BE%25E7%259A%2584%25E7%25AE%2580%25E5%258D%2595Python%25E8%2584%259A%25E6%259C%25AC%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -455,6 +454,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

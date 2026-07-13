@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidt0sqlHsDfGwxSTuV7JgxF" class="article article-type-post" itemscope
+    <article id="post-cuidYBsAAHZJ9lRE8E6T7FqON" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,38 +210,36 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>StackOverflow和StackExchange等等都是程序员常用的问题反馈和解决平台，相当于是专业性更强的知乎。但是很多类似的网站界面打开后总是有一个privacy收集的窗口无法关闭，在很大情况下影响了我们平时的阅读。因此我们通过前端的屏蔽方法，可以取消privacy位置收集窗口的固定，从而达到隐藏privacy收集窗口的目的。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>当我们打开一个StackExchange页面的时候，经常会出现一个很大的<a target="_blank" rel="noopener" href="https://tex.stackexchange.com/questions/284538/align-aligned-and-r-markdown">privacy收集窗口</a>，而且不管怎么点都关闭不了，比如像下图这样：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220609145337028-729584434.png" style="zoom:50%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220609145337028-729584434.png" style="zoom:50%">
 </div>
 如果屏幕足够大，影响可能也不是很大，但是关键是对于一些笔记本等小屏设备来说，这一个窗口基本挡住了所有的有用信息。因此，我们考虑在前端界面上将其屏蔽掉，就可以查看到背后的需要的信息。
 
-<h1 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h1><ol>
-<li>使用谷歌浏览器打开相应链接，比如这个链接：<a target="_blank" rel="noopener" href="https://tex.stackexchange.com/questions/284538/align-aligned-and-r-markdown">https://tex.stackexchange.com/questions/284538/align-aligned-and-r-markdown</a></li>
-</ol>
+# 操作步骤
+1. 使用谷歌浏览器打开相应链接，比如这个链接：https://tex.stackexchange.com/questions/284538/align-aligned-and-r-markdown
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220609145337028-729584434.png" style="zoom:50%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220609145337028-729584434.png" style="zoom:50%">
 </div>
 2. 点击F12按钮，进入开发者模式。
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220609145640041-1765359870.png" style="zoom:50%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220609145640041-1765359870.png" style="zoom:50%">
 </div>
 3. 点击操作栏的第一个带箭头的选择按钮。
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220609145738961-54675854.png" style="zoom:50%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220609145738961-54675854.png" style="zoom:50%">
 </div>
 4. 选中privacy的收集窗口，发现其变颜色，然后单击变颜色的部分。
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220609145842915-2145267441.png" style="zoom:50%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220609145842915-2145267441.png" style="zoom:50%">
 </div>
 5. 在开发者窗口中弹出的新模块中找到position标签，鼠标移上去会出现一个打勾的选中方框。
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220609150026567-1108814216.png" style="zoom:50%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220609150026567-1108814216.png" style="zoom:50%">
 </div>
 6. 点击选中方框，就可以取消privacy窗口的固定，界面上就看不见该收集窗口。
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220609150125233-1450942703.png" style="zoom:50%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220609150125233-1450942703.png" style="zoom:50%">
 </div>
 
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>StackOverflow和StackExchange等等都是程序员常用的问题反馈和解决平台，相当于是专业性更强的知乎。但是很多类似的网站界面打开后总是有一个privacy收集的窗口无法关闭，在很大情况下影响了我们平时的阅读。因此我们通过前端的屏蔽方法，可以取消privacy位置收集窗口的固定，从而达到隐藏privacy收集窗口的目的。</p>
@@ -266,7 +264,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -277,7 +275,7 @@
 <nav class="article-nav">
   
     <a href="/2022/06/16/git%E6%B7%BB%E5%8A%A0%E8%A2%AB.gitignore%E5%BF%BD%E7%95%A5%E7%9A%84%E6%96%87%E4%BB%B6/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           git添加被.gitignore忽略的文件
@@ -287,7 +285,7 @@
   
   
     <a href="/2022/05/17/git-clone%E6%8C%87%E5%AE%9A%E5%88%86%E6%94%AF/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">git clone指定分支</div>
     </a>
   
@@ -295,7 +293,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=关闭StackExchange等平台的privacy收集窗口 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F06%2F09%2F%25E5%2585%25B3%25E9%2597%25ADStackExchange%25E7%25AD%2589%25E5%25B9%25B3%25E5%258F%25B0%25E7%259A%2584privacy%25E6%2594%25B6%25E9%259B%2586%25E7%25AA%2597%25E5%258F%25A3%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -450,6 +448,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

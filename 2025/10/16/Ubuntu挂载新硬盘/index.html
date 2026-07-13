@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidxlSdbJzZTOQH21hfd7y0d" class="article article-type-post" itemscope
+    <article id="post-cuid7MEJ6BtIAIOMpFq7WRM7Z" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,25 +210,8 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文介绍了一个Ubuntu操作系统下如何挂载新硬盘，并配置重启开机默认挂载的流程和方法。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>本文将简单的介绍一下，如果在Ubuntu操作系统的服务器或者电脑上加新硬盘之后，如何挂载的问题。</p>
-<h1 id="硬盘挂载流程"><a href="#硬盘挂载流程" class="headerlink" title="硬盘挂载流程"></a>硬盘挂载流程</h1><p>首先我们查看硬盘列表：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ fdisk -l</span><br><span class="line"><span class="comment"># 找到我们需要挂载的硬盘</span></span><br><span class="line">Disk /dev/sda：7.28 TiB，8001563222016 字节，15628053168 个扇区</span><br></pre></td></tr></table></figure>
-<p>创建或者选择一个路径作为挂载点，最好是空路径：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">mkdir</span> /data</span><br></pre></td></tr></table></figure>
-<p>接下来需要考虑<code>是否分区</code>的问题，因为我这里的场景是需要大容量数据存储，所以这里不做分区，<code>直接格式化整个硬盘</code>。但是如果需要分区，那流程就应该是先分区，再做格式化（需要注意一下的是，这一步中得到的UUID信息需要保存一下）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ mkfs.ext4 /dev/sda</span><br><span class="line">mke2fs 1.46.5 (30-Dec-2021)</span><br><span class="line">创建含有 xxx 个块（每块 4k）和 xxx 个 inode 的文件系统</span><br><span class="line">文件系统 UUID：xxx</span><br><span class="line">超级块的备份存储于下列块：</span><br><span class="line">        xxx</span><br><span class="line"></span><br><span class="line">正在分配组表： 完成</span><br><span class="line">正在写入 inode表： 完成</span><br><span class="line">创建日志（xxx个块）： 完成</span><br><span class="line">写入超级块和文件系统账户统计信息： 已完成</span><br></pre></td></tr></table></figure>
-<p>格式化成功之后，就可以将硬盘挂载到我们所创建的路径下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mount /dev/sda /data/</span><br></pre></td></tr></table></figure>
-<p>挂载之后，理论上到这一步就可以直接使用新硬盘空间了。但是有个问题是，<code>如果只操作到这一步，后续重启电脑之后，又会需要重新挂载</code>。那么有一个方法便是，使用UUID或者硬盘地址来进行自动挂载。如果上上一步的操作中没有保存UUID的信息，也可以通过如下指令进行查询：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ blkid</span><br><span class="line"><span class="comment"># 找到指定的硬盘</span></span><br><span class="line">/dev/sda: UUID=<span class="string">&quot;xxx&quot;</span> BLOCK_SIZE=<span class="string">&quot;4096&quot;</span> TYPE=<span class="string">&quot;ext4&quot;</span></span><br></pre></td></tr></table></figure>
-<p>虽然可以用UUID也可以用硬盘地址，但我个人比较建议使用UUID来做mount。用vim编辑<code>/etc/fstab</code>文件，在最下方按照如下格式插入：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UUID=xxx                 /data           ext4    defaults        0       2</span><br></pre></td></tr></table></figure>
-<p>需要特别声明的是，如果为了安全考虑，需要使得挂载硬盘上面不能直接执行二进制文件，可以将上述配置中的<code>defaults</code>修改为<code>noexec</code>。最后两个数字分别是备份选项和文件系统检查顺序，一般设置为<code>0 2</code>或者<code>0 0</code>都可以。编辑保存之后，需要运行如下指令使其生效：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mount -a</span><br></pre></td></tr></table></figure>
-<p>这样就完成了硬盘的挂载。那么如果是使用了root权限来创建的这个路径，需要让其他的所有用户都能够访问到，并且用户和用户之间互相不干扰，可以配置路径权限为：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 1777 /data</span><br></pre></td></tr></table></figure>
-<p>这样所有用户都能在该路径下创建和修改自己的文件和目录了，可以按照自己的需求场景选择具体权限配置参数。</p>
+<h1 id="硬盘挂载流程"><a href="#硬盘挂载流程" class="headerlink" title="硬盘挂载流程"></a>硬盘挂载流程</h1><p>首先我们查看硬盘列表：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ fdisk -l</span><br><span class="line"><span class="comment"># 找到我们需要挂载的硬盘</span></span><br><span class="line">Disk /dev/sda：7.28 TiB，8001563222016 字节，15628053168 个扇区</span><br></pre></td></tr></table></figure><br>创建或者选择一个路径作为挂载点，最好是空路径：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">mkdir</span> /data</span><br></pre></td></tr></table></figure><br>接下来需要考虑<code>是否分区</code>的问题，因为我这里的场景是需要大容量数据存储，所以这里不做分区，<code>直接格式化整个硬盘</code>。但是如果需要分区，那流程就应该是先分区，再做格式化（需要注意一下的是，这一步中得到的UUID信息需要保存一下）：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ mkfs.ext4 /dev/sda</span><br><span class="line">mke2fs 1.46.5 (30-Dec-2021)</span><br><span class="line">创建含有 xxx 个块（每块 4k）和 xxx 个 inode 的文件系统</span><br><span class="line">文件系统 UUID：xxx</span><br><span class="line">超级块的备份存储于下列块：</span><br><span class="line">        xxx</span><br><span class="line"></span><br><span class="line">正在分配组表： 完成</span><br><span class="line">正在写入 inode表： 完成</span><br><span class="line">创建日志（xxx个块）： 完成</span><br><span class="line">写入超级块和文件系统账户统计信息： 已完成</span><br></pre></td></tr></table></figure><br>格式化成功之后，就可以将硬盘挂载到我们所创建的路径下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mount /dev/sda /data/</span><br></pre></td></tr></table></figure><br>挂载之后，理论上到这一步就可以直接使用新硬盘空间了。但是有个问题是，<code>如果只操作到这一步，后续重启电脑之后，又会需要重新挂载</code>。那么有一个方法便是，使用UUID或者硬盘地址来进行自动挂载。如果上上一步的操作中没有保存UUID的信息，也可以通过如下指令进行查询：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ blkid</span><br><span class="line"><span class="comment"># 找到指定的硬盘</span></span><br><span class="line">/dev/sda: UUID=<span class="string">&quot;xxx&quot;</span> BLOCK_SIZE=<span class="string">&quot;4096&quot;</span> TYPE=<span class="string">&quot;ext4&quot;</span></span><br></pre></td></tr></table></figure><br>虽然可以用UUID也可以用硬盘地址，但我个人比较建议使用UUID来做mount。用vim编辑<code>/etc/fstab</code>文件，在最下方按照如下格式插入：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UUID=xxx                 /data           ext4    defaults        0       2</span><br></pre></td></tr></table></figure><br>需要特别声明的是，如果为了安全考虑，需要使得挂载硬盘上面不能直接执行二进制文件，可以将上述配置中的<code>defaults</code>修改为<code>noexec</code>。最后两个数字分别是备份选项和文件系统检查顺序，一般设置为<code>0 2</code>或者<code>0 0</code>都可以。编辑保存之后，需要运行如下指令使其生效：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mount -a</span><br></pre></td></tr></table></figure><br>这样就完成了硬盘的挂载。那么如果是使用了root权限来创建的这个路径，需要让其他的所有用户都能够访问到，并且用户和用户之间互相不干扰，可以配置路径权限为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 1777 /data</span><br></pre></td></tr></table></figure><br>这样所有用户都能在该路径下创建和修改自己的文件和目录了，可以按照自己的需求场景选择具体权限配置参数。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了一个Ubuntu操作系统下如何挂载新硬盘，并配置重启开机默认挂载的流程和方法。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/disk.html">https://www.cnblogs.com/dechinphy/p/disk.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -248,7 +231,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -259,7 +242,7 @@
 <nav class="article-nav">
   
     <a href="/2025/11/03/%E4%BD%BF%E7%94%A8conda%E5%AE%89%E8%A3%85gcc%E5%92%8Cg++/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           使用conda安装gcc和g++
@@ -269,7 +252,7 @@
   
   
     <a href="/2025/09/17/Blelloch%E5%B9%B6%E8%A1%8C%E6%89%AB%E6%8F%8F%E7%AE%97%E6%B3%95/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">Blelloch并行扫描算法</div>
     </a>
   
@@ -277,7 +260,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Ubuntu挂载新硬盘 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2025%2F10%2F16%2FUbuntu%25E6%258C%2582%25E8%25BD%25BD%25E6%2596%25B0%25E7%25A1%25AC%25E7%259B%2598%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -432,6 +415,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

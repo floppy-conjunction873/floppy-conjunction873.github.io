@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidnZPi8w-5zTtXCgRknUzHB" class="article article-type-post" itemscope
+    <article id="post-cuidVcRTEGGiHBIvQJ8P1deiv" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,22 +210,171 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>量子计算是一门当下非常火热的技术，抛开个别企业对量子计算的过分吹嘘不谈，其本身是一门非常有意义的跨学科研究领域。本文仅从非物理科班专业的角度——用矩阵的语言去描述量子计算的基础单元和基础操作，包含量子态的含义、单比特量子门操作以及两比特量子门操作的矩阵形式。并且附带一定的物理图像，这一点其实非常重要，如果不断的推导公式，最终有可能迷失了其物理图像，这就脱离了我们做研究的初衷。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>量子计算作为一种新的计算框架，采用了以超导、离子阱等物理体系的新语言来描述我们传统中所理解的矩阵运算。不同于传统计算机中的比特（经典比特）表示方法，量子计算的基本单元被称为量子比特。我们可以通过一个布洛赫球的模型来理解二者的区别：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202204/2277440-20220402095604408-1294947899.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202204/2277440-20220402095604408-1294947899.png">
 </div>
 
-<p>传统比特用高电平和低电平来表示一个经典比特的1态和0态，分别对应于布洛赫球模型的南极点和北极点。这是经典比特所能够表示的信息，相当于球表面的两个点，而一个量子比特所能够表示的信息，是整个球的表面（球体内部的点在特定体系下也能够取到，一般我们只取球的表面来表示量子比特的信息）。除了两个极点所表示的信息，与经典比特所表示的信息一致之外，其他的布洛赫球表面的点，表示的是量子力学中所特有的<code>叠加态</code>。也就是说，一个量子比特不仅仅可以表示0态和1态，还可以用一个概率分布来表示0态和1态的叠加态：$qstate&#x3D;P(state&#x3D;0)\cdot\bold{0}+P(state&#x3D;1)\cdot\bold{1}$</p>
-<p>除了通过叠加态扩展了表示空间之外，量子计算还可以通过量子纠缠的特性，来制造非矩阵乘积态。举个比较通俗的例子来说，如果我们抛两枚硬币到地上，得到的结果，就是两个硬币各自状态的矩阵乘积态：$[正面,反面]\otimes[正面,反面]&#x3D;[正面正面,正面反面,反面正面,反面反面]$，换句话说，两个硬币之间是独立的。而量子纠缠，就可以使得我们能够得到$[正面正面，反面反面]$这样的结果集合，也就是将二者绑定。也正是对量子叠加和量子纠缠这两个重要量子特性的应用，使得量子计算机相比于传统计算机能够表现出性能上的极大优势，这种优势被称为Quantum Supremacy&#x2F;Quantum Advantage，也就是量子优越性。同时，量子计算也被认为是打破传统半导体的摩尔定律或者指数墙的最有力工具。</p>
-<h1 id="量子比特与量子操作"><a href="#量子比特与量子操作" class="headerlink" title="量子比特与量子操作"></a>量子比特与量子操作</h1><p>前面我们提到，量子比特可以表示为0态和1态的一个叠加态，那么就不能用一个元素来表示了，我们可以一个量子态表述为：<br>$$<br>\left|\psi\right&gt;&#x3D;\left[<br>\begin{matrix}<br>p_0\<br>p_1<br>\end{matrix}<br>\right]<br>$$<br>因为$p_0$和$p_1$分别表示的是取得0态与1态的概率，那么从线性叠加的角度来考虑，我们必须把0态和1态定义成矢量形式（基矢）的狄拉克符号：<br>$$<br>\left|0\right&gt;&#x3D;\left[<br>\begin{matrix}<br>1\0<br>\end{matrix}<br>\right],\left|1\right&gt;&#x3D;\left[<br>\begin{matrix}<br>0\1<br>\end{matrix}<br>\right]<br>$$<br>基于这两个基矢，我们可以重写单量子比特的量子态的形式：<br>$$<br>\left|\psi\right&gt;&#x3D;p_0\left|0\right&gt;+p_1\left|1\right&gt;<br>$$<br>通常情况下，如果是一个归一化的量子态（<strong>纯态</strong>），有：<br>$$<br>p_0^2+p_1^2&#x3D;1<br>$$<br>这同时也告诉我们，$p_0$的本质意义其实是取得0态的概率的开根号（也就是概率幅），并非取得0态的概率，这个表述可能会导致一些疑惑，但是这样也是为了告诉大家叠加态与概率的关系。。表示完单量子比特的信息，我们同样可以推理一下多量子比特信息的表示，比如两量子比特和三量子比特的量子态表示：<br>$$<br>\left|\psi\right&gt;&#x3D;p_{00}\left|00\right&gt;+p_{01}\left|01\right&gt;+p_{10}\left|10\right&gt;+p_{11}\left|11\right&gt;\<br>\left|\psi\right&gt;&#x3D;p_{000}\left|000\right&gt;+p_{001}\left|001\right&gt;+p_{010}\left|010\right&gt;+p_{011}\left|011\right&gt;+p_{100}\left|100\right&gt;+p_{101}\left|101\right&gt;+p_{110}\left|110\right&gt;+p_{111}\left|111\right&gt;<br>$$<br>从这个表示形式中，我们也可以看出，一个$n$量子比特的量子计算机所能够表示的信息，是$2^n$的空间，是指数级别上升的。所以一般认为，当量子计算机发展到50个完美量子比特以上时，就会真正意义上的实现量子优越性。</p>
-<p>这里插一段话，讲述一个不太经常被提到的，虽然不是很难，但是有可能让人感到迷惑的问题：<strong>给定的布洛赫球，实际上有三个坐标轴，为什么所表述的信息是$2^n$，而不是$3^n$次方</strong>？我们再回顾一下单量子比特的表达形式：<br>$$<br>\left|\psi\right&gt;&#x3D;p_0\left|0\right&gt;+p_1\left|1\right&gt;&#x3D;(p_{x0}+ip_{y0})\left|0\right&gt;+(p_{x1}+ip_{y1})\left|1\right&gt;<br>$$<br>公式中的$i$表示虚数单位，而这两个复数中所附带的相位，就是那一条缺失的坐标轴。但是，为什么这一个维度被“忽略”了呢？这一点其实跟硬件实现有关，在后面我们要提到的量子测量的模块中，一般只针对一个轴进行测量，制造坍缩的量子态，这就使得实际上只有两个轴向的操作会影响到最终的结果。但是我们又必须同时具备这三个轴，因为最终用于执行量子测量的轴，有可能是三个轴的某个叠加的位置（比如x&#x3D;y&#x3D;z这条直线）。</p>
-<p>在完成了量子比特的定义之后，我们需要定义一些基础的量子比特的操作，就类似于经典比特的逻辑门操作（与门、非门、与或门等等）。先从单个量子比特开始，我们首先回顾一下单位矩阵三个<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/magic.html">泡利矩阵</a>：<br>$$<br>\sigma^I&#x3D;\left(<br>\begin{array}{1}<br>1 &amp; 0\<br>0 &amp; 1<br>\end{array}<br>\right),<br>\sigma^X&#x3D;\left(<br>\begin{array}{1}<br>0 &amp; 1\<br>1 &amp; 0<br>\end{array}<br>\right),<br>\sigma^Y&#x3D;\left(<br>\begin{array}{1}<br>0 &amp; -i\<br>i &amp; 0<br>\end{array}<br>\right),<br>\sigma^Z&#x3D;\left(<br>\begin{array}{1}<br>1 &amp; 0\<br>0 &amp; -1<br>\end{array}<br>\right)<br>$$<br>单位矩阵我们都可以理解，就是保持量子态不变。而通过这些基础的泡利矩阵，我们可以用$R^{-i\theta M},M&#x3D;\sigma^X,\sigma^Y,\sigma^Z$去构造一些列绕$X,Y,Z$轴旋转的单比特旋转矩阵。我们可以把这些旋转矩阵的形式列出来，首先回顾一下指数矩阵的泰勒级数展开：<br>$$<br>e^{A}&#x3D;\sum^{\infty}_{k&#x3D;0}\frac{1}{k!}A^{k}<br>$$<br>将矩阵$-i\theta M$代入其中可以得到：<br>$$<br>R_M(\theta)&#x3D;e^{-i\theta\sigma^M}&#x3D;cos\left(\frac{\theta}{2}\right)\sigma^I-isin\left(\frac{\theta}{2}\right)M,M\in\left(\sigma^X,\sigma^Y,\sigma^Z\right)<br>$$<br>这便得到了将量子比特绕三个绕XYZ轴旋转的旋转矩阵。特殊地，在很多算法中都会使用到这样的一个单量子比特操作：Hadamard门，其定义为：<br>$$<br>H&#x3D;\frac{\sqrt{2}}{2}(\sigma^X+\sigma^Z)<br>$$<br>一般很少被提到，Hadamard门操作的几何意义，就是将一个量子比特绕X-Z的角平分线旋转180度。另外还有相位角量子门操作的形式：<br>$$<br>P(\theta)&#x3D;\left(<br>\begin{matrix}<br>1&amp;0\<br>0&amp;e^{i\theta}<br>\end{matrix}<br>\right)<br>$$<br>当相位角取得$\pi$时，相位角等价于$\sigma^Z$。而相位门跟$e^{-i\theta \sigma^Z}$的不同之处在于，$e^{-i\theta \sigma^Z}$是分别对0态和1态的相位进行旋转，最后再进行叠加，而相位门是固定了0态的位置而旋转1态的相位，最终再进行叠加。从量子态上来看，二者实际上是等价的：<br>$$<br>\begin{align*}<br>\left|\psi\right&gt;&amp;&#x3D;e^{i\phi_1}cos\frac{\theta}{2}\left| 0\right&gt;+e^{i\phi_2}sin\frac{\theta}{2}\left| 1\right&gt;\<br>&amp;&#x3D;e^{i\phi_1}(cos\frac{\theta}{2}\left| 0\right&gt;+e^{i(\phi_2-\phi_1)}sin\frac{\theta}{2}\left| 1\right&gt;)\<br>&amp;&#x3D;cos\frac{\theta}{2}\left| 0\right&gt;+e^{i(\phi_2-\phi_1)}sin\frac{\theta}{2}\left| 1\right&gt;\<br>&amp;&#x3D;\bold{\psi}(cos\phi sin\theta,sin\phi sin\theta, cos\theta)<br>\end{align*}<br>$$<br>根据以上的单比特门，加上一个双比特门，理论上就可以构成任意比特数的等效量子逻辑门，一般常用的两比特量子逻辑门是CNOT门，也叫CX门，其矩阵形式如下所示：<br>$$<br>CX&#x3D;\left|0\right&gt;\left&lt;0\right|\cdot I+\left|1\right&gt;\left&lt;1\right|\cdot \sigma^X&#x3D;\left(<br>\begin{array}{1}<br>1 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 1 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 1\<br>0 &amp; 0 &amp; 1 &amp; 0<br>\end{array}<br>\right)<br>$$<br>通过Hadamard门与CX门，就可以构建一个两比特的纠缠态：Bell State，我们可以用IBM的Composer（参考链接3）来演示一下：</p>
+<p>传统比特用高电平和低电平来表示一个经典比特的1态和0态，分别对应于布洛赫球模型的南极点和北极点。这是经典比特所能够表示的信息，相当于球表面的两个点，而一个量子比特所能够表示的信息，是整个球的表面（球体内部的点在特定体系下也能够取到，一般我们只取球的表面来表示量子比特的信息）。除了两个极点所表示的信息，与经典比特所表示的信息一致之外，其他的布洛赫球表面的点，表示的是量子力学中所特有的<code>叠加态</code>。也就是说，一个量子比特不仅仅可以表示0态和1态，还可以用一个概率分布来表示0态和1态的叠加态：$qstate=P(state=0)\cdot\bold{0}+P(state=1)\cdot\bold{1}$</p>
+<p>除了通过叠加态扩展了表示空间之外，量子计算还可以通过量子纠缠的特性，来制造非矩阵乘积态。举个比较通俗的例子来说，如果我们抛两枚硬币到地上，得到的结果，就是两个硬币各自状态的矩阵乘积态：$[正面,反面]\otimes[正面,反面]=[正面正面,正面反面,反面正面,反面反面]$，换句话说，两个硬币之间是独立的。而量子纠缠，就可以使得我们能够得到$[正面正面，反面反面]$这样的结果集合，也就是将二者绑定。也正是对量子叠加和量子纠缠这两个重要量子特性的应用，使得量子计算机相比于传统计算机能够表现出性能上的极大优势，这种优势被称为Quantum Supremacy/Quantum Advantage，也就是量子优越性。同时，量子计算也被认为是打破传统半导体的摩尔定律或者指数墙的最有力工具。</p>
+<h1 id="量子比特与量子操作"><a href="#量子比特与量子操作" class="headerlink" title="量子比特与量子操作"></a>量子比特与量子操作</h1><p>前面我们提到，量子比特可以表示为0态和1态的一个叠加态，那么就不能用一个元素来表示了，我们可以一个量子态表述为：</p>
+<script type="math/tex; mode=display">
+\left|\psi\right>=\left[
+\begin{matrix}
+p_0\\
+p_1
+\end{matrix}
+\right]</script><p>因为$p_0$和$p_1$分别表示的是取得0态与1态的概率，那么从线性叠加的角度来考虑，我们必须把0态和1态定义成矢量形式（基矢）的狄拉克符号：</p>
+<script type="math/tex; mode=display">
+\left|0\right>=\left[
+\begin{matrix}
+1\\0
+\end{matrix}
+\right],\left|1\right>=\left[
+\begin{matrix}
+0\\1
+\end{matrix}
+\right]</script><p>基于这两个基矢，我们可以重写单量子比特的量子态的形式：</p>
+<script type="math/tex; mode=display">
+\left|\psi\right>=p_0\left|0\right>+p_1\left|1\right></script><p>通常情况下，如果是一个归一化的量子态（<strong>纯态</strong>），有：</p>
+<script type="math/tex; mode=display">
+p_0^2+p_1^2=1</script><p>这同时也告诉我们，$p_0$的本质意义其实是取得0态的概率的开根号（也就是概率幅），并非取得0态的概率，这个表述可能会导致一些疑惑，但是这样也是为了告诉大家叠加态与概率的关系。。表示完单量子比特的信息，我们同样可以推理一下多量子比特信息的表示，比如两量子比特和三量子比特的量子态表示：</p>
+<script type="math/tex; mode=display">
+\left|\psi\right>=p_{00}\left|00\right>+p_{01}\left|01\right>+p_{10}\left|10\right>+p_{11}\left|11\right>\\
+\left|\psi\right>=p_{000}\left|000\right>+p_{001}\left|001\right>+p_{010}\left|010\right>+p_{011}\left|011\right>+p_{100}\left|100\right>+p_{101}\left|101\right>+p_{110}\left|110\right>+p_{111}\left|111\right></script><p>从这个表示形式中，我们也可以看出，一个$n$量子比特的量子计算机所能够表示的信息，是$2^n$的空间，是指数级别上升的。所以一般认为，当量子计算机发展到50个完美量子比特以上时，就会真正意义上的实现量子优越性。</p>
+<p>这里插一段话，讲述一个不太经常被提到的，虽然不是很难，但是有可能让人感到迷惑的问题：<strong>给定的布洛赫球，实际上有三个坐标轴，为什么所表述的信息是$2^n$，而不是$3^n$次方</strong>？我们再回顾一下单量子比特的表达形式：</p>
+<script type="math/tex; mode=display">
+\left|\psi\right>=p_0\left|0\right>+p_1\left|1\right>=(p_{x0}+ip_{y0})\left|0\right>+(p_{x1}+ip_{y1})\left|1\right></script><p>公式中的$i$表示虚数单位，而这两个复数中所附带的相位，就是那一条缺失的坐标轴。但是，为什么这一个维度被“忽略”了呢？这一点其实跟硬件实现有关，在后面我们要提到的量子测量的模块中，一般只针对一个轴进行测量，制造坍缩的量子态，这就使得实际上只有两个轴向的操作会影响到最终的结果。但是我们又必须同时具备这三个轴，因为最终用于执行量子测量的轴，有可能是三个轴的某个叠加的位置（比如x=y=z这条直线）。</p>
+<p>在完成了量子比特的定义之后，我们需要定义一些基础的量子比特的操作，就类似于经典比特的逻辑门操作（与门、非门、与或门等等）。先从单个量子比特开始，我们首先回顾一下单位矩阵三个<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/magic.html">泡利矩阵</a>：</p>
+<script type="math/tex; mode=display">
+\sigma^I=\left(
+\begin{array}{1}
+1 & 0\\
+0 & 1
+\end{array}
+\right),
+\sigma^X=\left(
+\begin{array}{1}
+0 & 1\\
+1 & 0
+\end{array}
+\right),
+\sigma^Y=\left(
+\begin{array}{1}
+0 & -i\\
+i & 0
+\end{array}
+\right),
+\sigma^Z=\left(
+\begin{array}{1}
+1 & 0\\
+0 & -1
+\end{array}
+\right)</script><p>单位矩阵我们都可以理解，就是保持量子态不变。而通过这些基础的泡利矩阵，我们可以用$R^{-i\theta M},M=\sigma^X,\sigma^Y,\sigma^Z$去构造一些列绕$X,Y,Z$轴旋转的单比特旋转矩阵。我们可以把这些旋转矩阵的形式列出来，首先回顾一下指数矩阵的泰勒级数展开：</p>
+<script type="math/tex; mode=display">
+e^{A}=\sum^{\infty}_{k=0}\frac{1}{k!}A^{k}</script><p>将矩阵$-i\theta M$代入其中可以得到：</p>
+<script type="math/tex; mode=display">
+R_M(\theta)=e^{-i\theta\sigma^M}=cos\left(\frac{\theta}{2}\right)\sigma^I-isin\left(\frac{\theta}{2}\right)M,M\in\left(\sigma^X,\sigma^Y,\sigma^Z\right)</script><p>这便得到了将量子比特绕三个绕XYZ轴旋转的旋转矩阵。特殊地，在很多算法中都会使用到这样的一个单量子比特操作：Hadamard门，其定义为：</p>
+<script type="math/tex; mode=display">
+H=\frac{\sqrt{2}}{2}(\sigma^X+\sigma^Z)</script><p>一般很少被提到，Hadamard门操作的几何意义，就是将一个量子比特绕X-Z的角平分线旋转180度。另外还有相位角量子门操作的形式：</p>
+<script type="math/tex; mode=display">
+P(\theta)=\left(
+\begin{matrix}
+1&0\\
+0&e^{i\theta}
+\end{matrix}
+\right)</script><p>当相位角取得$\pi$时，相位角等价于$\sigma^Z$。而相位门跟$e^{-i\theta \sigma^Z}$的不同之处在于，$e^{-i\theta \sigma^Z}$是分别对0态和1态的相位进行旋转，最后再进行叠加，而相位门是固定了0态的位置而旋转1态的相位，最终再进行叠加。从量子态上来看，二者实际上是等价的：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+\left|\psi\right>&=e^{i\phi_1}cos\frac{\theta}{2}\left| 0\right>+e^{i\phi_2}sin\frac{\theta}{2}\left| 1\right>\\
+&=e^{i\phi_1}(cos\frac{\theta}{2}\left| 0\right>+e^{i(\phi_2-\phi_1)}sin\frac{\theta}{2}\left| 1\right>)\\
+&=cos\frac{\theta}{2}\left| 0\right>+e^{i(\phi_2-\phi_1)}sin\frac{\theta}{2}\left| 1\right>\\
+&=\bold{\psi}(cos\phi sin\theta,sin\phi sin\theta, cos\theta)
+\end{align*}</script><p>根据以上的单比特门，加上一个双比特门，理论上就可以构成任意比特数的等效量子逻辑门，一般常用的两比特量子逻辑门是CNOT门，也叫CX门，其矩阵形式如下所示：</p>
+<script type="math/tex; mode=display">
+CX=\left|0\right>\left<0\right|\cdot I+\left|1\right>\left<1\right|\cdot \sigma^X=\left(
+\begin{array}{1}
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & 0 & 1\\
+0 & 0 & 1 & 0
+\end{array}
+\right)</script><p>通过Hadamard门与CX门，就可以构建一个两比特的纠缠态：Bell State，我们可以用IBM的Composer（参考链接3）来演示一下：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202204/2277440-20220402150832111-402508969.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202204/2277440-20220402150832111-402508969.png">
 </div>
 
-<p>从左下角的概率分布结果，我们就可以了解到最终的量子态为：$\frac{\sqrt{2}}{2}\left|00\right&gt;+\frac{\sqrt{2}}{2}\left|11\right&gt;$，这一点也可以从量子逻辑门操作来进行简单的分析，首先看下第一个量子比特作用Hadamard门的结果：<br>$$<br>H\left|0\right&gt;&#x3D;\frac{\sqrt{2}}{2}\left(<br>\begin{matrix}<br>1&amp;1\<br>1&amp;-1<br>\end{matrix}<br>\right)\left(<br>\begin{matrix}<br>1\<br>0<br>\end{matrix}<br>\right)&#x3D;\left(<br>\begin{matrix}<br>\frac{\sqrt{2}}{2}\<br>\frac{\sqrt{2}}{2}<br>\end{matrix}<br>\right)<br>$$<br>此时两个量子比特没有作用过两比特门，因此还是矩阵乘积态：<br>$$<br>\left|\psi_H\right&gt;&#x3D;\left(<br>\begin{matrix}<br>\frac{\sqrt{2}}{2}\<br>\frac{\sqrt{2}}{2}<br>\end{matrix}<br>\right)\otimes\left(<br>\begin{matrix}<br>1\<br>0<br>\end{matrix}<br>\right)&#x3D;<br>\left(<br>\begin{matrix}<br>\frac{\sqrt{2}}{2}\<br>0\<br>\frac{\sqrt{2}}{2}\<br>0<br>\end{matrix}<br>\right)<br>$$<br>此时再作用一个CX门，得到最终的量子态：<br>$$<br>\left|\psi_{final}\right&gt;&#x3D;CX\left|\psi_H\right&gt;&#x3D;\left(<br>\begin{array}{1}<br>1 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 1 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 1\<br>0 &amp; 0 &amp; 1 &amp; 0<br>\end{array}<br>\right)\left(<br>\begin{matrix}<br>\frac{\sqrt{2}}{2}\<br>0\<br>\frac{\sqrt{2}}{2}\<br>0<br>\end{matrix}<br>\right)&#x3D;<br>\left(<br>\begin{matrix}<br>\frac{\sqrt{2}}{2}\<br>0\<br>0\<br>\frac{\sqrt{2}}{2}<br>\end{matrix}<br>\right)<br>$$<br>这样，就完成了一个完全纠缠态的制备。制备完成后，<strong>对其中的任意一个量子比特进行测量，如果得到的结果是0态，那么另一个量子比特结果必然也是0态</strong>。除了CX门，还有另外一个有可能被经常使用到的两比特量子门是Swap门，顾名思义，就是交换两个量子比特的信息，其矩阵形式为：<br>$$<br>Swap&#x3D;\left(<br>\begin{array}{1}<br>1 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 1 &amp; 0\<br>0 &amp; 1 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 1<br>\end{array}<br>\right)<br>$$<br>从矩阵元素上就可以看出其物理图像，Swap的本质操作是交换作用的两个量子比特的概率幅，因为$\left|00\right&gt;$和$\left|11\right&gt;$态本身就具备对称关系，因此只需要交换$\left|01\right&gt;$和$\left|10\right&gt;$这两个量子态的振幅即可，因此只有矩阵中间的两个元素进行了交换。</p>
+<p>从左下角的概率分布结果，我们就可以了解到最终的量子态为：$\frac{\sqrt{2}}{2}\left|00\right&gt;+\frac{\sqrt{2}}{2}\left|11\right&gt;$，这一点也可以从量子逻辑门操作来进行简单的分析，首先看下第一个量子比特作用Hadamard门的结果：</p>
+<script type="math/tex; mode=display">
+H\left|0\right>=\frac{\sqrt{2}}{2}\left(
+\begin{matrix}
+1&1\\
+1&-1
+\end{matrix}
+\right)\left(
+\begin{matrix}
+1\\
+0
+\end{matrix}
+\right)=\left(
+\begin{matrix}
+\frac{\sqrt{2}}{2}\\
+\frac{\sqrt{2}}{2}
+\end{matrix}
+\right)</script><p>此时两个量子比特没有作用过两比特门，因此还是矩阵乘积态：</p>
+<script type="math/tex; mode=display">
+\left|\psi_H\right>=\left(
+\begin{matrix}
+\frac{\sqrt{2}}{2}\\
+\frac{\sqrt{2}}{2}
+\end{matrix}
+\right)\otimes\left(
+\begin{matrix}
+1\\
+0
+\end{matrix}
+\right)=
+\left(
+\begin{matrix}
+\frac{\sqrt{2}}{2}\\
+0\\
+\frac{\sqrt{2}}{2}\\
+0
+\end{matrix}
+\right)</script><p>此时再作用一个CX门，得到最终的量子态：</p>
+<script type="math/tex; mode=display">
+\left|\psi_{final}\right>=CX\left|\psi_H\right>=\left(
+\begin{array}{1}
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & 0 & 1\\
+0 & 0 & 1 & 0
+\end{array}
+\right)\left(
+\begin{matrix}
+\frac{\sqrt{2}}{2}\\
+0\\
+\frac{\sqrt{2}}{2}\\
+0
+\end{matrix}
+\right)=
+\left(
+\begin{matrix}
+\frac{\sqrt{2}}{2}\\
+0\\
+0\\
+\frac{\sqrt{2}}{2}
+\end{matrix}
+\right)</script><p>这样，就完成了一个完全纠缠态的制备。制备完成后，<strong>对其中的任意一个量子比特进行测量，如果得到的结果是0态，那么另一个量子比特结果必然也是0态</strong>。除了CX门，还有另外一个有可能被经常使用到的两比特量子门是Swap门，顾名思义，就是交换两个量子比特的信息，其矩阵形式为：</p>
+<script type="math/tex; mode=display">
+Swap=\left(
+\begin{array}{1}
+1 & 0 & 0 & 0\\
+0 & 0 & 1 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & 0 & 1
+\end{array}
+\right)</script><p>从矩阵元素上就可以看出其物理图像，Swap的本质操作是交换作用的两个量子比特的概率幅，因为$\left|00\right&gt;$和$\left|11\right&gt;$态本身就具备对称关系，因此只需要交换$\left|01\right&gt;$和$\left|10\right&gt;$这两个量子态的振幅即可，因此只有矩阵中间的两个元素进行了交换。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>量子计算是一门当下非常火热的技术，抛开个别企业对量子计算的过分吹嘘不谈，其本身是一门非常有意义的跨学科研究领域。本文仅从非物理科班专业的角度——用矩阵的语言去描述量子计算的基础单元和基础操作，包含量子态的含义、单比特量子门操作以及两比特量子门操作的矩阵形式。并且附带一定的物理图像，这一点其实非常重要，如果不断的推导公式，最终有可能迷失了其物理图像，这就脱离了我们做研究的初衷。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/quantum-base.html">https://www.cnblogs.com/dechinphy/p/quantum-base.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -252,7 +401,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -263,7 +412,7 @@
 <nav class="article-nav">
   
     <a href="/2022/03/30/%E4%B8%BAR-Markdown%E9%85%8D%E7%BD%AETinyTex%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           为R Markdown配置TinyTex编译环境
@@ -273,7 +422,7 @@
   
   
     <a href="/2022/03/29/%E9%80%9A%E8%BF%87R-Studio%E7%94%A8Markdown%E5%86%99Beamer/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">通过R Studio用Markdown写Beamer</div>
     </a>
   
@@ -281,7 +430,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=量子计算基础——矩阵语言 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F03%2F29%2F%25E9%2587%258F%25E5%25AD%2590%25E8%25AE%25A1%25E7%25AE%2597%25E5%259F%25BA%25E7%25A1%2580%25E2%2580%2594%25E2%2580%2594%25E7%259F%25A9%25E9%2598%25B5%25E8%25AF%25AD%25E8%25A8%2580%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -436,6 +585,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidjBYPXLBGWY96-JWcUatp7" class="article article-type-post" itemscope
+    <article id="post-cuid-EGuT16-mxe1opjYXO5BX" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,29 +210,156 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文主要介绍四元数Quaternion的一些基本运算法则。四元数的概念，更像是复数的一个推广，在图形学和工程学中有大量的应用，在蛋白质结构预测软件AlphaFold和MEGA-Protein中都大量的使用了四元数的计算。而大部分的四元数的教材中写的计算法则，经常把各类乘法混在一起使用，阅读起来非常难受，因此只好自己总结一下四元数的相关运算。并且跟我们所熟悉的复数运算有一定的对比，更加容易去理解四元数的概念。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/quaternion.html">文章</a>中我们介绍了欧拉角死锁问题的一些产生背景，还有基于四元数的求解方案。四元数这个概念虽然重要，但是很少会在通识教育课程中涉及到，更多的是一些图形学或者是工程学当中才会进行讲解。本文主要是面向四元数，相比上一篇文章更加详细的介绍和总结一下四元数的一些运算法则，还有基于四元数的插值法。</p>
-<h1 id="基本运算"><a href="#基本运算" class="headerlink" title="基本运算"></a>基本运算</h1><p>说到四元数，很多人可能会觉得有点陌生，但是如果说复数，很多人就都有学习过。我们一般用$z&#x3D;x+iy$这样的形式去定义一个复数（Complex Number），其中$x$是实部，而$y$是虚部，$i$是虚数单位，并且有$i^2&#x3D;-1$这样的特性。并且对于一个虚数而言，如果取自然指数（运算规则为：$e^{i\theta}&#x3D;cos\theta+i\ sin\theta$），还能够得到一个很美的数学公式：$e^{i\pi}&#x3D;-1$，这就是非常著名的欧拉公式。</p>
-<p>而四元数Quaternion这个概念的提出，更像是对复数的一个扩展，我们通常把四元数写成这样的形式：<br>$$<br>q&#x3D;s+ix+jy+kz<br>$$<br>其中$s,x,y,z$都是实数，并满足这样的一些运算规则：<br>$$<br>i^2&#x3D;j^2&#x3D;k^2&#x3D;ijk&#x3D;-1\<br>i\times j&#x3D;k,j\times k&#x3D;i,k\times i&#x3D;j\<br>j\times i&#x3D;-k,k\times j&#x3D;-i,i\times k&#x3D;-j<br>$$<br>以上都是四元数的一些基本定义，接下来我们逐一看一下四元数的一些基本运算。</p>
-<h2 id="四元数加法"><a href="#四元数加法" class="headerlink" title="四元数加法"></a>四元数加法</h2><p>两个四元数的加法就是将“实部虚部”对应位置做元素求和：<br>$$<br>q_1+q_2&#x3D;(s_1+ix_1+jy_1+kz_1)+(s_2+ix_2+jy_2+kz_2)&#x3D;(s_1+s_2)+i(x_1+x_2)+j(y_1+y_2)+k(z_1+z_2)<br>$$<br>可以简单证明，四元数的加法满足交换律、结合律和分配律，这里不过多展开介绍。</p>
-<h2 id="四元数缩放"><a href="#四元数缩放" class="headerlink" title="四元数缩放"></a>四元数缩放</h2><p>在系数缩放这一点上，四元数与复数是一致的：<br>$$<br>\lambda q&#x3D;\lambda s+i\lambda x+j\lambda y+k\lambda z<br>$$<br>逐一对四元数中的各项元素进行缩放即可。</p>
-<h2 id="四元数乘法"><a href="#四元数乘法" class="headerlink" title="四元数乘法"></a>四元数乘法</h2><p>四元数的乘法是所有元素之前都要运算一遍：<br>$$<br>\begin{align*}<br>q_1q_2&amp;&#x3D;(s_1+ix_1+jy_1+kz_1)<em>(s_2+ix_2+jy_2+kz_2)\<br>&amp;&#x3D;(s_1s_2-x_1x_2-y_1y_2-z_1z_2)\<br>&amp;\ +i(s_1x_2+s_2x_1+y_1z_2-y_2z_1)\<br>&amp;\ +j(s_1y_2+s_2y_1+x_2z_1-x_1z_2)\<br>&amp;\ +k(s_1z_2+s_2z_1+x_1y_2-x_2y_1)<br>\end{align</em>}<br>$$<br>这个运算过程是这样的，我们令$q&#x3D;q_1q_2&#x3D;s+ix+jy+kz$，那么这个乘法运算最终组成$s$这个元素的，分别是$s_1<em>s_2, (ix_1)</em>(ix_2), (iy_1)<em>(iy_2), (iz_1)</em>(iz_2)$这些项，而$i^2&#x3D;j^2&#x3D;k^2&#x3D;-1$，因此最终得到$s&#x3D;(s_1s_2-x_1x_2-y_1y_2-z_1z_2)$。但是直到这里为止，我们所涉及到的元素乘法只是在“实部”和相同的“虚数单位”之间的运算，如果一旦涉及到不同的“虚数单位”之间的乘法运算，那就要自动转化成向量叉乘，比如$ij&#x3D;ji&#x3D;k$。因此，我们要计算$q$中的$z$项的时候，只需要计算$s_1z_2, s_2z_1, x_1y_2, x_2y_1$这些项即可，同时注意符号的变换，那么得到的最终的结果就是如上所示。</p>
-<p>需要注意的是，<code>四元数与复数的最大的一点不同，复数乘法是有交换律的，而四元数没有</code>。举个例子说，我们可以计算一下$q_1,q_2$的对易：<br>$$<br>\begin{align*}<br>[q_1, q_2]&amp;&#x3D;q_1q_2-q_2q_1\<br>&amp;&#x3D;(s_1s_2-x_1x_2-y_1y_2-z_1z_2)+i(s_1x_2+s_2x_1+y_1z_2-y_2z_1)+j(s_1y_2+s_2y_1+x_2z_1-x_1z_2)+k(s_1z_2+s_2z_1+x_1y_2-x_2y_1)-(s_2s_1-x_2x_1-y_2y_1-z_2z_1)-i(s_2x_1+s_1x_2+y_2z_1-y_1z_2)-j(s_2y_1+s_1y_2+x_1z_2-x_2z_1)-k(s_2z_1+s_1z_2+x_2y_1-x_1y_2)\<br>&amp;&#x3D;2i(y_1z_2-y_2z_1)+2j(x_2z_1-x_1z_2)+2k(x_1y_2-x_2y_1)<br>\end{align*}<br>$$<br>那么也就是说，这两个四元数$q_1,q_2$之间是非对易的，也就是不可交换的。但是，<code>四元数的运算是满足结合律和分配率的</code>。</p>
-<p>由于上面的这种四元数乘法展开，写起来过于繁杂，我们考虑对其进行一定的简化。如果我们假定2个纯虚数（$s&#x3D;0$）：<br>$$<br>a&#x3D;ix_1+jy_1+kz_1\<br>b&#x3D;ix_2+jy_2+kz_2<br>$$<br>其实类似于这种形式的四元数，实际上就是三维空间中的向量，那么这两者的点积和叉积有：<br>$$<br>a\cdot b&#x3D;x_1x_2+y_1y_2+z_1z_2\<br>a\times b&#x3D;(y_1z_2-y_2z_1)i+(z_1x_2-z_2x_1)j+(x_1y_2-x_2y_1)k<br>$$<br>需要注意的是，这里的叉积是向量叉积，跟四元数中的“虚数单位”相比，最大的一点不同就是：<strong>在向量叉积中，$i\times i&#x3D;0$，但是在四元数的乘法中，$i\times i&#x3D;-1$</strong>（非常重要）。</p>
-<p>那么在有了以上的两个公式之后，我们就可以对四元数的乘法表示做一个简化：<br>$$<br>q_1q_2&#x3D;s_1s_2-a\cdot b+s_ab+s_ba+a\times b<br>$$</p>
-<h2 id="实四元数和纯四元数"><a href="#实四元数和纯四元数" class="headerlink" title="实四元数和纯四元数"></a>实四元数和纯四元数</h2><p>对于一个实四元数而言，就是取$x&#x3D;y&#x3D;z&#x3D;0$：<br>$$<br>q_r&#x3D;s<br>$$<br>对于一个纯四元数而言，就是取$s&#x3D;0$：<br>$$<br>q_i&#x3D;ix+jy+kz<br>$$</p>
-<h2 id="四元数共轭"><a href="#四元数共轭" class="headerlink" title="四元数共轭"></a>四元数共轭</h2><p>对四元数的所有“虚部”取负数，即是四元数的共轭：<br>$$<br>q^*&#x3D;s-ix-jy-kz<br>$$</p>
-<h2 id="单位四元数"><a href="#单位四元数" class="headerlink" title="单位四元数"></a>单位四元数</h2><p>四元数的模的定义跟复数是一致的：<br>$$<br>|q|&#x3D;\sqrt{s^2+x^2+y^2+z^2}&#x3D;\sqrt{qq*}<br>$$<br>而单位四元数的定义即是模为1的四元数：<br>$$<br>s^2+x^2+y^2+z^2&#x3D;1<br>$$<br>如果给定的一个四元数不是单位四元数，那么我们可以对其进行规范化：<br>$$<br>q’&#x3D;\frac{q}{\sqrt{s^2+x^2+y^2+z^2}}<br>$$</p>
-<h2 id="四元数的逆"><a href="#四元数的逆" class="headerlink" title="四元数的逆"></a>四元数的逆</h2><p>对于一个单位四元数而言，因为有$qq^<em>&#x3D;1$，所以单位四元数的逆就是其共轭四元数。如果是对于更加一般的场景，我们可以这样考虑：<br>$$<br>q(q^{-1}</em>|q|^2)&#x3D;|q|^2\<br>qq^<em>&#x3D;|q|^2\<br>q^{-1}&#x3D;\frac{q^</em>}{|q|^2}<br>$$<br>比较特殊地，对于单位四元数$q^{-1}&#x3D;q^*$。</p>
-<h2 id="四元数的二元表示"><a href="#四元数的二元表示" class="headerlink" title="四元数的二元表示"></a>四元数的二元表示</h2><p>类似于复数的二元形式，通常一个四元数也可以被表示成如下的二元形式：<br>$$<br>q&#x3D;s+v\hat{q}&#x3D;[s,v\hat{q}]<br>$$<br>其中$v&#x3D;[x,y,z],\hat{q}&#x3D;[i,j,k]$。关于此处的乘法描述，其实有一定的不严谨性，因为它既不是点积，也不是叉积，也不是外积，而是普通的元素乘。这种元素乘的概念在计算机领域是很常用的，但是在数学上其实并不是很常用。在这种二元描述下，四元数的乘法形式会略有调整：<br>$$<br>q_1q_2&#x3D;[s_1s_2-(v_1\hat{q}_1)\cdot (v_2\hat{q}_2), s_1v_2\hat{q}_2+s_2v_1\hat{q}_1+(v_1\hat{q}_1)\times(v_2\hat{q}_2)]<br>$$</p>
-<h2 id="四元数点积"><a href="#四元数点积" class="headerlink" title="四元数点积"></a>四元数点积</h2><p>上面的章节中提到过四元数的普通乘法，但其实四元数也像普通的向量一样可以进行点积运算：<br>$$<br>q_1\cdot q_2&#x3D;s_1s_2+v_1\cdot v_2<br>$$<br>这也是受益于四元数的二元表示，使得我们在书写结果的时候可以更加的简练。</p>
-<h2 id="四元数的指数"><a href="#四元数的指数" class="headerlink" title="四元数的指数"></a>四元数的指数</h2><p>我们先来回顾一下复数$z&#x3D;x+iy$的指数计算，根据泰勒展开公式$f(x)&#x3D;\sum_n\frac{f^{(n)}(x_0)}{n!}(x-x_0)^n$（比较特殊地，$e^x&#x3D;\sum_{k&#x3D;0}^\infty\frac{x^k}{k!}$）对$e^z$在$y&#x3D;0$处的展开有：<br>$$<br>\begin{align*}<br>e^{z}&amp;&#x3D;e^{x+iy}&#x3D;e^xe^{iy}\<br>&amp;&#x3D;e^x\left(<br>1+iy-\frac{1}{2!}y^2-\frac{i}{3!}y^3+\frac{1}{4!}y^4+\frac{i}{5!}y^5-\frac{1}{6!}y^6-\frac{i}{7!}y^7+…<br>\right)<br>\end{align*}<br>$$<br>对比一下常用的三角函数的泰勒展开式（相关证明见参考链接2）：<br>$$<br>sin\ x&#x3D;x-\frac{1}{3!}x^3+\frac{1}{5!}x^5-\frac{1}{7!}x^7+…\<br>cos\ x&#x3D;1-\frac{1}{2!}x^2+\frac{1}{4!}x^4-\frac{1}{6!}x^6+…<br>$$<br>代入可得：<br>$$<br>e^{z}&#x3D;e^xe^{iy}<br>&#x3D;e^x\left(<br>cos\ y+i\ sin\ y<br>\right)<br>$$<br>也即，对于一个纯虚数$i\theta$而言，其指数为：$e^{i\theta}&#x3D;cos\theta+i\ sin\theta$。那么类似的，对于一个二元表示的四元数$q&#x3D;s+v\hat{q}$有：<br>$$<br>\begin{align*}<br>e^q&amp;&#x3D;e^{s+v\hat{q}}\<br>&amp;&#x3D;e^s\left(<br>1+v\hat{q}+\frac{1}{2!}(v\hat{q})^2+\frac{1}{3!}(v\hat{q})^3+\frac{1}{4!}(v\hat{q})^4+\frac{1}{5!}(v\hat{q})^5+\frac{1}{6!}(v\hat{q})^6+\frac{1}{7!}(v\hat{q})^7+…<br>\right)<br>\end{align*}<br>$$<br>这里有一点不同的是，我们计算四元数的幂次的时候需要谨慎，可以先手动计算一下：<br>$$<br>\begin{align*}<br>(v\hat{q})^2&amp;&#x3D;0-(v\hat{q})\cdot (v\hat{q})+0+0+(v\hat{q})\times(v\hat{q})&#x3D;-|v|^2\<br>(v\hat{q})^3&amp;&#x3D;-|v|^2(v\hat{q})\<br>(v\hat{q})^4&amp;&#x3D;|v|^4\<br>(v\hat{q})^5&amp;&#x3D;|v|^4(v\hat{q})\<br>(v\hat{q})^6&amp;&#x3D;-|v|^6\<br>(v\hat{q})^7&amp;&#x3D;-|v|^6(v\hat{q})\<br>&amp;…<br>\end{align*}<br>$$<br>代入四元数的指数部分进行计算可得：<br>$$<br>\begin{align*}<br>e^q&amp;&#x3D;e^{s+v\hat{q}}\<br>&amp;&#x3D;e^s\left(<br>1+v\hat{q}-\frac{1}{2!}|v|^2-\frac{1}{3!}|v|^2(v\hat{q})+\frac{1}{4!}|v|^4+\frac{1}{5!}|v|^4(v\hat{q})-\frac{1}{6!}|v|^6-\frac{1}{7!}|v|^6(v\hat{q})+…<br>\right)\<br>&amp;&#x3D;e^s\left(<br>cos|v|+\frac{v\hat{q}}{|v|}sin|v|<br>\right)<br>\end{align*}<br>$$<br>这就是四元数的指数运算。</p>
-<h2 id="四元数的指数表示"><a href="#四元数的指数表示" class="headerlink" title="四元数的指数表示"></a>四元数的指数表示</h2><p>区分于上一个章节中的四元数的指数运算，这个章节我们是要用一个指数形式去表示任意给定的一个四元数。因为在上一个章节中我们发现，一个四元数的指数形式是另外一个四元数，因此，理论上说我们可以用一个指数形式来表示任意的一个四元数。我们首先还是参考一下复数的指数表示：<br>$$<br>z&#x3D;x+iy&#x3D;\sqrt{x^2+y^2}\left(\frac{x}{\sqrt{x^2+y^2}}+i\frac{y}{\sqrt{x^2+y^2}}\right)&#x3D;\sqrt{x^2+y^2}e^{i\frac{y}{|y|}\ arccos\left(\frac{x}{\sqrt{x^2+y^2}}\right)}<br>$$<br>类似地，一个四元数可以表示为：<br>$$<br>q&#x3D;s+v\hat{q}&#x3D;\sqrt{s^2+|v|^2}\left(<br>\frac{s}{\sqrt{s^2+|v|^2}}+\frac{v\hat{q}}{|v|}\frac{|v|}{\sqrt{s^2+|v|^2}}<br>\right)&#x3D;\sqrt{s^2+|v|^2}e^{\hat{q}\frac{v}{|v|}\ arccos\left(\frac{s}{\sqrt{s^2+|v|^2}}\right)}<br>$$<br>比较有意思的是，如果我们取$q&#x3D;s+ix+jy+kz$中的$y&#x3D;0,z&#x3D;0$时，我们发现$v&#x3D;\pm|v|,\hat{q}&#x3D;i$，这样一来，四元数的指数表示形式就和复数的指数表示形式完全对应上了。</p>
-<h2 id="四元数的对数"><a href="#四元数的对数" class="headerlink" title="四元数的对数"></a>四元数的对数</h2><p>在上一个章节中，如果我们把一个四元数表示成一个指数的形式，就会很大程度上方便我们去计算一个四元数$q&#x3D;s+v\hat{q}$的对数：<br>$$<br>\begin{align*}<br>log(q)&amp;&#x3D;log\left(\sqrt{s^2+|v|^2}e^{\hat{q}\frac{v}{|v|}\ arccos\left(\frac{s}{\sqrt{s^2+|v|^2}}\right)}\right)\<br>&amp;&#x3D;log\left(\sqrt{s^2+|v|^2}\right)+\hat{q}\frac{v}{|v|}\ arccos\left(\frac{s}{\sqrt{s^2+|v|^2}}\right)<br>\end{align*}<br>$$<br>这样就得到了四元数的对数的二元表示形式。</p>
-<h2 id="四元数的幂次"><a href="#四元数的幂次" class="headerlink" title="四元数的幂次"></a>四元数的幂次</h2><p>了解了四元数的指数和对数的计算模块之后，我们可以计算一个四元数的幂次。正是由于四元数的指数表示形式，使得我们可以将四元数的幂次简单的转化成乘法的表示形式：<br>$$<br>q^t&#x3D;\left[\sqrt{s^2+|v|^2}e^{\hat{q}\frac{v}{|v|}\ arccos\left(\frac{s}{\sqrt{s^2+|v|^2}}\right)}\right]^t&#x3D;<br>\left(s^2+|v|^2\right)^{\frac{t}{2}}e^{\hat{q}\frac{vt}{|v|}\ arccos\left(\frac{s}{\sqrt{s^2+|v|^2}}\right)}<br>$$<br>那么这就得到了四元数的幂次表达形式。</p>
-<h2 id="欧拉角旋转四元数"><a href="#欧拉角旋转四元数" class="headerlink" title="欧拉角旋转四元数"></a>欧拉角旋转四元数</h2><p>在上一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/quaternion.html">文章</a>中我们提到过，每一个四元数其实都可以对应于三维空间的一个向量旋转，一个四元数$q$作用在一个空间向量$v$上就会旋转得到一个新的空间向量：<br>$$<br>v’&#x3D;qvq^*<br>$$<br>而如果给定了三维空间中的旋转欧拉角，在四元数中就可以表示为相应的旋转四元数。比如绕$X$轴旋转$\beta$角所对应的四元数为：$q&#x3D;cos\frac{\beta}{2}+i\ sin\frac{\beta}{2}$，绕$Y$轴旋转$\alpha$角所对应的四元数为：$q&#x3D;cos\frac{\alpha}{2}-j\ sin\frac{\alpha}{2}$，绕$Z$轴旋转$\gamma$角所对应的四元数为：$q&#x3D;cos\frac{\gamma}{2}+k\ sin\frac{\gamma}{2}$。而通常使用的$ZXY$顺规可表示为：<br>$$<br>q&#x3D;\left(cos\frac{\alpha}{2}-j\ sin\frac{\alpha}{2}\right)\left(cos\frac{\beta}{2}+i\ sin\frac{\beta}{2}\right)\left(cos\frac{\gamma}{2}+k\ sin\frac{\gamma}{2}\right)<br>$$<br>关于更多的旋转四元数的内容，可以阅读一下参考链接3中的内容。</p>
-<h2 id="向量变换四元数"><a href="#向量变换四元数" class="headerlink" title="向量变换四元数"></a>向量变换四元数</h2><p>这个问题的定义是比较清晰的，如果给定空间中的两个不同的向量，能否直接获得这两个向量之间变换的四元数呢？如果用公式来表示就是：已知$\textbf{v}_1,\textbf{v}_2$两个空间向量，求$q$使得$\textbf{v}_2&#x3D;q\textbf{v}_1q^*$。关于这个问题的求解，在参考链接3中也是有介绍的，这里再简单提一下计算方法：<br>$$<br>\textbf{u}&#x3D;\textbf{v}_1\times\textbf{v}_2\<br>cos\theta&#x3D;\frac{\textbf{v}_1\cdot\textbf{v}_2}{|\textbf{v}_1||\textbf{v}_2|}\<br>q&#x3D;cos\frac{\theta}{2}+i\ sin\frac{\theta}{2}\textbf{u}\cdot i+j\ sin\frac{\theta}{2}\textbf{u}\cdot j+k\ sin\frac{\theta}{2}\textbf{u}\cdot k<br>$$<br>这个算法的本质，其实就是先用向量叉乘找到旋转轴，然后计算两个向量之间的夹角，最后再使用四元数的绕旋转轴旋转指定角度的公式计算，就可以得到对应的空间向量变换的四元数。</p>
-<h2 id="旋转四元数和变换四元数的不对等场景"><a href="#旋转四元数和变换四元数的不对等场景" class="headerlink" title="旋转四元数和变换四元数的不对等场景"></a>旋转四元数和变换四元数的不对等场景</h2><p>这里为了区分欧拉角旋转的四元数和绕轴旋转的四元数，我们将其分别称呼为旋转四元数与变换四元数。其实要证明二者是不对等的也很容易，只要举出一个例子来证明二者作用的结果不相等即可。其实在参考链接3中已经给出了类似的案例，这里我们再举一个简单例子来进行探讨。首先我们给定一个初始空间向量：<br>$$<br>\textbf{v}<em>1&#x3D;i<br>$$<br>我们使其先绕$Y$轴旋转90度，再绕$Z$轴旋转90度，那么利用四元数进行计算，得到的结果是：<br>$$<br>q</em>{rot}&#x3D;(cos\frac{\gamma}{2}+k\ sin\frac{\gamma}{2})(cos\frac{\beta}{2}-j\ sin\frac{\beta}{2})\<br>\textbf{v}<em>2&#x3D;q\textbf{v}<em>1q^<em>&#x3D;k<br>$$<br>也就是说，在这个欧拉角对应的旋转变换下，我们将一个向量从$X$轴正方向变换到了$Z$轴的正方向上。那么如果我们考虑使用向量绕轴旋转的公式来计算的话：<br>$$<br>\textbf{u}&#x3D;\textbf{v}_1\times\textbf{v}_2&#x3D;i\times k&#x3D;-j\<br>cos\theta&#x3D;\frac{\textbf{v}<em>1\cdot\textbf{v}<em>2}{|\textbf{v}<em>1||\textbf{v}<em>2|}&#x3D;0\<br>q</em>{trans}&#x3D;cos\frac{\theta}{2}+i\ sin\frac{\theta}{2}\textbf{u}\cdot i+j\ sin\frac{\theta}{2}\textbf{u}\cdot j+k\ sin\frac{\theta}{2}\textbf{u}\cdot k&#x3D;<br>\frac{\sqrt{2}}{2}-j\frac{\sqrt{2}}{2}<br>$$<br>显然，$q</em>{rot}\neq q</em>{trans}$，只是在这个案例下有：<br>$$<br>q</em>{rot}\textbf{v}<em>1q</em>{rot}^</em>&#x3D;q_{trans}\textbf{v}<em>1q</em>{trans}^<em>&#x3D;\textbf{v}_2<br>$$<br>我们只需要换一个初始空间向量，比如我们将初始向量设置为$Z$轴的负方向，即：$\textbf{v}<em>1&#x3D;-k$，那么再看看两个变换所对应的结果：<br>$$<br>q</em>{rot}\textbf{v}<em>1q</em>{rot}^</em>&#x3D;\frac{1}{4}(1+i-j+k)(-k)(1-i+j-k)&#x3D;j\<br>q_{trans}\textbf{v}<em>1q</em>{trans}^*&#x3D;\frac{1}{2}(1-j)(-k)(1+j)&#x3D;i<br>$$<br>显然这两个变换之后的结果是不同的。其实道理很简单，$i$在$q_{rot}$的作用下，先绕$Y$轴转90度，刚好就到了$Z$轴正方向上，此时再绕$Z$轴旋转是不会动的。而$q</em>{trans}$，就只是绕$Y$轴旋转90度的一个操作，因为从客观的变换来说，$q</em>{rot}$作用在$i$上就等价于只绕$Y$轴旋转了90度。这就是旋转的特殊性，在很多情况下，欧拉角的旋转跟绕轴旋转是不能画上等号的。</p>
+<h1 id="基本运算"><a href="#基本运算" class="headerlink" title="基本运算"></a>基本运算</h1><p>说到四元数，很多人可能会觉得有点陌生，但是如果说复数，很多人就都有学习过。我们一般用$z=x+iy$这样的形式去定义一个复数（Complex Number），其中$x$是实部，而$y$是虚部，$i$是虚数单位，并且有$i^2=-1$这样的特性。并且对于一个虚数而言，如果取自然指数（运算规则为：$e^{i\theta}=cos\theta+i\ sin\theta$），还能够得到一个很美的数学公式：$e^{i\pi}=-1$，这就是非常著名的欧拉公式。</p>
+<p>而四元数Quaternion这个概念的提出，更像是对复数的一个扩展，我们通常把四元数写成这样的形式：</p>
+<script type="math/tex; mode=display">
+q=s+ix+jy+kz</script><p>其中$s,x,y,z$都是实数，并满足这样的一些运算规则：</p>
+<script type="math/tex; mode=display">
+i^2=j^2=k^2=ijk=-1\\
+i\times j=k,j\times k=i,k\times i=j\\
+j\times i=-k,k\times j=-i,i\times k=-j</script><p>以上都是四元数的一些基本定义，接下来我们逐一看一下四元数的一些基本运算。</p>
+<h2 id="四元数加法"><a href="#四元数加法" class="headerlink" title="四元数加法"></a>四元数加法</h2><p>两个四元数的加法就是将“实部虚部”对应位置做元素求和：</p>
+<script type="math/tex; mode=display">
+q_1+q_2=(s_1+ix_1+jy_1+kz_1)+(s_2+ix_2+jy_2+kz_2)=(s_1+s_2)+i(x_1+x_2)+j(y_1+y_2)+k(z_1+z_2)</script><p>可以简单证明，四元数的加法满足交换律、结合律和分配律，这里不过多展开介绍。</p>
+<h2 id="四元数缩放"><a href="#四元数缩放" class="headerlink" title="四元数缩放"></a>四元数缩放</h2><p>在系数缩放这一点上，四元数与复数是一致的：</p>
+<script type="math/tex; mode=display">
+\lambda q=\lambda s+i\lambda x+j\lambda y+k\lambda z</script><p>逐一对四元数中的各项元素进行缩放即可。</p>
+<h2 id="四元数乘法"><a href="#四元数乘法" class="headerlink" title="四元数乘法"></a>四元数乘法</h2><p>四元数的乘法是所有元素之前都要运算一遍：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+q_1q_2&=(s_1+ix_1+jy_1+kz_1)*(s_2+ix_2+jy_2+kz_2)\\
+&=(s_1s_2-x_1x_2-y_1y_2-z_1z_2)\\
+&\ +i(s_1x_2+s_2x_1+y_1z_2-y_2z_1)\\
+&\ +j(s_1y_2+s_2y_1+x_2z_1-x_1z_2)\\
+&\ +k(s_1z_2+s_2z_1+x_1y_2-x_2y_1)
+\end{align*}</script><p>这个运算过程是这样的，我们令$q=q_1q_2=s+ix+jy+kz$，那么这个乘法运算最终组成$s$这个元素的，分别是$s_1<em>s_2, (ix_1)</em>(ix_2), (iy_1)<em>(iy_2), (iz_1)</em>(iz_2)$这些项，而$i^2=j^2=k^2=-1$，因此最终得到$s=(s_1s_2-x_1x_2-y_1y_2-z_1z_2)$。但是直到这里为止，我们所涉及到的元素乘法只是在“实部”和相同的“虚数单位”之间的运算，如果一旦涉及到不同的“虚数单位”之间的乘法运算，那就要自动转化成向量叉乘，比如$ij=ji=k$。因此，我们要计算$q$中的$z$项的时候，只需要计算$s_1z_2, s_2z_1, x_1y_2, x_2y_1$这些项即可，同时注意符号的变换，那么得到的最终的结果就是如上所示。</p>
+<p>需要注意的是，<code>四元数与复数的最大的一点不同，复数乘法是有交换律的，而四元数没有</code>。举个例子说，我们可以计算一下$q_1,q_2$的对易：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+[q_1, q_2]&=q_1q_2-q_2q_1\\
+&=(s_1s_2-x_1x_2-y_1y_2-z_1z_2)+i(s_1x_2+s_2x_1+y_1z_2-y_2z_1)+j(s_1y_2+s_2y_1+x_2z_1-x_1z_2)+k(s_1z_2+s_2z_1+x_1y_2-x_2y_1)-(s_2s_1-x_2x_1-y_2y_1-z_2z_1)-i(s_2x_1+s_1x_2+y_2z_1-y_1z_2)-j(s_2y_1+s_1y_2+x_1z_2-x_2z_1)-k(s_2z_1+s_1z_2+x_2y_1-x_1y_2)\\
+&=2i(y_1z_2-y_2z_1)+2j(x_2z_1-x_1z_2)+2k(x_1y_2-x_2y_1)
+\end{align*}</script><p>那么也就是说，这两个四元数$q_1,q_2$之间是非对易的，也就是不可交换的。但是，<code>四元数的运算是满足结合律和分配率的</code>。</p>
+<p>由于上面的这种四元数乘法展开，写起来过于繁杂，我们考虑对其进行一定的简化。如果我们假定2个纯虚数（$s=0$）：</p>
+<script type="math/tex; mode=display">
+a=ix_1+jy_1+kz_1\\
+b=ix_2+jy_2+kz_2</script><p>其实类似于这种形式的四元数，实际上就是三维空间中的向量，那么这两者的点积和叉积有：</p>
+<script type="math/tex; mode=display">
+a\cdot b=x_1x_2+y_1y_2+z_1z_2\\
+a\times b=(y_1z_2-y_2z_1)i+(z_1x_2-z_2x_1)j+(x_1y_2-x_2y_1)k</script><p>需要注意的是，这里的叉积是向量叉积，跟四元数中的“虚数单位”相比，最大的一点不同就是：<strong>在向量叉积中，$i\times i=0$，但是在四元数的乘法中，$i\times i=-1$</strong>（非常重要）。</p>
+<p>那么在有了以上的两个公式之后，我们就可以对四元数的乘法表示做一个简化：</p>
+<script type="math/tex; mode=display">
+q_1q_2=s_1s_2-a\cdot b+s_ab+s_ba+a\times b</script><h2 id="实四元数和纯四元数"><a href="#实四元数和纯四元数" class="headerlink" title="实四元数和纯四元数"></a>实四元数和纯四元数</h2><p>对于一个实四元数而言，就是取$x=y=z=0$：</p>
+<script type="math/tex; mode=display">
+q_r=s</script><p>对于一个纯四元数而言，就是取$s=0$：</p>
+<script type="math/tex; mode=display">
+q_i=ix+jy+kz</script><h2 id="四元数共轭"><a href="#四元数共轭" class="headerlink" title="四元数共轭"></a>四元数共轭</h2><p>对四元数的所有“虚部”取负数，即是四元数的共轭：</p>
+<script type="math/tex; mode=display">
+q^*=s-ix-jy-kz</script><h2 id="单位四元数"><a href="#单位四元数" class="headerlink" title="单位四元数"></a>单位四元数</h2><p>四元数的模的定义跟复数是一致的：</p>
+<script type="math/tex; mode=display">
+|q|=\sqrt{s^2+x^2+y^2+z^2}=\sqrt{qq*}</script><p>而单位四元数的定义即是模为1的四元数：</p>
+<script type="math/tex; mode=display">
+s^2+x^2+y^2+z^2=1</script><p>如果给定的一个四元数不是单位四元数，那么我们可以对其进行规范化：</p>
+<script type="math/tex; mode=display">
+q'=\frac{q}{\sqrt{s^2+x^2+y^2+z^2}}</script><h2 id="四元数的逆"><a href="#四元数的逆" class="headerlink" title="四元数的逆"></a>四元数的逆</h2><p>对于一个单位四元数而言，因为有$qq^*=1$，所以单位四元数的逆就是其共轭四元数。如果是对于更加一般的场景，我们可以这样考虑：</p>
+<script type="math/tex; mode=display">
+q(q^{-1}*|q|^2)=|q|^2\\
+qq^*=|q|^2\\
+q^{-1}=\frac{q^*}{|q|^2}</script><p>比较特殊地，对于单位四元数$q^{-1}=q^*$。</p>
+<h2 id="四元数的二元表示"><a href="#四元数的二元表示" class="headerlink" title="四元数的二元表示"></a>四元数的二元表示</h2><p>类似于复数的二元形式，通常一个四元数也可以被表示成如下的二元形式：</p>
+<script type="math/tex; mode=display">
+q=s+v\hat{q}=[s,v\hat{q}]</script><p>其中$v=[x,y,z],\hat{q}=[i,j,k]$。关于此处的乘法描述，其实有一定的不严谨性，因为它既不是点积，也不是叉积，也不是外积，而是普通的元素乘。这种元素乘的概念在计算机领域是很常用的，但是在数学上其实并不是很常用。在这种二元描述下，四元数的乘法形式会略有调整：</p>
+<script type="math/tex; mode=display">
+q_1q_2=[s_1s_2-(v_1\hat{q}_1)\cdot (v_2\hat{q}_2), s_1v_2\hat{q}_2+s_2v_1\hat{q}_1+(v_1\hat{q}_1)\times(v_2\hat{q}_2)]</script><h2 id="四元数点积"><a href="#四元数点积" class="headerlink" title="四元数点积"></a>四元数点积</h2><p>上面的章节中提到过四元数的普通乘法，但其实四元数也像普通的向量一样可以进行点积运算：</p>
+<script type="math/tex; mode=display">
+q_1\cdot q_2=s_1s_2+v_1\cdot v_2</script><p>这也是受益于四元数的二元表示，使得我们在书写结果的时候可以更加的简练。</p>
+<h2 id="四元数的指数"><a href="#四元数的指数" class="headerlink" title="四元数的指数"></a>四元数的指数</h2><p>我们先来回顾一下复数$z=x+iy$的指数计算，根据泰勒展开公式$f(x)=\sum<em>n\frac{f^{(n)}(x_0)}{n!}(x-x_0)^n$（比较特殊地，$e^x=\sum</em>{k=0}^\infty\frac{x^k}{k!}$）对$e^z$在$y=0$处的展开有：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+e^{z}&=e^{x+iy}=e^xe^{iy}\\
+&=e^x\left(
+1+iy-\frac{1}{2!}y^2-\frac{i}{3!}y^3+\frac{1}{4!}y^4+\frac{i}{5!}y^5-\frac{1}{6!}y^6-\frac{i}{7!}y^7+...
+\right)
+\end{align*}</script><p>对比一下常用的三角函数的泰勒展开式（相关证明见参考链接2）：</p>
+<script type="math/tex; mode=display">
+sin\ x=x-\frac{1}{3!}x^3+\frac{1}{5!}x^5-\frac{1}{7!}x^7+...\\
+cos\ x=1-\frac{1}{2!}x^2+\frac{1}{4!}x^4-\frac{1}{6!}x^6+...</script><p>代入可得：</p>
+<script type="math/tex; mode=display">
+e^{z}=e^xe^{iy}
+=e^x\left(
+cos\ y+i\ sin\ y
+\right)</script><p>也即，对于一个纯虚数$i\theta$而言，其指数为：$e^{i\theta}=cos\theta+i\ sin\theta$。那么类似的，对于一个二元表示的四元数$q=s+v\hat{q}$有：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+e^q&=e^{s+v\hat{q}}\\
+&=e^s\left(
+1+v\hat{q}+\frac{1}{2!}(v\hat{q})^2+\frac{1}{3!}(v\hat{q})^3+\frac{1}{4!}(v\hat{q})^4+\frac{1}{5!}(v\hat{q})^5+\frac{1}{6!}(v\hat{q})^6+\frac{1}{7!}(v\hat{q})^7+...
+\right)
+\end{align*}</script><p>这里有一点不同的是，我们计算四元数的幂次的时候需要谨慎，可以先手动计算一下：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+(v\hat{q})^2&=0-(v\hat{q})\cdot (v\hat{q})+0+0+(v\hat{q})\times(v\hat{q})=-|v|^2\\
+(v\hat{q})^3&=-|v|^2(v\hat{q})\\
+(v\hat{q})^4&=|v|^4\\
+(v\hat{q})^5&=|v|^4(v\hat{q})\\
+(v\hat{q})^6&=-|v|^6\\
+(v\hat{q})^7&=-|v|^6(v\hat{q})\\
+&...
+\end{align*}</script><p>代入四元数的指数部分进行计算可得：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+e^q&=e^{s+v\hat{q}}\\
+&=e^s\left(
+1+v\hat{q}-\frac{1}{2!}|v|^2-\frac{1}{3!}|v|^2(v\hat{q})+\frac{1}{4!}|v|^4+\frac{1}{5!}|v|^4(v\hat{q})-\frac{1}{6!}|v|^6-\frac{1}{7!}|v|^6(v\hat{q})+...
+\right)\\
+&=e^s\left(
+cos|v|+\frac{v\hat{q}}{|v|}sin|v|
+\right)
+\end{align*}</script><p>这就是四元数的指数运算。</p>
+<h2 id="四元数的指数表示"><a href="#四元数的指数表示" class="headerlink" title="四元数的指数表示"></a>四元数的指数表示</h2><p>区分于上一个章节中的四元数的指数运算，这个章节我们是要用一个指数形式去表示任意给定的一个四元数。因为在上一个章节中我们发现，一个四元数的指数形式是另外一个四元数，因此，理论上说我们可以用一个指数形式来表示任意的一个四元数。我们首先还是参考一下复数的指数表示：</p>
+<script type="math/tex; mode=display">
+z=x+iy=\sqrt{x^2+y^2}\left(\frac{x}{\sqrt{x^2+y^2}}+i\frac{y}{\sqrt{x^2+y^2}}\right)=\sqrt{x^2+y^2}e^{i\frac{y}{|y|}\ arccos\left(\frac{x}{\sqrt{x^2+y^2}}\right)}</script><p>类似地，一个四元数可以表示为：</p>
+<script type="math/tex; mode=display">
+q=s+v\hat{q}=\sqrt{s^2+|v|^2}\left(
+\frac{s}{\sqrt{s^2+|v|^2}}+\frac{v\hat{q}}{|v|}\frac{|v|}{\sqrt{s^2+|v|^2}}
+\right)=\sqrt{s^2+|v|^2}e^{\hat{q}\frac{v}{|v|}\ arccos\left(\frac{s}{\sqrt{s^2+|v|^2}}\right)}</script><p>比较有意思的是，如果我们取$q=s+ix+jy+kz$中的$y=0,z=0$时，我们发现$v=\pm|v|,\hat{q}=i$，这样一来，四元数的指数表示形式就和复数的指数表示形式完全对应上了。</p>
+<h2 id="四元数的对数"><a href="#四元数的对数" class="headerlink" title="四元数的对数"></a>四元数的对数</h2><p>在上一个章节中，如果我们把一个四元数表示成一个指数的形式，就会很大程度上方便我们去计算一个四元数$q=s+v\hat{q}$的对数：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+log(q)&=log\left(\sqrt{s^2+|v|^2}e^{\hat{q}\frac{v}{|v|}\ arccos\left(\frac{s}{\sqrt{s^2+|v|^2}}\right)}\right)\\
+&=log\left(\sqrt{s^2+|v|^2}\right)+\hat{q}\frac{v}{|v|}\ arccos\left(\frac{s}{\sqrt{s^2+|v|^2}}\right)
+\end{align*}</script><p>这样就得到了四元数的对数的二元表示形式。</p>
+<h2 id="四元数的幂次"><a href="#四元数的幂次" class="headerlink" title="四元数的幂次"></a>四元数的幂次</h2><p>了解了四元数的指数和对数的计算模块之后，我们可以计算一个四元数的幂次。正是由于四元数的指数表示形式，使得我们可以将四元数的幂次简单的转化成乘法的表示形式：</p>
+<script type="math/tex; mode=display">
+q^t=\left[\sqrt{s^2+|v|^2}e^{\hat{q}\frac{v}{|v|}\ arccos\left(\frac{s}{\sqrt{s^2+|v|^2}}\right)}\right]^t=
+\left(s^2+|v|^2\right)^{\frac{t}{2}}e^{\hat{q}\frac{vt}{|v|}\ arccos\left(\frac{s}{\sqrt{s^2+|v|^2}}\right)}</script><p>那么这就得到了四元数的幂次表达形式。</p>
+<h2 id="欧拉角旋转四元数"><a href="#欧拉角旋转四元数" class="headerlink" title="欧拉角旋转四元数"></a>欧拉角旋转四元数</h2><p>在上一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/quaternion.html">文章</a>中我们提到过，每一个四元数其实都可以对应于三维空间的一个向量旋转，一个四元数$q$作用在一个空间向量$v$上就会旋转得到一个新的空间向量：</p>
+<script type="math/tex; mode=display">
+v'=qvq^*</script><p>而如果给定了三维空间中的旋转欧拉角，在四元数中就可以表示为相应的旋转四元数。比如绕$X$轴旋转$\beta$角所对应的四元数为：$q=cos\frac{\beta}{2}+i\ sin\frac{\beta}{2}$，绕$Y$轴旋转$\alpha$角所对应的四元数为：$q=cos\frac{\alpha}{2}-j\ sin\frac{\alpha}{2}$，绕$Z$轴旋转$\gamma$角所对应的四元数为：$q=cos\frac{\gamma}{2}+k\ sin\frac{\gamma}{2}$。而通常使用的$ZXY$顺规可表示为：</p>
+<script type="math/tex; mode=display">
+q=\left(cos\frac{\alpha}{2}-j\ sin\frac{\alpha}{2}\right)\left(cos\frac{\beta}{2}+i\ sin\frac{\beta}{2}\right)\left(cos\frac{\gamma}{2}+k\ sin\frac{\gamma}{2}\right)</script><p>关于更多的旋转四元数的内容，可以阅读一下参考链接3中的内容。</p>
+<h2 id="向量变换四元数"><a href="#向量变换四元数" class="headerlink" title="向量变换四元数"></a>向量变换四元数</h2><p>这个问题的定义是比较清晰的，如果给定空间中的两个不同的向量，能否直接获得这两个向量之间变换的四元数呢？如果用公式来表示就是：已知$\textbf{v}_1,\textbf{v}_2$两个空间向量，求$q$使得$\textbf{v}_2=q\textbf{v}_1q^*$。关于这个问题的求解，在参考链接3中也是有介绍的，这里再简单提一下计算方法：</p>
+<script type="math/tex; mode=display">
+\textbf{u}=\textbf{v}_1\times\textbf{v}_2\\
+cos\theta=\frac{\textbf{v}_1\cdot\textbf{v}_2}{|\textbf{v}_1||\textbf{v}_2|}\\
+q=cos\frac{\theta}{2}+i\ sin\frac{\theta}{2}\textbf{u}\cdot i+j\ sin\frac{\theta}{2}\textbf{u}\cdot j+k\ sin\frac{\theta}{2}\textbf{u}\cdot k</script><p>这个算法的本质，其实就是先用向量叉乘找到旋转轴，然后计算两个向量之间的夹角，最后再使用四元数的绕旋转轴旋转指定角度的公式计算，就可以得到对应的空间向量变换的四元数。</p>
+<h2 id="旋转四元数和变换四元数的不对等场景"><a href="#旋转四元数和变换四元数的不对等场景" class="headerlink" title="旋转四元数和变换四元数的不对等场景"></a>旋转四元数和变换四元数的不对等场景</h2><p>这里为了区分欧拉角旋转的四元数和绕轴旋转的四元数，我们将其分别称呼为旋转四元数与变换四元数。其实要证明二者是不对等的也很容易，只要举出一个例子来证明二者作用的结果不相等即可。其实在参考链接3中已经给出了类似的案例，这里我们再举一个简单例子来进行探讨。首先我们给定一个初始空间向量：</p>
+<script type="math/tex; mode=display">
+\textbf{v}_1=i</script><p>我们使其先绕$Y$轴旋转90度，再绕$Z$轴旋转90度，那么利用四元数进行计算，得到的结果是：</p>
+<script type="math/tex; mode=display">
+q_{rot}=(cos\frac{\gamma}{2}+k\ sin\frac{\gamma}{2})(cos\frac{\beta}{2}-j\ sin\frac{\beta}{2})\\
+\textbf{v}_2=q\textbf{v}_1q^*=k</script><p>也就是说，在这个欧拉角对应的旋转变换下，我们将一个向量从$X$轴正方向变换到了$Z$轴的正方向上。那么如果我们考虑使用向量绕轴旋转的公式来计算的话：</p>
+<script type="math/tex; mode=display">
+\textbf{u}=\textbf{v}_1\times\textbf{v}_2=i\times k=-j\\
+cos\theta=\frac{\textbf{v}_1\cdot\textbf{v}_2}{|\textbf{v}_1||\textbf{v}_2|}=0\\
+q_{trans}=cos\frac{\theta}{2}+i\ sin\frac{\theta}{2}\textbf{u}\cdot i+j\ sin\frac{\theta}{2}\textbf{u}\cdot j+k\ sin\frac{\theta}{2}\textbf{u}\cdot k=
+\frac{\sqrt{2}}{2}-j\frac{\sqrt{2}}{2}</script><p>显然，$q<em>{rot}\neq q</em>{trans}$，只是在这个案例下有：</p>
+<script type="math/tex; mode=display">
+q_{rot}\textbf{v}_1q_{rot}^*=q_{trans}\textbf{v}_1q_{trans}^*=\textbf{v}_2</script><p>我们只需要换一个初始空间向量，比如我们将初始向量设置为$Z$轴的负方向，即：$\textbf{v}_1=-k$，那么再看看两个变换所对应的结果：</p>
+<script type="math/tex; mode=display">
+q_{rot}\textbf{v}_1q_{rot}^*=\frac{1}{4}(1+i-j+k)(-k)(1-i+j-k)=j\\
+q_{trans}\textbf{v}_1q_{trans}^*=\frac{1}{2}(1-j)(-k)(1+j)=i</script><p>显然这两个变换之后的结果是不同的。其实道理很简单，$i$在$q<em>{rot}$的作用下，先绕$Y$轴转90度，刚好就到了$Z$轴正方向上，此时再绕$Z$轴旋转是不会动的。而$q</em>{trans}$，就只是绕$Y$轴旋转90度的一个操作，因为从客观的变换来说，$q_{rot}$作用在$i$上就等价于只绕$Y$轴旋转了90度。这就是旋转的特殊性，在很多情况下，欧拉角的旋转跟绕轴旋转是不能画上等号的。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文主要介绍四元数Quaternion的一些基本运算法则。四元数的概念，更像是复数的一个推广，在图形学和工程学中有大量的应用，在蛋白质结构预测软件AlphaFold和MEGA-Protein中都大量的使用了四元数的计算。而大部分的四元数的教材中写的计算法则，经常把各类乘法混在一起使用，阅读起来非常难受，因此只好自己总结一下四元数的相关运算。并且跟我们所熟悉的复数运算有一定的对比，更加容易去理解四元数的概念。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/quaternion-calc.html">https://www.cnblogs.com/dechinphy/p/quaternion-calc.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -260,7 +387,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -271,7 +398,7 @@
 <nav class="article-nav">
   
     <a href="/2022/09/21/Latex%E4%B8%AD%E4%B9%9F%E8%83%BD%E5%B1%95%E7%A4%BA%E5%8A%A8%E6%80%81%E5%9B%BE%EF%BC%9F/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Latex中也能展示动态图？
@@ -281,7 +408,7 @@
   
   
     <a href="/2022/09/07/%E5%8F%AF%E4%BB%A5%E7%94%A8%E7%88%B1%E5%9B%A0%E6%96%AF%E5%9D%A6%E6%B1%82%E5%92%8C%E6%9B%BF%E4%BB%A3%E7%9A%84%E9%82%A3%E4%BA%9B%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">可以用爱因斯坦求和替代的那些矩阵运算</div>
     </a>
   
@@ -289,7 +416,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=四元数Quaternion的基本运算 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F09%2F19%2F%25E5%259B%259B%25E5%2585%2583%25E6%2595%25B0Quaternion%25E7%259A%2584%25E5%259F%25BA%25E6%259C%25AC%25E8%25BF%2590%25E7%25AE%2597%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -444,6 +571,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

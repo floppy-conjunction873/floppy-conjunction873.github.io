@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidNOQrT6Vi7uQvSEJ1N_ZRw" class="article article-type-post" itemscope
+    <article id="post-cuidfLB9XXVjQOa_UAP_hQleb" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,18 +210,15 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文主要解决的是在Ubuntu 20.04下有可能出现的中文输入法无法正常使用的问题，经过检索判断是系统应用商城中下载的VS code版本是不完整版的，因此解决方案就是先删除已安装的VS code，再重新安装完整版的VS code。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在Ubuntu 20.04下，如果从应用商城中直接下载VS code，有可能会导致无法使用中文输入法的问题，那么就只能从其他地方写了中文再复制过来，非常的麻烦。从一些文章中收集到的信息来看，应该是从应用商城中下载的VS Code是一个阉割版的软件，其中就把中文输入法这一项给抛弃了。因此我们的操作是先把从应用商城安装的VS code卸载掉，然后重新安装一个完整版的VS code即可解决问题。</p>
-<h1 id="操作流程"><a href="#操作流程" class="headerlink" title="操作流程"></a>操作流程</h1><p>整体流程基本上是先删除，后重新安装的策略。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">sudo</span> snap remove code</span><br><span class="line">[<span class="built_in">sudo</span>] dechin 的密码： </span><br><span class="line">已删除 code</span><br><span class="line">$ wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor &gt; packages.microsoft.gpg</span><br><span class="line">$ <span class="built_in">sudo</span> install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/</span><br><span class="line">$ <span class="built_in">sudo</span> sh -c <span class="string">&#x27;echo &quot;deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main&quot; &gt; /etc/apt/sources.list.d/vscode.list&#x27;</span></span><br><span class="line">$ <span class="built_in">rm</span> -f packages.microsoft.gpg</span><br><span class="line">$ <span class="built_in">sudo</span> apt install apt-transport-https</span><br><span class="line">正在读取软件包列表... 完成</span><br><span class="line">正在分析软件包的依赖关系树       </span><br><span class="line">正在读取状态信息... 完成       </span><br><span class="line">apt-transport-https 已经是最新版 (2.0.9)。</span><br><span class="line">下列软件包是自动安装的并且现在不需要了：</span><br><span class="line">  libfwupdplugin1 libice6:i386 libsm6:i386 libxt6:i386 linux-headers-5.14.0-1048-oem linux-image-5.14.0-1048-oem</span><br><span class="line">  linux-modules-5.14.0-1048-oem linux-oem-5.14-headers-5.14.0-1048</span><br><span class="line">使用<span class="string">&#x27;sudo apt autoremove&#x27;</span>来卸载它(它们)。</span><br><span class="line">升级了 0 个软件包，新安装了 0 个软件包，要卸载 0 个软件包，有 189 个软件包未被升级。</span><br><span class="line">$ <span class="built_in">sudo</span> apt update</span><br><span class="line">获取:1 file:/var/cuda-repo-ubuntu2004-11-4-<span class="built_in">local</span>  InRelease</span><br><span class="line">忽略:1 file:/var/cuda-repo-ubuntu2004-11-4-<span class="built_in">local</span>  InRelease</span><br><span class="line">获取:2 file:/var/nccl-repo-2.7.6-ga-cuda11.0  InRelease</span><br><span class="line">...       </span><br><span class="line">获取:71 https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal-security/multiverse amd64 DEP-11 Metadata [2,468 B]      </span><br><span class="line">已下载 14.2 MB，耗时 30秒 (476 kB/s)                                                                               </span><br><span class="line">正在读取软件包列表... 完成</span><br><span class="line">正在分析软件包的依赖关系树       </span><br><span class="line">正在读取状态信息... 完成       </span><br><span class="line">有 197 个软件包可以升级。请执行 ‘apt list --upgradable’ 来查看它们。</span><br><span class="line">$ <span class="built_in">sudo</span> apt install code</span><br><span class="line">正在读取软件包列表... 完成</span><br><span class="line">正在分析软件包的依赖关系树       </span><br><span class="line">正在读取状态信息... 完成       </span><br><span class="line">下列软件包是自动安装的并且现在不需要了：</span><br><span class="line">  libfwupdplugin1 libice6:i386 libsm6:i386 libxt6:i386 linux-headers-5.14.0-1048-oem linux-image-5.14.0-1048-oem</span><br><span class="line">  linux-modules-5.14.0-1048-oem linux-oem-5.14-headers-5.14.0-1048</span><br><span class="line">使用<span class="string">&#x27;sudo apt autoremove&#x27;</span>来卸载它(它们)。</span><br><span class="line">下列【新】软件包将被安装：</span><br><span class="line">  code</span><br><span class="line">升级了 0 个软件包，新安装了 1 个软件包，要卸载 0 个软件包，有 197 个软件包未被升级。</span><br><span class="line">需要下载 88.1 MB 的归档。</span><br><span class="line">解压缩后会消耗 369 MB 的额外空间。</span><br><span class="line">获取:1 https://packages.microsoft.com/repos/code stable/main amd64 code amd64 1.72.2-1665614327 [88.1 MB]</span><br><span class="line">已下载 88.1 MB，耗时 1分 6秒 (1,341 kB/s)                                                                          </span><br><span class="line">正在选中未选择的软件包 code。</span><br><span class="line">(正在读取数据库 ... 系统当前共安装有 480642 个文件和目录。)</span><br><span class="line">准备解压 .../code_1.72.2-1665614327_amd64.deb  ...</span><br><span class="line">正在解压 code (1.72.2-1665614327) ...</span><br><span class="line">正在设置 code (1.72.2-1665614327) ...</span><br><span class="line">Error <span class="keyword">in</span> file <span class="string">&quot;/usr/share/applications/org.kde.kdeconnect_open.desktop&quot;</span>: <span class="string">&quot;*/*&quot;</span> is an invalid MIME <span class="built_in">type</span> (<span class="string">&quot;*&quot;</span> is an un</span><br><span class="line">registered media <span class="built_in">type</span>)</span><br><span class="line">正在处理用于 mime-support (3.64ubuntu1) 的触发器 ...</span><br><span class="line">正在处理用于 gnome-menus (3.36.0-1ubuntu1) 的触发器 ...</span><br><span class="line">正在处理用于 shared-mime-info (1.15-1) 的触发器 ...</span><br><span class="line">正在处理用于 desktop-file-utils (0.24-1ubuntu3) 的触发器 ...</span><br></pre></td></tr></table></figure>
-<p>执行完成后，可以在应用程序列表找到Visual Studio Code的程序标志，此时可以正常进入VS code。</p>
+<h1 id="操作流程"><a href="#操作流程" class="headerlink" title="操作流程"></a>操作流程</h1><p>整体流程基本上是先删除，后重新安装的策略。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">sudo</span> snap remove code</span><br><span class="line">[<span class="built_in">sudo</span>] dechin 的密码： </span><br><span class="line">已删除 code</span><br><span class="line">$ wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor &gt; packages.microsoft.gpg</span><br><span class="line">$ <span class="built_in">sudo</span> install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/</span><br><span class="line">$ <span class="built_in">sudo</span> sh -c <span class="string">&#x27;echo &quot;deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main&quot; &gt; /etc/apt/sources.list.d/vscode.list&#x27;</span></span><br><span class="line">$ <span class="built_in">rm</span> -f packages.microsoft.gpg</span><br><span class="line">$ <span class="built_in">sudo</span> apt install apt-transport-https</span><br><span class="line">正在读取软件包列表... 完成</span><br><span class="line">正在分析软件包的依赖关系树       </span><br><span class="line">正在读取状态信息... 完成       </span><br><span class="line">apt-transport-https 已经是最新版 (2.0.9)。</span><br><span class="line">下列软件包是自动安装的并且现在不需要了：</span><br><span class="line">  libfwupdplugin1 libice6:i386 libsm6:i386 libxt6:i386 linux-headers-5.14.0-1048-oem linux-image-5.14.0-1048-oem</span><br><span class="line">  linux-modules-5.14.0-1048-oem linux-oem-5.14-headers-5.14.0-1048</span><br><span class="line">使用<span class="string">&#x27;sudo apt autoremove&#x27;</span>来卸载它(它们)。</span><br><span class="line">升级了 0 个软件包，新安装了 0 个软件包，要卸载 0 个软件包，有 189 个软件包未被升级。</span><br><span class="line">$ <span class="built_in">sudo</span> apt update</span><br><span class="line">获取:1 file:/var/cuda-repo-ubuntu2004-11-4-<span class="built_in">local</span>  InRelease</span><br><span class="line">忽略:1 file:/var/cuda-repo-ubuntu2004-11-4-<span class="built_in">local</span>  InRelease</span><br><span class="line">获取:2 file:/var/nccl-repo-2.7.6-ga-cuda11.0  InRelease</span><br><span class="line">...       </span><br><span class="line">获取:71 https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal-security/multiverse amd64 DEP-11 Metadata [2,468 B]      </span><br><span class="line">已下载 14.2 MB，耗时 30秒 (476 kB/s)                                                                               </span><br><span class="line">正在读取软件包列表... 完成</span><br><span class="line">正在分析软件包的依赖关系树       </span><br><span class="line">正在读取状态信息... 完成       </span><br><span class="line">有 197 个软件包可以升级。请执行 ‘apt list --upgradable’ 来查看它们。</span><br><span class="line">$ <span class="built_in">sudo</span> apt install code</span><br><span class="line">正在读取软件包列表... 完成</span><br><span class="line">正在分析软件包的依赖关系树       </span><br><span class="line">正在读取状态信息... 完成       </span><br><span class="line">下列软件包是自动安装的并且现在不需要了：</span><br><span class="line">  libfwupdplugin1 libice6:i386 libsm6:i386 libxt6:i386 linux-headers-5.14.0-1048-oem linux-image-5.14.0-1048-oem</span><br><span class="line">  linux-modules-5.14.0-1048-oem linux-oem-5.14-headers-5.14.0-1048</span><br><span class="line">使用<span class="string">&#x27;sudo apt autoremove&#x27;</span>来卸载它(它们)。</span><br><span class="line">下列【新】软件包将被安装：</span><br><span class="line">  code</span><br><span class="line">升级了 0 个软件包，新安装了 1 个软件包，要卸载 0 个软件包，有 197 个软件包未被升级。</span><br><span class="line">需要下载 88.1 MB 的归档。</span><br><span class="line">解压缩后会消耗 369 MB 的额外空间。</span><br><span class="line">获取:1 https://packages.microsoft.com/repos/code stable/main amd64 code amd64 1.72.2-1665614327 [88.1 MB]</span><br><span class="line">已下载 88.1 MB，耗时 1分 6秒 (1,341 kB/s)                                                                          </span><br><span class="line">正在选中未选择的软件包 code。</span><br><span class="line">(正在读取数据库 ... 系统当前共安装有 480642 个文件和目录。)</span><br><span class="line">准备解压 .../code_1.72.2-1665614327_amd64.deb  ...</span><br><span class="line">正在解压 code (1.72.2-1665614327) ...</span><br><span class="line">正在设置 code (1.72.2-1665614327) ...</span><br><span class="line">Error <span class="keyword">in</span> file <span class="string">&quot;/usr/share/applications/org.kde.kdeconnect_open.desktop&quot;</span>: <span class="string">&quot;*/*&quot;</span> is an invalid MIME <span class="built_in">type</span> (<span class="string">&quot;*&quot;</span> is an un</span><br><span class="line">registered media <span class="built_in">type</span>)</span><br><span class="line">正在处理用于 mime-support (3.64ubuntu1) 的触发器 ...</span><br><span class="line">正在处理用于 gnome-menus (3.36.0-1ubuntu1) 的触发器 ...</span><br><span class="line">正在处理用于 shared-mime-info (1.15-1) 的触发器 ...</span><br><span class="line">正在处理用于 desktop-file-utils (0.24-1ubuntu3) 的触发器 ...</span><br></pre></td></tr></table></figure><br>执行完成后，可以在应用程序列表找到Visual Studio Code的程序标志，此时可以正常进入VS code。</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202211/2277440-20221101100932192-751761396.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202211/2277440-20221101100932192-751761396.png">
 </div>
 
 <p>第一次打开的界面，不仅记录了删除前的最后一个界面，现在也可以正常使用中文输入法了。</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202211/2277440-20221101101311432-1290832329.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202211/2277440-20221101101311432-1290832329.png">
 </div>
 
 <p>到这里，我们的问题就解决了。</p>
@@ -250,7 +247,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -261,7 +258,7 @@
 <nav class="article-nav">
   
     <a href="/2022/11/09/MindSpore%E5%9B%BE%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9D%97/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           MindSpore图学习模块
@@ -271,7 +268,7 @@
   
   
     <a href="/2022/10/20/Ubuntu%E8%A7%A3%E5%86%B3Github%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E7%9A%84%E9%97%AE%E9%A2%98/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">Ubuntu解决Github无法访问的问题</div>
     </a>
   
@@ -279,7 +276,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=解决Ubuntu 20.04下VS code无法使用中文输入法的问题 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F11%2F01%2F%25E8%25A7%25A3%25E5%2586%25B3Ubuntu-20.04%25E4%25B8%258BVS-code%25E6%2597%25A0%25E6%25B3%2595%25E4%25BD%25BF%25E7%2594%25A8%25E4%25B8%25AD%25E6%2596%2587%25E8%25BE%2593%25E5%2585%25A5%25E6%25B3%2595%25E7%259A%2584%25E9%2597%25AE%25E9%25A2%2598%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -434,6 +431,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

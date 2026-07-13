@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidz4LhlWw1viQHAvETVx11c" class="article article-type-post" itemscope
+    <article id="post-cuidU05ekL3ZDaJJf1OyH1K5e" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,7 +210,6 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文主要介绍了在numpy的框架下实现的分子内坐标的计算，类似的方法可以应用于MindSpore和Pytorch、Jax等深度学习相关的框架中。分子的内坐标，可以更加直观的描述分子内的相对运动，通过键长键角和二面角这三个参数。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>当我们打开一个用于表示分子构象的xyz文件或者pdb文件，很容易可以理解这种基于笛卡尔坐标的空间表征方法。但是除了笛卡尔坐标表示方法之外，其实也有很多其他的方法用于粗粒化或者其他目的的表征方法，比如前一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/rigid-res.html">文章</a>中所介绍的在AlphaFold2中所使用的残基的刚体表示方法。而这种刚体坐标，在本质上来说也是一种特殊的分子内坐标表示方法，因为对于每一个残基而言只有旋转和平移的自由度，而残基内部是保持互相之间相对静止的。换句话说，每一个残基的内坐标是保持不变的，本文主要介绍分子的内坐标表示方法。</p>
 <h1 id="具体表示方法"><a href="#具体表示方法" class="headerlink" title="具体表示方法"></a>具体表示方法</h1><p>在笛卡尔坐标系中，我们使用绝对坐标来表示每一个原子的空间位置，虽然也可以用于计算分子之间的相对位置，但是如果每一次更新之后都需要重新计算一遍这个相对位置的话，在演化效率上来说会比较低。因此，我们考虑有没有一种方法，可以直接对分子的“相对位置”进行演化，直到演化结束之后，再转化回笛卡尔坐标进行可视化。其实，市面上已经有一些软件可以直接可视化这种基于“相对位置”的内坐标了，这里我们主要探讨从绝对坐标到相对坐标的算法。</p>
 <ul>
@@ -223,13 +222,11 @@
 <h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>其实这个算法逻辑是很简单的，我们更多的注重一个原生算子的使用以及代码的复用。以下是几个相关的关注点：</p>
 <ul>
 <li>在计算距离、角度和二面角的过程中，我们都会使用到序列原子之间的相对矢量(B, A-1, D)，那么在计算过一次之后我们应该保存下来以供几个不同的函数使用。</li>
-<li>在numpy或者是一些常用的深度学习框架中，我们最好在代码实现阶段就去避免$\frac{x}{0}$这种情况的出现，一般在遇到除法、反三角函数或者对数函数的时候，我们可以在对应的位置加一个小量$\epsilon&#x3D;1e-08$以避免出现nan的情况。</li>
+<li>在numpy或者是一些常用的深度学习框架中，我们最好在代码实现阶段就去避免$\frac{x}{0}$这种情况的出现，一般在遇到除法、反三角函数或者对数函数的时候，我们可以在对应的位置加一个小量$\epsilon=1e-08$以避免出现nan的情况。</li>
 <li>在计算相对矢量的时候我们一般使用的是错位相减，比如可以使用crd[1:]-crd[:-1]，但是这里我们在计算过程中使用的是numpy.roll对数组进行滚动之后做减法，最后再去掉一个结果。事实上用前面的这种算法会更加简单高效一些。</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># inner_crd.py</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">np.random.seed(<span class="number">1</span>)</span><br><span class="line">EPSILON = <span class="number">1e-08</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_vec</span>(<span class="params">crd</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot; Get the vector of the sequential coordinate.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># (B, A, D)</span></span><br><span class="line">    crd_ = np.roll(crd, -<span class="number">1</span>, axis=-<span class="number">2</span>)</span><br><span class="line">    vec = crd_ - crd</span><br><span class="line">    <span class="comment"># (B, A-1, D)</span></span><br><span class="line">    <span class="keyword">return</span> vec[:, :-<span class="number">1</span>, :]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_dis</span>(<span class="params">crd</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot; Get the distance of the sequential coordinate.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># (B, A-1, D)</span></span><br><span class="line">    vec = get_vec(crd)</span><br><span class="line">    <span class="comment"># (B, A-1, 1)</span></span><br><span class="line">    dis = np.linalg.norm(vec, axis=-<span class="number">1</span>, keepdims=<span class="literal">True</span>)</span><br><span class="line">    <span class="keyword">return</span> dis, vec</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_angle</span>(<span class="params">crd</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot; Get the bond angle of the sequential coordinate.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># (B, A-1, 1), (B, A-1, D)</span></span><br><span class="line">    dis, vec = get_dis(crd)</span><br><span class="line">    vec_ = np.roll(vec, -<span class="number">1</span>, axis=-<span class="number">2</span>)</span><br><span class="line">    dis_ = np.roll(dis, -<span class="number">1</span>, axis=-<span class="number">2</span>)</span><br><span class="line">    <span class="comment"># (B, A-1, 1)</span></span><br><span class="line">    angle = np.einsum(<span class="string">&#x27;ijk,ijk-&gt;ij&#x27;</span>, vec, vec_)[..., <span class="literal">None</span>] / (dis * dis_ + EPSILON)</span><br><span class="line">    <span class="comment"># (B, A-2, 1), (B, A-1, 1), (B, A-1, D)</span></span><br><span class="line">    <span class="keyword">return</span> np.arccos(angle[:, :-<span class="number">1</span>, :]), dis, vec</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_dihedral</span>(<span class="params">crd</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot; Get the dihedrals of the sequential coordinate.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># (B, A-2, 1), (B, A-1, 1), (B, A-1, D)</span></span><br><span class="line">    angle, dis, vec_0 = get_angle(crd)</span><br><span class="line">    <span class="comment"># (B, A-1, D)</span></span><br><span class="line">    vec_1 = np.roll(vec_0, -<span class="number">1</span>, axis=-<span class="number">2</span>)</span><br><span class="line">    vec_2 = np.roll(vec_1, -<span class="number">1</span>, axis=-<span class="number">2</span>)</span><br><span class="line">    vec_01 = np.cross(vec_0, vec_1)</span><br><span class="line">    vec_12 = np.cross(vec_1, vec_2)</span><br><span class="line">    vec_01 /= np.linalg.norm(vec_01, axis=-<span class="number">1</span>, keepdims=<span class="literal">True</span>) + EPSILON</span><br><span class="line">    vec_12 /= np.linalg.norm(vec_12, axis=-<span class="number">1</span>, keepdims=<span class="literal">True</span>) + EPSILON</span><br><span class="line">    <span class="comment"># (B, A-1, 1)</span></span><br><span class="line">    dihedral = np.einsum(<span class="string">&#x27;ijk,ijk-&gt;ij&#x27;</span>, vec_01, vec_12)[..., <span class="literal">None</span>]</span><br><span class="line">    <span class="comment"># (B, A-3, 1), (B, A-2, 1), (B, A-1, 1)</span></span><br><span class="line">    <span class="keyword">return</span> np.arccos(dihedral[:, :-<span class="number">2</span>, :]), angle, dis</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_inner_crd</span>(<span class="params">crd</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot; Concat the distance, angles and dihedrals to get the inner coordinate.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># (B, A-3, 1), (B, A-2, 1), (B, A-1, 1)</span></span><br><span class="line">    dihedral, angle, dis = get_dihedral(crd)</span><br><span class="line">    <span class="comment"># (B, A, 1)</span></span><br><span class="line">    dihedral_ = np.pad(dihedral, ((<span class="number">0</span>, <span class="number">0</span>), (<span class="number">3</span>, <span class="number">0</span>), (<span class="number">0</span>, <span class="number">0</span>)), mode=<span class="string">&#x27;constant&#x27;</span>, constant_values=<span class="number">0</span>)</span><br><span class="line">    angle_ = np.pad(angle, ((<span class="number">0</span>, <span class="number">0</span>), (<span class="number">2</span>, <span class="number">0</span>), (<span class="number">0</span>, <span class="number">0</span>)), mode=<span class="string">&#x27;constant&#x27;</span>, constant_values=<span class="number">0</span>)</span><br><span class="line">    dis_ = np.pad(dis, ((<span class="number">0</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">0</span>), (<span class="number">0</span>, <span class="number">0</span>)), mode=<span class="string">&#x27;constant&#x27;</span>, constant_values=<span class="number">0</span>)</span><br><span class="line">    <span class="comment"># (B, A, 3)</span></span><br><span class="line">    inner_crd = np.concatenate((dis_, angle_, dihedral_), axis=-<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> inner_crd</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    B = <span class="number">1</span></span><br><span class="line">    A = <span class="number">6</span></span><br><span class="line">    D = <span class="number">3</span></span><br><span class="line">    <span class="comment"># (B, A, D)</span></span><br><span class="line">    origin_crd = np.random.random((B, A, D))</span><br><span class="line">    <span class="comment"># (B, A, 3)</span></span><br><span class="line">    icrd = get_inner_crd(origin_crd)</span><br><span class="line">    <span class="built_in">print</span> (icrd)</span><br></pre></td></tr></table></figure>
-<p>上述代码执行的输出结果如下所示：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[[[0.         0.         0.        ]</span><br><span class="line">  [0.59214856 0.         0.        ]</span><br><span class="line">  [0.38167145 1.89801242 0.        ]</span><br><span class="line">  [0.46143538 1.2138982  1.46589893]</span><br><span class="line">  [0.86899521 2.32255675 1.61009033]</span><br><span class="line">  [0.84368274 2.92999231 1.97853456]]]</span><br></pre></td></tr></table></figure>
-<p>这个结果就是我们所需要的分子内坐标。</p>
+<p>上述代码执行的输出结果如下所示：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[[[0.         0.         0.        ]</span><br><span class="line">  [0.59214856 0.         0.        ]</span><br><span class="line">  [0.38167145 1.89801242 0.        ]</span><br><span class="line">  [0.46143538 1.2138982  1.46589893]</span><br><span class="line">  [0.86899521 2.32255675 1.61009033]</span><br><span class="line">  [0.84368274 2.92999231 1.97853456]]]</span><br></pre></td></tr></table></figure><br>这个结果就是我们所需要的分子内坐标。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文主要介绍了在numpy的框架下实现的分子内坐标的计算，类似的方法可以应用于MindSpore和Pytorch、Jax等深度学习相关的框架中。分子的内坐标，可以更加直观的描述分子内的相对运动，通过键长键角和二面角这三个参数。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/inner_crd.html">https://www.cnblogs.com/dechinphy/p/inner_crd.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -255,7 +252,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -266,7 +263,7 @@
 <nav class="article-nav">
   
     <a href="/2023/06/26/%E5%9C%A8Linux%E4%B8%8A%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8%E5%85%8D%E8%B4%B9%E7%89%88%E6%9C%AC%E7%9A%84PyMol/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           在Linux上安装和使用免费版本的PyMol
@@ -276,7 +273,7 @@
   
   
     <a href="/2023/05/09/%E4%BD%BF%E7%94%A8Amber%E8%AE%A1%E7%AE%97%E5%8D%95%E7%82%B9%E8%83%BD%E4%B8%89%E6%AD%A5%E8%B5%B0/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">使用Amber计算单点能三步走</div>
     </a>
   
@@ -284,7 +281,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=使用numpy计算分子内坐标 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2023%2F06%2F08%2F%25E4%25BD%25BF%25E7%2594%25A8numpy%25E8%25AE%25A1%25E7%25AE%2597%25E5%2588%2586%25E5%25AD%2590%25E5%2586%2585%25E5%259D%2590%25E6%25A0%2587%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -439,6 +436,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidJmGyreGdUxJjUnJFrcFWF" class="article article-type-post" itemscope
+    <article id="post-cuidPvVMg7eFfQZXy995cwLd1" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,23 +210,61 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文介绍了使用基于格点拉格朗日插值法的Particle Mesh Ewald算法，降低分子力场中的静电势能项计算复杂度的基本原理。静电势能的计算在Ewald求和框架下被拆分成了远程相互作用项和短程相互作用项，其中短程相互作用项关于实空间的点电荷间距快速收敛，而远程相互作用项在倒易空间慢速收敛。因此在远程相互作用的计算中，可以使用插值法降低单个倒易格点的计算复杂度，从而使得整体的远程相互作用项计算也能够快速收敛。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面的一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18464001/lg-interp">博客</a>中，我们介绍了拉格朗日插值法的基本由来和表示形式。这里我们要介绍一种拉格朗日插值法的应用场景：格点拉格朗日插值法。这种场景的优势在于，如果我们要对整个实数空间进行求和或者积分，计算量是随着变量的形状增长的。例如分子动力学模拟中<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18434945/ewald">计算静电势能</a>，光是计算电荷分布函数都是一个$O(N^2)$的计算量，其中$N$表示点电荷数量。而如果我们对空间进行离散化，划分成一系列的格点，再对邻近的常数个格点进行插值，那么我们的求和计算量可以缩减到$O(N)$。</p>
-<h1 id="格点拉格朗日插值"><a href="#格点拉格朗日插值" class="headerlink" title="格点拉格朗日插值"></a>格点拉格朗日插值</h1><p>给定一个函数$y&#x3D;f(x-x_r)$，我们可以将其插值到最近的4个整数格点上：$\lfloor x_r\rfloor-1.5,\lfloor x_r\rfloor-0.5,\lfloor x_r\rfloor+0.5,\lfloor x_r\rfloor+1.5$，根据拉格朗日插值形式有：<br>$$<br>y_{interp}&#x3D;c_1(x)f(\lfloor x_r\rfloor-1.5-x_r)+c_2(x)f(\lfloor x_r\rfloor-0.5-x_r)+c_3(x)f(\lfloor x_r\rfloor+0.5-x_r)+c_4(x)f(\lfloor x_r\rfloor+1.5-x_r)<br>$$<br>如果以$\lfloor x_r\rfloor$最近的中心点为原点，即$\lfloor x_r\rfloor&#x3D;0$，则其系数有：<br>$$<br>\begin{align*}<br>c_1(x)&amp;&#x3D;\frac{(x-\lfloor x_r\rfloor+0.5)(x-\lfloor x_r\rfloor-0.5)(x-\lfloor x_r\rfloor-1.5)}{-6}&#x3D;\frac{1}{48}(-8x^3+12x^2+2x-3)\<br>c_2(x)&amp;&#x3D;\frac{(x-\lfloor x_r\rfloor+1.5)(x-\lfloor x_r\rfloor-0.5)(x-\lfloor x_r\rfloor-1.5)}{2}&#x3D;\frac{1}{16}(8x^3-4x^2-18x+9)\<br>c_3(x)&amp;&#x3D;\frac{(x-\lfloor x_r\rfloor+1.5)(x-\lfloor x_r\rfloor+0.5)(x-\lfloor x_r\rfloor-1.5)}{-2}&#x3D;\frac{1}{16}(-8x^3-4x^2+18x+9)\<br>c_4(x)&amp;&#x3D;\frac{(x-\lfloor x_r\rfloor+1.5)(x-\lfloor x_r\rfloor+0.5)(x-\lfloor x_r\rfloor-0.5)}{6}&#x3D;\frac{1}{48}(8x^3+12x^2-2x-3)<br>\end{align*}<br>$$<br>其图像大致如下图所示（图片来自于参考链接1）：</p>
+<h1 id="格点拉格朗日插值"><a href="#格点拉格朗日插值" class="headerlink" title="格点拉格朗日插值"></a>格点拉格朗日插值</h1><p>给定一个函数$y=f(x-x_r)$，我们可以将其插值到最近的4个整数格点上：$\lfloor x_r\rfloor-1.5,\lfloor x_r\rfloor-0.5,\lfloor x_r\rfloor+0.5,\lfloor x_r\rfloor+1.5$，根据拉格朗日插值形式有：</p>
+<script type="math/tex; mode=display">
+y_{interp}=c_1(x)f(\lfloor x_r\rfloor-1.5-x_r)+c_2(x)f(\lfloor x_r\rfloor-0.5-x_r)+c_3(x)f(\lfloor x_r\rfloor+0.5-x_r)+c_4(x)f(\lfloor x_r\rfloor+1.5-x_r)</script><p>如果以$\lfloor x_r\rfloor$最近的中心点为原点，即$\lfloor x_r\rfloor=0$，则其系数有：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+c_1(x)&=\frac{(x-\lfloor x_r\rfloor+0.5)(x-\lfloor x_r\rfloor-0.5)(x-\lfloor x_r\rfloor-1.5)}{-6}=\frac{1}{48}(-8x^3+12x^2+2x-3)\\
+c_2(x)&=\frac{(x-\lfloor x_r\rfloor+1.5)(x-\lfloor x_r\rfloor-0.5)(x-\lfloor x_r\rfloor-1.5)}{2}=\frac{1}{16}(8x^3-4x^2-18x+9)\\
+c_3(x)&=\frac{(x-\lfloor x_r\rfloor+1.5)(x-\lfloor x_r\rfloor+0.5)(x-\lfloor x_r\rfloor-1.5)}{-2}=\frac{1}{16}(-8x^3-4x^2+18x+9)\\
+c_4(x)&=\frac{(x-\lfloor x_r\rfloor+1.5)(x-\lfloor x_r\rfloor+0.5)(x-\lfloor x_r\rfloor-0.5)}{6}=\frac{1}{48}(8x^3+12x^2-2x-3)
+\end{align*}</script><p>其图像大致如下图所示（图片来自于参考链接1）：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202410/2277440-20241017095907185-562800121.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202410/2277440-20241017095907185-562800121.png">
 </div>
 对于多维的格点拉格朗日插值，则是一个叉乘的关系，其图像为：
 
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202410/2277440-20241017101756639-1767135991.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202410/2277440-20241017101756639-1767135991.png">
 </div>
 
 
-<h1 id="远程相互作用项的截断"><a href="#远程相互作用项的截断" class="headerlink" title="远程相互作用项的截断"></a>远程相互作用项的截断</h1><p>我们把上面得到的这个格点拉格朗日插值应用到静电势能的计算中。在前面一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18434945/ewald">博客</a>介绍的静电势计算中，有一项电荷分布函数是这样的：<br>$$<br>s(\mathbf{k})&#x3D;|S(\mathbf{k})|^2&#x3D;\sum_{i&#x3D;0}^{N-1}q_ie^{-j\mathbf{k}\mathbf{r}<em>i}\sum</em>{l&#x3D;0}^{N-1}q_le^{j\mathbf{k}\mathbf{r}<em>l}<br>$$<br>其中$S(\mathbf{k})&#x3D;\sum</em>{i&#x3D;0}^{N-1}q_ie^{j\mathbf{k}\mathbf{r}<em>i}&#x3D;\sum</em>{i&#x3D;0}^{N-1}q_ie^{j\mathbf{k}<em>xx_i}e^{j\mathbf{k}<em>yy_i}e^{j\mathbf{k}<em>zz_i}$。把后面这几个指数项用格点拉格朗日插值替代得：<br>$$<br>S(\mathbf{k})&#x3D;\sum</em>{i&#x3D;0}^{N-1}q_i\sum</em>{x,y,z}\left[c_1(x)f(\lfloor x_i\rfloor-1.5-x_i)+c_2(x)f(\lfloor x_i\rfloor-0.5-x_i)+c_3(x)f(\lfloor x_i\rfloor+0.5-x_i)+c_4(x)f(\lfloor x_i\rfloor+1.5-x_i)\right]\left[c_1(y)f(\lfloor y_i\rfloor-1.5-y_i)+c_2(y)f(\lfloor y_i\rfloor-0.5-y_i)+c_3(y)f(\lfloor y_i\rfloor+0.5-y_i)+c_4(y)f(\lfloor y_i\rfloor+1.5-y_i)\right]\left[c_1(z)f(\lfloor z_i\rfloor-1.5-z_i)+c_2(z)f(\lfloor z_i\rfloor-0.5-z_i)+c_3(z)f(\lfloor z_i\rfloor+0.5-z_i)+c_4(z)f(\lfloor z_i\rfloor+1.5-z_i)\right]<br>$$<br>有了函数形式以后，我们可以简写$S(\mathbf{k})$为一个关于三维空间格点的求和：<br>$$<br>S(\mathbf{k})&#x3D;\sum</em>{i&#x3D;0}^{N-1}q_i\sum_{m_x&#x3D;\lfloor x_{min}\rfloor-1.5}^{\lfloor x_{max}\rfloor+1.5}\sum_{m_y&#x3D;\lfloor y_{min}\rfloor-1.5}^{\lfloor y_{max}\rfloor+1.5}\sum_{m_z&#x3D;\lfloor z_{min}\rfloor-1.5}^{\lfloor z_{max}\rfloor+1.5}c_{m_x}(m_x)e^{jk_xm_{x}}c_{m_y}(m_y)e^{jk_ym_{y}}c_{m_z}(m_z)e^{jk_zm_{z}}<br>$$<br>再把系数项单独拿出来：<br>$$<br>Q(m_x,m_y,m_z)&#x3D;\sum_{i&#x3D;0}^{N-1}q_ic_{m_x}(m_x)c_{m_y}(m_y)c_{m_z}(m_z)<br>$$<br>这里的$Q$其实是一个shape为$(N_x,N_y,N_z)$的张量，而$m_x,m_y,m_z$对应的是某一个格点的张量索引，每一个索引对应的张量元素都是通过系数函数计算出来的，有了这样的一个概念之后，再重写$S(\mathbf{k})$的函数：<br>$$<br>S(\mathbf{k})&#x3D;\sum_{m_x&#x3D;\lfloor x_{min}\rfloor-1.5}^{\lfloor x_{max}\rfloor+1.5}\sum_{m_y&#x3D;\lfloor y_{min}\rfloor-1.5}^{\lfloor y_{max}\rfloor+1.5}\sum_{m_z&#x3D;\lfloor z_{min}\rfloor-1.5}^{\lfloor z_{max}\rfloor+1.5}Q(m_x,m_y,m_z)e^{j\mathbf{k}\cdot\mathbf{m}}<br>$$<br>我们会发现，这个插值出来的$S(\mathbf{k})$函数其实是在计算张量$Q$在$\mathbf{k}$处的傅里叶变换，那么就可以进一步简写$S(\mathbf{k})$的形式：<br>$$<br>S(\mathbf{k})&#x3D;VF_{\mathbf{k}}^{<em>}(Q)(m_x,m_y,m_z)<br>$$<br>其中$F^{</em>}$表示逆傅里叶变换，$V$表示逆傅里叶变换归一化常数。按照前面的4-格点拉格朗日插值法，此时得到的$S(\mathbf{k})$的值是一个shape为（4，4，4）的张量，这个张量的含义是64个格点分别对于倒格矢$\mathbf{k}$的贡献（插值出来的单个点电荷的作用效果）。那么类似的可以得到：<br>$$<br>s(\mathbf{k})&#x3D;VF_{\mathbf{k}}^{<em>}(Q)(m_x,m_y,m_z)F_{\mathbf{k}}(Q)(m_x,m_y,m_z)&#x3D;V|F_{\mathbf{k}}(Q)(m_x,m_y,m_z)|^2<br>$$<br>代入到Ewald形式的长程相互作用项（可以参考这篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18434945/ewald">文章</a>）中可以得到：<br>$$<br>\begin{align</em>}<br>E^L&amp;&#x3D;\frac{1}{2k_xk_yk_z\epsilon_0}\sum_{|\mathbf{k}|&gt;0}\frac{e^{-\frac{\sigma^2 k^2}{2}}}{k^2}s(\mathbf{k})\<br>&amp;&#x3D;\frac{V}{2k_xk_yk_z\epsilon_0}\sum_{|\mathbf{k}|&gt;0}\frac{e^{-\frac{\sigma^2 k^2}{2}}}{k^2}|F_{\mathbf{k}}(Q)(m_x,m_y,m_z)|^2<br>\end{align*}<br>$$<br>这就是Particle-Mesh-Ewald方法计算中计算长程相互作用势能的技巧。既然$\mathbf{k}$空间无法快速收敛，那就减少电荷分布项的计算复杂度，同样也可以起到大量节约计算量的效果。</p>
-<h1 id="短程相互作用项的截断"><a href="#短程相互作用项的截断" class="headerlink" title="短程相互作用项的截断"></a>短程相互作用项的截断</h1><p>在前面Ewald求和的文章中我们介绍过，把静电势能的计算分成长程、短程和自我相互作用项之后，分别有不同的收敛形式。长程相互作用项已经通过上述章节完成了计算量的简化，另外还有一个短程相互作用项$E^{S}$，我们知道短程相互作用项关于原子实空间的间距是快速收敛的，并且在计算LJ势能的时候我们已经计算过一次给定cutoff截断的近邻表。那么，我们很容易考虑到引入近邻表的概念，直接利用这个近邻表对静电势能的短程相互作用项做一个截断。于是短程相互作用项可以写为：<br>$$<br>\begin{align*}<br>E^S&amp;&#x3D;\sum_{\mathbf{n}}\sum_{i&#x3D;0}^{N-2}\sum_{j&#x3D;i+1}^{N-1}\frac{q_iq_j}{4\pi\epsilon_0|\mathbf{r}_j-\mathbf{r}_i+\mathbf{n}\mathbf{L}|}Erfc\left(\frac{|\mathbf{r}<em>j-\mathbf{r}<em>i+\mathbf{n}\mathbf{L}|}{\sqrt{2}\sigma}\right)+\sum</em>{|\mathbf{n}|&gt;0}\frac{q_i^2}{4\pi\epsilon_0|\mathbf{n}\mathbf{L}|}Erfc\left(\frac{|\mathbf{n}\mathbf{L}|}{\sqrt{2}\sigma}\right)\<br>&amp;\approx \sum</em>{i,j\in {Neigh}}\frac{q_iq_j}{4\pi\epsilon_0|\mathbf{r}_j-\mathbf{r}_i|}Erfc\left(\frac{|\mathbf{r}<em>j-\mathbf{r}<em>i|}{\sqrt{2}\sigma}\right)<br>\end{align*}<br>$$<br>这里有个前提假设是$d</em>{cutoff}&lt;&lt;L</em>{pbc}$，所以略去了周期性盒子中其他盒子内的$i$电荷对中心盒子的$\mathbf{r}_i$处的作用项。</p>
-<h1 id="Particle-Mesh-Ewald"><a href="#Particle-Mesh-Ewald" class="headerlink" title="Particle-Mesh-Ewald"></a>Particle-Mesh-Ewald</h1><p>根据上面章节中得到的近似的远程相互作用项和短程相互作用项之后，我们可以重写PME(Particle-Mesh-Ewald)算法中的总静电势能为：<br>$$<br>\begin{align*}<br>E&amp;&#x3D;E^S+E^L-E^{self}\<br>&amp;&#x3D;\sum_{i,j\in {Neigh}}\frac{q_iq_j}{4\pi\epsilon_0|\mathbf{r}_j-\mathbf{r}<em>i|}Erfc\left(\frac{|\mathbf{r}<em>j-\mathbf{r}<em>i|}{\sqrt{2}\sigma}\right)\<br>&amp;+\frac{V}{2k_xk_yk_z\epsilon_0}\sum</em>{|\mathbf{k}|&gt;0}\frac{e^{-\frac{\sigma^2 k^2}{2}}}{k^2}|F</em>{\mathbf{k}}(Q)(m_x,m_y,m_z)|^2\<br>&amp;-\frac{1}{4\pi\epsilon_0}\frac{1}{\sqrt{2\pi}\sigma}\sum</em>{i&#x3D;0}^{N-1}q_i^2<br>\end{align*}<br>$$</p>
-<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了使用基于格点拉格朗日插值法的Particle Mesh Ewald算法，降低分子力场中的静电势能项计算复杂度的基本原理。静电势能的计算在Ewald求和框架下被拆分成了远程相互作用项和短程相互作用项，其中短程相互作用项关于实空间的点电荷间距快速收敛，而远程相互作用项在倒易空间慢速收敛。因此在远程相互作用的计算中，可以使用插值法降低单个倒易格点的计算复杂度，从而使得整体的远程相互作用项计算也能够快速收敛。</p>
+<h1 id="远程相互作用项的截断"><a href="#远程相互作用项的截断" class="headerlink" title="远程相互作用项的截断"></a>远程相互作用项的截断</h1><p>我们把上面得到的这个格点拉格朗日插值应用到静电势能的计算中。在前面一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18434945/ewald">博客</a>介绍的静电势计算中，有一项电荷分布函数是这样的：</p>
+<script type="math/tex; mode=display">
+s(\mathbf{k})=|S(\mathbf{k})|^2=\sum_{i=0}^{N-1}q_ie^{-j\mathbf{k}\mathbf{r}_i}\sum_{l=0}^{N-1}q_le^{j\mathbf{k}\mathbf{r}_l}</script><p>其中$S(\mathbf{k})=\sum<em>{i=0}^{N-1}q_ie^{j\mathbf{k}\mathbf{r}_i}=\sum</em>{i=0}^{N-1}q_ie^{j\mathbf{k}_xx_i}e^{j\mathbf{k}_yy_i}e^{j\mathbf{k}_zz_i}$。把后面这几个指数项用格点拉格朗日插值替代得：</p>
+<script type="math/tex; mode=display">
+S(\mathbf{k})=\sum_{i=0}^{N-1}q_i\sum_{x,y,z}\left[c_1(x)f(\lfloor x_i\rfloor-1.5-x_i)+c_2(x)f(\lfloor x_i\rfloor-0.5-x_i)+c_3(x)f(\lfloor x_i\rfloor+0.5-x_i)+c_4(x)f(\lfloor x_i\rfloor+1.5-x_i)\right]\left[c_1(y)f(\lfloor y_i\rfloor-1.5-y_i)+c_2(y)f(\lfloor y_i\rfloor-0.5-y_i)+c_3(y)f(\lfloor y_i\rfloor+0.5-y_i)+c_4(y)f(\lfloor y_i\rfloor+1.5-y_i)\right]\left[c_1(z)f(\lfloor z_i\rfloor-1.5-z_i)+c_2(z)f(\lfloor z_i\rfloor-0.5-z_i)+c_3(z)f(\lfloor z_i\rfloor+0.5-z_i)+c_4(z)f(\lfloor z_i\rfloor+1.5-z_i)\right]</script><p>有了函数形式以后，我们可以简写$S(\mathbf{k})$为一个关于三维空间格点的求和：</p>
+<script type="math/tex; mode=display">
+S(\mathbf{k})=\sum_{i=0}^{N-1}q_i\sum_{m_x=\lfloor x_{min}\rfloor-1.5}^{\lfloor x_{max}\rfloor+1.5}\sum_{m_y=\lfloor y_{min}\rfloor-1.5}^{\lfloor y_{max}\rfloor+1.5}\sum_{m_z=\lfloor z_{min}\rfloor-1.5}^{\lfloor z_{max}\rfloor+1.5}c_{m_x}(m_x)e^{jk_xm_{x}}c_{m_y}(m_y)e^{jk_ym_{y}}c_{m_z}(m_z)e^{jk_zm_{z}}</script><p>再把系数项单独拿出来：</p>
+<script type="math/tex; mode=display">
+Q(m_x,m_y,m_z)=\sum_{i=0}^{N-1}q_ic_{m_x}(m_x)c_{m_y}(m_y)c_{m_z}(m_z)</script><p>这里的$Q$其实是一个shape为$(N_x,N_y,N_z)$的张量，而$m_x,m_y,m_z$对应的是某一个格点的张量索引，每一个索引对应的张量元素都是通过系数函数计算出来的，有了这样的一个概念之后，再重写$S(\mathbf{k})$的函数：</p>
+<script type="math/tex; mode=display">
+S(\mathbf{k})=\sum_{m_x=\lfloor x_{min}\rfloor-1.5}^{\lfloor x_{max}\rfloor+1.5}\sum_{m_y=\lfloor y_{min}\rfloor-1.5}^{\lfloor y_{max}\rfloor+1.5}\sum_{m_z=\lfloor z_{min}\rfloor-1.5}^{\lfloor z_{max}\rfloor+1.5}Q(m_x,m_y,m_z)e^{j\mathbf{k}\cdot\mathbf{m}}</script><p>我们会发现，这个插值出来的$S(\mathbf{k})$函数其实是在计算张量$Q$在$\mathbf{k}$处的傅里叶变换，那么就可以进一步简写$S(\mathbf{k})$的形式：</p>
+<script type="math/tex; mode=display">
+S(\mathbf{k})=VF_{\mathbf{k}}^{*}(Q)(m_x,m_y,m_z)</script><p>其中$F^{*}$表示逆傅里叶变换，$V$表示逆傅里叶变换归一化常数。按照前面的4-格点拉格朗日插值法，此时得到的$S(\mathbf{k})$的值是一个shape为（4，4，4）的张量，这个张量的含义是64个格点分别对于倒格矢$\mathbf{k}$的贡献（插值出来的单个点电荷的作用效果）。那么类似的可以得到：</p>
+<script type="math/tex; mode=display">
+s(\mathbf{k})=VF_{\mathbf{k}}^{*}(Q)(m_x,m_y,m_z)F_{\mathbf{k}}(Q)(m_x,m_y,m_z)=V|F_{\mathbf{k}}(Q)(m_x,m_y,m_z)|^2</script><p>代入到Ewald形式的长程相互作用项（可以参考这篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18434945/ewald">文章</a>）中可以得到：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+E^L&=\frac{1}{2k_xk_yk_z\epsilon_0}\sum_{|\mathbf{k}|>0}\frac{e^{-\frac{\sigma^2 k^2}{2}}}{k^2}s(\mathbf{k})\\
+&=\frac{V}{2k_xk_yk_z\epsilon_0}\sum_{|\mathbf{k}|>0}\frac{e^{-\frac{\sigma^2 k^2}{2}}}{k^2}|F_{\mathbf{k}}(Q)(m_x,m_y,m_z)|^2
+\end{align*}</script><p>这就是Particle-Mesh-Ewald方法计算中计算长程相互作用势能的技巧。既然$\mathbf{k}$空间无法快速收敛，那就减少电荷分布项的计算复杂度，同样也可以起到大量节约计算量的效果。</p>
+<h1 id="短程相互作用项的截断"><a href="#短程相互作用项的截断" class="headerlink" title="短程相互作用项的截断"></a>短程相互作用项的截断</h1><p>在前面Ewald求和的文章中我们介绍过，把静电势能的计算分成长程、短程和自我相互作用项之后，分别有不同的收敛形式。长程相互作用项已经通过上述章节完成了计算量的简化，另外还有一个短程相互作用项$E^{S}$，我们知道短程相互作用项关于原子实空间的间距是快速收敛的，并且在计算LJ势能的时候我们已经计算过一次给定cutoff截断的近邻表。那么，我们很容易考虑到引入近邻表的概念，直接利用这个近邻表对静电势能的短程相互作用项做一个截断。于是短程相互作用项可以写为：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+E^S&=\sum_{\mathbf{n}}\sum_{i=0}^{N-2}\sum_{j=i+1}^{N-1}\frac{q_iq_j}{4\pi\epsilon_0|\mathbf{r}_j-\mathbf{r}_i+\mathbf{n}\mathbf{L}|}Erfc\left(\frac{|\mathbf{r}_j-\mathbf{r}_i+\mathbf{n}\mathbf{L}|}{\sqrt{2}\sigma}\right)+\sum_{|\mathbf{n}|>0}\frac{q_i^2}{4\pi\epsilon_0|\mathbf{n}\mathbf{L}|}Erfc\left(\frac{|\mathbf{n}\mathbf{L}|}{\sqrt{2}\sigma}\right)\\
+&\approx \sum_{i,j\in \{Neigh\}}\frac{q_iq_j}{4\pi\epsilon_0|\mathbf{r}_j-\mathbf{r}_i|}Erfc\left(\frac{|\mathbf{r}_j-\mathbf{r}_i|}{\sqrt{2}\sigma}\right)
+\end{align*}</script><p>这里有个前提假设是$d<em>{cutoff}&lt;&lt;L</em>{pbc}$，所以略去了周期性盒子中其他盒子内的$i$电荷对中心盒子的$\mathbf{r}_i$处的作用项。</p>
+<h1 id="Particle-Mesh-Ewald"><a href="#Particle-Mesh-Ewald" class="headerlink" title="Particle-Mesh-Ewald"></a>Particle-Mesh-Ewald</h1><p>根据上面章节中得到的近似的远程相互作用项和短程相互作用项之后，我们可以重写PME(Particle-Mesh-Ewald)算法中的总静电势能为：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+E&=E^S+E^L-E^{self}\\
+&=\sum_{i,j\in \{Neigh\}}\frac{q_iq_j}{4\pi\epsilon_0|\mathbf{r}_j-\mathbf{r}_i|}Erfc\left(\frac{|\mathbf{r}_j-\mathbf{r}_i|}{\sqrt{2}\sigma}\right)\\
+&+\frac{V}{2k_xk_yk_z\epsilon_0}\sum_{|\mathbf{k}|>0}\frac{e^{-\frac{\sigma^2 k^2}{2}}}{k^2}|F_{\mathbf{k}}(Q)(m_x,m_y,m_z)|^2\\
+&-\frac{1}{4\pi\epsilon_0}\frac{1}{\sqrt{2\pi}\sigma}\sum_{i=0}^{N-1}q_i^2
+\end{align*}</script><h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了使用基于格点拉格朗日插值法的Particle Mesh Ewald算法，降低分子力场中的静电势能项计算复杂度的基本原理。静电势能的计算在Ewald求和框架下被拆分成了远程相互作用项和短程相互作用项，其中短程相互作用项关于实空间的点电荷间距快速收敛，而远程相互作用项在倒易空间慢速收敛。因此在远程相互作用的计算中，可以使用插值法降低单个倒易格点的计算复杂度，从而使得整体的远程相互作用项计算也能够快速收敛。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/pme.html">https://www.cnblogs.com/dechinphy/p/pme.html</a></p>
 <p>作者ID：DechinPhy</p>
 <p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
@@ -248,7 +286,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -259,7 +297,7 @@
 <nav class="article-nav">
   
     <a href="/2024/10/31/PME%E7%AE%97%E6%B3%95%E7%AE%80%E5%8D%95Python%E5%AE%9E%E7%8E%B0/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           PME算法简单Python实现
@@ -269,7 +307,7 @@
   
   
     <a href="/2024/10/14/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E6%8F%92%E5%80%BC%E6%B3%95/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">拉格朗日插值法</div>
     </a>
   
@@ -277,7 +315,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=格点拉格朗日插值与PME算法 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F10%2F17%2F%25E6%25A0%25BC%25E7%2582%25B9%25E6%258B%2589%25E6%25A0%25BC%25E6%259C%2597%25E6%2597%25A5%25E6%258F%2592%25E5%2580%25BC%25E4%25B8%258EPME%25E7%25AE%2597%25E6%25B3%2595%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -432,6 +470,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

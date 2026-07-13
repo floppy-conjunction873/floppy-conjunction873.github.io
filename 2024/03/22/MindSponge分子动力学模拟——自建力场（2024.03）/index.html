@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidFhE0sXPfd7mXFF7RJ54Lm" class="article article-type-post" itemscope
+    <article id="post-cuidHS65_B8NORR8OalYDl_vg" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,22 +210,18 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>基于力场的分子动力学模拟，其实可以看做是一个最简单的机器学习模型，具有计算成本低的特点，在药物研发、生物化学和计算物理学等研究领域存在广泛的应用。那么，如何去快速的开发一个新的力场，在传统的MD模拟软件中其实可能是一个不小的门槛，而基于MindSpore框架开发的MindSponge分子动力学模拟软件，则具有这种便捷开发的特性。本文通过一个简单的示例，介绍了如何在MindSponge分子动力学模拟框架内构建一个自定义的分子力场，可以正常的执行分子动力学模拟迭代过程并保存相应的结果和输出。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/collections/5620">MindSponge教程合集</a>中我们已经介绍了很多使用MindSponge进行分子动力学模拟的方法，这里主要介绍在MindSponge中自定义一个力场。在传统的MD软件中，如果你希望去开发一个自己的力场，或者是添加一些分子动力学模拟方法如增强采样等，会面临不少编程上的困难。而这些困难对于使用Python来编程的MindSponge来说，就天然的降低了门槛。以力场为例子，我们可以在EnergyCell的基础上，去开发一个自定义的ForceField。</p>
-<h1 id="自定义力场"><a href="#自定义力场" class="headerlink" title="自定义力场"></a>自定义力场</h1><p>首先，关于MindSponge的安装和基础使用，大家可以在前面的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/collections/5620">博客</a>中去学习，这里不做更多介绍。<br>由于这里我们只是为了演示如何使用MindSponge来构建自定义力场的方法，因此我们可以用一个最简单方便的操作，把所有的坐标做一个加和：<br>$$<br>E_{self}&#x3D;\sum_{i}(x_i+y_i+z_i)<br>$$<br>这里$E_{self}$就是我们用到的自定义力场的势能。在MindSponge里面定义一个力场，首先我们继承基础能量类<code>EnergyCell</code>来构建一个新的势能类：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyEnergy</span>(<span class="title class_ inherited__">EnergyCell</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">construct</span>(<span class="params">self, coordinate: Tensor, **kwargs</span>):</span><br><span class="line">            <span class="keyword">return</span> coordinate.<span class="built_in">sum</span>()[<span class="literal">None</span>, <span class="literal">None</span>]</span><br></pre></td></tr></table></figure>
-<p>这里需要解释的是，因为我们只是定义一个简单的力场，没有额外的参数，所以没必要修改__init__函数里面的参数内容，只需要修改construct里面的内容就可以了。唯一有要求的是最后输出的能量的维度有一点要求，为了原生支持多batch的操作，我们输出的能量项是二维的，所以这里求和之后又做了一个扩维。完整的演示代码如下所示：</p>
+<h1 id="自定义力场"><a href="#自定义力场" class="headerlink" title="自定义力场"></a>自定义力场</h1><p>首先，关于MindSponge的安装和基础使用，大家可以在前面的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/collections/5620">博客</a>中去学习，这里不做更多介绍。<br>由于这里我们只是为了演示如何使用MindSponge来构建自定义力场的方法，因此我们可以用一个最简单方便的操作，把所有的坐标做一个加和：</p>
+<script type="math/tex; mode=display">
+E_{self}=\sum_{i}(x_i+y_i+z_i)</script><p>这里$E<em>{self}$就是我们用到的自定义力场的势能。在MindSponge里面定义一个力场，首先我们继承基础能量类<code>EnergyCell</code>来构建一个新的势能类：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyEnergy</span>(<span class="title class_ inherited__">EnergyCell</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">construct</span>(<span class="params">self, coordinate: Tensor, **kwargs</span>):</span><br><span class="line">            <span class="keyword">return</span> coordinate.<span class="built_in">sum</span>()[<span class="literal">None</span>, <span class="literal">None</span>]</span><br></pre></td></tr></table></figure><br>这里需要解释的是，因为我们只是定义一个简单的力场，没有额外的参数，所以没必要修改<em>_init</em></em>函数里面的参数内容，只需要修改construct里面的内容就可以了。唯一有要求的是最后输出的能量的维度有一点要求，为了原生支持多batch的操作，我们输出的能量项是二维的，所以这里求和之后又做了一个扩维。完整的演示代码如下所示：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> context, Tensor</span><br><span class="line"><span class="keyword">from</span> mindspore.nn <span class="keyword">import</span> Adam</span><br><span class="line">context.set_context(mode=context.GRAPH_MODE, device_target=<span class="string">&#x27;GPU&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="keyword">from</span> sponge <span class="keyword">import</span> Sponge, Molecule, WithEnergyCell</span><br><span class="line">    <span class="keyword">from</span> sponge.potential <span class="keyword">import</span> EnergyCell, ForceFieldBase</span><br><span class="line">    <span class="keyword">from</span> sponge.callback <span class="keyword">import</span> RunInfo, SaveLastPdb</span><br><span class="line">    <span class="comment"># 自定义能量类</span></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">MyEnergy</span>(<span class="title class_ inherited__">EnergyCell</span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">construct</span>(<span class="params">self, coordinate: Tensor, **kwargs</span>):</span><br><span class="line">            <span class="keyword">return</span> coordinate.<span class="built_in">sum</span>()[<span class="literal">None</span>, <span class="literal">None</span>]</span><br><span class="line">    <span class="comment"># 生成水分子系统</span></span><br><span class="line">    system = Molecule(template=<span class="string">&#x27;water.spce.yaml&#x27;</span>)</span><br><span class="line">    system.reduplicate([<span class="number">0.3</span>, <span class="number">0</span>, <span class="number">0</span>])</span><br><span class="line">    new_sys = system.copy([<span class="number">0</span>, <span class="number">0</span>, -<span class="number">0.3</span>])</span><br><span class="line">    system.append(new_sys)</span><br><span class="line">    <span class="comment"># 根据系统生成自定义力场对象</span></span><br><span class="line">    potential = MyEnergy(system)</span><br><span class="line">    forcefield = ForceFieldBase(potential)</span><br><span class="line">    withenergy = WithEnergyCell(system, forcefield)</span><br><span class="line">    opt = Adam(system.trainable_params(), <span class="number">1e-3</span>)</span><br><span class="line">    mini = Sponge(withenergy, optimizer=opt)</span><br><span class="line">    <span class="comment"># 配置回调函数</span></span><br><span class="line">    run_info = RunInfo(<span class="number">5</span>)</span><br><span class="line">    save_pdb = SaveLastPdb(system, save_freq=<span class="number">1</span>, pdb_name=<span class="string">&#x27;water_last.pdb&#x27;</span>)</span><br><span class="line">    <span class="comment"># 开始执行模拟任务</span></span><br><span class="line">    mini.run(<span class="number">10</span>, callbacks=[run_info, save_pdb])</span><br></pre></td></tr></table></figure>
-
 <p>这里演示的是4个水分子的体系，其中定义好能量项之后，要用ForceFieldBase力场基础类封装起来，才是一个完整的力场。然后再把力场信息、系统信息和迭代器信息传给Sponge类，就可以来时进行模拟了。根据定义的迭代器的不同，既可以完成能量优化的功能，也可以实现分子动力学模拟的过程，在框架上实现了统一。此外我们还可以分别定义两个回调函数RunInfo和SaveLastPdb，用于在屏幕上输出迭代信息，以及输出最后一步的系统的坐标到一个指定的pdb文件里面。运行结果如下所示：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[MindSPONGE] Started simulation at 2024-03-22 16:54:45</span><br><span class="line">[MindSPONGE] Step: 5, E_pot: 0.31788814</span><br><span class="line">[MindSPONGE] Step: 10, E_pot: 0.13788882</span><br><span class="line">[MindSPONGE] Finished simulation at 2024-03-22 16:54:46</span><br><span class="line">[MindSPONGE] Simulation <span class="keyword">time</span>: 1.03 seconds.</span><br><span class="line">--------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
-
 <p>同时在当前路径下生成了一个pdb文件：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">MODEL     1</span><br><span class="line">ATOM      1  O   WAT A   1      -0.100  -0.100  -0.100   1.0   0.0           O</span><br><span class="line">ATOM      2  H1  WAT A   1       0.716   0.477  -0.100   1.0   0.0           H</span><br><span class="line">ATOM      3  H2  WAT A   1      -0.916   0.477  -0.100   1.0   0.0           H</span><br><span class="line">ATOM      4  O   WAT A   2       2.900  -0.100  -0.100   1.0   0.0           O</span><br><span class="line">ATOM      5  H1  WAT A   2       3.716   0.477  -0.100   1.0   0.0           H</span><br><span class="line">ATOM      6  H2  WAT A   2       2.084   0.477  -0.100   1.0   0.0           H</span><br><span class="line">ATOM      7  O   WAT A   3      -0.100  -0.100  -3.100   1.0   0.0           O</span><br><span class="line">ATOM      8  H1  WAT A   3       0.716   0.477  -3.100   1.0   0.0           H</span><br><span class="line">ATOM      9  H2  WAT A   3      -0.916   0.477  -3.100   1.0   0.0           H</span><br><span class="line">ATOM     10  O   WAT A   4       2.900  -0.100  -3.100   1.0   0.0           O</span><br><span class="line">ATOM     11  H1  WAT A   4       3.716   0.477  -3.100   1.0   0.0           H</span><br><span class="line">ATOM     12  H2  WAT A   4       2.084   0.477  -3.100   1.0   0.0           H</span><br><span class="line">TER</span><br><span class="line">ENDMDL</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
-
 <p>有了这个pdb结构文件，我们就可以用VMD来进行可视化了：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202403/2277440-20240322170347671-1132121392.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202403/2277440-20240322170347671-1132121392.png">
 </div>
 
 <p>如果需要保存完整的轨迹文件，那就需要用到MindSponge所支持的h5md数据结构，相关方法可以参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18042865/mda-mds">这篇博客</a>中的范例，其中还包含了使用MDAnalysis第三方软件进行后分析的方法。</p>
@@ -248,7 +244,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -259,7 +255,7 @@
 <nav class="article-nav">
   
     <a href="/2024/03/25/IPython%E5%88%B7%E6%96%B0%E5%87%BD%E6%95%B0%E6%A8%A1%E5%9D%97/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           IPython刷新函数模块
@@ -269,7 +265,7 @@
   
   
     <a href="/2024/03/22/MindSpore%E6%8A%A5%E9%94%99%E5%A4%84%E7%90%86%EF%BC%9ATypeError--For-'set_context',-the-pa/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">MindSpore报错处理：TypeError: For &#39;set_context&#39;, the parameter device_id can not be set repeatedly, origin value [0] has been in effect.</div>
     </a>
   
@@ -277,7 +273,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=MindSponge分子动力学模拟——自建力场（2024.03） - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F03%2F22%2FMindSponge%25E5%2588%2586%25E5%25AD%2590%25E5%258A%25A8%25E5%258A%259B%25E5%25AD%25A6%25E6%25A8%25A1%25E6%258B%259F%25E2%2580%2594%25E2%2580%2594%25E8%2587%25AA%25E5%25BB%25BA%25E5%258A%259B%25E5%259C%25BA%25EF%25BC%25882024.03%25EF%25BC%2589%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -432,6 +428,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

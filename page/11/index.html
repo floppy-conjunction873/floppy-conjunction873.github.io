@@ -260,7 +260,7 @@ class="article article-type-post"
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>在一维空间下，我们要表示密度时可以给出一个二维的函数y&#x3D;f(x)，画出来是一条二维平面上的曲线。在二维空间下，我们要表示密度可以使用一个三维的函数z&#x3D;f(x,y)，画出来是一个三维空间的曲面。而三维空间下，密度表示是一个四维的函数：q&#x3D;f(x,y,z)，这个密度我们在三维空间已经没有办法用线或者面去表示，只能用体积元的颜色来表示。但是我们可以把这个密度投影到一个三维的等高曲面上，这个曲面就称为等高面。本文介绍了一个python中性能比较好的画等高面的工具：Plotly。</p>
+        <p>在一维空间下，我们要表示密度时可以给出一个二维的函数y=f(x)，画出来是一条二维平面上的曲线。在二维空间下，我们要表示密度可以使用一个三维的函数z=f(x,y)，画出来是一个三维空间的曲面。而三维空间下，密度表示是一个四维的函数：q=f(x,y,z)，这个密度我们在三维空间已经没有办法用线或者面去表示，只能用体积元的颜色来表示。但是我们可以把这个密度投影到一个三维的等高曲面上，这个曲面就称为等高面。本文介绍了一个python中性能比较好的画等高面的工具：Plotly。</p>
         
     </div>
     </div>
@@ -741,6 +741,21 @@ class="article article-type-post"
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

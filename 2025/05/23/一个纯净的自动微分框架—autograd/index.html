@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuiddlcwy3AA9KBY08Ucu1QKy" class="article article-type-post" itemscope
+    <article id="post-cuidPzV9jWU-XXpuceKWrBmPD" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,12 +210,10 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文介绍了一个可以基于CPU和numpy的自动微分计算框架。如果只是需要使用自动微分计算的功能，就可以直接在CPU环境下简便的部署，快捷的完成环境搭建。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>自动微分是一个在深度学习等计算领域非常常用的一个工具了，其核心原理就是基于链式法则的求导。但是如果只是为了使用一个自动微分的功能，不做深度学习的话，去安装一个庞大的深度学习框架，学习成本是很高的，尤其是在个别硬件环境下，配置还相当的复杂。如果只是想使用一个自动微分的功能，可以考虑本文所介绍的autograd自动微分计算框架。</p>
 <h1 id="autograd实例"><a href="#autograd实例" class="headerlink" title="autograd实例"></a>autograd实例</h1><p>autograd是一个基于numpy或者scipy接口的自动微分计算框架，使用cpu环境即可，安装也非常简单，直接使用<code>pip install autograd</code>即可完成环境部署。在使用方式上，跟普通的numpy模块的区别就是，此处的numpy函数要从autograd中进行导入，例如如下示例：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> autograd <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> autograd <span class="keyword">import</span> grad, elementwise_grad</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">f</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span> * x</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">f1</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> np.<span class="built_in">sum</span>(<span class="number">2</span> * x)</span><br><span class="line"></span><br><span class="line">g = elementwise_grad(f)</span><br><span class="line">h = grad(f1)</span><br><span class="line">x = np.arange(<span class="number">10</span>).astype(np.float32)</span><br><span class="line"><span class="built_in">print</span> (g(x))</span><br><span class="line"><span class="built_in">print</span> (h(x))</span><br><span class="line"><span class="comment"># [2. 2. 2. 2. 2. 2. 2. 2. 2. 2.]</span></span><br><span class="line"><span class="comment"># [2. 2. 2. 2. 2. 2. 2. 2. 2. 2.]</span></span><br></pre></td></tr></table></figure>
-
-<p>这里我们用了一个非常简单的函数$y&#x3D;2x$来进行测试，那么得到的预期结果应该是$y’&#x3D;2$，所以程序输出没有问题。当然，这里使用的是逐元素的求导，总体的求导就是把逐元素的求导相加。这就是一个简单的在cpu和numpy框架下进行自动微分计算的实例。</p>
+<p>这里我们用了一个非常简单的函数$y=2x$来进行测试，那么得到的预期结果应该是$y&#39;=2$，所以程序输出没有问题。当然，这里使用的是逐元素的求导，总体的求导就是把逐元素的求导相加。这就是一个简单的在cpu和numpy框架下进行自动微分计算的实例。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了一个可以基于CPU和numpy的自动微分计算框架。如果只是需要使用自动微分计算的功能，就可以直接在CPU环境下简便的部署，快捷的完成环境搭建。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/autograd-cpu.html">https://www.cnblogs.com/dechinphy/p/autograd-cpu.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -235,7 +233,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -246,7 +244,7 @@
 <nav class="article-nav">
   
     <a href="/2025/06/03/Python%E4%B8%AD%E7%9A%84cls%E5%8F%98%E9%87%8F/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Python中的cls变量
@@ -256,7 +254,7 @@
   
   
     <a href="/2025/04/21/QUBO%E5%BB%BA%E6%A8%A1/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">QUBO建模</div>
     </a>
   
@@ -264,7 +262,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=一个纯净的自动微分框架—autograd - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2025%2F05%2F23%2F%25E4%25B8%2580%25E4%25B8%25AA%25E7%25BA%25AF%25E5%2587%2580%25E7%259A%2584%25E8%2587%25AA%25E5%258A%25A8%25E5%25BE%25AE%25E5%2588%2586%25E6%25A1%2586%25E6%259E%25B6%25E2%2580%2594autograd%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -419,6 +417,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

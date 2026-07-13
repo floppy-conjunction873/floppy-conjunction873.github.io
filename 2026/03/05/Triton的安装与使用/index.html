@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidFch0Gju4_6q0Etr56DJco" class="article article-type-post" itemscope
+    <article id="post-cuidc0R2aoM-_I4MhrLBxJ4Wt" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -209,13 +209,9 @@
 
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>现在基于GPU的运算加速，往往都是以单个算力单元为单位，例如1-Thread*1-Block这样的运算单元，然后通过写CUDA的Kernel算子，或者是调用PyTorch等高级封装库来使用，其实基本上也都是单个单个的运算。这种运算模式，非常适用于稠密矩阵的运算。但是对于稀疏的矩阵运算，使用这种模式运算时，就不可避免的产生大量的Kernel循环。要不就是用大量的无用数据传输和冗余计算去填补那些空缺。</p>
-<h1 id="pip安装"><a href="#pip安装" class="headerlink" title="pip安装"></a>pip安装</h1><p>如果说本地没有pytorch的环境，那么建议是使用conda创建一个pytorch环境，在pytorch的环境中用pip再去安装这个triton包：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install triton</span><br></pre></td></tr></table></figure>
-
+<h1 id="pip安装"><a href="#pip安装" class="headerlink" title="pip安装"></a>pip安装</h1><p>如果说本地没有pytorch的环境，那么建议是使用conda创建一个pytorch环境，在pytorch的环境中用pip再去安装这个triton包：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install triton</span><br></pre></td></tr></table></figure></p>
 <h1 id="案例演示"><a href="#案例演示" class="headerlink" title="案例演示"></a>案例演示</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">import torch</span><br><span class="line">import triton</span><br><span class="line">import triton.language as tl</span><br><span class="line"></span><br><span class="line">@triton.jit</span><br><span class="line">def add_kernel(x_ptr,</span><br><span class="line">               y_ptr,</span><br><span class="line">               output_ptr,</span><br><span class="line">               n_elements,</span><br><span class="line">               BLOCK_SIZE: tl.constexpr,</span><br><span class="line">               ):</span><br><span class="line">    pid = tl.program_id(axis=0)</span><br><span class="line">    block_start = pid * BLOCK_SIZE</span><br><span class="line">    offsets = block_start + tl.arange(0, BLOCK_SIZE)</span><br><span class="line">    mask = offsets &lt; n_elements</span><br><span class="line">    x = tl.load(x_ptr + offsets, mask=mask)</span><br><span class="line">    y = tl.load(y_ptr + offsets, mask=mask)</span><br><span class="line">    output = x + y</span><br><span class="line">    tl.store(output_ptr + offsets, output, mask=mask)</span><br><span class="line"></span><br><span class="line">def add(x: torch.Tensor, y: torch.Tensor):</span><br><span class="line">    output = torch.empty_like(x)</span><br><span class="line">    assert x.is_cuda and y.is_cuda and output.is_cuda</span><br><span class="line">    n_elements = output.numel()</span><br><span class="line">    grid = lambda meta: (triton.cdiv(n_elements, meta[&#x27;BLOCK_SIZE&#x27;]), )</span><br><span class="line">    add_kernel[grid](x, y, output, n_elements, BLOCK_SIZE=1024)</span><br><span class="line">    return output</span><br><span class="line"></span><br><span class="line">torch.manual_seed(0)</span><br><span class="line">size = 98432</span><br><span class="line">x = torch.rand(size, device=&#x27;cuda&#x27;)</span><br><span class="line">y = torch.rand(size, device=&#x27;cuda&#x27;)</span><br><span class="line">output_torch = x + y</span><br><span class="line">output_triton = add(x, y)</span><br><span class="line">print(output_torch)</span><br><span class="line">print(output_triton)</span><br><span class="line">print(f&#x27;The maximum difference between torch and triton is &#x27;</span><br><span class="line">      f&#x27;&#123;torch.max(torch.abs(output_torch - output_triton))&#125;&#x27;)</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ python3 triton_test.py </span><br><span class="line">tensor([1.3713, 1.3076, 0.4940,  ..., 0.9360, 1.3598, 0.3215], device=<span class="string">&#x27;cuda:0&#x27;</span>)</span><br><span class="line">tensor([1.3713, 1.3076, 0.4940,  ..., 0.9360, 1.3598, 0.3215], device=<span class="string">&#x27;cuda:0&#x27;</span>)</span><br><span class="line">The maximum difference between torch and triton is 0.0</span><br></pre></td></tr></table></figure>
-
 <p>加法benchmark<br><img src="https://img2024.cnblogs.com/blog/2277440/202604/2277440-20260416111125475-744881383.png" alt="image"></p>
 
         </div>
@@ -231,7 +227,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -242,7 +238,7 @@
 <nav class="article-nav">
   
     <a href="/2026/03/11/Win11+Docker+qwen3.5%E6%9C%AC%E5%9C%B0%E5%8C%96%E5%85%BB%E8%99%BE/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Win11+Docker+qwen3.5本地化养虾
@@ -252,7 +248,7 @@
   
   
     <a href="/2026/01/12/%E8%A7%A3%E5%86%B3Error-500--named-symbol-not-found%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">解决Error 500: named symbol not found报错问题</div>
     </a>
   
@@ -260,7 +256,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Triton的安装与使用 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2026%2F03%2F05%2FTriton%25E7%259A%2584%25E5%25AE%2589%25E8%25A3%2585%25E4%25B8%258E%25E4%25BD%25BF%25E7%2594%25A8%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -415,6 +411,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

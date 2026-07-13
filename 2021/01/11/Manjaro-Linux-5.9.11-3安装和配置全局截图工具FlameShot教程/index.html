@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidfxbkmpOu0uLQ5mgExuo7R" class="article article-type-post" itemscope
+    <article id="post-cuidFwIPYDkidS_kDG9OGeACX" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,12 +210,9 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>在Manjaro Linux系统上安装FlameShot截图工具，并且完成键盘配置。</p>
 <span id="more"></span>
-
 <h1 id="背景说明"><a href="#背景说明" class="headerlink" title="背景说明"></a>背景说明</h1><p>截图工具是日常适用频率较高的一种系统工具，在Linux下也有不少常用截图工具，如deepin-screenshot等，但是今天我们要介绍的是FlameShot——一款更加精致的Linux全局截图工具。</p>
-<h1 id="工具安装"><a href="#工具安装" class="headerlink" title="工具安装"></a>工具安装</h1><p><img src="https://img2020.cnblogs.com/blog/2277440/202101/2277440-20210111160516338-815537377.png" alt="manjaro"><br>笔者所用的操作系统是Manjaro Linux，这里直接适用<code>pacman -S</code>来执行安装任务：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[dechin-manjaro dechin]# pacman -S flameshot</span><br><span class="line">正在解析依赖关系...</span><br><span class="line">正在查找软件包冲突...</span><br><span class="line"></span><br><span class="line">软件包 (1) flameshot-0.8.5-1</span><br><span class="line"></span><br><span class="line">下载大小：  0.29 MiB</span><br><span class="line">全部安装大小：  1.14 MiB</span><br><span class="line"></span><br><span class="line">:: 进行安装吗？ [Y/n] Y</span><br><span class="line">:: 正在获取软件包......</span><br><span class="line"> flameshot-0.8.5-...   296.7 KiB  2.50 MiB/s 00:00 [##################] 100%</span><br><span class="line">(1/1) 正在检查密钥环里的密钥                       [##################] 100%</span><br><span class="line">(1/1) 正在检查软件包完整性                         [##################] 100%</span><br><span class="line">(1/1) 正在加载软件包文件                           [##################] 100%</span><br><span class="line">(1/1) 正在检查文件冲突                             [##################] 100%</span><br><span class="line">(1/1) 正在检查可用存储空间                         [##################] 100%</span><br><span class="line">:: 正在处理软件包的变化...</span><br><span class="line">(1/1) 正在安装 flameshot                           [##################] 100%</span><br><span class="line">:: 正在运行事务后钩子函数...</span><br><span class="line">(1/3) Arming ConditionNeedsUpdate...</span><br><span class="line">(2/3) Updating icon theme caches...</span><br><span class="line">(3/3) Updating the desktop file MIME <span class="built_in">type</span> cache...</span><br><span class="line">[dechin-manjaro dechin]# <span class="built_in">cat</span> /usr/bin/fla</span><br><span class="line">flac                 flat-clip            flatpak-coredumpctl</span><br><span class="line">flameshot            flatpak              </span><br><span class="line">flashrom             flatpak-bisect  </span><br></pre></td></tr></table></figure>
-<p>安装成功后，可以在<code>/usr/bin</code>目录下找到<code>flameshot</code>这一可执行文件。</p>
-<h1 id="配置快捷键"><a href="#配置快捷键" class="headerlink" title="配置快捷键"></a>配置快捷键</h1><p>在Manjaro Linux系统中找到<code>系统设置&gt;工作区&gt;快捷键&gt;自定义快捷键</code>，点击<code>编辑&gt;新建&gt;全局快捷键&gt;命令/URL:</code>，定义一个新的动作名字为<code>FlameShot</code>，点击右侧<code>触发器&gt;快捷键</code>，当框框中的字符显示为”输入…“时，直接按键盘上你需要配置的组合键，笔者这里配置的是<code>Ctrl+Alt+A</code>，再点击<code>动作</code>，配置命令&#x2F;URL为<code>/usr/bin/flameshot gui</code>，最后应用该配置即可。<br><img src="https://img2020.cnblogs.com/blog/2277440/202101/2277440-20210111161223376-1111277598.png" alt="flameshot"></p>
+<h1 id="工具安装"><a href="#工具安装" class="headerlink" title="工具安装"></a>工具安装</h1><p><img src="https://img2020.cnblogs.com/blog/2277440/202101/2277440-20210111160516338-815537377.png" alt="manjaro"><br>笔者所用的操作系统是Manjaro Linux，这里直接适用<code>pacman -S</code>来执行安装任务：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[dechin-manjaro dechin]# pacman -S flameshot</span><br><span class="line">正在解析依赖关系...</span><br><span class="line">正在查找软件包冲突...</span><br><span class="line"></span><br><span class="line">软件包 (1) flameshot-0.8.5-1</span><br><span class="line"></span><br><span class="line">下载大小：  0.29 MiB</span><br><span class="line">全部安装大小：  1.14 MiB</span><br><span class="line"></span><br><span class="line">:: 进行安装吗？ [Y/n] Y</span><br><span class="line">:: 正在获取软件包......</span><br><span class="line"> flameshot-0.8.5-...   296.7 KiB  2.50 MiB/s 00:00 [##################] 100%</span><br><span class="line">(1/1) 正在检查密钥环里的密钥                       [##################] 100%</span><br><span class="line">(1/1) 正在检查软件包完整性                         [##################] 100%</span><br><span class="line">(1/1) 正在加载软件包文件                           [##################] 100%</span><br><span class="line">(1/1) 正在检查文件冲突                             [##################] 100%</span><br><span class="line">(1/1) 正在检查可用存储空间                         [##################] 100%</span><br><span class="line">:: 正在处理软件包的变化...</span><br><span class="line">(1/1) 正在安装 flameshot                           [##################] 100%</span><br><span class="line">:: 正在运行事务后钩子函数...</span><br><span class="line">(1/3) Arming ConditionNeedsUpdate...</span><br><span class="line">(2/3) Updating icon theme caches...</span><br><span class="line">(3/3) Updating the desktop file MIME <span class="built_in">type</span> cache...</span><br><span class="line">[dechin-manjaro dechin]# <span class="built_in">cat</span> /usr/bin/fla</span><br><span class="line">flac                 flat-clip            flatpak-coredumpctl</span><br><span class="line">flameshot            flatpak              </span><br><span class="line">flashrom             flatpak-bisect  </span><br></pre></td></tr></table></figure><br>安装成功后，可以在<code>/usr/bin</code>目录下找到<code>flameshot</code>这一可执行文件。</p>
+<h1 id="配置快捷键"><a href="#配置快捷键" class="headerlink" title="配置快捷键"></a>配置快捷键</h1><p>在Manjaro Linux系统中找到<code>系统设置&gt;工作区&gt;快捷键&gt;自定义快捷键</code>，点击<code>编辑&gt;新建&gt;全局快捷键&gt;命令/URL:</code>，定义一个新的动作名字为<code>FlameShot</code>，点击右侧<code>触发器&gt;快捷键</code>，当框框中的字符显示为”输入...“时，直接按键盘上你需要配置的组合键，笔者这里配置的是<code>Ctrl+Alt+A</code>，再点击<code>动作</code>，配置命令/URL为<code>/usr/bin/flameshot gui</code>，最后应用该配置即可。<br><img src="https://img2020.cnblogs.com/blog/2277440/202101/2277440-20210111161223376-1111277598.png" alt="flameshot"></p>
 <h1 id="使用操作"><a href="#使用操作" class="headerlink" title="使用操作"></a>使用操作</h1><p>在屏幕上任何一处，按住组合键<code>Ctrl+Alt+A</code>，可以看到屏幕变黑，用鼠标左键拖拽即可实现截图功能。</p>
 <h1 id="不足之处"><a href="#不足之处" class="headerlink" title="不足之处"></a>不足之处</h1><p>目前看来大部分的情况都能截图，但是似乎点击某项标签弹出的时候，无法执行截图，这一点还有待探索。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/flameshot-install.html">https://www.cnblogs.com/dechinphy/p/flameshot-install.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
@@ -233,7 +230,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -244,7 +241,7 @@
 <nav class="article-nav">
   
     <a href="/2021/01/11/%E5%9C%A8Linux%E7%B3%BB%E7%BB%9F%E4%B8%8B%E9%99%90%E5%88%B6%E6%8C%87%E5%AE%9A%E7%9B%AE%E5%BD%95%E7%9A%84%E5%A4%A7%E5%B0%8F%E4%BB%A5%E5%8F%8A%E6%96%87%E4%BB%B6-%E6%96%87%E4%BB%B6%E5%A4%B9%E6%95%B0%E9%87%8F/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           在Linux系统下限制指定目录的大小以及文件/文件夹数量
@@ -257,7 +254,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Manjaro Linux 5.9.11-3安装和配置全局截图工具FlameShot教程 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F01%2F11%2FManjaro-Linux-5.9.11-3%25E5%25AE%2589%25E8%25A3%2585%25E5%2592%258C%25E9%2585%258D%25E7%25BD%25AE%25E5%2585%25A8%25E5%25B1%2580%25E6%2588%25AA%25E5%259B%25BE%25E5%25B7%25A5%25E5%2585%25B7FlameShot%25E6%2595%2599%25E7%25A8%258B%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -412,6 +409,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidtpfT0BSq84wVkRifyI9EU" class="article article-type-post" itemscope
+    <article id="post-cuidAF8A8naxanA4mSenP1wQr" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,30 +210,73 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文的主要内容是一些统计力学中的基础的概率论知识，如密度函数、分布函数和贝叶斯定理的一些基本概念，主要作为一个简单的知识内容记录和分享，后续还有更多的同系列文章。</p>
 <span id="more"></span>
-
-<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>统计力学是一门通过粒子的纯粹微观量来表示系统宏观量的学科，从统计分布出发，用无偏&#x2F;有偏估计来研究各种不同的系综。本文内容部分参考自郑伟谋老师所著《统计力学导引》，主要介绍其中概率论基础的部分。但因为大多是个人的理解，<strong>如有差错，与参考文献作者无关</strong>。</p>
-<h1 id="事件与概率"><a href="#事件与概率" class="headerlink" title="事件与概率"></a>事件与概率</h1><p>假定我们抛一枚质地未知的硬币，正面事件记为$A$，反面事件记为$B$。那么经过多次的测试，可以得到一个统计概率：$P(A)&#x3D;\frac{n_A}{N},P(B)&#x3D;\frac{n_B}{N}$。这里就可以有一些基本性的结论：<br>$$<br>P(A)\geq0,P(B)\geq0\<br>P(A)+P(B)&#x3D;1\<br>$$<br>因为这里面事件$A$和事件$B$是互斥事件（发生$A$的同时不可能发生$B$），那么发生$A$或$B$的概率就可以表示为：<br>$$<br>P(A\or B)&#x3D;\frac{n_A+n_B}{N}&#x3D;P(A)+P(B)<br>$$<br>以上就是概率函数的3个基本特性。假如在此基础上，再进行一轮测试，那么此时得到$A$的概率为：<br>$$<br>P(A)&#x3D;\frac{n_A^{(1)}+n_A^{(2)}}{N_1+N_2}<br>$$<br>由于样本数的不一致，这里有：<br>$$<br>P_1(A)+P_2(A)&#x3D;\frac{n_A^{(1)}}{N_1}+\frac{n_A^{(2)}}{N_2}\<br>P(A)&#x3D;P_1(A)\frac{N_1}{N_1+N_2}+P_2(A)\frac{N_2}{N_1+N_2}<br>$$<br>也就是说，如果要获取多份样本中的同一个事件的总概率，需要依照样本数做一个加权平均。</p>
-<h1 id="条件概率"><a href="#条件概率" class="headerlink" title="条件概率"></a>条件概率</h1><p>如果问题变得更加复杂一些，我们一次抛2个硬币，并且记1号硬币正面朝上为事件$A$，反面朝上为事件$B$，2号硬币正面朝上为事件$C$，反面朝上为事件$D$。那么类似的有$P(C)&#x3D;\frac{n_C}{N},P(D)&#x3D;\frac{n_D}{N}$，这是对2号硬币的结果的概率统计。此时如果我们去统计一个联合概率，1号硬币正面朝上2号硬币也正面朝上的概率为：<br>$$<br>P(A\and C)&#x3D;\frac{n_{A\and C}}{N}&#x3D;\frac{n_A}{N}\frac{n_{A\and C}}{n_A}&#x3D;P(A)P(C|A)<br>$$<br>其中$P(C|A)$表示事件$A$发生的条件下，事件$C$发生的概率，是一个条件概率。</p>
-<p>同样在这个案例中，因为事件$C$发生的概率为$\frac{n_C}{N}$，因此在$n_A$的样本数下，事件$C$发生的频次的期望值为$n_{A\and C}&#x3D;\frac{n_C}{N}n_A$，因此有：<br>$$<br>P(A\and C)&#x3D;\frac{n_A}{N}\frac{n_{A\and C}}{n_A}&#x3D;\frac{n_A}{N}\frac{n_C}{N}&#x3D;P(A)P(C)<br>$$</p>
-<h2 id="贝叶斯定理"><a href="#贝叶斯定理" class="headerlink" title="贝叶斯定理"></a>贝叶斯定理</h2><p>满足这种条件的事件$A$和$C$，又称为<strong>独立事件</strong>。并由此可以得到<strong>贝叶斯（Bayes）定理</strong>：<br>$$<br>P(A|C)P(C)&#x3D;P(C|A)P(A)<br>$$<br>或者写为这种更加常见的形式：<br>$$<br>P(A|C)&#x3D;\frac{P(C|A)P(A)}{P(C)}<br>$$</p>
-<p>还是在这个案例中，因为我们知道第一个硬币正面朝上（事件$A$）的条件下，对应的第二个硬币，要么正面朝上（事件$C$），要么反面朝上（事件$D$），而事件$A$的概率可以表示为两个条件概率的加和：<br>$$<br>P(A)&#x3D;P(A|C)+P(A|D)<br>$$<br>该公式又称为<strong>边际分布</strong>。</p>
-<h1 id="累积分布函数"><a href="#累积分布函数" class="headerlink" title="累积分布函数"></a>累积分布函数</h1><p>如果我们随机投一个骰子，它朝上的一面对应的值，有可能是整数1~6之间的一个。因为在投之前，我们并不知道会出现什么数字朝上，因此我们将朝上的数字定义为一个随机变量$X$。对于一个随机变量$X$而言，其分布函数被定义为：<br>$$<br>F(x)&#x3D;P(X\leq x)<br>$$<br>表示的是$X$取值不大于$x$的概率，例如，开小的概率为$F(3)&#x3D;P(X\leq3)&#x3D;\frac{1}{2}$，开大的概率为$F(6)-F(3)&#x3D;P(X\leq6)-P(X\leq3)&#x3D;\frac{1}{2}$。其导数$f(x)&#x3D;F’(x)$为<strong>概率密度函数</strong>。累积分布函数有如下的一些特性：</p>
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>统计力学是一门通过粒子的纯粹微观量来表示系统宏观量的学科，从统计分布出发，用无偏/有偏估计来研究各种不同的系综。本文内容部分参考自郑伟谋老师所著《统计力学导引》，主要介绍其中概率论基础的部分。但因为大多是个人的理解，<strong>如有差错，与参考文献作者无关</strong>。</p>
+<h1 id="事件与概率"><a href="#事件与概率" class="headerlink" title="事件与概率"></a>事件与概率</h1><p>假定我们抛一枚质地未知的硬币，正面事件记为$A$，反面事件记为$B$。那么经过多次的测试，可以得到一个统计概率：$P(A)=\frac{n_A}{N},P(B)=\frac{n_B}{N}$。这里就可以有一些基本性的结论：</p>
+<script type="math/tex; mode=display">
+P(A)\geq0,P(B)\geq0\\
+P(A)+P(B)=1\\</script><p>因为这里面事件$A$和事件$B$是互斥事件（发生$A$的同时不可能发生$B$），那么发生$A$或$B$的概率就可以表示为：</p>
+<script type="math/tex; mode=display">
+P(A\or B)=\frac{n_A+n_B}{N}=P(A)+P(B)</script><p>以上就是概率函数的3个基本特性。假如在此基础上，再进行一轮测试，那么此时得到$A$的概率为：</p>
+<script type="math/tex; mode=display">
+P(A)=\frac{n_A^{(1)}+n_A^{(2)}}{N_1+N_2}</script><p>由于样本数的不一致，这里有：</p>
+<script type="math/tex; mode=display">
+P_1(A)+P_2(A)=\frac{n_A^{(1)}}{N_1}+\frac{n_A^{(2)}}{N_2}\\
+P(A)=P_1(A)\frac{N_1}{N_1+N_2}+P_2(A)\frac{N_2}{N_1+N_2}</script><p>也就是说，如果要获取多份样本中的同一个事件的总概率，需要依照样本数做一个加权平均。</p>
+<h1 id="条件概率"><a href="#条件概率" class="headerlink" title="条件概率"></a>条件概率</h1><p>如果问题变得更加复杂一些，我们一次抛2个硬币，并且记1号硬币正面朝上为事件$A$，反面朝上为事件$B$，2号硬币正面朝上为事件$C$，反面朝上为事件$D$。那么类似的有$P(C)=\frac{n_C}{N},P(D)=\frac{n_D}{N}$，这是对2号硬币的结果的概率统计。此时如果我们去统计一个联合概率，1号硬币正面朝上2号硬币也正面朝上的概率为：</p>
+<script type="math/tex; mode=display">
+P(A\and C)=\frac{n_{A\and C}}{N}=\frac{n_A}{N}\frac{n_{A\and C}}{n_A}=P(A)P(C|A)</script><p>其中$P(C|A)$表示事件$A$发生的条件下，事件$C$发生的概率，是一个条件概率。</p>
+<p>同样在这个案例中，因为事件$C$发生的概率为$\frac{n<em>C}{N}$，因此在$n_A$的样本数下，事件$C$发生的频次的期望值为$n</em>{A\and C}=\frac{n_C}{N}n_A$，因此有：</p>
+<script type="math/tex; mode=display">
+P(A\and C)=\frac{n_A}{N}\frac{n_{A\and C}}{n_A}=\frac{n_A}{N}\frac{n_C}{N}=P(A)P(C)</script><h2 id="贝叶斯定理"><a href="#贝叶斯定理" class="headerlink" title="贝叶斯定理"></a>贝叶斯定理</h2><p>满足这种条件的事件$A$和$C$，又称为<strong>独立事件</strong>。并由此可以得到<strong>贝叶斯（Bayes）定理</strong>：</p>
+<script type="math/tex; mode=display">
+P(A|C)P(C)=P(C|A)P(A)</script><p>或者写为这种更加常见的形式：</p>
+<script type="math/tex; mode=display">
+P(A|C)=\frac{P(C|A)P(A)}{P(C)}</script><p>还是在这个案例中，因为我们知道第一个硬币正面朝上（事件$A$）的条件下，对应的第二个硬币，要么正面朝上（事件$C$），要么反面朝上（事件$D$），而事件$A$的概率可以表示为两个条件概率的加和：</p>
+<script type="math/tex; mode=display">
+P(A)=P(A|C)+P(A|D)</script><p>该公式又称为<strong>边际分布</strong>。</p>
+<h1 id="累积分布函数"><a href="#累积分布函数" class="headerlink" title="累积分布函数"></a>累积分布函数</h1><p>如果我们随机投一个骰子，它朝上的一面对应的值，有可能是整数1~6之间的一个。因为在投之前，我们并不知道会出现什么数字朝上，因此我们将朝上的数字定义为一个随机变量$X$。对于一个随机变量$X$而言，其分布函数被定义为：</p>
+<script type="math/tex; mode=display">
+F(x)=P(X\leq x)</script><p>表示的是$X$取值不大于$x$的概率，例如，开小的概率为$F(3)=P(X\leq3)=\frac{1}{2}$，开大的概率为$F(6)-F(3)=P(X\leq6)-P(X\leq3)=\frac{1}{2}$。其导数$f(x)=F&#39;(x)$为<strong>概率密度函数</strong>。累积分布函数有如下的一些特性：</p>
 <ol>
-<li>累积分布函数是有界的：$\lim_{x\rightarrow-\infty}F(x)&#x3D;0,\lim_{x\rightarrow+\infty}F(x)&#x3D;1$。</li>
+<li>累积分布函数是有界的：$\lim<em>{x\rightarrow-\infty}F(x)=0,\lim</em>{x\rightarrow+\infty}F(x)=1$。</li>
 <li>累积分布函数具有单调性：$F(x_1)\leq F(X_2),x_1\leq x_2$。</li>
-<li>$P(x_1&lt; x\leq x_2)&#x3D;F(x_2)-F(X_1)$。</li>
-<li>当我们写出上面这个式子时，我们应当注意到，这是一个左开右闭的区间。其实也容易理解，比如狄拉克函数的积分在$x&#x3D;x_0$处有一个突跃的位置，那么比较显然的是，$F_{x\rightarrow x_0^-}(x)&#x3D;0,F_{x&#x3D;x_0}(x)&#x3D;1,F_{x\rightarrow x_0^+}(x)&#x3D;1$。更一般的，我们可以理解其为<strong>右连续</strong>的累积分布函数：$\lim_{x\rightarrow x_0^+}F(x)&#x3D;F(x_0)$。</li>
+<li>$P(x_1&lt; x\leq x_2)=F(x_2)-F(X_1)$。</li>
+<li>当我们写出上面这个式子时，我们应当注意到，这是一个左开右闭的区间。其实也容易理解，比如狄拉克函数的积分在$x=x<em>0$处有一个突跃的位置，那么比较显然的是，$F</em>{x\rightarrow x<em>0^-}(x)=0,F</em>{x=x<em>0}(x)=1,F</em>{x\rightarrow x<em>0^+}(x)=1$。更一般的，我们可以理解其为<strong>右连续</strong>的累积分布函数：$\lim</em>{x\rightarrow x_0^+}F(x)=F(x_0)$。</li>
 </ol>
-<p>如果考虑一个离散情形的概率密度函数，有：<br>$$<br>f(x)\Delta x&#x3D;P(x\leq X\leq x+\Delta x)<br>$$<br>分布函数唯一地决定随机变量的全部数字特征。</p>
-<p>对于这个投骰子的问题，虽然我们没办法知道下一次会投出什么数字来，但是我们可以计算出出现的数字的平均值，或者叫<strong>期望值</strong>：<br>$$<br>E(X)&#x3D;1<em>P(X&#x3D;1)+2</em>P(X&#x3D;2)+…+6<em>P(X&#x3D;6)&#x3D;\frac{1}{6}+\frac{2}{6}+…+\frac{6}{6}&#x3D;\frac{7}{2}<br>$$<br>也就是说，最终得到的点数的平均值应该为<code>3.5</code>。那么假如对于这个随机变量，有一个函数$Y&#x3D;h(X)$，那么关于$Y$的期望值为：<br>$$<br>E(Y)&#x3D;E(h(X))&#x3D;h(1)P(X&#x3D;1)+h(2)P(X&#x3D;2)+…+h(6)P(X&#x3D;6)<br>$$<br>对于连续型的随机变量来说，期望值可以写为：<br>$$<br>\mu(X)&#x3D;E(X)&#x3D;\int_{-\infty}^{\infty}xf(x)dx<br>$$<br>带函数的期望值可以写为：$E(h(x))&#x3D;\int_{-\infty}^{\infty}h(x)f(x)dx$，例如$X$的$\gamma$阶绝对矩为：<br>$$<br>M_{\gamma}(X)&#x3D;E(|X|^{\gamma})&#x3D;\int_{-\infty}^{\infty}|X|^{\gamma}f(x)dx<br>$$<br>此时要回顾起一个跟期望值&#x2F;平均值息息相关的函数：<strong>方差函数</strong>。在概率论中，方差被定义为：<br>$$<br>\sigma^2(X)&#x3D;E[(X-E(X))^2]&#x3D;E[X^2-2E(X)X+E(X)^2]&#x3D;E(X^2)-2[E(X)]^2+[E(X)]^2&#x3D;M_2(X)-[\mu(X)]^2&#x3D;\int_{-\infty}^{\infty}(x-\mu)^2f(x)dx<br>$$<br>有了方差，自然就有了*<em>标准差</em></em>：<br>$$<br>\sigma(X)&#x3D;\sqrt{M_2(X)-[\mu(X)]^2}<br>$$<br>如果是多变量情形，我们还可以定义一个<strong>协方差</strong>（Covariance）用于衡量两个变量之间的总体偏差：<br>$$<br>Cov(X,Y)&#x3D;E{[X-E(X)][Y-E(Y)]}&#x3D;E[XY-YE(X)-XE(Y)+E(X)E(Y)]&#x3D;E(XY)-E(X)E(Y)<br>$$<br>需要注意的是，协方差可以用于计算一维的随机变量$X,Y$，也可以用于计算高维的随机变量$\textbf{X},\textbf{Y}$。我们可以想象出来，对于一个shape为$(n,)$的随机变量$\textbf{X}$而言，对其计算期望值$E(\textbf{X})$，得到的结果也是$(n,)$的shape。如果给定的是两个高维的随机变量$\textbf{X},\textbf{Y}$，假设其shape分别为$(n,)$和$(m,)$，那么得到的期望值$E(\textbf{X}\textbf{Y})$的结果shape为$(n,m)$。类似的，$E(\textbf{X})E(\textbf{Y})$的结果shape也是$(n,m)$。这样一来，协方差$Cov(\textbf{X},\textbf{Y})$的结果shape也是$(n,m)$。</p>
-<h1 id="母函数"><a href="#母函数" class="headerlink" title="母函数"></a>母函数</h1><p>母函数，又称生成函数（Generating function），是一种形式幂级数，其每一项的系数可以提供关于这个序列的信息。例如我们有可能得到这样的一个母函数：<br>$$<br>g(x)&#x3D;2x^1+3x^4<br>$$<br>这个形式的母函数表示，事件$1$发生的概率为$\frac{2}{2+3}&#x3D;\frac{2}{5}$，事件$4$有可能发生的概率为$\frac{3}{5}$。具体的母函数构造方法是这样的，还是以抛硬币为例子。假设硬币正面朝上为事件$A$，硬币反面朝上为事件$B$，那么可以这样构造一个母函数：<br>$$<br>g(x)&#x3D;P(A)+xP(B),P(A)+P(B)&#x3D;1<br>$$<br>这里面$x$只是一个形参，没有具体含义。那么如果我们抛两次硬币，得到的母函数形式为：<br>$$<br>g(x)&#x3D;[P(A)+xP(B)][P(A)+xP(B)]&#x3D;x^0P(A)^2+2x^1P(A)P(B)+x^2P(B)<br>$$<br>写成这个形式之后，就可以分别获得三个不同事件的概率。事件0：两次都是正面朝上，概率为$P(0)&#x3D;P(A)^2$，事件1：一次正面朝上一次反面朝上，概率为$P(1)&#x3D;2P(A)P(B)$，事件2：两次都是反面朝上，概率为$P(2)&#x3D;P(B)^2$。那么假设投的是一块质地均匀的硬币，这样我们得到的三个事件的概率分别为：<br>$$<br>P(0)&#x3D;\frac{1}{4},P(1)&#x3D;\frac{1}{2},P(2)&#x3D;\frac{1}{4}<br>$$<br>这里事件1记录的是一个无序事件，如果要记录为有序事件，即第一次正面朝上、第二次反面朝上和第一次反面朝上、第二次正面朝上为不同事件的话，那表示方法又会有所不同。母函数更多的用于记录可能出现的组合的数量，也就是无序事件的场景用的会更多一些。</p>
+<p>如果考虑一个离散情形的概率密度函数，有：</p>
+<script type="math/tex; mode=display">
+f(x)\Delta x=P(x\leq X\leq x+\Delta x)</script><p>分布函数唯一地决定随机变量的全部数字特征。</p>
+<p>对于这个投骰子的问题，虽然我们没办法知道下一次会投出什么数字来，但是我们可以计算出出现的数字的平均值，或者叫<strong>期望值</strong>：</p>
+<script type="math/tex; mode=display">
+E(X)=1*P(X=1)+2*P(X=2)+...+6*P(X=6)=\frac{1}{6}+\frac{2}{6}+...+\frac{6}{6}=\frac{7}{2}</script><p>也就是说，最终得到的点数的平均值应该为<code>3.5</code>。那么假如对于这个随机变量，有一个函数$Y=h(X)$，那么关于$Y$的期望值为：</p>
+<script type="math/tex; mode=display">
+E(Y)=E(h(X))=h(1)P(X=1)+h(2)P(X=2)+...+h(6)P(X=6)</script><p>对于连续型的随机变量来说，期望值可以写为：</p>
+<script type="math/tex; mode=display">
+\mu(X)=E(X)=\int_{-\infty}^{\infty}xf(x)dx</script><p>带函数的期望值可以写为：$E(h(x))=\int_{-\infty}^{\infty}h(x)f(x)dx$，例如$X$的$\gamma$阶绝对矩为：</p>
+<script type="math/tex; mode=display">
+M_{\gamma}(X)=E(|X|^{\gamma})=\int_{-\infty}^{\infty}|X|^{\gamma}f(x)dx</script><p>此时要回顾起一个跟期望值/平均值息息相关的函数：<strong>方差函数</strong>。在概率论中，方差被定义为：</p>
+<script type="math/tex; mode=display">
+\sigma^2(X)=E[(X-E(X))^2]=E[X^2-2E(X)X+E(X)^2]=E(X^2)-2[E(X)]^2+[E(X)]^2=M_2(X)-[\mu(X)]^2=\int_{-\infty}^{\infty}(x-\mu)^2f(x)dx</script><p>有了方差，自然就有了<strong>标准差</strong>：</p>
+<script type="math/tex; mode=display">
+\sigma(X)=\sqrt{M_2(X)-[\mu(X)]^2}</script><p>如果是多变量情形，我们还可以定义一个<strong>协方差</strong>（Covariance）用于衡量两个变量之间的总体偏差：</p>
+<script type="math/tex; mode=display">
+Cov(X,Y)=E\{[X-E(X)][Y-E(Y)]\}=E[XY-YE(X)-XE(Y)+E(X)E(Y)]=E(XY)-E(X)E(Y)</script><p>需要注意的是，协方差可以用于计算一维的随机变量$X,Y$，也可以用于计算高维的随机变量$\textbf{X},\textbf{Y}$。我们可以想象出来，对于一个shape为$(n,)$的随机变量$\textbf{X}$而言，对其计算期望值$E(\textbf{X})$，得到的结果也是$(n,)$的shape。如果给定的是两个高维的随机变量$\textbf{X},\textbf{Y}$，假设其shape分别为$(n,)$和$(m,)$，那么得到的期望值$E(\textbf{X}\textbf{Y})$的结果shape为$(n,m)$。类似的，$E(\textbf{X})E(\textbf{Y})$的结果shape也是$(n,m)$。这样一来，协方差$Cov(\textbf{X},\textbf{Y})$的结果shape也是$(n,m)$。</p>
+<h1 id="母函数"><a href="#母函数" class="headerlink" title="母函数"></a>母函数</h1><p>母函数，又称生成函数（Generating function），是一种形式幂级数，其每一项的系数可以提供关于这个序列的信息。例如我们有可能得到这样的一个母函数：</p>
+<script type="math/tex; mode=display">
+g(x)=2x^1+3x^4</script><p>这个形式的母函数表示，事件$1$发生的概率为$\frac{2}{2+3}=\frac{2}{5}$，事件$4$有可能发生的概率为$\frac{3}{5}$。具体的母函数构造方法是这样的，还是以抛硬币为例子。假设硬币正面朝上为事件$A$，硬币反面朝上为事件$B$，那么可以这样构造一个母函数：</p>
+<script type="math/tex; mode=display">
+g(x)=P(A)+xP(B),P(A)+P(B)=1</script><p>这里面$x$只是一个形参，没有具体含义。那么如果我们抛两次硬币，得到的母函数形式为：</p>
+<script type="math/tex; mode=display">
+g(x)=[P(A)+xP(B)][P(A)+xP(B)]=x^0P(A)^2+2x^1P(A)P(B)+x^2P(B)</script><p>写成这个形式之后，就可以分别获得三个不同事件的概率。事件0：两次都是正面朝上，概率为$P(0)=P(A)^2$，事件1：一次正面朝上一次反面朝上，概率为$P(1)=2P(A)P(B)$，事件2：两次都是反面朝上，概率为$P(2)=P(B)^2$。那么假设投的是一块质地均匀的硬币，这样我们得到的三个事件的概率分别为：</p>
+<script type="math/tex; mode=display">
+P(0)=\frac{1}{4},P(1)=\frac{1}{2},P(2)=\frac{1}{4}</script><p>这里事件1记录的是一个无序事件，如果要记录为有序事件，即第一次正面朝上、第二次反面朝上和第一次反面朝上、第二次正面朝上为不同事件的话，那表示方法又会有所不同。母函数更多的用于记录可能出现的组合的数量，也就是无序事件的场景用的会更多一些。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文的主要内容是一些统计力学中的基础的概率论知识，如密度函数、分布函数和贝叶斯定理的一些基本概念，主要作为一个简单的知识内容记录和分享。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/prob-1.html">https://www.cnblogs.com/dechinphy/p/prob-1.html</a></p>
 <p>作者ID：DechinPhy</p>
 <p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
 <p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
-<li>《统计力学导引》–郑伟谋</li>
+<li>《统计力学导引》--郑伟谋</li>
 </ol>
 
         </div>
@@ -249,7 +292,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -260,7 +303,7 @@
 <nav class="article-nav">
   
     <a href="/2024/05/14/%E7%BB%9F%E8%AE%A1%E5%8A%9B%E5%AD%A6%E4%B8%AD%E7%9A%84%E6%A6%82%E7%8E%87%E8%AE%BA%E5%9F%BA%E7%A1%80%EF%BC%88%E4%BA%8C%EF%BC%89/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           统计力学中的概率论基础（二）
@@ -270,7 +313,7 @@
   
   
     <a href="/2024/05/09/MindSpore%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E9%85%8D%E7%BD%AE%E5%85%B3%E9%94%AE%E5%AD%97%E5%8F%82%E6%95%B0/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">MindSpore反向传播配置关键字参数</div>
     </a>
   
@@ -278,7 +321,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=统计力学中的概率论基础（一） - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F05%2F14%2F%25E7%25BB%259F%25E8%25AE%25A1%25E5%258A%259B%25E5%25AD%25A6%25E4%25B8%25AD%25E7%259A%2584%25E6%25A6%2582%25E7%258E%2587%25E8%25AE%25BA%25E5%259F%25BA%25E7%25A1%2580%25EF%25BC%2588%25E4%25B8%2580%25EF%25BC%2589%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -433,6 +476,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidKfaSmCjsRGNf1CJjRwkOu" class="article article-type-post" itemscope
+    <article id="post-cuidGp3RcJlcq379AQ7HYycs1" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,27 +210,10 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文通过4个测试案例分析了在python中读取文件指定行内容的方案，并得到了一些运行耗时的数据。从需求上来说，如果是对于小规模的数据，比如几百行规模的数据，建议使用readline循环遍历来操作，速度也相当不错，或者是linecache中的函数实现也是可以的，甚至可以直接用readlines将整个文本内容加载到内存中。但是对于数据规模比较大的场景，比如超过了千万行的级别，那么使用sed指令的方式对指定行内容进行读取的方式，应该是所有方式中最快速的。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>考虑到深度学习领域中的数据规模一般都比较大，尤其是训练集，这个限制条件对应到实际编程中就意味着，我们很有可能无法将整个数据文件的内容全部都加载到内存中。那么就需要一些特殊的处理方式，比如：创建内存映射文件来替代原始文件被加载到内存中、预处理数据后再加载内存中以及单次只加载文件的片段。其中关于内存映射技术的一些应用，在前面的这2篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/vaex.html">博客1</a>和<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/mmap.html">博客2</a>中有所介绍，而本文将要介绍的是从文件中只读取特定行的内容的3种解决方案。</p>
-<h1 id="行遍历实现"><a href="#行遍历实现" class="headerlink" title="行遍历实现"></a>行遍历实现</h1><p>在python中如果要将一个文件完全加载到内存中，通过<code>file.readlines()</code>即可，但是在文件占用较高时，我们是无法完整的将文件加载到内存中的，这时候就需要用到python的<code>file.readline()</code>进行迭代式的逐行读取：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">filename = <span class="string">&#x27;hello.txt&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(filename, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> file:</span><br><span class="line">    line = file.readline()</span><br><span class="line">    counts = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> line:</span><br><span class="line">        <span class="keyword">if</span> counts &gt;= <span class="number">50000000</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        line = file.readline()</span><br><span class="line">        counts += <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>这里我们的实现方式是先用一个<code>with</code>语句打开一个文件，然后用<code>readline()</code>函数配合<code>while</code>循环逐行加载，最终通过一个序号标记来结束循环遍历，输出文件第50000000行的内容。该代码的执行效果如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ <span class="keyword">time</span> python3 get_line.py </span><br><span class="line"></span><br><span class="line">real    0m10.359s</span><br><span class="line">user    0m10.062s</span><br><span class="line">sys     0m0.296s</span><br></pre></td></tr></table></figure>
-<p>可以看到这里的耗时为10s多一些。</p>
-<h1 id="linecache实现"><a href="#linecache实现" class="headerlink" title="linecache实现"></a>linecache实现</h1><p>虽然在python的<code>readline</code>函数中并没有实现读取指定行内容的方案，但是在另一个库<code>linecache</code>中是实现了的，由于使用的方式较为简单，这里直接放上代码示例供参考：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">filename = <span class="string">&#x27;hello.txt&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> linecache</span><br><span class="line">text = linecache.getline(filename, <span class="number">50000000</span>)</span><br></pre></td></tr></table></figure>
-<p>该代码的执行结果如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ <span class="keyword">time</span> python3 get_line.py </span><br><span class="line"></span><br><span class="line">real    0m11.904s</span><br><span class="line">user    0m5.672s</span><br><span class="line">sys     0m6.231s</span><br></pre></td></tr></table></figure>
-<p>虽然在实现方式上简化了许多，但是我们发现这个实现的用时超过了11s，还不如我们自己手动实现的循环遍历方案。因此如果是对于性能有一定要求的场景，是不建议采用这个方案的。</p>
-<h1 id="命令行sed获取"><a href="#命令行sed获取" class="headerlink" title="命令行sed获取"></a>命令行sed获取</h1><p>我们知道用Linux系统本身自带的sed指令也是可以获取到文件指定行或者是指定行范围的数据的，其执行指令为：<code>sed -n 50000000p filename</code>即表示读取文件的第50000000行的内容。同时结合python的话，我们可以在python代码中执行系统指令并获取输出结果：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">filename = <span class="string">&#x27;hello.txt&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">result = os.popen(<span class="string">&#x27;sed -n &#123;&#125;p &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(<span class="number">50000000</span>, filename)).read()</span><br></pre></td></tr></table></figure>
-<p>需要注意的是，如果直接运行<code>os.system()</code>是没有返回值的，只有<code>os.popen()</code>是有返回值的，并且需要在尾巴加上一个<code>read()</code>的选项。该代码的执行结果如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ <span class="keyword">time</span> python3 get_line.py </span><br><span class="line"></span><br><span class="line">real    0m2.532s</span><br><span class="line">user    0m0.032s</span><br><span class="line">sys     0m0.020s</span><br></pre></td></tr></table></figure>
-<p>可以看到直接使用<code>sed</code>指令的执行速度很快，但是用这种方法并不是一本万利的，比如以下这个例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">filename = <span class="string">&#x27;hello.txt&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">result = os.popen(<span class="string">&#x27;sed -n &#123;&#125;p &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(<span class="number">500</span>, filename)).read()</span><br></pre></td></tr></table></figure>
-<p>我们把读取第50000000行内容改为读取第500行的内容，再运行一次程序：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ <span class="keyword">time</span> python3 get_line.py </span><br><span class="line"></span><br><span class="line">real    0m2.540s</span><br><span class="line">user    0m0.037s</span><br><span class="line">sys     0m0.013s</span><br></pre></td></tr></table></figure>
-<p>然而我们发现这个速度并没有因为要读取的行数减少了而变少，而是几乎保持不变的。</p>
+<h1 id="行遍历实现"><a href="#行遍历实现" class="headerlink" title="行遍历实现"></a>行遍历实现</h1><p>在python中如果要将一个文件完全加载到内存中，通过<code>file.readlines()</code>即可，但是在文件占用较高时，我们是无法完整的将文件加载到内存中的，这时候就需要用到python的<code>file.readline()</code>进行迭代式的逐行读取：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">filename = <span class="string">&#x27;hello.txt&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(filename, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> file:</span><br><span class="line">    line = file.readline()</span><br><span class="line">    counts = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> line:</span><br><span class="line">        <span class="keyword">if</span> counts &gt;= <span class="number">50000000</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        line = file.readline()</span><br><span class="line">        counts += <span class="number">1</span></span><br></pre></td></tr></table></figure><br>这里我们的实现方式是先用一个<code>with</code>语句打开一个文件，然后用<code>readline()</code>函数配合<code>while</code>循环逐行加载，最终通过一个序号标记来结束循环遍历，输出文件第50000000行的内容。该代码的执行效果如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ <span class="keyword">time</span> python3 get_line.py </span><br><span class="line"></span><br><span class="line">real    0m10.359s</span><br><span class="line">user    0m10.062s</span><br><span class="line">sys     0m0.296s</span><br></pre></td></tr></table></figure><br>可以看到这里的耗时为10s多一些。</p>
+<h1 id="linecache实现"><a href="#linecache实现" class="headerlink" title="linecache实现"></a>linecache实现</h1><p>虽然在python的<code>readline</code>函数中并没有实现读取指定行内容的方案，但是在另一个库<code>linecache</code>中是实现了的，由于使用的方式较为简单，这里直接放上代码示例供参考：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">filename = <span class="string">&#x27;hello.txt&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> linecache</span><br><span class="line">text = linecache.getline(filename, <span class="number">50000000</span>)</span><br></pre></td></tr></table></figure><br>该代码的执行结果如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ <span class="keyword">time</span> python3 get_line.py </span><br><span class="line"></span><br><span class="line">real    0m11.904s</span><br><span class="line">user    0m5.672s</span><br><span class="line">sys     0m6.231s</span><br></pre></td></tr></table></figure><br>虽然在实现方式上简化了许多，但是我们发现这个实现的用时超过了11s，还不如我们自己手动实现的循环遍历方案。因此如果是对于性能有一定要求的场景，是不建议采用这个方案的。</p>
+<h1 id="命令行sed获取"><a href="#命令行sed获取" class="headerlink" title="命令行sed获取"></a>命令行sed获取</h1><p>我们知道用Linux系统本身自带的sed指令也是可以获取到文件指定行或者是指定行范围的数据的，其执行指令为：<code>sed -n 50000000p filename</code>即表示读取文件的第50000000行的内容。同时结合python的话，我们可以在python代码中执行系统指令并获取输出结果：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">filename = <span class="string">&#x27;hello.txt&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">result = os.popen(<span class="string">&#x27;sed -n &#123;&#125;p &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(<span class="number">50000000</span>, filename)).read()</span><br></pre></td></tr></table></figure><br>需要注意的是，如果直接运行<code>os.system()</code>是没有返回值的，只有<code>os.popen()</code>是有返回值的，并且需要在尾巴加上一个<code>read()</code>的选项。该代码的执行结果如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ <span class="keyword">time</span> python3 get_line.py </span><br><span class="line"></span><br><span class="line">real    0m2.532s</span><br><span class="line">user    0m0.032s</span><br><span class="line">sys     0m0.020s</span><br></pre></td></tr></table></figure><br>可以看到直接使用<code>sed</code>指令的执行速度很快，但是用这种方法并不是一本万利的，比如以下这个例子：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">filename = <span class="string">&#x27;hello.txt&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">result = os.popen(<span class="string">&#x27;sed -n &#123;&#125;p &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(<span class="number">500</span>, filename)).read()</span><br></pre></td></tr></table></figure><br>我们把读取第50000000行内容改为读取第500行的内容，再运行一次程序：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ <span class="keyword">time</span> python3 get_line.py </span><br><span class="line"></span><br><span class="line">real    0m2.540s</span><br><span class="line">user    0m0.037s</span><br><span class="line">sys     0m0.013s</span><br></pre></td></tr></table></figure><br>然而我们发现这个速度并没有因为要读取的行数减少了而变少，而是几乎保持不变的。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文通过4个测试案例分析了在python中读取文件指定行内容的方案，并得到了一些运行耗时的数据。从需求上来说，如果是对于小规模的数据，比如几百行规模的数据，建议使用readline循环遍历来操作，速度也相当不错，或者是linecache中的函数实现也是可以的，甚至可以直接用readlines将整个文本内容加载到内存中。但是对于数据规模比较大的场景，比如超过了千万行的级别，那么使用sed指令的方式对指定行内容进行读取的方式，应该是所有方式中最快速的。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/lbl.html">https://www.cnblogs.com/dechinphy/p/lbl.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -251,7 +234,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -262,7 +245,7 @@
 <nav class="article-nav">
   
     <a href="/2021/05/26/MindSpore%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93%E4%B8%8E%E6%B5%8B%E8%AF%95/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           MindSpore激活函数总结与测试
@@ -272,7 +255,7 @@
   
   
     <a href="/2021/05/20/%E5%9C%A8C++%E4%B8%AD%E8%B0%83%E7%94%A8Python/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">在C++中调用Python</div>
     </a>
   
@@ -280,7 +263,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=python3读取文件指定行的三种方案 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F05%2F24%2Fpython3%25E8%25AF%25BB%25E5%258F%2596%25E6%2596%2587%25E4%25BB%25B6%25E6%258C%2587%25E5%25AE%259A%25E8%25A1%258C%25E7%259A%2584%25E4%25B8%2589%25E7%25A7%258D%25E6%2596%25B9%25E6%25A1%2588%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -435,6 +418,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

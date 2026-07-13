@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuid7NnOw_mXwMJDPXOW2rW-K" class="article article-type-post" itemscope
+    <article id="post-cuidt-mBJZptdolW1OsA9q2Op" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,14 +201,14 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
         </div>
 
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
-            <p><img src="https://img2022.cnblogs.com/blog/2277440/202204/2277440-20220402202819448-1551702393.png"></p>
+            <p><img src="https://img2022.cnblogs.com/blog/2277440/202204/2277440-20220402202819448-1551702393.png" alt=""></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> openfermionpyscf <span class="keyword">import</span> run_pyscf</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">from</span> openfermion.chem <span class="keyword">import</span> MolecularData, geometry_from_pubchem</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: <span class="keyword">from</span> openfermion.transforms <span class="keyword">import</span> get_fermion_operator, jordan_wigner</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: multiplicity=<span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: basis=<span class="string">&quot;sto-3g&quot;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: geometry=geometry_from_pubchem(<span class="string">&#x27;h2o&#x27;</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: geometry</span><br><span class="line">Out[<span class="number">7</span>]:</span><br><span class="line">[(<span class="string">&#x27;O&#x27;</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)),</span><br><span class="line"> (<span class="string">&#x27;H&#x27;</span>, (<span class="number">0.2774</span>, <span class="number">0.8929</span>, <span class="number">0.2544</span>)),</span><br><span class="line"> (<span class="string">&#x27;H&#x27;</span>, (<span class="number">0.6068</span>, -<span class="number">0.2383</span>, -<span class="number">0.7169</span>))]</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: molecule = MolecularData(geometry, basis, multiplicity)</span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: molecule = run_pyscf(molecule ,run_mp2=<span class="literal">True</span>, run_cisd=<span class="literal">True</span> ,run_ccsd=<span class="literal">True</span>, run_fci=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">10</span>]: <span class="built_in">print</span>(molecule.fci_energy, molecule.ccsd_energy, molecule.hf_energy)</span><br><span class="line">-<span class="number">75.01553018949156</span> -<span class="number">75.01540899923555</span> -<span class="number">74.96444758276995</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: mh = molecule.get_molecular_hamiltonian()</span><br><span class="line"></span><br><span class="line">In [<span class="number">12</span>]: fh = get_fermion_operator(mh)</span><br><span class="line"><span class="number">9.08436451197603</span> [] +</span><br><span class="line">-<span class="number">32.68991541360028</span> [<span class="number">0</span>^ <span class="number">0</span>] +</span><br><span class="line"><span class="number">2.3723529797919625</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">0</span>] +</span><br><span class="line">-<span class="number">0.20870450678118344</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">2</span>] +</span><br><span class="line">-<span class="number">1.3696880086319053e-07</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">4</span>] +</span><br><span class="line"><span class="number">0.09152338506995344</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">6</span>] +</span><br><span class="line">-<span class="number">0.11727907659025232</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">10</span>] +</span><br><span class="line"><span class="number">4.994906556311282e-07</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">12</span>] +</span><br><span class="line">-<span class="number">0.2087045067811834</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">2</span> <span class="number">0</span>] +</span><br><span class="line"><span class="number">0.02917682895944584</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">2</span> <span class="number">2</span>] + ...</span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: jw = jordan_wigner(fh)</span><br><span class="line">(-<span class="number">46.46560078195154</span>+<span class="number">0j</span>) [] +</span><br><span class="line">(-<span class="number">0.01458841447972292</span>+<span class="number">0j</span>) [X0 X1 Y2 Y3] +</span><br><span class="line">(<span class="number">0.005639816627633215</span>+<span class="number">0j</span>) [X0 X1 Y2 Z3 Z4 Z5 Z6 Y7] +</span><br><span class="line">(-<span class="number">0.008830198814313132</span>+<span class="number">0j</span>) [X0 X1 Y2 Z3 Z4 Z5 Z6 Z7 Z8 Z9 Z10 Y11] +</span><br><span class="line">(<span class="number">0.005639816627633215</span>+<span class="number">0j</span>) [X0 X1 X3 Z4 Z5 X6] +</span><br><span class="line">(-<span class="number">0.008830198814313132</span>+<span class="number">0j</span>) [X0 X1 X3 Z4 Z5 Z6 Z7 Z8 Z9 X10] +</span><br><span class="line">(-<span class="number">0.002741354103185628</span>+<span class="number">0j</span>) [X0 X1 Y4 Y5] + ...</span><br></pre></td></tr></table></figure>
         </div>
 
@@ -223,7 +223,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -234,7 +234,7 @@
 <nav class="article-nav">
   
     <a href="/2022/04/05/%E4%BA%8C%E6%AC%A1%E9%87%8F%E5%AD%90%E5%8C%96%E4%B8%8E%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97%E5%8C%96%E5%AD%A6/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           二次量子化与量子计算化学
@@ -244,7 +244,7 @@
   
   
     <a href="/2022/04/02/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E9%87%8F%E5%AD%90%E6%B5%8B%E9%87%8F/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">量子计算基础——量子测量</div>
     </a>
   
@@ -252,7 +252,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=变分量子本征求解器 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F04%2F02%2F%25E5%258F%2598%25E5%2588%2586%25E9%2587%258F%25E5%25AD%2590%25E6%259C%25AC%25E5%25BE%2581%25E6%25B1%2582%25E8%25A7%25A3%25E5%2599%25A8%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -407,6 +407,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

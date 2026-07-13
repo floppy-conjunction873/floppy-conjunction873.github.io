@@ -166,7 +166,7 @@ class="article article-type-post"
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>hdf5是一个在量子化学和分子动力学模拟中经常有可能被用到的一种数据存储格式，得益于其良好的压缩率和完整性校验，一定程度上保障了其数据&#x2F;轨迹存储的可靠性。本文介绍了关于hdf5文件的两个操作：更新已有的hdf5文件中的数据内容，以及flush同步更新的方法。</p>
+        <p>hdf5是一个在量子化学和分子动力学模拟中经常有可能被用到的一种数据存储格式，得益于其良好的压缩率和完整性校验，一定程度上保障了其数据/轨迹存储的可靠性。本文介绍了关于hdf5文件的两个操作：更新已有的hdf5文件中的数据内容，以及flush同步更新的方法。</p>
         
     </div>
     </div>
@@ -260,7 +260,7 @@ class="article article-type-post"
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>本文介绍了一下使用Cython对Python&#x2F;Numpy实现的函数进行加速的一个简单案例，模型使用的是一个弹性系数全同的谐振势，然后计算总势能。从计算结果来看，使用Cython确实可以获得更接近于C语言的速度，并且编程逻辑还可以大幅的保留Python的语法。</p>
+        <p>本文介绍了一下使用Cython对Python/Numpy实现的函数进行加速的一个简单案例，模型使用的是一个弹性系数全同的谐振势，然后计算总势能。从计算结果来看，使用Cython确实可以获得更接近于C语言的速度，并且编程逻辑还可以大幅的保留Python的语法。</p>
         
     </div>
     </div>
@@ -741,6 +741,21 @@ class="article article-type-post"
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

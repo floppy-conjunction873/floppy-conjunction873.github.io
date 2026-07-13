@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidxGOvGHTOkaDJ9X63aDLSe" class="article article-type-post" itemscope
+    <article id="post-cuidB30d8t_nyeHcknFuE4nxx" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,24 +210,9 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文通过简单演示，介绍了在Manjaro Linux系统下设置变更主机名的方法，包含有临时方法和永久生效的方法。这些方法在Linux系统中应该是可以通用的，不仅仅局限在Manjaro Linux中。</p>
 <span id="more"></span>
-
-<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>Linux系统中默认的主机名可以通过<code>hostname</code>指令进行查询，一般默认的是一串的随机字符串：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-20n2s01200 numba]$ hostname</span><br><span class="line">dechin-20n2s01200</span><br></pre></td></tr></table></figure>
-<p>也可以通过<code>hostnamectl</code>查看更加详细的主机信息：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-20n2s01200 numba]$ hostnamectl</span><br><span class="line">   Static hostname: dechin-20n2s01200</span><br><span class="line">         Icon name: computer-laptop</span><br><span class="line">           Chassis: laptop</span><br><span class="line">        Machine ID: 285a6fb7ab414541955d31e5eda79e5a</span><br><span class="line">           Boot ID: 7009c86f6c654d61af3e6376a13f2b26</span><br><span class="line">  Operating System: Manjaro Linux</span><br><span class="line">            Kernel: Linux 5.9.16-1-MANJARO</span><br><span class="line">      Architecture: x86-64</span><br></pre></td></tr></table></figure>
-<p>但是这个字符串本身没有任何的意义，比如我们可以将这个字符串改为一个用于表征系统OS名称的字符串，这样就可以显示更多的信息。</p>
-<h1 id="配置主机名称"><a href="#配置主机名称" class="headerlink" title="配置主机名称"></a>配置主机名称</h1><p>一般我们都是希望修改能够被持久化保存的，这里可以直接使用<code>hostnamectl</code>的指令进行修改：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-20n2s01200 numba]$ hostnamectl set-hostname dechin-manjaro</span><br><span class="line">[dechin@dechin-20n2s01200 numba]$ hostname</span><br><span class="line">dechin-manjaro</span><br></pre></td></tr></table></figure>
-<p>可以看到修改完之后hostname立即发生了变化，但是前面的方括号中的变量还没刷新，因此我们再新建一个terminal窗口看看：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro numba]$ hostnamectl</span><br><span class="line">   Static hostname: dechin-manjaro</span><br><span class="line">         Icon name: computer-laptop</span><br><span class="line">           Chassis: laptop</span><br><span class="line">        Machine ID: 285a6fb7ab414541955d31e5eda79e5a</span><br><span class="line">           Boot ID: 7009c86f6c654d61af3e6376a13f2b26</span><br><span class="line">  Operating System: Manjaro Linux</span><br><span class="line">            Kernel: Linux 5.9.16-1-MANJARO</span><br><span class="line">      Architecture: x86-64</span><br></pre></td></tr></table></figure>
-<p>这里我们就可以看到，不仅主机名发生了变化，方括号中的内容也改变了。</p>
-<h1 id="临时修改主机名"><a href="#临时修改主机名" class="headerlink" title="临时修改主机名"></a>临时修改主机名</h1><p>而还有一种场景，如果我们只是希望临时的修改一下系统的主机名称，可以直接用<code>hostname yourname</code>的形式赋予，但是运行这个指令需要有root权限：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[dechin-manjaro ~]# hostname dechin-tmp</span><br><span class="line">[dechin-manjaro ~]# hostname</span><br><span class="line">dechin-tmp</span><br></pre></td></tr></table></figure>
-<p>此时如果我们切换到普通帐号：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[dechin-manjaro ~]# su dechin</span><br><span class="line">[dechin@dechin-tmp ~]$ hostname</span><br><span class="line">dechin-tmp</span><br></pre></td></tr></table></figure>
-<p>可以看到在窗口未关闭的情况下主机名仍然是刚才临时设定的，但是此时如果我们用<code>reboot</code>进行重启的话，新打开的terminal窗口中主机名成又变回了刚才用<code>hostnamectl</code>所永久设定的主机名：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro ~]$ hostname</span><br><span class="line">dechin-manjaro</span><br></pre></td></tr></table></figure>
-
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>Linux系统中默认的主机名可以通过<code>hostname</code>指令进行查询，一般默认的是一串的随机字符串：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-20n2s01200 numba]$ hostname</span><br><span class="line">dechin-20n2s01200</span><br></pre></td></tr></table></figure><br>也可以通过<code>hostnamectl</code>查看更加详细的主机信息：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-20n2s01200 numba]$ hostnamectl</span><br><span class="line">   Static hostname: dechin-20n2s01200</span><br><span class="line">         Icon name: computer-laptop</span><br><span class="line">           Chassis: laptop</span><br><span class="line">        Machine ID: 285a6fb7ab414541955d31e5eda79e5a</span><br><span class="line">           Boot ID: 7009c86f6c654d61af3e6376a13f2b26</span><br><span class="line">  Operating System: Manjaro Linux</span><br><span class="line">            Kernel: Linux 5.9.16-1-MANJARO</span><br><span class="line">      Architecture: x86-64</span><br></pre></td></tr></table></figure><br>但是这个字符串本身没有任何的意义，比如我们可以将这个字符串改为一个用于表征系统OS名称的字符串，这样就可以显示更多的信息。</p>
+<h1 id="配置主机名称"><a href="#配置主机名称" class="headerlink" title="配置主机名称"></a>配置主机名称</h1><p>一般我们都是希望修改能够被持久化保存的，这里可以直接使用<code>hostnamectl</code>的指令进行修改：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-20n2s01200 numba]$ hostnamectl set-hostname dechin-manjaro</span><br><span class="line">[dechin@dechin-20n2s01200 numba]$ hostname</span><br><span class="line">dechin-manjaro</span><br></pre></td></tr></table></figure><br>可以看到修改完之后hostname立即发生了变化，但是前面的方括号中的变量还没刷新，因此我们再新建一个terminal窗口看看：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro numba]$ hostnamectl</span><br><span class="line">   Static hostname: dechin-manjaro</span><br><span class="line">         Icon name: computer-laptop</span><br><span class="line">           Chassis: laptop</span><br><span class="line">        Machine ID: 285a6fb7ab414541955d31e5eda79e5a</span><br><span class="line">           Boot ID: 7009c86f6c654d61af3e6376a13f2b26</span><br><span class="line">  Operating System: Manjaro Linux</span><br><span class="line">            Kernel: Linux 5.9.16-1-MANJARO</span><br><span class="line">      Architecture: x86-64</span><br></pre></td></tr></table></figure><br>这里我们就可以看到，不仅主机名发生了变化，方括号中的内容也改变了。</p>
+<h1 id="临时修改主机名"><a href="#临时修改主机名" class="headerlink" title="临时修改主机名"></a>临时修改主机名</h1><p>而还有一种场景，如果我们只是希望临时的修改一下系统的主机名称，可以直接用<code>hostname yourname</code>的形式赋予，但是运行这个指令需要有root权限：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[dechin-manjaro ~]# hostname dechin-tmp</span><br><span class="line">[dechin-manjaro ~]# hostname</span><br><span class="line">dechin-tmp</span><br></pre></td></tr></table></figure><br>此时如果我们切换到普通帐号：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[dechin-manjaro ~]# su dechin</span><br><span class="line">[dechin@dechin-tmp ~]$ hostname</span><br><span class="line">dechin-tmp</span><br></pre></td></tr></table></figure><br>可以看到在窗口未关闭的情况下主机名仍然是刚才临时设定的，但是此时如果我们用<code>reboot</code>进行重启的话，新打开的terminal窗口中主机名成又变回了刚才用<code>hostnamectl</code>所永久设定的主机名：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro ~]$ hostname</span><br><span class="line">dechin-manjaro</span><br></pre></td></tr></table></figure></p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文通过简单演示，介绍了在Manjaro Linux系统下设置变更主机名的方法，包含有临时方法和永久生效的方法。这些方法在Linux系统中应该是可以通用的，不仅仅局限在Manjaro Linux中。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/hostname.html">https://www.cnblogs.com/dechinphy/p/hostname.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
 
@@ -244,7 +229,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -255,7 +240,7 @@
 <nav class="article-nav">
   
     <a href="/2021/04/21/%E4%BD%BF%E7%94%A8autopep8%E8%87%AA%E5%8A%A8%E8%A7%84%E8%8C%83%E5%8C%96python3%E4%BB%A3%E7%A0%81/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           使用autopep8自动规范化python3代码
@@ -265,7 +250,7 @@
   
   
     <a href="/2021/04/16/%E4%BD%BF%E7%94%A8numba%E5%8A%A0%E9%80%9Fpython%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">使用numba加速python科学计算</div>
     </a>
   
@@ -273,7 +258,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Manjaro Linux永久修改主机名 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F04%2F19%2FManjaro-Linux%25E6%25B0%25B8%25E4%25B9%2585%25E4%25BF%25AE%25E6%2594%25B9%25E4%25B8%25BB%25E6%259C%25BA%25E5%2590%258D%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -428,6 +413,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

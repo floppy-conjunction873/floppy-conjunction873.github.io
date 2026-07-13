@@ -260,7 +260,7 @@ class="article article-type-post"
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>本文重点介绍了绝热演化&#x2F;量子退火算法的基本原理，及两个基于Python代码编写的实例，以说明绝热演化&#x2F;量子退火在实际问题求解中的作用。</p>
+        <p>本文重点介绍了绝热演化/量子退火算法的基本原理，及两个基于Python代码编写的实例，以说明绝热演化/量子退火在实际问题求解中的作用。</p>
         
     </div>
     </div>
@@ -600,6 +600,21 @@ class="article article-type-post"
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

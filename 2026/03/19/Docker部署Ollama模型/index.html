@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidmSfgGLcDc6H0OsLbdjkNP" class="article article-type-post" itemscope
+    <article id="post-cuidkVOVueLW3R1sez6kkp3zR" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,36 +210,20 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>接上一篇关于Docker中的Ollama养虾的文章之后，这里补充一个Docker中部署Ollama模型的方案，通过这种方式建立一个完整的虚拟化环境，确保Ollama和OpenClaw在环境内的操作都相对可控。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>前面写过几篇关于<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18702523/deepseek2">DeepSeek大模型的本地部署</a>以及<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/19703249/openclaw">本地Docker部署OpenClaw的教程</a>。但是这里边的Ollama都是直接部署在裸机上的，图个方便，想来还是不妥，于是补充本文，基于<code>Ubuntu Linux</code>的Docker环境中部署Ollama模型的方法。</p>
-<h1 id="Docker部署"><a href="#Docker部署" class="headerlink" title="Docker部署"></a>Docker部署</h1><p>先查看系统中是否安装了<code>nvidia-container-toolkit</code>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ dpkg -l | grep nvidia-container-toolkit</span><br><span class="line">ii  nvidia-container-toolkit                   1.13.5-1                                amd64        NVIDIA Container toolkit</span><br><span class="line">ii  nvidia-container-toolkit-base              1.13.5-1                                amd64        NVIDIA Container Toolkit Base</span><br></pre></td></tr></table></figure>
-<p>如果没有安装，可以参考一下之前写过的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/dmg.html#mindspore-gpu-docker%E7%9A%84%E5%AE%89%E8%A3%85">这篇博客</a>进行安装。然后就是在DockerHub拉取Ollama的镜像（如有必要，请自行配置Docker源）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ docker pull ollama/ollama</span><br><span class="line">Using default tag: latest</span><br><span class="line">latest: Pulling from ollama/ollama</span><br><span class="line">817807f3c64e: Pull complete</span><br><span class="line">ae25ca5ada6c: Pull complete</span><br><span class="line">2608ea1d5119: Pull complete</span><br><span class="line">84d58e6813b6: Pull complete</span><br><span class="line">Digest: sha256:</span><br><span class="line">Status: Downloaded newer image <span class="keyword">for</span> ollama/ollama:latest</span><br><span class="line">docker.io/ollama/ollama:latest</span><br></pre></td></tr></table></figure>
-<p>拉取完成后，就可以在本地看到Ollama的镜像：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker images</span><br><span class="line">REPOSITORY                     TAG                  IMAGE ID       CREATED        SIZE</span><br><span class="line">ollama/ollama                  latest               bc1c           3 hours ago    6.01GB</span><br></pre></td></tr></table></figure>
-
+<h1 id="Docker部署"><a href="#Docker部署" class="headerlink" title="Docker部署"></a>Docker部署</h1><p>先查看系统中是否安装了<code>nvidia-container-toolkit</code>：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ dpkg -l | grep nvidia-container-toolkit</span><br><span class="line">ii  nvidia-container-toolkit                   1.13.5-1                                amd64        NVIDIA Container toolkit</span><br><span class="line">ii  nvidia-container-toolkit-base              1.13.5-1                                amd64        NVIDIA Container Toolkit Base</span><br></pre></td></tr></table></figure><br>如果没有安装，可以参考一下之前写过的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/dmg.html#mindspore-gpu-docker%E7%9A%84%E5%AE%89%E8%A3%85">这篇博客</a>进行安装。然后就是在DockerHub拉取Ollama的镜像（如有必要，请自行配置Docker源）：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ docker pull ollama/ollama</span><br><span class="line">Using default tag: latest</span><br><span class="line">latest: Pulling from ollama/ollama</span><br><span class="line">817807f3c64e: Pull complete</span><br><span class="line">ae25ca5ada6c: Pull complete</span><br><span class="line">2608ea1d5119: Pull complete</span><br><span class="line">84d58e6813b6: Pull complete</span><br><span class="line">Digest: sha256:</span><br><span class="line">Status: Downloaded newer image <span class="keyword">for</span> ollama/ollama:latest</span><br><span class="line">docker.io/ollama/ollama:latest</span><br></pre></td></tr></table></figure><br>拉取完成后，就可以在本地看到Ollama的镜像：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker images</span><br><span class="line">REPOSITORY                     TAG                  IMAGE ID       CREATED        SIZE</span><br><span class="line">ollama/ollama                  latest               bc1c           3 hours ago    6.01GB</span><br></pre></td></tr></table></figure></p>
 <p>然后就可以启动一个带GPU环境的Ollama容器：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -d --name my-ollama.docker --runtime=nvidia -p xxx:11434 -v ~/.ollama:/root/.ollama --gpus all ollama/ollama</span><br><span class="line">7ae5</span><br></pre></td></tr></table></figure>
-
 <p>这里边有两个重要参数配置：<code>--runtime=nvidia</code>还有<code>--gpus all</code>都需要配上，否则无法调用到GPU算力。具体用哪些GPU，这个就按照自己的环境来。然后就可以在Docker的容器列表中看到这一条（这里xxx就是你配置的本地监听端口）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker ps -a</span><br><span class="line">CONTAINER ID   IMAGE                                 COMMAND                   CREATED         STATUS                  PORTS                                           NAMES</span><br><span class="line">7ae5   ollama/ollama                         <span class="string">&quot;/bin/ollama serve&quot;</span>       7 seconds ago   Up 6 seconds            0.0.0.0:xxx-&gt;11434/tcp, [::]:xxx-&gt;11434/tcp   my-ollama.docker</span><br></pre></td></tr></table></figure>
-
 <p>然后可以使用该镜像直接pull远程模型，例如这里pull一个qwen3.5的模型：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker <span class="built_in">exec</span> -it my-ollama.docker ollama pull qwen3.5:latest</span><br><span class="line">$ docker <span class="built_in">exec</span> -it my-ollama.docker ollama list</span><br><span class="line">NAME              ID              SIZE      MODIFIED</span><br><span class="line">qwen3.5:latest    96fa            6.6 GB    18 hours ago</span><br></pre></td></tr></table></figure>
-<p>pull完成后，可以查看模型的具体信息：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">$ docker <span class="built_in">exec</span> -it my-ollama.docker ollama show qwen3.5:latest</span><br><span class="line">  Model</span><br><span class="line">    architecture        qwen35</span><br><span class="line">    parameters          9.7B</span><br><span class="line">    context length      262144</span><br><span class="line">    embedding length    4096</span><br><span class="line">    quantization        Q4_K_M</span><br><span class="line">    requires            0.17.1</span><br><span class="line"></span><br><span class="line">  Capabilities</span><br><span class="line">    completion</span><br><span class="line">    vision</span><br><span class="line">    tools</span><br><span class="line">    thinking</span><br><span class="line"></span><br><span class="line">  Parameters</span><br><span class="line">    presence_penalty    1.5</span><br><span class="line">    temperature         1</span><br><span class="line">    top_k               20</span><br><span class="line">    top_p               0.95</span><br><span class="line"></span><br><span class="line">  License</span><br><span class="line">    Apache License</span><br><span class="line">    Version 2.0, January 2004</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-
-<p>可以看到这里下载的是一个Q4_K_M的量化模型，如果有需要，可以自己检索一下看看哪个模型更适合自己。最后再确认GPU是否能够正常调用：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ docker <span class="built_in">exec</span> -it my-ollama.docker nvidia-smi</span><br><span class="line">Mon Mar 23 06:27:21 2026</span><br><span class="line">+---------------------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI 535.274.02             Driver Version: 535.274.02   CUDA Version: 12.2     |</span><br><span class="line">|-----------------------------------------+----------------------+----------------------+</span><br><span class="line">| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|                                         |                      |               MIG M. |</span><br><span class="line">|=========================================+======================+======================|</span><br></pre></td></tr></table></figure>
-
+<p>pull完成后，可以查看模型的具体信息：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">$ docker <span class="built_in">exec</span> -it my-ollama.docker ollama show qwen3.5:latest</span><br><span class="line">  Model</span><br><span class="line">    architecture        qwen35</span><br><span class="line">    parameters          9.7B</span><br><span class="line">    context length      262144</span><br><span class="line">    embedding length    4096</span><br><span class="line">    quantization        Q4_K_M</span><br><span class="line">    requires            0.17.1</span><br><span class="line"></span><br><span class="line">  Capabilities</span><br><span class="line">    completion</span><br><span class="line">    vision</span><br><span class="line">    tools</span><br><span class="line">    thinking</span><br><span class="line"></span><br><span class="line">  Parameters</span><br><span class="line">    presence_penalty    1.5</span><br><span class="line">    temperature         1</span><br><span class="line">    top_k               20</span><br><span class="line">    top_p               0.95</span><br><span class="line"></span><br><span class="line">  License</span><br><span class="line">    Apache License</span><br><span class="line">    Version 2.0, January 2004</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure></p>
+<p>可以看到这里下载的是一个Q4_K_M的量化模型，如果有需要，可以自己检索一下看看哪个模型更适合自己。最后再确认GPU是否能够正常调用：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ docker <span class="built_in">exec</span> -it my-ollama.docker nvidia-smi</span><br><span class="line">Mon Mar 23 06:27:21 2026</span><br><span class="line">+---------------------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI 535.274.02             Driver Version: 535.274.02   CUDA Version: 12.2     |</span><br><span class="line">|-----------------------------------------+----------------------+----------------------+</span><br><span class="line">| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|                                         |                      |               MIG M. |</span><br><span class="line">|=========================================+======================+======================|</span><br></pre></td></tr></table></figure></p>
 <p>能够正常看到GPU，就代表这个环境没问题，Ollama的镜像是自带显卡驱动的。</p>
 <h1 id="Ollama模型测试"><a href="#Ollama模型测试" class="headerlink" title="Ollama模型测试"></a>Ollama模型测试</h1><p>完成Ollama的Docker环境配置后，就可以在本地进行测试了：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ curl http://localhost:xxx/api/generate -d <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">  &quot;model&quot;: &quot;qwen3.5:latest&quot;,</span></span><br><span class="line"><span class="string">  &quot;prompt&quot;: &quot;who are you?&quot;,</span></span><br><span class="line"><span class="string">  &quot;stream&quot;: false</span></span><br><span class="line"><span class="string">&#125;&#x27;</span></span><br><span class="line">&#123;<span class="string">&quot;model&quot;</span>:<span class="string">&quot;qwen3.5:latest&quot;</span>,<span class="string">&quot;created_at&quot;</span>:<span class="string">&quot;2026-03-23T06:28:08.27341445Z&quot;</span>,<span class="string">&quot;response&quot;</span>:<span class="string">&quot;I&#x27;m **Qwen3.5**, a large language model developed by Tongyi Lab. I&#x27;m here to help with tasks like answering questions, creating content, coding, analyzing data, and more. I support over 100 languages, handle long documents with full context, and can even visualize data or generate code. What would you like to do? 😊&quot;</span>,<span class="string">&quot;thinking&quot;</span>:<span class="string">&quot;Okay, the user is asking \&quot;who are you?\&quot; This is a straightforward question about my identity. I need to provide a clear and accurate response. Since I&#x27;m Qwen3.5, I should mention that I&#x27;m a large language model developed by Tongyi Lab. I should also highlight some of my capabilities like multi-language support, logical reasoning, and long-context understanding. Keep the response friendly and concise. Make sure to avoid technical jargon to keep it accessible.&quot;</span>,<span class="string">&quot;done&quot;</span>:<span class="literal">true</span>,<span class="string">&quot;done_reason&quot;</span>:<span class="string">&quot;stop&quot;</span>,<span class="string">&quot;context&quot;</span>:,<span class="string">&quot;total_duration&quot;</span>:31831260725,<span class="string">&quot;load_duration&quot;</span>:28675863540,<span class="string">&quot;prompt_eval_count&quot;</span>:14,<span class="string">&quot;prompt_eval_duration&quot;</span>:49629384,<span class="string">&quot;eval_count&quot;</span>:174,<span class="string">&quot;eval_duration&quot;</span>:278832</span><br></pre></td></tr></table></figure>
-
-<p>这里就成功获取了相应的对话输出。另外在运行的时候，可以后台查看GPU的使用情况：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker <span class="built_in">exec</span> -it my-ollama.docker ollama ps</span><br><span class="line">NAME              ID              SIZE     PROCESSOR    CONTEXT    UNTIL</span><br><span class="line">qwen3.5:latest    fa5f            23 GB    100% GPU     262144     3 minutes from now</span><br></pre></td></tr></table></figure>
-<p>如果这里不是纯GPU的运行，那么就可能会导致速度偏慢。</p>
+<p>这里就成功获取了相应的对话输出。另外在运行的时候，可以后台查看GPU的使用情况：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker <span class="built_in">exec</span> -it my-ollama.docker ollama ps</span><br><span class="line">NAME              ID              SIZE     PROCESSOR    CONTEXT    UNTIL</span><br><span class="line">qwen3.5:latest    fa5f            23 GB    100% GPU     262144     3 minutes from now</span><br></pre></td></tr></table></figure><br>如果这里不是纯GPU的运行，那么就可能会导致速度偏慢。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>接上一篇关于Docker中的Ollama养虾的文章之后，这里补充一个Docker中部署Ollama模型的方案，通过这种方式建立一个完整的虚拟化环境，确保Ollama和OpenClaw在环境内的操作都相对可控。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/docker-ollama.html">https://www.cnblogs.com/dechinphy/p/docker-ollama.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -262,7 +246,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -273,7 +257,7 @@
 <nav class="article-nav">
   
     <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           基于Qwen3-Code-Next+KTransformer的本地Vibe Coding
@@ -283,7 +267,7 @@
   
   
     <a href="/2026/03/11/Win11+Docker+qwen3.5%E6%9C%AC%E5%9C%B0%E5%8C%96%E5%85%BB%E8%99%BE/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">Win11+Docker+qwen3.5本地化养虾</div>
     </a>
   
@@ -291,7 +275,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Docker部署Ollama模型 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2026%2F03%2F19%2FDocker%25E9%2583%25A8%25E7%25BD%25B2Ollama%25E6%25A8%25A1%25E5%259E%258B%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -446,6 +430,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

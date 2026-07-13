@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidqtR9V-VTCUPIe6fLvsZ1Z" class="article article-type-post" itemscope
+    <article id="post-cuid2FBUaC8HbPvZpiMpt7Eup" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,18 +210,21 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文通过一个python的实际案例的设计，来讲解python面向对象的技术——类的继承中必用的super函数的逻辑。其实我们可以把python中类的继承理解成这样的一个过程：当我们在括号中明确了父类时，其实已经引用了父类的成员函数，但是并没有执行父类的初始化函数。在执行子类的初始化函数的同时，会检查是否重载了父类的成员函数，如果重载则会直接覆盖。而只有在执行了super之后，才相当于执行了父类的初始化函数，此时才可以访问父类的成员变量。</p>
 <span id="more"></span>
-
-<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>python中的super，名为超类，可以简单的理解为执行父类的__init__函数。由于在python中不论是一对一的继承，还是一子类继承多个父类，都会涉及到执行的先后顺序的问题。那么本文就着重看下super的具体作用。</p>
-<h1 id="案例测试"><a href="#案例测试" class="headerlink" title="案例测试"></a>案例测试</h1><p>通过设计这样一个案例，我们可以明确super的前后逻辑关系：先定义一个父类<code>initial</code>，在这个父类中有参数值<code>param</code>和函数<code>func</code>，然后用子类<code>new</code>来继承父类<code>initial</code>。继承之后，在子类的<code>__init__</code>函数中<code>super</code>执行的前后去打印参数值<code>param</code>和函数<code>func</code>的返回值，相关代码如下所示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义父类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">initial</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&#x27;This print is from initial object&#x27;</span>)</span><br><span class="line">        <span class="comment"># 定义父类参数</span></span><br><span class="line">        <span class="variable language_">self</span>.param = <span class="number">3</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义父类函数</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">func</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义子类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">new</span>(<span class="title class_ inherited__">initial</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&#x27;This print is from new object&#x27;</span>)</span><br><span class="line">        <span class="comment"># 打印子类函数值</span></span><br><span class="line">        <span class="built_in">print</span> (<span class="variable language_">self</span>.func())</span><br><span class="line">        <span class="comment"># 执行父类初始化函数</span></span><br><span class="line">        <span class="built_in">super</span>(new, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="comment"># 打印父类参数值</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="variable language_">self</span>.param)</span><br><span class="line">        <span class="variable language_">self</span>.param = <span class="number">4</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义子类函数</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">func</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    new()</span><br></pre></td></tr></table></figure>
-<p>代码的执行结果如下所示：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">This <span class="built_in">print</span> is from new object</span><br><span class="line">2</span><br><span class="line">This <span class="built_in">print</span> is from initial object</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
-
-<h2 id="结果分析"><a href="#结果分析" class="headerlink" title="结果分析"></a>结果分析</h2><p>首先我们注意到，父类<code>initial</code>中的<code>__init__</code>函数内的打印语句，是在super之后才输出的，这说明了，<code>super</code>函数是在执行父类的初始化操作。那么如果没有执行<code>super</code>，<code>new</code>子类对<code>initial</code>父类的继承体现在哪里呢？答案就是父类的成员函数，比如这样的一个案例：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">initial</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&#x27;This print is from initial object&#x27;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.param = <span class="number">3</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">func</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">new</span>(<span class="title class_ inherited__">initial</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&#x27;This print is from new object&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span> (<span class="variable language_">self</span>.func())</span><br><span class="line">        <span class="built_in">super</span>(new, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="built_in">print</span>(<span class="variable language_">self</span>.param)</span><br><span class="line">        <span class="variable language_">self</span>.param = <span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    new()</span><br></pre></td></tr></table></figure>
-<p>其实就是删掉了子类中重载的成员函数，那么得到的结果如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">This <span class="built_in">print</span> is from new object</span><br><span class="line">1</span><br><span class="line">This <span class="built_in">print</span> is from initial object</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
-<p>可以发现在执行super之前就可以打印父类的<code>func</code>函数的函数值。所以python中继承的逻辑是这样的：<br>$$<br>initial.func()\<br>\Downarrow\<br>new.__init__()\<br>\Downarrow\<br>new.func()&#x2F;new.param\<br>\Downarrow\<br>super()\<br>\Downarrow\<br>initial.__init__()&#x2F;initial.param\<br>\Downarrow\<br>new.__init__()&#x2F;new.param<br>$$<br>也正是因为只有执行了<code>super</code>才能初始化父类中的成员变量，因此如果在super之前是无法访问父类的成员变量的。</p>
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>python中的super，名为超类，可以简单的理解为执行父类的<strong>init</strong>函数。由于在python中不论是一对一的继承，还是一子类继承多个父类，都会涉及到执行的先后顺序的问题。那么本文就着重看下super的具体作用。</p>
+<h1 id="案例测试"><a href="#案例测试" class="headerlink" title="案例测试"></a>案例测试</h1><p>通过设计这样一个案例，我们可以明确super的前后逻辑关系：先定义一个父类<code>initial</code>，在这个父类中有参数值<code>param</code>和函数<code>func</code>，然后用子类<code>new</code>来继承父类<code>initial</code>。继承之后，在子类的<code>__init__</code>函数中<code>super</code>执行的前后去打印参数值<code>param</code>和函数<code>func</code>的返回值，相关代码如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义父类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">initial</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&#x27;This print is from initial object&#x27;</span>)</span><br><span class="line">        <span class="comment"># 定义父类参数</span></span><br><span class="line">        <span class="variable language_">self</span>.param = <span class="number">3</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义父类函数</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">func</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义子类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">new</span>(<span class="title class_ inherited__">initial</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&#x27;This print is from new object&#x27;</span>)</span><br><span class="line">        <span class="comment"># 打印子类函数值</span></span><br><span class="line">        <span class="built_in">print</span> (<span class="variable language_">self</span>.func())</span><br><span class="line">        <span class="comment"># 执行父类初始化函数</span></span><br><span class="line">        <span class="built_in">super</span>(new, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="comment"># 打印父类参数值</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="variable language_">self</span>.param)</span><br><span class="line">        <span class="variable language_">self</span>.param = <span class="number">4</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义子类函数</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">func</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    new()</span><br></pre></td></tr></table></figure><br>代码的执行结果如下所示：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">This <span class="built_in">print</span> is from new object</span><br><span class="line">2</span><br><span class="line">This <span class="built_in">print</span> is from initial object</span><br><span class="line">3</span><br></pre></td></tr></table></figure></p>
+<h2 id="结果分析"><a href="#结果分析" class="headerlink" title="结果分析"></a>结果分析</h2><p>首先我们注意到，父类<code>initial</code>中的<code>__init__</code>函数内的打印语句，是在super之后才输出的，这说明了，<code>super</code>函数是在执行父类的初始化操作。那么如果没有执行<code>super</code>，<code>new</code>子类对<code>initial</code>父类的继承体现在哪里呢？答案就是父类的成员函数，比如这样的一个案例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">initial</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&#x27;This print is from initial object&#x27;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.param = <span class="number">3</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">func</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">new</span>(<span class="title class_ inherited__">initial</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&#x27;This print is from new object&#x27;</span>)</span><br><span class="line">        <span class="built_in">print</span> (<span class="variable language_">self</span>.func())</span><br><span class="line">        <span class="built_in">super</span>(new, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="built_in">print</span>(<span class="variable language_">self</span>.param)</span><br><span class="line">        <span class="variable language_">self</span>.param = <span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    new()</span><br></pre></td></tr></table></figure><br>其实就是删掉了子类中重载的成员函数，那么得到的结果如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">This <span class="built_in">print</span> is from new object</span><br><span class="line">1</span><br><span class="line">This <span class="built_in">print</span> is from initial object</span><br><span class="line">3</span><br></pre></td></tr></table></figure><br>可以发现在执行super之前就可以打印父类的<code>func</code>函数的函数值。所以python中继承的逻辑是这样的：</p>
+<script type="math/tex; mode=display">
+initial.func()\\
+\Downarrow\\
+new.\_\_init\_\_()\\
+\Downarrow\\
+new.func()/new.param\\
+\Downarrow\\
+super()\\
+\Downarrow\\
+initial.\_\_init\_\_()/initial.param\\
+\Downarrow\\
+new.\_\_init\_\_()/new.param</script><p>也正是因为只有执行了<code>super</code>才能初始化父类中的成员变量，因此如果在super之前是无法访问父类的成员变量的。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文通过一个python的实际案例的设计，来讲解python面向对象的技术——类的继承中必用的super函数的逻辑。其实我们可以把python中类的继承理解成这样的一个过程：当我们在括号中明确了父类时，其实已经引用了父类的成员函数，但是并没有执行父类的初始化函数。在执行子类的初始化函数的同时，会检查是否重载了父类的成员函数，如果重载则会直接覆盖。而只有在执行了super之后，才相当于执行了父类的初始化函数，此时才可以访问父类的成员变量。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/super.html">https://www.cnblogs.com/dechinphy/p/super.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -242,7 +245,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -253,7 +256,7 @@
 <nav class="article-nav">
   
     <a href="/2022/03/24/MindSpore%E5%B0%9D%E9%B2%9C%E4%B9%8BVmap%E5%8A%9F%E8%83%BD/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           MindSpore尝鲜之Vmap功能
@@ -263,7 +266,7 @@
   
   
     <a href="/2022/03/21/%E4%BB%8E%E7%BB%8F%E5%85%B8%E5%8A%A8%E5%8A%9B%E5%AD%A6%E7%90%86%E8%A7%A3%E5%8B%92%E8%AE%A9%E5%BE%B7%E5%8F%98%E6%8D%A2/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">从经典动力学理解勒让德变换</div>
     </a>
   
@@ -271,7 +274,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=python中的super是什么？ - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F03%2F22%2Fpython%25E4%25B8%25AD%25E7%259A%2584super%25E6%2598%25AF%25E4%25BB%2580%25E4%25B9%2588%25EF%25BC%259F%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -426,6 +429,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

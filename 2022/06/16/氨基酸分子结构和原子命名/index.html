@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidqiy1QYJ71IpHyqg90n3Mq" class="article article-type-post" itemscope
+    <article id="post-cuid37XLk7HhWPCeSGiUq2K_G" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,220 +210,223 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>PDB格式的文件是最常用于存储蛋白质构象的一种，其中也是以各个氨基酸(残基)为基本单位，在氨基酸内部对原子进行唯一性的命名。本文先通过展示各种氨基酸在蛋白质链的不同位置的结构，介绍各类氨基酸的基础构象。再通过丙氨酸和色氨酸两个案例，详细介绍了在蛋白质链的中的各种氨基酸内部的原子命名法则。需要注意的是，atom_name和atom_type是不一样的，atom_name是一个唯一的标识符，atom_type则是用于导出力场参数的重要标记。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面的一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/pdb.html">文章</a>中，我们讲述了蛋白质的组成结构，一共是20种氨基酸。由这20种氨基酸的排列组合，可以得到一条相应的蛋白质链，而这条蛋白质链经过各种螺旋和折叠，会得到一个最终稳定的蛋白质构象，也是我们日常生活中所能够接触到的蛋白质的存在形态。那么在上一篇文章中的表格里面，我们可以看到众多的氨基酸在蛋白质链的中间时候的构象，本文将要讲述一些其他位置所对应的构象，以及其中原子的命名法则。</p>
 <h1 id="同残基不同位置的构象"><a href="#同残基不同位置的构象" class="headerlink" title="同残基不同位置的构象"></a>同残基不同位置的构象</h1><p>即使是同一个残基，在位于蛋白质链的不同位置时，也有可能表现出不同的构象。比如在蛋白质的头部时，有可能会出现一些氢离子跟氮原子的成键。而残基位于蛋白质链的中部时，我们往往会略去其中的一个$H_2O$，跟两侧的其他残基形成2个肽键。具体结构如下表所示：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="center">英文名</th>
-<th align="center">中文名</th>
-<th align="center">三字母缩写</th>
-<th align="center">单字母缩写</th>
-<th align="center">三维结构图</th>
-<th align="center">N起始点结构图</th>
-<th align="center">C终点结构图</th>
+<th style="text-align:center">英文名</th>
+<th style="text-align:center">中文名</th>
+<th style="text-align:center">三字母缩写</th>
+<th style="text-align:center">单字母缩写</th>
+<th style="text-align:center">三维结构图</th>
+<th style="text-align:center">N起始点结构图</th>
+<th style="text-align:center">C终点结构图</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">Alanine</td>
-<td align="center">丙氨酸</td>
-<td align="center">Ala</td>
-<td align="center">A</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104356551-163091046.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616163551814-1469818965.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164018868-1173426007.png"></td>
+<tbody>
+<tr>
+<td style="text-align:center">Alanine</td>
+<td style="text-align:center">丙氨酸</td>
+<td style="text-align:center">Ala</td>
+<td style="text-align:center">A</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104356551-163091046.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616163551814-1469818965.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164018868-1173426007.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Arginine</td>
-<td align="center">精氨酸</td>
-<td align="center">Arg</td>
-<td align="center">R</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104617173-1258258958.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164208849-109126603.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172815508-1258247765.png"></td>
+<td style="text-align:center">Arginine</td>
+<td style="text-align:center">精氨酸</td>
+<td style="text-align:center">Arg</td>
+<td style="text-align:center">R</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104617173-1258258958.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164208849-109126603.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172815508-1258247765.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Asparagine</td>
-<td align="center">天冬酰胺</td>
-<td align="center">Asn</td>
-<td align="center">N</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104930400-829906203.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164346947-1201493218.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172931543-911542365.png"></td>
+<td style="text-align:center">Asparagine</td>
+<td style="text-align:center">天冬酰胺</td>
+<td style="text-align:center">Asn</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104930400-829906203.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164346947-1201493218.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172931543-911542365.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Asparticacid</td>
-<td align="center">天冬氨酸</td>
-<td align="center">Asp</td>
-<td align="center">D</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105029669-1063806573.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164457959-1352955320.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173031609-1536549685.png"></td>
+<td style="text-align:center">Asparticacid</td>
+<td style="text-align:center">天冬氨酸</td>
+<td style="text-align:center">Asp</td>
+<td style="text-align:center">D</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105029669-1063806573.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164457959-1352955320.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173031609-1536549685.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Cysteine</td>
-<td align="center">半胱氨酸</td>
-<td align="center">Cys</td>
-<td align="center">C</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105354587-147198142.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164622907-365857586.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173150829-2129306079.png"></td>
+<td style="text-align:center">Cysteine</td>
+<td style="text-align:center">半胱氨酸</td>
+<td style="text-align:center">Cys</td>
+<td style="text-align:center">C</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105354587-147198142.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164622907-365857586.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173150829-2129306079.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Glutamine</td>
-<td align="center">谷氨酰胺</td>
-<td align="center">Gln</td>
-<td align="center">Q</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105528619-1856489452.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164728552-1754699486.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173320155-430569307.png"></td>
+<td style="text-align:center">Glutamine</td>
+<td style="text-align:center">谷氨酰胺</td>
+<td style="text-align:center">Gln</td>
+<td style="text-align:center">Q</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105528619-1856489452.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164728552-1754699486.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173320155-430569307.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Glutamicacid</td>
-<td align="center">谷氨酸</td>
-<td align="center">Glu</td>
-<td align="center">E</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105627423-681216789.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164830808-1321873423.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173427313-89331128.png"></td>
+<td style="text-align:center">Glutamicacid</td>
+<td style="text-align:center">谷氨酸</td>
+<td style="text-align:center">Glu</td>
+<td style="text-align:center">E</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105627423-681216789.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164830808-1321873423.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173427313-89331128.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Glycine</td>
-<td align="center">甘氨酸</td>
-<td align="center">Gly</td>
-<td align="center">G</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105711942-1717438535.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164950287-969817560.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173540620-1354528631.png"></td>
+<td style="text-align:center">Glycine</td>
+<td style="text-align:center">甘氨酸</td>
+<td style="text-align:center">Gly</td>
+<td style="text-align:center">G</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105711942-1717438535.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164950287-969817560.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173540620-1354528631.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Histidine</td>
-<td align="center">组氨酸</td>
-<td align="center">His</td>
-<td align="center">H</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105816547-2046245703.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165105606-973348457.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173647695-312812108.png"></td>
+<td style="text-align:center">Histidine</td>
+<td style="text-align:center">组氨酸</td>
+<td style="text-align:center">His</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105816547-2046245703.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165105606-973348457.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173647695-312812108.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Isoleucine</td>
-<td align="center">异亮氨酸</td>
-<td align="center">Ile</td>
-<td align="center">I</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105857553-539582156.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165221911-1830019574.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173757321-1973450981.png"></td>
+<td style="text-align:center">Isoleucine</td>
+<td style="text-align:center">异亮氨酸</td>
+<td style="text-align:center">Ile</td>
+<td style="text-align:center">I</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105857553-539582156.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165221911-1830019574.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173757321-1973450981.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Leucine</td>
-<td align="center">亮氨酸</td>
-<td align="center">Leu</td>
-<td align="center">L</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105949218-1194449475.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165339382-1655388808.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173903651-505874335.png"></td>
+<td style="text-align:center">Leucine</td>
+<td style="text-align:center">亮氨酸</td>
+<td style="text-align:center">Leu</td>
+<td style="text-align:center">L</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105949218-1194449475.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165339382-1655388808.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173903651-505874335.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Lysine</td>
-<td align="center">赖氨酸</td>
-<td align="center">Lys</td>
-<td align="center">K</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110033488-1761911638.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165447939-1138263581.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174007708-736798707.png"></td>
+<td style="text-align:center">Lysine</td>
+<td style="text-align:center">赖氨酸</td>
+<td style="text-align:center">Lys</td>
+<td style="text-align:center">K</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110033488-1761911638.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165447939-1138263581.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174007708-736798707.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Methionine</td>
-<td align="center">甲硫氨酸（蛋氨酸）</td>
-<td align="center">Met</td>
-<td align="center">M</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110115808-434808146.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165600604-1628359784.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174110932-848498549.png"></td>
+<td style="text-align:center">Methionine</td>
+<td style="text-align:center">甲硫氨酸（蛋氨酸）</td>
+<td style="text-align:center">Met</td>
+<td style="text-align:center">M</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110115808-434808146.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165600604-1628359784.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174110932-848498549.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Phenylalanine</td>
-<td align="center">苯丙氨酸</td>
-<td align="center">Phe</td>
-<td align="center">F</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110155932-940361433.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165721294-1709809473.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174225471-1269675263.png"></td>
+<td style="text-align:center">Phenylalanine</td>
+<td style="text-align:center">苯丙氨酸</td>
+<td style="text-align:center">Phe</td>
+<td style="text-align:center">F</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110155932-940361433.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165721294-1709809473.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174225471-1269675263.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Proline</td>
-<td align="center">脯氨酸</td>
-<td align="center">Pro</td>
-<td align="center">P</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110248741-2145369047.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165853843-1729100986.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174424041-99262541.png"></td>
+<td style="text-align:center">Proline</td>
+<td style="text-align:center">脯氨酸</td>
+<td style="text-align:center">Pro</td>
+<td style="text-align:center">P</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110248741-2145369047.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165853843-1729100986.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174424041-99262541.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Serine</td>
-<td align="center">丝氨酸</td>
-<td align="center">Ser</td>
-<td align="center">S</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110322349-52703156.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616170004842-1782575657.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174550969-855251961.png"></td>
+<td style="text-align:center">Serine</td>
+<td style="text-align:center">丝氨酸</td>
+<td style="text-align:center">Ser</td>
+<td style="text-align:center">S</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110322349-52703156.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616170004842-1782575657.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174550969-855251961.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Threonine</td>
-<td align="center">苏氨酸</td>
-<td align="center">Thr</td>
-<td align="center">T</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110400266-17020800.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172117782-752423784.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174657698-1270462707.png"></td>
+<td style="text-align:center">Threonine</td>
+<td style="text-align:center">苏氨酸</td>
+<td style="text-align:center">Thr</td>
+<td style="text-align:center">T</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110400266-17020800.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172117782-752423784.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174657698-1270462707.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Tryptophan</td>
-<td align="center">色氨酸</td>
-<td align="center">Trp</td>
-<td align="center">W</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110437821-709539527.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172233405-2010768135.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174840641-76219393.png"></td>
+<td style="text-align:center">Tryptophan</td>
+<td style="text-align:center">色氨酸</td>
+<td style="text-align:center">Trp</td>
+<td style="text-align:center">W</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110437821-709539527.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172233405-2010768135.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174840641-76219393.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Tyrosine</td>
-<td align="center">酪氨酸</td>
-<td align="center">Tyr</td>
-<td align="center">Y</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110512569-739475348.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172346330-214328045.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174948632-321620394.png"></td>
+<td style="text-align:center">Tyrosine</td>
+<td style="text-align:center">酪氨酸</td>
+<td style="text-align:center">Tyr</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110512569-739475348.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172346330-214328045.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174948632-321620394.png" alt=""></td>
 </tr>
 <tr>
-<td align="center">Valine</td>
-<td align="center">缬氨酸</td>
-<td align="center">Val</td>
-<td align="center">V</td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110556757-964057686.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172507095-1160898201.png"></td>
-<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616175046778-943893825.png"></td>
+<td style="text-align:center">Valine</td>
+<td style="text-align:center">缬氨酸</td>
+<td style="text-align:center">Val</td>
+<td style="text-align:center">V</td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110556757-964057686.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172507095-1160898201.png" alt=""></td>
+<td style="text-align:center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616175046778-943893825.png" alt=""></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h1 id="原子命名法则"><a href="#原子命名法则" class="headerlink" title="原子命名法则"></a>原子命名法则</h1><p>当我们把这些生成的构象存储成PDB文件时，我们会发现其中每一个原子在所处的残基内的命名都是唯一的。我们以丙氨酸为例，来解读一下其中的命名法则。</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104356551-163091046.png" style="zoom:50%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104356551-163091046.png" style="zoom:50%">
 </div>
 
-<p>在上面这个结构图中，绿色的代表碳原子，灰色代表氢原子，红色代表氧原子，蓝色代表氮原子。一般我们先找到当前氨基酸的氮基碳原子，由于丙氨酸中只有一个氮原子，因此与氮原子成键的这个碳原子就是我们要找的氮基碳原子，我们将其命名为”CA”，对应的氮原子命名为”N”。一般我们会发现，这个氮基碳原子并不是位于主链的顶点，也就是在氨基酸内部还会连接至少2个其他的重原子。我们找到其连接的带氧原子的那个碳原子，将其命名为”C”，对应的氧原子命名为”O”，”CA”表示的是这个碳原子处于$\alpha$位。另外一个被氮基碳原子所连接的碳原子，被命名为”CB”，也就是$\beta$位的碳。按照与氮基碳原子的远近关系，分别用”A,B,G,D,E,Z,H”来标记这些重原子，对应的希腊字母是”$\alpha,\beta,\gamma,\delta,\epsilon,\zeta,\eta$”。那么这就是丙氨酸的所有重原子在PDB文件中的命名，如下图是一个含有丙氨酸的蛋白质的PDB文件。</p>
+<p>在上面这个结构图中，绿色的代表碳原子，灰色代表氢原子，红色代表氧原子，蓝色代表氮原子。一般我们先找到当前氨基酸的氮基碳原子，由于丙氨酸中只有一个氮原子，因此与氮原子成键的这个碳原子就是我们要找的氮基碳原子，我们将其命名为&quot;CA&quot;，对应的氮原子命名为&quot;N&quot;。一般我们会发现，这个氮基碳原子并不是位于主链的顶点，也就是在氨基酸内部还会连接至少2个其他的重原子。我们找到其连接的带氧原子的那个碳原子，将其命名为&quot;C&quot;，对应的氧原子命名为&quot;O&quot;，&quot;CA&quot;表示的是这个碳原子处于$\alpha$位。另外一个被氮基碳原子所连接的碳原子，被命名为&quot;CB&quot;，也就是$\beta$位的碳。按照与氮基碳原子的远近关系，分别用&quot;A,B,G,D,E,Z,H&quot;来标记这些重原子，对应的希腊字母是&quot;$\alpha,\beta,\gamma,\delta,\epsilon,\zeta,\eta$&quot;。那么这就是丙氨酸的所有重原子在PDB文件中的命名，如下图是一个含有丙氨酸的蛋白质的PDB文件。</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220617095520644-1497558836.png" style="zoom:70%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220617095520644-1497558836.png" style="zoom:70%">
 </div>
 
-<p>对于氢原子来说，命名是取决于其所连接的碳原子的位置，比如连接氮的氢原子，可以直接命名为”H”，连接$\alpha$碳的氢原子，可以命名为”HA”。而$\beta$位的碳连接了3个氢原子，因此需要加上额外的数字标记，那么对应的命名就是”HB1,HB2,HB3”。并且，这种加数字编号的方法对于重原子也是同样适用的，比如下图所示的色氨酸：</p>
+<p>对于氢原子来说，命名是取决于其所连接的碳原子的位置，比如连接氮的氢原子，可以直接命名为&quot;H&quot;，连接$\alpha$碳的氢原子，可以命名为&quot;HA&quot;。而$\beta$位的碳连接了3个氢原子，因此需要加上额外的数字标记，那么对应的命名就是&quot;HB1,HB2,HB3&quot;。并且，这种加数字编号的方法对于重原子也是同样适用的，比如下图所示的色氨酸：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110437821-709539527.png" style="zoom:50%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110437821-709539527.png" style="zoom:50%">
 </div>
 
-<p>同样的方法我们可以找到氮基碳原子和$\alpha$位的氧基碳原子，这样我们就可以按照连接的远近关系对其中的重原子进行命名。比如我们可以$\beta$位有1个碳，$\gamma$位也是1个碳，$\delta$位是2个碳，$\epsilon$位有1个氮原子和2个碳原子，$\zeta$位有2个碳原子，$\eta$位有1个碳原子。那么综合下来，我们将会得到的重原子的命名就是：”C,N,O,CA,CB,CG,CD1,CD2,NE1,CE2,CE3,CZ2,CZ3,CH2”，下图是一个真实蛋白质PDB文件中的色氨酸的命名：</p>
+<p>同样的方法我们可以找到氮基碳原子和$\alpha$位的氧基碳原子，这样我们就可以按照连接的远近关系对其中的重原子进行命名。比如我们可以$\beta$位有1个碳，$\gamma$位也是1个碳，$\delta$位是2个碳，$\epsilon$位有1个氮原子和2个碳原子，$\zeta$位有2个碳原子，$\eta$位有1个碳原子。那么综合下来，我们将会得到的重原子的命名就是：&quot;C,N,O,CA,CB,CG,CD1,CD2,NE1,CE2,CE3,CZ2,CZ3,CH2&quot;，下图是一个真实蛋白质PDB文件中的色氨酸的命名：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220617101334360-1865873969.png" style="zoom:70%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220617101334360-1865873969.png" style="zoom:70%">
 </div>
 
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>PDB格式的文件是最常用于存储蛋白质构象的一种，其中也是以各个氨基酸(残基)为基本单位，在氨基酸内部对原子进行唯一性的命名。本文先通过展示各种氨基酸在蛋白质链的不同位置的结构，介绍各类氨基酸的基础构象。再通过丙氨酸和色氨酸两个案例，详细介绍了在蛋白质链的中的各种氨基酸内部的原子命名法则。需要注意的是，atom_name和atom_type是不一样的，atom_name是一个唯一的标识符，atom_type则是用于导出力场参数的重要标记。</p>
@@ -448,7 +451,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -459,7 +462,7 @@
 <nav class="article-nav">
   
     <a href="/2022/06/27/%E4%BB%8EHadder%E7%9C%8B%E8%9B%8B%E7%99%BD%E8%B4%A8%E5%88%86%E5%AD%90%E4%B8%AD%E7%9A%84%E5%8A%A0%E6%B0%A2%E7%AE%97%E6%B3%95/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           从Hadder看蛋白质分子中的加氢算法
@@ -469,7 +472,7 @@
   
   
     <a href="/2022/06/16/git%E6%B7%BB%E5%8A%A0%E8%A2%AB.gitignore%E5%BF%BD%E7%95%A5%E7%9A%84%E6%96%87%E4%BB%B6/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">git添加被.gitignore忽略的文件</div>
     </a>
   
@@ -477,7 +480,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=氨基酸分子结构和原子命名 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F06%2F16%2F%25E6%25B0%25A8%25E5%259F%25BA%25E9%2585%25B8%25E5%2588%2586%25E5%25AD%2590%25E7%25BB%2593%25E6%259E%2584%25E5%2592%258C%25E5%258E%259F%25E5%25AD%2590%25E5%2591%25BD%25E5%2590%258D%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -632,6 +635,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

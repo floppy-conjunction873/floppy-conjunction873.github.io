@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidgsWuCurW17zkq4-2WoZQD" class="article article-type-post" itemscope
+    <article id="post-cuidiz1XJt_hZVBFGGMvoPqbl" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,36 +210,53 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文主要分享了文献Multibody molecular docking on a quantum annealer中的主要建模思路和初步的测试结果，可以实现QUBO模型求解多体分子对接的问题。在目前常见的分子对接软件中，更多的是实现的两体对接，多体对接的采样空间有可能会随着分子数量的增长而指数增长。而借助于量子退火机或者是量子计算机来求解这样的一个问题，不失为一个较好的思路。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>本文分享内容来自于最新的一篇名为<code>Multibody molecular docking on a quantum annealer</code>的文章，这篇文章的核心思想，是使用QUBO（二次受限二元优化）模型来求解一个分子对接问题：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240411161907540-209517628.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240411161907540-209517628.png">
 </div>
 
 <h2 id="分子对接"><a href="#分子对接" class="headerlink" title="分子对接"></a>分子对接</h2><p>如果我们考虑空间中有$N$个分子，这$N$个分子可以摆放在任意的位置，以任意的角度。那么这些不同的位置和角度，每一个都可以计算出来一个能量值，不论是使用分子力场的方法，还是使用第一性原理计算的方法。而这其中每一个能量较低的位置组合，都是一个潜在的分子对接形式。两个分子的对接就叫两体对接，两个以上分子的对接可以称为多体对接。目前大多数的分子对接软件支持的还是两体对接，随着分子数量的增长，多体对接的计算难易度有可能是随着分子数量指数增长的。具体的复杂度跟建模方式有关，例如，在这篇文章中用到的二元建模方法，采样空间就是指数增长的。</p>
-<h2 id="QUBO模型"><a href="#QUBO模型" class="headerlink" title="QUBO模型"></a>QUBO模型</h2><p>QUBO（quadratic unconstrained binary optimization formulation）模型常常被应用于组合优化问题中，其哈密顿量（损失函数）的通用形式为：<br>$$<br>H_{QUBO}&#x3D;\sum_ih_i(b_i)b_i+\sum_{i&gt;j}J(b_i,b_j)b_ib_j<br>$$<br>其中$b_i$是一个二元变量$b_i\in{0,1}$。使用QUBO模型解决问题的基本思路，首先要把问题映射到一个二元变量上。举一个最简单的例子，背包问题（Knapspack Problem）的二元建模，有$M$个物体和1个背包，如果我们决定把第$j$个物体放到背包中，那么对应的二元变量$b_j&#x3D;1$。相反地，如果我们决定不把第$j$个物体放到背包中，那么就有$b_j&#x3D;0$。最终完成QUBO模型的求解之后，我们会得到一串二元字符串$000111000…10100111$，而这其中被标记为1的物体都会被放到背包里面。在我们这篇文章中要介绍的，就是如何使用QUBO模型来建模和求解多体分子对接的问题。</p>
+<h2 id="QUBO模型"><a href="#QUBO模型" class="headerlink" title="QUBO模型"></a>QUBO模型</h2><p>QUBO（quadratic unconstrained binary optimization formulation）模型常常被应用于组合优化问题中，其哈密顿量（损失函数）的通用形式为：</p>
+<script type="math/tex; mode=display">
+H_{QUBO}=\sum_ih_i(b_i)b_i+\sum_{i>j}J(b_i,b_j)b_ib_j</script><p>其中$b_i$是一个二元变量$b_i\in{0,1}$。使用QUBO模型解决问题的基本思路，首先要把问题映射到一个二元变量上。举一个最简单的例子，背包问题（Knapspack Problem）的二元建模，有$M$个物体和1个背包，如果我们决定把第$j$个物体放到背包中，那么对应的二元变量$b_j=1$。相反地，如果我们决定不把第$j$个物体放到背包中，那么就有$b_j=0$。最终完成QUBO模型的求解之后，我们会得到一串二元字符串$000111000...10100111$，而这其中被标记为1的物体都会被放到背包里面。在我们这篇文章中要介绍的，就是如何使用QUBO模型来建模和求解多体分子对接的问题。</p>
 <h1 id="问题场景"><a href="#问题场景" class="headerlink" title="问题场景"></a>问题场景</h1><p>这篇文章中求解的一个问题是三个$\alpha$螺旋的对接问题。因为主要是思想性的创新，所以用的体系简单一些，当然，这样也更加方便验证结果的正确性。而且做了一个降维的简化，实际上求解的是一个二维平面的对接问题：三个螺旋结构平行放置且没有错位：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240411164843147-418572801.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240411164843147-418572801.png">
 </div>
 
 <h1 id="QUBO建模"><a href="#QUBO建模" class="headerlink" title="QUBO建模"></a>QUBO建模</h1><p>文章前面提到，我们要用QUBO模型来解决分子对接问题，首先要进行二元的建模，把问题转化为一个二元的模型。然后确定每一项所对应的系数，这样才能进入到模型的求解阶段。关于这个三螺旋的问题，QUBO模型研究的是这三个螺旋之间的两两相互作用（因为QUBO模型最高只能做到二次，对应的就是两体相互作用）。因为我们最终求解的目标是找到一些低能量的对接位点，因此我们可以启发性的使用相关的能量来作为系数。单点能好说，因为单个的分子不论放在什么位置，其能量只有内部结构决定。而两体相互作用能量（主要成分是范德华作用力）的参数需要结合QUBO建模来考虑。</p>
-<p>这篇文章使用的方法是，对二维的空间进行打格点操作，把空间离散化。然后针对于每一个格点进行one-hot编码，例如说，2号螺旋在格点1而3号格点在格点2，那么对应的二元表述就是：<br>$$<br>b_{(1-1)*2+0}&#x3D;b_0&#x3D;1;b_{(1-1)*2+1}&#x3D;b_1&#x3D;0\<br>b_{(2-1)*2+0}&#x3D;b_2&#x3D;0;b_{(2-1)*2+1}&#x3D;b_3&#x3D;1<br>$$<br>之所以这里面one-hot只用到了2维，这是因为我们在处理三体问题时，其实可以把其中的一个螺旋作为中心点不动，因此实际上one-hot的维度是2维。这样一来，实际上我们的解要在$2^{2G}$的解空间中去寻找，这里$G$表示打的格点的数量，一般跟分子本身无关。可以类似的推导，如果是有$N$体的相互作用，那么最终解空间的大小就会是$2^{(N-1)G}$，也就是我们作为的指数级别增长。</p>
+<p>这篇文章使用的方法是，对二维的空间进行打格点操作，把空间离散化。然后针对于每一个格点进行one-hot编码，例如说，2号螺旋在格点1而3号格点在格点2，那么对应的二元表述就是：</p>
+<script type="math/tex; mode=display">
+b_{(1-1)*2+0}=b_0=1;b_{(1-1)*2+1}=b_1=0\\
+b_{(2-1)*2+0}=b_2=0;b_{(2-1)*2+1}=b_3=1</script><p>之所以这里面one-hot只用到了2维，这是因为我们在处理三体问题时，其实可以把其中的一个螺旋作为中心点不动，因此实际上one-hot的维度是2维。这样一来，实际上我们的解要在$2^{2G}$的解空间中去寻找，这里$G$表示打的格点的数量，一般跟分子本身无关。可以类似的推导，如果是有$N$体的相互作用，那么最终解空间的大小就会是$2^{(N-1)G}$，也就是我们作为的指数级别增长。</p>
 <p>确定了建模方法之后，我们可以通过计算分子的单点能和格点中的两两相互作用能量，来获得QUBO模型的系数：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240411171005434-97848865.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240411171005434-97848865.png">
 </div>
 
-<h1 id="约束条件"><a href="#约束条件" class="headerlink" title="约束条件"></a>约束条件</h1><p>聪明的小伙伴已经意识到了一个问题，在上一个章节中的建模方法，会导致一个问题是，解空间中包含了两个分子处在相邻格点甚至是同一个格点内这样的解。还有可能出现一种更加不合理的情况：得到的解里面可能只剩下一个分子，会出现分子丢失的问题，这是Non-Physical的解。为了避免此类问题，需要在建模中加上一个惩罚值Penalty。因为这里加惩罚项的主要目的是为了避免分子被抹去的问题，因此约束条件可以这样定义：<br>$$<br>\sum_ib_i^x&#x3D;1<br>$$<br>这里$x$表示第$x$个分子，翻译成大白话就是：遍历所有的网格，你必然能找到且只能找到一个分子$x$。如果对所有的$x$加上这一项，那么就能尽可能的确保结果中不出现Non-Physical的解。不仅如此，一般情况下约束条件要双向约束，也就是过犹不及，因此一般都会采用二次形式的约束条件：<br>$$<br>f(b^x)&#x3D;(\sum_ib_i^x-1)^2&#x3D;\sum_{i&gt;j}2b_i^xb_j^x-\sum_ib_i^x+1&#x3D;0<br>$$<br>要说明的是，这里约束条件只是作为一个目标，我们希望把$f(b^x)$这个约束条件优化到0，但实际上我们只能确保$f(b^x)$被加到QUBO模型完整的损失函数内的时候，得到完整的损失函数的最小值。</p>
-<p>建模的最后，我们要得到带有惩罚值$\gamma$的最终哈密顿量（损失函数）：<br>$$<br>H_{MBD}&#x3D;H_{QUBO}+\gamma f(b^x)&#x3D;\sum_{x\in X’}\sum_{i&#x3D;1}^{T}(h(b_i^x)-\gamma)b_i^x+\sum_{x\geq y}\sum_{i&gt;j}(J(b_i^x,b_j^y)+\delta)b_i^xb_j^y<br>$$<br>其中$\delta$有：<br>$$<br>\delta&#x3D;\left{<br>\begin{matrix}<br>2\gamma, x&#x3D;y\<br>0, otherwise<br>\end{matrix}<br>\right.<br>$$<br>因为我们建模的时候固定了一个中心的$\alpha$螺旋，所以建模中的约束条件实际上是针对于可移动的单体目标的，这个集合被设定为$X’$。</p>
+<h1 id="约束条件"><a href="#约束条件" class="headerlink" title="约束条件"></a>约束条件</h1><p>聪明的小伙伴已经意识到了一个问题，在上一个章节中的建模方法，会导致一个问题是，解空间中包含了两个分子处在相邻格点甚至是同一个格点内这样的解。还有可能出现一种更加不合理的情况：得到的解里面可能只剩下一个分子，会出现分子丢失的问题，这是Non-Physical的解。为了避免此类问题，需要在建模中加上一个惩罚值Penalty。因为这里加惩罚项的主要目的是为了避免分子被抹去的问题，因此约束条件可以这样定义：</p>
+<script type="math/tex; mode=display">
+\sum_ib_i^x=1</script><p>这里$x$表示第$x$个分子，翻译成大白话就是：遍历所有的网格，你必然能找到且只能找到一个分子$x$。如果对所有的$x$加上这一项，那么就能尽可能的确保结果中不出现Non-Physical的解。不仅如此，一般情况下约束条件要双向约束，也就是过犹不及，因此一般都会采用二次形式的约束条件：</p>
+<script type="math/tex; mode=display">
+f(b^x)=(\sum_ib_i^x-1)^2=\sum_{i>j}2b_i^xb_j^x-\sum_ib_i^x+1=0</script><p>要说明的是，这里约束条件只是作为一个目标，我们希望把$f(b^x)$这个约束条件优化到0，但实际上我们只能确保$f(b^x)$被加到QUBO模型完整的损失函数内的时候，得到完整的损失函数的最小值。</p>
+<p>建模的最后，我们要得到带有惩罚值$\gamma$的最终哈密顿量（损失函数）：</p>
+<script type="math/tex; mode=display">
+H_{MBD}=H_{QUBO}+\gamma f(b^x)=\sum_{x\in X'}\sum_{i=1}^{T}(h(b_i^x)-\gamma)b_i^x+\sum_{x\geq y}\sum_{i>j}(J(b_i^x,b_j^y)+\delta)b_i^xb_j^y</script><p>其中$\delta$有：</p>
+<script type="math/tex; mode=display">
+\delta=\left\{
+\begin{matrix}
+2\gamma, x=y\\
+0, otherwise
+\end{matrix}
+\right.</script><p>因为我们建模的时候固定了一个中心的$\alpha$螺旋，所以建模中的约束条件实际上是针对于可移动的单体目标的，这个集合被设定为$X&#39;$。</p>
 <h1 id="求解QUBO模型"><a href="#求解QUBO模型" class="headerlink" title="求解QUBO模型"></a>求解QUBO模型</h1><p>当QUBO建模完成后，QUBO模型的求解过程是固定的，目前而言有三种主流的方法：使用退火机求解、使用模拟退火算法求解、使用QAOA算法求解，其中QAOA算法相当于退火算法的一个离散化版本，但是因为可以在量子计算机上面进行求解，所以退火机求解和QAOA求解算法可以重点关注下。而这篇文章里面用到的是退火机和模拟退火，退火机使用的是加拿大公司Dwave的硬件，亚洲地区用光学做的退火机可能更多一些。</p>
-<p>退火的大致原理，就是构造一个简单的哈密顿量$H_0$和对应的本征态$|{\psi_0}\rangle$，以及目标哈密顿量$H_{MBD}$和目标量子态$|{\psi_{MBD}}\rangle$，通过准静态过程实现$H_{t}&#x3D;\lambda H_0+(1-\lambda)H_{MBD}$。根据绝热近似（adiabatic approximation）理论，我们最终可以制备出来目标哈密顿量的量子态，从而实现对目标哈密顿量的求解。在前面的文章中我们实现过<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/annealer.html">使用绝热演化&#x2F;量子退火算法求解矩阵本征态
+<p>退火的大致原理，就是构造一个简单的哈密顿量$H<em>0$和对应的本征态$|{\psi_0}\rangle$，以及目标哈密顿量$H</em>{MBD}$和目标量子态$|{\psi<em>{MBD}}\rangle$，通过准静态过程实现$H</em>{t}=\lambda H<em>0+(1-\lambda)H</em>{MBD}$。根据绝热近似（adiabatic approximation）理论，我们最终可以制备出来目标哈密顿量的量子态，从而实现对目标哈密顿量的求解。在前面的文章中我们实现过<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/annealer.html">使用绝热演化/量子退火算法求解矩阵本征态
 </a>以及<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/qaa-maxcut.html">量子绝热算法求解最大切割问题
 </a>，感兴趣的读者可以跳转去看一下退火算法的相关实现，这里不做赘述。</p>
 <p>总而言之我们最终会得到一个本征量子态。而所谓的量子态在这个问题求解中的含义，其实对应的是一个求解空间的子空间。在这个子空间中进行采样，有更高的概率可以获得最终的最优解，并不是说这个量子态就是最终解了。而如果是通过退火机和量子计算机的体系来实现的话，可以做到高效的采样，从而做到更加快速的得到最优解。在我们引用的这篇文献中，重点介绍了一下惩罚值对于采样结果的影响，从而指导采样结果的选取。其实对于更多的工程问题而言，惩罚值的选取更多的依赖于经验，是一个经验参数。</p>
 <p>文献里面的基本结论是这样的：如果惩罚值选取的过小，那么没办法区分开Physical的解和Non-Physical的解；如果惩罚值过高，则很难采样采到能量较低（较优）的Physical解；因此，适中的惩罚值会是一个更好的选择：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240412100956758-1651666198.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240412100956758-1651666198.png">
 </div>
 
 <p>文献中还有一些更进一步的测试结果，还包含了退火机和模拟退火算法的效果比对，感兴趣的读者可以自行下载文献进行阅读。</p>
@@ -249,7 +266,7 @@
 <p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
 <p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
 <h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ol>
-<li>“<strong>Multibody molecular docking on a quantum annealer</strong>“. Mohit Pandey, Tristan Zaborniak, Hans Melo, Alexey Galda, and Vikram Khipple Mulligan</li>
+<li>&quot;<strong>Multibody molecular docking on a quantum annealer</strong>&quot;. Mohit Pandey, Tristan Zaborniak, Hans Melo, Alexey Galda, and Vikram Khipple Mulligan</li>
 </ol>
 
         </div>
@@ -265,7 +282,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -276,7 +293,7 @@
 <nav class="article-nav">
   
     <a href="/2024/04/12/MindSpore%E8%BF%90%E8%A1%8C%E6%8A%A5%E9%94%99RuntimeError--Unsupported-device-targ/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           MindSpore运行报错RuntimeError: Unsupported device target GPU解决方案
@@ -286,7 +303,7 @@
   
   
     <a href="/2024/04/11/MindSpore%E7%BC%96%E8%AF%91%E6%9E%84%E5%BB%BA%E5%90%8EVmap%E6%A8%A1%E5%9D%97%E7%9A%84RuntimeError%E9%97%AE%E9%A2%98/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">MindSpore编译构建后Vmap模块的RuntimeError问题</div>
     </a>
   
@@ -294,7 +311,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=基于QUBO模型的多体分子对接 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F04%2F11%2F%25E5%259F%25BA%25E4%25BA%258EQUBO%25E6%25A8%25A1%25E5%259E%258B%25E7%259A%2584%25E5%25A4%259A%25E4%25BD%2593%25E5%2588%2586%25E5%25AD%2590%25E5%25AF%25B9%25E6%258E%25A5%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -449,6 +466,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

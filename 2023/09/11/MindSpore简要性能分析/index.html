@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidJnf1Tgl1_Yb-mPp744DBv" class="article article-type-post" itemscope
+    <article id="post-cuidvulhrqXKgPFJNdVKbtNII" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,55 +210,43 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>当我们需要优化程序性能的时候，首先我们就需要了解程序的主要耗时模块在哪里，也就是通常所谓的决速步，或者瓶颈模块，这样就可以有针对性的去进行优化。在MindSpore相关的程序中，我们可以使用MindInsight这一强力的性能分析可视化工具来进行分析。该工具会给出每个算子的调用次数以及总耗时等参数，能够给性能优化带来不少重要的参考。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在之前的一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/msinsight.html">博客</a>中，我们介绍过MindInsight的安装与使用。不过在前面的文章中，我们主要介绍的是MindInsight与SummaryCollector的配合使用，更多的是用于对结果进行回溯。这篇文章我们简要的从性能分析的角度，来介绍一下MindInsight的一些使用方法。</p>
-<h1 id="MindInsight的安装与启动"><a href="#MindInsight的安装与启动" class="headerlink" title="MindInsight的安装与启动"></a>MindInsight的安装与启动</h1><p>这部分内容在前面的博客中已经介绍过一次，这里简单的重复一下相关的内容。安装我们还是推荐使用pip进行安装和管理：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install mindinsight</span><br></pre></td></tr></table></figure>
-<p>启动的方法很简单，就是在指定的目录下运行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mindinsight start</span><br></pre></td></tr></table></figure>
-<p>如果在terminal里面显示如下内容，则表示安装成功。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Web address: http://127.0.0.1:8080</span><br><span class="line">service start state: success</span><br></pre></td></tr></table></figure>
-
+<h1 id="MindInsight的安装与启动"><a href="#MindInsight的安装与启动" class="headerlink" title="MindInsight的安装与启动"></a>MindInsight的安装与启动</h1><p>这部分内容在前面的博客中已经介绍过一次，这里简单的重复一下相关的内容。安装我们还是推荐使用pip进行安装和管理：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install mindinsight</span><br></pre></td></tr></table></figure><br>启动的方法很简单，就是在指定的目录下运行：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mindinsight start</span><br></pre></td></tr></table></figure><br>如果在terminal里面显示如下内容，则表示安装成功。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Web address: http://127.0.0.1:8080</span><br><span class="line">service start state: success</span><br></pre></td></tr></table></figure></p>
 <h1 id="使用Profiler分析算子性能"><a href="#使用Profiler分析算子性能" class="headerlink" title="使用Profiler分析算子性能"></a>使用Profiler分析算子性能</h1><p>当我们构建好相关的网络之后，类似于CPU中的line_profiler，这里我们可以用MindSpore中所支持的Profiler来直接进行网络性能评估。这里的Profiler主要以算子为单位进行统计，最终会输出每一个算子的调用次数以及相关的占用时长。使用方法非常简单，就是在代码的开头写一句：<code>profiler = ms.Profiler(start_profile=True)</code>，以及在结尾处写一句：<code>profiler.analyse()</code>即可。</p>
 <p>下面这个案例是MindSponge的一个能量极小化的案例。MindSponge是一个基于MindSpore框架开发的分子动力学模拟框架，更多的介绍和相关信息可以参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/collections/5620">MindSponge教程系列博客</a>。简单来说，这里我们只是模拟几百个水分子的动力学演化过程。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">os.environ[&#x27;GLOG_v&#x27;]=&#x27;4&#x27;</span><br><span class="line">os.environ[&#x27;MS_JIT_MODULES&#x27;]=&#x27;sponge&#x27;</span><br><span class="line">import mindspore as ms</span><br><span class="line">from mindspore import context</span><br><span class="line">from mindspore.nn import Adam</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line"></span><br><span class="line">    import sys</span><br><span class="line">    sys.path.insert(0, &#x27;..&#x27;)</span><br><span class="line"></span><br><span class="line">    from sponge import Sponge, Molecule, ForceField, WithEnergyCell</span><br><span class="line">    from sponge.callback import RunInfo</span><br><span class="line">    context.set_context(mode=context.GRAPH_MODE, device_target=&#x27;GPU&#x27;, device_id=1)</span><br><span class="line"></span><br><span class="line">    profiler = ms.Profiler(start_profile=True)</span><br><span class="line">    system = Molecule(template=&#x27;water.tip3p.yaml&#x27;)</span><br><span class="line">    system.set_pbc_box([0.4, 0.4, 0.4])</span><br><span class="line">    system.repeat_box([5, 5, 5])</span><br><span class="line"></span><br><span class="line">    potential = ForceField(system, parameters=[&#x27;TIP3P&#x27;], use_pme=False)</span><br><span class="line"></span><br><span class="line">    opt = Adam(system.trainable_params(), 1e-3)</span><br><span class="line"></span><br><span class="line">    sim = WithEnergyCell(system, potential)</span><br><span class="line">    mini = Sponge(sim, optimizer=opt)</span><br><span class="line"></span><br><span class="line">    run_info = RunInfo(10)</span><br><span class="line">    mini.run(200, callbacks=[run_info])</span><br><span class="line"></span><br><span class="line">    profiler.analyse()</span><br></pre></td></tr></table></figure>
-<p>该模拟过程的输出如下所示：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[MindSPONGE] Started simulation at 2023-09-11 10:57:03</span><br><span class="line">[MindSPONGE] Compilation Time: 2.49s</span><br><span class="line">[MindSPONGE] Step: 0, E_pot: 11003.434, Time: 2494.60ms</span><br><span class="line">[MindSPONGE] Step: 10, E_pot: 9931.012, Time: 55.70ms</span><br><span class="line">[MindSPONGE] Step: 20, E_pot: 9860.436, Time: 51.15ms</span><br><span class="line">[MindSPONGE] Step: 30, E_pot: 9833.985, Time: 50.74ms</span><br><span class="line">[MindSPONGE] Step: 40, E_pot: 9820.092, Time: 52.73ms</span><br><span class="line">[MindSPONGE] Step: 50, E_pot: 9805.144, Time: 48.95ms</span><br><span class="line">[MindSPONGE] Step: 60, E_pot: 9781.4375, Time: 47.87ms</span><br><span class="line">[MindSPONGE] Step: 70, E_pot: 9740.486, Time: 48.46ms</span><br><span class="line">[MindSPONGE] Step: 80, E_pot: 9684.311, Time: 48.67ms</span><br><span class="line">[MindSPONGE] Step: 90, E_pot: 9619.269, Time: 52.02ms</span><br><span class="line">[MindSPONGE] Step: 100, E_pot: 9555.06, Time: 51.39ms</span><br><span class="line">[MindSPONGE] Step: 110, E_pot: 9498.154, Time: 47.72ms</span><br><span class="line">[MindSPONGE] Step: 120, E_pot: 9450.13, Time: 49.52ms</span><br><span class="line">[MindSPONGE] Step: 130, E_pot: 9408.7705, Time: 48.77ms</span><br><span class="line">[MindSPONGE] Step: 140, E_pot: 9370.615, Time: 50.83ms</span><br><span class="line">[MindSPONGE] Step: 150, E_pot: 9332.237, Time: 48.89ms</span><br><span class="line">[MindSPONGE] Step: 160, E_pot: 9290.162, Time: 49.57ms</span><br><span class="line">[MindSPONGE] Step: 170, E_pot: 9240.263, Time: 52.04ms</span><br><span class="line">[MindSPONGE] Step: 180, E_pot: 9177.134, Time: 51.12ms</span><br><span class="line">[MindSPONGE] Step: 190, E_pot: 9094.976, Time: 53.40ms</span><br><span class="line">[MindSPONGE] Finished simulation at 2023-09-11 10:57:15</span><br><span class="line">[MindSPONGE] Simulation <span class="keyword">time</span>: 11.91 seconds.</span><br><span class="line">--------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
-<p>运行结束后，会在路径下生成一个<code>data/profiler/</code>的目录，里面存放有我们所需的性能分析相关信息。但是需要注意的是，profiler本身也会占用很多的运行时间，所以使用profiler和不使用profiler的运行时间会有比较大的差别。我们如果只是希望对算法代码进行优化，只要保持在同一个条件（使用或不使用profiler）下进行分析即可。</p>
+<p>该模拟过程的输出如下所示：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[MindSPONGE] Started simulation at 2023-09-11 10:57:03</span><br><span class="line">[MindSPONGE] Compilation Time: 2.49s</span><br><span class="line">[MindSPONGE] Step: 0, E_pot: 11003.434, Time: 2494.60ms</span><br><span class="line">[MindSPONGE] Step: 10, E_pot: 9931.012, Time: 55.70ms</span><br><span class="line">[MindSPONGE] Step: 20, E_pot: 9860.436, Time: 51.15ms</span><br><span class="line">[MindSPONGE] Step: 30, E_pot: 9833.985, Time: 50.74ms</span><br><span class="line">[MindSPONGE] Step: 40, E_pot: 9820.092, Time: 52.73ms</span><br><span class="line">[MindSPONGE] Step: 50, E_pot: 9805.144, Time: 48.95ms</span><br><span class="line">[MindSPONGE] Step: 60, E_pot: 9781.4375, Time: 47.87ms</span><br><span class="line">[MindSPONGE] Step: 70, E_pot: 9740.486, Time: 48.46ms</span><br><span class="line">[MindSPONGE] Step: 80, E_pot: 9684.311, Time: 48.67ms</span><br><span class="line">[MindSPONGE] Step: 90, E_pot: 9619.269, Time: 52.02ms</span><br><span class="line">[MindSPONGE] Step: 100, E_pot: 9555.06, Time: 51.39ms</span><br><span class="line">[MindSPONGE] Step: 110, E_pot: 9498.154, Time: 47.72ms</span><br><span class="line">[MindSPONGE] Step: 120, E_pot: 9450.13, Time: 49.52ms</span><br><span class="line">[MindSPONGE] Step: 130, E_pot: 9408.7705, Time: 48.77ms</span><br><span class="line">[MindSPONGE] Step: 140, E_pot: 9370.615, Time: 50.83ms</span><br><span class="line">[MindSPONGE] Step: 150, E_pot: 9332.237, Time: 48.89ms</span><br><span class="line">[MindSPONGE] Step: 160, E_pot: 9290.162, Time: 49.57ms</span><br><span class="line">[MindSPONGE] Step: 170, E_pot: 9240.263, Time: 52.04ms</span><br><span class="line">[MindSPONGE] Step: 180, E_pot: 9177.134, Time: 51.12ms</span><br><span class="line">[MindSPONGE] Step: 190, E_pot: 9094.976, Time: 53.40ms</span><br><span class="line">[MindSPONGE] Finished simulation at 2023-09-11 10:57:15</span><br><span class="line">[MindSPONGE] Simulation <span class="keyword">time</span>: 11.91 seconds.</span><br><span class="line">--------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure><br>运行结束后，会在路径下生成一个<code>data/profiler/</code>的目录，里面存放有我们所需的性能分析相关信息。但是需要注意的是，profiler本身也会占用很多的运行时间，所以使用profiler和不使用profiler的运行时间会有比较大的差别。我们如果只是希望对算法代码进行优化，只要保持在同一个条件（使用或不使用profiler）下进行分析即可。</p>
 <h1 id="MindInsight性能分析"><a href="#MindInsight性能分析" class="headerlink" title="MindInsight性能分析"></a>MindInsight性能分析</h1><p>如果在前面代码运行的路径下直接启动MindInsight，然后把<code>http://127.0.0.1:8080</code>复制到浏览器里面打开，就可以看到对应的性能数据，如下图所示：</p>
 <div align=center>
-	<img src="https://img2023.cnblogs.com/blog/2277440/202309/2277440-20230911105549351-1596315005.png">
+    <img src="https://img2023.cnblogs.com/blog/2277440/202309/2277440-20230911105549351-1596315005.png">
 </div>
 
 <p>除了图形化的数据展示之外，还可以在列表中逐项展开，去查看每一个Operator的占用时间：</p>
 <div align=center>
-	<img src="https://img2023.cnblogs.com/blog/2277440/202309/2277440-20230911113551691-562591820.png">
+    <img src="https://img2023.cnblogs.com/blog/2277440/202309/2277440-20230911113551691-562591820.png">
 </div>
 
 <p>在这个结果中我们发现，由于使用了太多的Cast，有可能导致整体代码运行速度低下。如此一来，我们就可以挨个去查找代码中所用到的Cast算子，然后有针对性的进行优化：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">$ grep -n -r <span class="string">&quot;Cast&quot;</span> ~/projects/gitee/dechin/mindsponge/sponge/</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/potential/energy/coulomb.py:399:        self.cast = ops.Cast()</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/potential/energy/coulomb.py:490:        self.cast = ops.Cast()</span><br><span class="line">$ grep -n -r <span class="string">&quot;F.cast&quot;</span> ~/projects/gitee/dechin/mindsponge/sponge/</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/partition/fullconnect.py:75:            fc_idx = nrange + F.cast(no_idx &lt;= nrange, ms.int32)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/partition/distance.py:142:        max_neighbours = ops.count_nonzero(F.cast(mask, ms.float16), -1, dtype=ms.float16) - 1</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/partition/distance.py:143:        <span class="built_in">return</span> F.cast(ops.reduce_max(max_neighbours), ms.int32)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/partition/distance.py:239:            distances = F.cast(distances, ms.float16)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/partition/distance.py:242:            distances = F.cast(distances, ms.float32)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/partition/grids.py:324:        sorted_grid_idx, sort_arg = self.sort(F.cast(atom_grid_idx, ms.float16))</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/partition/grids.py:325:        sorted_grid_idx = F.cast(sorted_grid_idx, ms.int32)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/partition/grids.py:356:        grid_neigh_atoms, _ = self.sort(F.cast(grid_neigh_atoms, ms.float16))</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/partition/grids.py:357:        grid_neigh_atoms = F.cast(grid_neigh_atoms, ms.int32)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/partition/grids.py:360:        max_neighbours = F.cast(msnp.amax(F.cast(max_neighbours, ms.float32)), ms.int32)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/metrics/metrics.py:455:        classes_w_tensor = F.cast(classes_w_t2, mstype.float32)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/metrics/metrics.py:482:        classes_num = F.cast(classes_num, mstype.float32)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/metrics/metrics.py:541:        target = F.cast(target, mstype.float32)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/metrics/metrics.py:542:        probs = F.cast(prediction, mstype.float32)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/function/operations.py:295:                n = func.keepdims_sum(F.cast(mask, ms.int32), -2)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/function/functions.py:618:    <span class="built_in">return</span> F.cast(image, ms.int32)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/function/functions.py:1409:        value = F.cast(value, dtype)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/function/functions.py:1441:        value = F.cast(value, dtype)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/system/residue/residue.py:262:        self.natom_tensor = msnp.sum(F.cast(self.atom_mask, ms.float32), -1, keepdims=True)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/system/residue/residue.py:572:            F.cast(self.atom_mask, ms.int32), -1, keepdims=True)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/system/molecule/molecule.py:633:        self.system_natom = msnp.sum(F.cast(self.atom_mask, ms.float32), -1, keepdims=True)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/sampling/bias/metad.py:191:        cutoff_bins = F.cast(cutoff_bins, ms.int32)</span><br><span class="line">/home/dechin/projects/gitee/dechin/mindsponge/sponge/sampling/bias/metad.py:398:        <span class="built_in">return</span> F.cast(nearest_grid, ms.int32)</span><br></pre></td></tr></table></figure>
-
 <p>这里优化的思路和过程我们暂时就不做展示了，本文主要介绍的是一个性能优化的思路：<code>先用profiler定位到性能决速步，然后有针对性的进行优化</code>。</p>
-<h1 id="MindInsight查看计算图"><a href="#MindInsight查看计算图" class="headerlink" title="MindInsight查看计算图"></a>MindInsight查看计算图</h1><p>在使用AI框架进行计算的时候，我们的各种算子会被编译成一张大的计算图，使用MindInsight就可以对这个计算图进行可视化。使用方法也很简单，在设置context的时候多加上两项配置即可：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">context.set_context(mode=context.GRAPH_MODE, device_target=<span class="string">&#x27;GPU&#x27;</span>, device_id=<span class="number">1</span>,)</span><br><span class="line">                    save_graphs=<span class="literal">True</span>, save_graphs_path=<span class="string">&#x27;./graphs/&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p>需要留意的是，这个<code>save_graphs_path</code>一定要配置上，否则输出的一大堆文件在当前目录下，直接没眼看。接下来同样的运行代码，会在当前目录下生成一个<code>graphs/</code>文件夹。此时刷新一下MindInsight的页面，点击最上面的<code>训练列表</code>，这个时候就会看到有两个数据列：</p>
+<h1 id="MindInsight查看计算图"><a href="#MindInsight查看计算图" class="headerlink" title="MindInsight查看计算图"></a>MindInsight查看计算图</h1><p>在使用AI框架进行计算的时候，我们的各种算子会被编译成一张大的计算图，使用MindInsight就可以对这个计算图进行可视化。使用方法也很简单，在设置context的时候多加上两项配置即可：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">context.set_context(mode=context.GRAPH_MODE, device_target=<span class="string">&#x27;GPU&#x27;</span>, device_id=<span class="number">1</span>,)</span><br><span class="line">                    save_graphs=<span class="literal">True</span>, save_graphs_path=<span class="string">&#x27;./graphs/&#x27;</span>)</span><br></pre></td></tr></table></figure><br>需要留意的是，这个<code>save_graphs_path</code>一定要配置上，否则输出的一大堆文件在当前目录下，直接没眼看。接下来同样的运行代码，会在当前目录下生成一个<code>graphs/</code>文件夹。此时刷新一下MindInsight的页面，点击最上面的<code>训练列表</code>，这个时候就会看到有两个数据列：</p>
 <div align=center>
-	<img src="https://img2023.cnblogs.com/blog/2277440/202309/2277440-20230912151204935-1664687644.png">
+    <img src="https://img2023.cnblogs.com/blog/2277440/202309/2277440-20230912151204935-1664687644.png">
 </div>
 
 <p>其中<code>graphs</code>这个数据列就是计算图的内容，点进去以后的界面如下所示：</p>
 <div align=center>
-	<img src="https://img2023.cnblogs.com/blog/2277440/202309/2277440-20230912153454018-1581957472.png">
+    <img src="https://img2023.cnblogs.com/blog/2277440/202309/2277440-20230912153454018-1581957472.png">
 </div>
 
 <p>如果我们比较关注计算图的话，就可以点进计算图的界面：</p>
 <div align=center>
-	<img src="https://img2023.cnblogs.com/blog/2277440/202309/2277440-20230912153538133-1893295418.png">
+    <img src="https://img2023.cnblogs.com/blog/2277440/202309/2277440-20230912153538133-1893295418.png">
 </div>
 
 <p>这个计算图的界面是根据右边的目录展开而展开的，如果我们想关注某一个模块的细节，就可以点进目录树：</p>
 <div align=center>
-	<img src="https://img2023.cnblogs.com/blog/2277440/202309/2277440-20230912153659249-1746483239.png">
+    <img src="https://img2023.cnblogs.com/blog/2277440/202309/2277440-20230912153659249-1746483239.png">
 </div>
 
 <p>这样的计算图结构，便于大家对整体的性能进行调节和优化。</p>
@@ -281,7 +269,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -292,7 +280,7 @@
 <nav class="article-nav">
   
     <a href="/2023/11/21/Jupyter-Notebook%E6%8A%A5%E9%94%99'500---Internal-Server-Error'%E7%9A%84%E8%A7%A3%E5%86%B3/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Jupyter Notebook报错&#39;500 : Internal Server Error&#39;的解决方法
@@ -302,7 +290,7 @@
   
   
     <a href="/2023/09/07/MindSponge%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6%E6%A8%A1%E6%8B%9F%E2%80%94%E2%80%94%E5%AE%9A%E4%B9%89Collective-Variables%EF%BC%882024.02%EF%BC%89/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">MindSponge分子动力学模拟——定义Collective Variables（2024.02）</div>
     </a>
   
@@ -310,7 +298,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=MindSpore简要性能分析 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2023%2F09%2F11%2FMindSpore%25E7%25AE%2580%25E8%25A6%2581%25E6%2580%25A7%25E8%2583%25BD%25E5%2588%2586%25E6%259E%2590%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -465,6 +453,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

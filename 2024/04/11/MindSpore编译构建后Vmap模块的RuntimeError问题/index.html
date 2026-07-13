@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuide704eGYokLQKSVslIo2fU" class="article article-type-post" itemscope
+    <article id="post-cuidJgJihthhcgTysGUPFF9oH" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,18 +210,14 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>在MindSpore编译计算图的过程中，会把从编译构建好的whl包中引入的模块视为第三方库，也就没有办法在即时编译的阶段入图。普通的math和numpy等第三方库不入图也不会影响计算。但如果是基于MindSpore本身开发的一些函数，如果用到了Jit、Grad和Vmap，那么有可能出现无法入图的问题，就会出现RuntimeError报错。解决方法就是设置一个跟即时编译有关的环境变量，把相关的第三方包引用修改为内部引用。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>这篇文章来源于MindSpore仓库中的一个<a target="_blank" rel="noopener" href="https://gitee.com/mindspore/mindspore/issues/I9C9WW#note_26489110">Issue</a>，简单描述问题就是，如果你用MindSpore开发了一个python软件供别人使用，那么很有可能涉及到编译构建的问题。但是如果直接使用编译好的whl包去运行的话，就有可能出现一个跟Jit即时编译有关的报错，这里Jit在其他的一些模块中也会被使用到，比如Vmap函数和Grad函数等。</p>
 <h1 id="问题复现"><a href="#问题复现" class="headerlink" title="问题复现"></a>问题复现</h1><p>我们通过一个简单的测试案例来复现一下这个RuntimeError。</p>
-<h2 id="软件环境"><a href="#软件环境" class="headerlink" title="软件环境"></a>软件环境</h2><p>– MindSpore version: 2.2.11<br>– Python version: 3.9.16<br>– OS platform and distribution: Linux Ubuntu 20.04</p>
+<h2 id="软件环境"><a href="#软件环境" class="headerlink" title="软件环境"></a>软件环境</h2><p>-- MindSpore version: 2.2.11<br>-- Python version: 3.9.16<br>-- OS platform and distribution: Linux Ubuntu 20.04</p>
 <h2 id="执行模式"><a href="#执行模式" class="headerlink" title="执行模式"></a>执行模式</h2><p>GRAPH_MODE</p>
 <h2 id="复现代码结构"><a href="#复现代码结构" class="headerlink" title="复现代码结构"></a>复现代码结构</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">debug/</span><br><span class="line">├── debug</span><br><span class="line">│   ├── __init__.py</span><br><span class="line">│   └── test_vmap.py</span><br><span class="line">├── example</span><br><span class="line">│   └── test.py</span><br><span class="line">└── setup.py</span><br></pre></td></tr></table></figure>
-
 <h2 id="代码内容"><a href="#代码内容" class="headerlink" title="代码内容"></a>代码内容</h2><h3 id="setup-py"><a href="#setup-py" class="headerlink" title="setup.py"></a>setup.py</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> setuptools <span class="keyword">import</span> setup, find_packages</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line">this_directory = Path(__file__).parent</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name=<span class="string">&quot;debugs&quot;</span>,</span><br><span class="line">    version=<span class="string">&quot;1.0&quot;</span>,</span><br><span class="line">    description=<span class="string">&quot;Test Vmap&quot;</span>,</span><br><span class="line">    license=<span class="string">&quot;Apache 2.0 Licence&quot;</span>,</span><br><span class="line">    packages=find_packages(),</span><br><span class="line">    platforms=<span class="string">&quot;any&quot;</span>,</span><br><span class="line">    scripts=[],</span><br><span class="line">    include_package_data=<span class="literal">True</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <h3 id="test-vmap-py"><a href="#test-vmap-py" class="headerlink" title="test_vmap.py"></a>test_vmap.py</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> ops</span><br><span class="line"></span><br><span class="line">func = <span class="keyword">lambda</span> ts: ts</span><br><span class="line">batch_func = ops.vmap(func, in_axes=(<span class="number">0</span>, ), out_axes=(<span class="number">0</span>, ))</span><br></pre></td></tr></table></figure>
-
 <h3 id="test-py"><a href="#test-py" class="headerlink" title="test.py"></a>test.py</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># import sys</span></span><br><span class="line"><span class="comment"># sys.path.insert(0, &#x27;../&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> debug.test_vmap <span class="keyword">import</span> batch_func</span><br><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> Tensor</span><br><span class="line"></span><br><span class="line">a = Tensor([<span class="number">0</span>, <span class="number">1</span>])</span><br><span class="line">batch_a = batch_func(a)</span><br><span class="line"><span class="built_in">print</span> (batch_a)</span><br></pre></td></tr></table></figure>
-
 <h2 id="复现步骤"><a href="#复现步骤" class="headerlink" title="复现步骤"></a>复现步骤</h2><ol>
 <li>按照目录树结构构建好本地测试复现环境；</li>
 <li>取消test.py文件中的两行注释，运行python3 test.py；</li>
@@ -230,22 +226,18 @@
 <h2 id="预期结果"><a href="#预期结果" class="headerlink" title="预期结果"></a>预期结果</h2><p>两次运行test.py都输出<code>[0 1]</code></p>
 <h2 id="报错信息"><a href="#报错信息" class="headerlink" title="报错信息"></a>报错信息</h2><p>第一次测试，为了方便代码阅读，使用了lambda函数，后来发现这个报错可能是即时编译跟lambda函数不兼容所导致的：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240411094820356-1058989988.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240411094820356-1058989988.png">
 </div>
 
 <p>后来修改成了普通的函数，才复现了一个RuntimeError：</p>
 <h3 id="test-vmap-py-1"><a href="#test-vmap-py-1" class="headerlink" title="test_vmap.py"></a>test_vmap.py</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> ops, jit</span><br><span class="line"></span><br><span class="line"><span class="meta">@jit</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">func</span>(<span class="params">ts</span>):</span><br><span class="line">    <span class="keyword">return</span> ts</span><br><span class="line"></span><br><span class="line">batch_func = ops.vmap(func, in_axes=(<span class="number">0</span>, ), out_axes=(<span class="number">0</span>, ))</span><br></pre></td></tr></table></figure>
-<p>得到的报错信息为：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;test.py&quot;</span>, line 8, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    batch_a = batch_func(a)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/mindspore-latest/lib/python3.7/site-packages/mindspore/common/api.py&quot;</span>, line 718, <span class="keyword">in</span> staging_specialize</span><br><span class="line">    out = _MindsporeFunctionExecutor(func, hash_obj, input_signature, process_obj, jit_config)(*args, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/mindspore-latest/lib/python3.7/site-packages/mindspore/common/api.py&quot;</span>, line 121, <span class="keyword">in</span> wrapper</span><br><span class="line">    results = fn(*arg, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/mindspore-latest/lib/python3.7/site-packages/mindspore/common/api.py&quot;</span>, line 350, <span class="keyword">in</span> __call__</span><br><span class="line">    raise err</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/mindspore-latest/lib/python3.7/site-packages/mindspore/common/api.py&quot;</span>, line 344, <span class="keyword">in</span> __call__</span><br><span class="line">    phase = self.compile(self.fn.__name__, *args_list, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/mindspore-latest/lib/python3.7/site-packages/mindspore/common/api.py&quot;</span>, line 435, <span class="keyword">in</span> compile</span><br><span class="line">    is_compile = self._graph_executor.compile(self.fn, compile_args, kwargs, phase, True)</span><br><span class="line">RuntimeError: <span class="string">&#x27;VmapOperation&#x27;</span> arg0 must be a <span class="string">&#x27;Function&#x27;</span> or <span class="string">&#x27;Cell&#x27;</span>, but got AbstractScalar(Type: External, Value: PythonObject(<span class="built_in">type</span>: &lt;class <span class="string">&#x27;function&#x27;</span>&gt;, value: &lt;<span class="keyword">function</span> func at 0x7f75c0375ef0&gt;), Shape: NoShape).</span><br><span class="line"></span><br><span class="line">----------------------------------------------------</span><br><span class="line">- C++ Call Stack: (For framework developers)</span><br><span class="line">----------------------------------------------------</span><br><span class="line">mindspore/ccsrc/frontend/operator/composite/composite.cc:1420 CheckVmapFunc</span><br><span class="line"></span><br><span class="line">----------------------------------------------------</span><br><span class="line">- The Traceback of Net Construct Code:</span><br><span class="line">----------------------------------------------------</span><br><span class="line"><span class="comment"># 0 In file /home/dechin/anaconda3/envs/mindspore-latest/lib/python3.7/site-packages/mindspore/ops/composite/base.py:686</span></span><br><span class="line">            <span class="built_in">return</span> vmap_(fn, in_axes, out_axes)(*args, **kwargs)</span><br><span class="line">                   ^</span><br><span class="line"> (See file <span class="string">&#x27;/tmp/debug/example/rank_0/om/analyze_fail.ir&#x27;</span> <span class="keyword">for</span> more details. Get instructions about `analyze_fail.ir` at https://www.mindspore.cn/search?inputValue=analyze_fail.ir)</span><br></pre></td></tr></table></figure>
-
+<p>得到的报错信息为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;test.py&quot;</span>, line 8, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    batch_a = batch_func(a)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/mindspore-latest/lib/python3.7/site-packages/mindspore/common/api.py&quot;</span>, line 718, <span class="keyword">in</span> staging_specialize</span><br><span class="line">    out = _MindsporeFunctionExecutor(func, hash_obj, input_signature, process_obj, jit_config)(*args, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/mindspore-latest/lib/python3.7/site-packages/mindspore/common/api.py&quot;</span>, line 121, <span class="keyword">in</span> wrapper</span><br><span class="line">    results = fn(*arg, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/mindspore-latest/lib/python3.7/site-packages/mindspore/common/api.py&quot;</span>, line 350, <span class="keyword">in</span> __call__</span><br><span class="line">    raise err</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/mindspore-latest/lib/python3.7/site-packages/mindspore/common/api.py&quot;</span>, line 344, <span class="keyword">in</span> __call__</span><br><span class="line">    phase = self.compile(self.fn.__name__, *args_list, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/mindspore-latest/lib/python3.7/site-packages/mindspore/common/api.py&quot;</span>, line 435, <span class="keyword">in</span> compile</span><br><span class="line">    is_compile = self._graph_executor.compile(self.fn, compile_args, kwargs, phase, True)</span><br><span class="line">RuntimeError: <span class="string">&#x27;VmapOperation&#x27;</span> arg0 must be a <span class="string">&#x27;Function&#x27;</span> or <span class="string">&#x27;Cell&#x27;</span>, but got AbstractScalar(Type: External, Value: PythonObject(<span class="built_in">type</span>: &lt;class <span class="string">&#x27;function&#x27;</span>&gt;, value: &lt;<span class="keyword">function</span> func at 0x7f75c0375ef0&gt;), Shape: NoShape).</span><br><span class="line"></span><br><span class="line">----------------------------------------------------</span><br><span class="line">- C++ Call Stack: (For framework developers)</span><br><span class="line">----------------------------------------------------</span><br><span class="line">mindspore/ccsrc/frontend/operator/composite/composite.cc:1420 CheckVmapFunc</span><br><span class="line"></span><br><span class="line">----------------------------------------------------</span><br><span class="line">- The Traceback of Net Construct Code:</span><br><span class="line">----------------------------------------------------</span><br><span class="line"><span class="comment"># 0 In file /home/dechin/anaconda3/envs/mindspore-latest/lib/python3.7/site-packages/mindspore/ops/composite/base.py:686</span></span><br><span class="line">            <span class="built_in">return</span> vmap_(fn, in_axes, out_axes)(*args, **kwargs)</span><br><span class="line">                   ^</span><br><span class="line"> (See file <span class="string">&#x27;/tmp/debug/example/rank_0/om/analyze_fail.ir&#x27;</span> <span class="keyword">for</span> more details. Get instructions about `analyze_fail.ir` at https://www.mindspore.cn/search?inputValue=analyze_fail.ir)</span><br></pre></td></tr></table></figure></p>
 <h1 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h1><p>按照开发人员的回复，这个问题是因为Vmap会使用到静态图模式。但是编译成whl包之后，静态图模式下会把whl包的内容识别为第三方仓库。从第三方仓库来的函数，有可能出现无法入图的问题：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240411095636173-427837175.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240411095636173-427837175.png">
 </div>
 
-<p>解决的方法就是，把相应的仓库添加到环境变量中去：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> MS_JIT_MODULES=debug</span><br></pre></td></tr></table></figure>
-
+<p>解决的方法就是，把相应的仓库添加到环境变量中去：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> MS_JIT_MODULES=debug</span><br></pre></td></tr></table></figure></p>
 <p>然后再次运行test.py，问题就解决了。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>在MindSpore编译计算图的过程中，会把从编译构建好的whl包中引入的模块视为第三方库，也就没有办法在即时编译的阶段入图。普通的math和numpy等第三方库不入图也不会影响计算。但如果是基于MindSpore本身开发的一些函数，如果用到了Jit、Grad和Vmap，那么有可能出现无法入图的问题，就会出现RuntimeError报错。解决方法就是设置一个跟即时编译有关的环境变量，把相关的第三方包引用修改为内部引用。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/ms_jit_module.html">https://www.cnblogs.com/dechinphy/p/ms_jit_module.html</a></p>
@@ -266,7 +258,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -277,7 +269,7 @@
 <nav class="article-nav">
   
     <a href="/2024/04/11/%E5%9F%BA%E4%BA%8EQUBO%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%A4%9A%E4%BD%93%E5%88%86%E5%AD%90%E5%AF%B9%E6%8E%A5/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           基于QUBO模型的多体分子对接
@@ -287,7 +279,7 @@
   
   
     <a href="/2024/04/10/%E5%8D%95%E7%B2%BE%E5%BA%A6%E6%B5%AE%E7%82%B9%E6%95%B0%E8%AE%A1%E7%AE%97%E8%AF%AF%E5%B7%AE%E4%B8%8E%E6%B6%88%E5%87%8F%E6%96%B9%E6%B3%95/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">单精度浮点数计算误差与消减方法</div>
     </a>
   
@@ -295,7 +287,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=MindSpore编译构建后Vmap模块的RuntimeError问题 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F04%2F11%2FMindSpore%25E7%25BC%2596%25E8%25AF%2591%25E6%259E%2584%25E5%25BB%25BA%25E5%2590%258EVmap%25E6%25A8%25A1%25E5%259D%2597%25E7%259A%2584RuntimeError%25E9%2597%25AE%25E9%25A2%2598%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -450,6 +442,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

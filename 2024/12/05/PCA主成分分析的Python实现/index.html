@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidULS_kLRUqmPNRepsURIVt" class="article article-type-post" itemscope
+    <article id="post-cuidJtTCP5AKv0K6H-t5jJwRf" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,37 +210,34 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>接上一篇文章介绍的矩阵特征分解，本文介绍了矩阵特征分解在主成分分析（PCA）算法中的应用。对于PCA算法，最直观的理解就是，在高维数据中找到一个低维的空间，使得所有的数据点投影到该低维空间之后尽可能的分离。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>PCA主成分分析在数据处理和降维中经常被使用到，是一个非常经典的降维算法，本文提供一个PCA降维的流程分解，和对应的Python代码实现。</p>
-<h1 id="二维数据生成"><a href="#二维数据生成" class="headerlink" title="二维数据生成"></a>二维数据生成</h1><p>如果没有自己的测试数据，我们可以生成一些特殊的随机数据点。例如我们使用Numpy的均匀随机数生成一系列二维的数据点$\mathbf{r}&#x3D;\left(x,y\right)$，其中数据点分布在一个椭圆内：<br>$$<br>x^2+4y^2\leq 1<br>$$<br>生成数据点的Python代码如下所示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plot_points</span>(<span class="params">data</span>):</span><br><span class="line">    <span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">    plt.figure()</span><br><span class="line">    plt.xlim(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    plt.ylim(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    plt.plot(data[:, <span class="number">0</span>], data[:, <span class="number">1</span>], <span class="string">&#x27;.&#x27;</span>, color=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">    plt.savefig(<span class="string">&quot;PCA.png&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">data_generator</span>(<span class="params">nodes, seed=<span class="number">0</span></span>):</span><br><span class="line">    np.random.seed(seed)</span><br><span class="line">    data = <span class="number">2</span> * np.random.random((nodes, <span class="number">2</span>)) - <span class="number">1</span></span><br><span class="line">    mask_index = np.where(data[:,<span class="number">0</span>]**<span class="number">2</span>+<span class="number">4</span>*data[:,<span class="number">1</span>]**<span class="number">2</span>&lt;=<span class="number">1</span>)[<span class="number">0</span>]</span><br><span class="line">    masked_data = data[mask_index]</span><br><span class="line">    <span class="keyword">return</span> masked_data</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    masked_data = data_generator(<span class="number">1000</span>)</span><br><span class="line">    plot_points(masked_data)</span><br></pre></td></tr></table></figure>
-<p>运行上述代码会在当前路径下生成一个<code>PCA.png</code>的图片，结果如下所示：</p>
+<h1 id="二维数据生成"><a href="#二维数据生成" class="headerlink" title="二维数据生成"></a>二维数据生成</h1><p>如果没有自己的测试数据，我们可以生成一些特殊的随机数据点。例如我们使用Numpy的均匀随机数生成一系列二维的数据点$\mathbf{r}=\left(x,y\right)$，其中数据点分布在一个椭圆内：</p>
+<script type="math/tex; mode=display">
+x^2+4y^2\leq 1</script><p>生成数据点的Python代码如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plot_points</span>(<span class="params">data</span>):</span><br><span class="line">    <span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">    plt.figure()</span><br><span class="line">    plt.xlim(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    plt.ylim(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    plt.plot(data[:, <span class="number">0</span>], data[:, <span class="number">1</span>], <span class="string">&#x27;.&#x27;</span>, color=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">    plt.savefig(<span class="string">&quot;PCA.png&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">data_generator</span>(<span class="params">nodes, seed=<span class="number">0</span></span>):</span><br><span class="line">    np.random.seed(seed)</span><br><span class="line">    data = <span class="number">2</span> * np.random.random((nodes, <span class="number">2</span>)) - <span class="number">1</span></span><br><span class="line">    mask_index = np.where(data[:,<span class="number">0</span>]**<span class="number">2</span>+<span class="number">4</span>*data[:,<span class="number">1</span>]**<span class="number">2</span>&lt;=<span class="number">1</span>)[<span class="number">0</span>]</span><br><span class="line">    masked_data = data[mask_index]</span><br><span class="line">    <span class="keyword">return</span> masked_data</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    masked_data = data_generator(<span class="number">1000</span>)</span><br><span class="line">    plot_points(masked_data)</span><br></pre></td></tr></table></figure><br>运行上述代码会在当前路径下生成一个<code>PCA.png</code>的图片，结果如下所示：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202412/2277440-20241205171057338-2001203493.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202412/2277440-20241205171057338-2001203493.png">
 </div>
 
-<h1 id="数据标准化"><a href="#数据标准化" class="headerlink" title="数据标准化"></a>数据标准化</h1><p>因为不同类型的数据有不同的范围和特征，可以做一个标准化方便后续处理，但标准化之后的数据，记得降维之后要进行还原：<br>$$<br>\mathbf{x}’&#x3D;\frac{x-\bar{x}}{\sqrt{\frac{\sum_i(x-\bar{x})^2}{n-1}}}<br>$$<br>这是$x$方向的标准化，$y$方向的标准化同理，最终可以得到$\mathbf{Z}&#x3D;\left(\mathbf{x}’,\mathbf{y}’\right)$。对应的Python函数实现为：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">normalization</span>(<span class="params">data</span>):</span><br><span class="line">    data_avg = np.average(data, axis=<span class="number">0</span>)</span><br><span class="line">    data_shift = data - data_avg</span><br><span class="line">    output = np.zeros_like(data)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(data.shape[-<span class="number">1</span>]):</span><br><span class="line">        output[:, i] = data_shift[:, i] / np.sqrt(np.<span class="built_in">sum</span>(data_shift[:, i] ** <span class="number">2</span>)/(data.shape[<span class="number">0</span>]-<span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> output</span><br></pre></td></tr></table></figure>
-
-<h1 id="协方差矩阵"><a href="#协方差矩阵" class="headerlink" title="协方差矩阵"></a>协方差矩阵</h1><p>正常我们写样本协方差矩阵的形式是这样的：<br>$$<br>C_{jk}&#x3D;\frac{\sum_{i&#x3D;1}^n(x_{ij}-\bar{x})(y_{ik}-\bar{y})}{n-1}<br>$$<br>但是因为前面已经分别得到了两个方向的标准化数据，所以我们直接用下面这个公式计算就可以了：<br>$$<br>C&#x3D;\frac{Z^TZ}{n-1}<br>$$<br>对应的Python实现为：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">cov_matrix</span>(<span class="params">Z</span>):</span><br><span class="line">    <span class="keyword">return</span> (Z.T @ Z) / (Z.shape[<span class="number">0</span>] - <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-<p>如果对标准化之后的数据计算一个协方差矩阵可以得到：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[[1.         0.04955086]</span><br><span class="line"> [0.04955086 1.        ]]</span><br></pre></td></tr></table></figure>
-
-<h1 id="特征值分解"><a href="#特征值分解" class="headerlink" title="特征值分解"></a>特征值分解</h1><p>关于特征值分解的内容，可以参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18585748/numpy-eig">上一篇文章</a>中的介绍。总体来说就是把一个矩阵分解为如下形式：<br>$$<br>C&#x3D;U\Sigma U^{-1}<br>$$<br>其中$\Sigma$是由本征值组成的对角矩阵，$U$是由本征列向量组成的本征矩阵。对应的Python代码实现为：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">eig_decomp</span>(<span class="params">C</span>):</span><br><span class="line">    vals, vecs = np.linalg.eig(C)</span><br><span class="line">    sort_idx = np.argsort(vals)</span><br><span class="line">    <span class="keyword">return</span> np.diag(vals), vecs, sort_idx</span><br></pre></td></tr></table></figure>
-<p>如果对上面的协方差矩阵做一个特征值分解，可以得到输出的特征值为：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[[1.04955086 0.        ]</span><br><span class="line"> [0.         0.95044914]]</span><br></pre></td></tr></table></figure>
-<p>输出的特征列向量组成的矩阵$U$为：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[[ 0.70710678 -0.70710678]</span><br><span class="line"> [ 0.70710678  0.70710678]]</span><br></pre></td></tr></table></figure>
-<p>可以把这两个列向量画到数据点中：</p>
+<h1 id="数据标准化"><a href="#数据标准化" class="headerlink" title="数据标准化"></a>数据标准化</h1><p>因为不同类型的数据有不同的范围和特征，可以做一个标准化方便后续处理，但标准化之后的数据，记得降维之后要进行还原：</p>
+<script type="math/tex; mode=display">
+\mathbf{x}'=\frac{x-\bar{x}}{\sqrt{\frac{\sum_i(x-\bar{x})^2}{n-1}}}</script><p>这是$x$方向的标准化，$y$方向的标准化同理，最终可以得到$\mathbf{Z}=\left(\mathbf{x}&#39;,\mathbf{y}&#39;\right)$。对应的Python函数实现为：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">normalization</span>(<span class="params">data</span>):</span><br><span class="line">    data_avg = np.average(data, axis=<span class="number">0</span>)</span><br><span class="line">    data_shift = data - data_avg</span><br><span class="line">    output = np.zeros_like(data)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(data.shape[-<span class="number">1</span>]):</span><br><span class="line">        output[:, i] = data_shift[:, i] / np.sqrt(np.<span class="built_in">sum</span>(data_shift[:, i] ** <span class="number">2</span>)/(data.shape[<span class="number">0</span>]-<span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> output</span><br></pre></td></tr></table></figure></p>
+<h1 id="协方差矩阵"><a href="#协方差矩阵" class="headerlink" title="协方差矩阵"></a>协方差矩阵</h1><p>正常我们写样本协方差矩阵的形式是这样的：</p>
+<script type="math/tex; mode=display">
+C_{jk}=\frac{\sum_{i=1}^n(x_{ij}-\bar{x})(y_{ik}-\bar{y})}{n-1}</script><p>但是因为前面已经分别得到了两个方向的标准化数据，所以我们直接用下面这个公式计算就可以了：</p>
+<script type="math/tex; mode=display">
+C=\frac{Z^TZ}{n-1}</script><p>对应的Python实现为：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">cov_matrix</span>(<span class="params">Z</span>):</span><br><span class="line">    <span class="keyword">return</span> (Z.T @ Z) / (Z.shape[<span class="number">0</span>] - <span class="number">1</span>)</span><br></pre></td></tr></table></figure><br>如果对标准化之后的数据计算一个协方差矩阵可以得到：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[[1.         0.04955086]</span><br><span class="line"> [0.04955086 1.        ]]</span><br></pre></td></tr></table></figure></p>
+<h1 id="特征值分解"><a href="#特征值分解" class="headerlink" title="特征值分解"></a>特征值分解</h1><p>关于特征值分解的内容，可以参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18585748/numpy-eig">上一篇文章</a>中的介绍。总体来说就是把一个矩阵分解为如下形式：</p>
+<script type="math/tex; mode=display">
+C=U\Sigma U^{-1}</script><p>其中$\Sigma$是由本征值组成的对角矩阵，$U$是由本征列向量组成的本征矩阵。对应的Python代码实现为：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">eig_decomp</span>(<span class="params">C</span>):</span><br><span class="line">    vals, vecs = np.linalg.eig(C)</span><br><span class="line">    sort_idx = np.argsort(vals)</span><br><span class="line">    <span class="keyword">return</span> np.diag(vals), vecs, sort_idx</span><br></pre></td></tr></table></figure><br>如果对上面的协方差矩阵做一个特征值分解，可以得到输出的特征值为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[[1.04955086 0.        ]</span><br><span class="line"> [0.         0.95044914]]</span><br></pre></td></tr></table></figure><br>输出的特征列向量组成的矩阵$U$为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[[ 0.70710678 -0.70710678]</span><br><span class="line"> [ 0.70710678  0.70710678]]</span><br></pre></td></tr></table></figure><br>可以把这两个列向量画到数据点中：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202412/2277440-20241206093937161-559290758.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202412/2277440-20241206093937161-559290758.png">
 </div>
 
-<h1 id="PCA降维"><a href="#PCA降维" class="headerlink" title="PCA降维"></a>PCA降维</h1><p>根据上面生成的对角化矩阵，我们已经可以从中筛选一些比较大的值和对应的本征向量，作为数据点的“主要成分”。一般是在本征值之间的值差异较大的时候可以更好的降维，这里生成的数据其实两个本征值没有很好的降维效果，但是我们依然可以执行降维的操作。例如我们选取第一个本征向量$\mathbf{v}$作为投影空间，把所有的数据点都投影到这个向量上：<br>$$<br>\mathbf{r}’&#x3D;\bar{\mathbf{r}}+\frac{(\mathbf{r}-\bar{\mathbf{r}})\cdot\mathbf{v}}{|\mathbf{v}|^2}\mathbf{v}<br>$$<br>就可以完成对数据点的降维，效果如下所示：</p>
+<h1 id="PCA降维"><a href="#PCA降维" class="headerlink" title="PCA降维"></a>PCA降维</h1><p>根据上面生成的对角化矩阵，我们已经可以从中筛选一些比较大的值和对应的本征向量，作为数据点的“主要成分”。一般是在本征值之间的值差异较大的时候可以更好的降维，这里生成的数据其实两个本征值没有很好的降维效果，但是我们依然可以执行降维的操作。例如我们选取第一个本征向量$\mathbf{v}$作为投影空间，把所有的数据点都投影到这个向量上：</p>
+<script type="math/tex; mode=display">
+\mathbf{r}'=\bar{\mathbf{r}}+\frac{(\mathbf{r}-\bar{\mathbf{r}})\cdot\mathbf{v}}{|\mathbf{v}|^2}\mathbf{v}</script><p>就可以完成对数据点的降维，效果如下所示：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202412/2277440-20241206105549493-1273320095.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202412/2277440-20241206105549493-1273320095.png">
 </div>
 
 <p>所用到的完整Python代码示例如下：</p>
@@ -271,7 +268,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -282,7 +279,7 @@
 <nav class="article-nav">
   
     <a href="/2024/12/18/PySAGES%E7%BB%93%E5%90%88CUDA-SPONGE%E5%A2%9E%E5%BC%BA%E9%87%87%E6%A0%B7/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           PySAGES结合CUDA SPONGE增强采样
@@ -292,7 +289,7 @@
   
   
     <a href="/2024/12/04/Numpy%E6%9C%AC%E5%BE%81%E5%80%BC%E6%B1%82%E8%A7%A3/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">Numpy本征值求解</div>
     </a>
   
@@ -300,7 +297,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=PCA主成分分析的Python实现 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F12%2F05%2FPCA%25E4%25B8%25BB%25E6%2588%2590%25E5%2588%2586%25E5%2588%2586%25E6%259E%2590%25E7%259A%2584Python%25E5%25AE%259E%25E7%258E%25B0%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -455,6 +452,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidYBcky6_ddccAJlKuqlMzE" class="article article-type-post" itemscope
+    <article id="post-cuidJo1Tw9Wf0hahV0viZsA-V" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,12 +210,11 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文介绍了一下使用Numpy计算矩阵的特征值求解和特征值分解问题。Numpy的eig特征求解函数可以直接输出给定矩阵所有的特征值，和对应的所有特征列向量所构成的矩阵。再使用Numpy的矩阵求逆函数，即可得到相关矩阵的EVD特征值分解。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>Numpy是一个Python库中最经常被用于执行计算任务的一个包，得益于其相比默认列表的高性能表现，以及易用性和可靠性，深受广大Python开发者的喜爱。这里介绍的是使用Numpy计算矩阵本征值和本征矩阵的方法。</p>
-<h1 id="求解问题"><a href="#求解问题" class="headerlink" title="求解问题"></a>求解问题</h1><p>本征问题是求解形如：$\mathbf{A}\mathbf{v}&#x3D;\lambda\mathbf{v}$的方程，其中$\mathbf{A}$为已知矩阵，$\mathbf{v}$为其中一个本征向量，$\lambda$是其中一个本征值。求解这个本征方程，就是找到所有符合条件的本征向量和对应的本征值。如果把所有的本征向量用一个本征矩阵$\mathbf{V}$来表示，那么就得到了一个特征值分解（EVD）：<br>$$<br>\mathbf{A} &#x3D; \mathbf{V}\Sigma\mathbf{V}^{-1}<br>$$<br>其中$\Sigma$是由所有的特征值$\lambda$组成的对角矩阵。该形式的分解与另外一种SVD奇异值分解，在各种数据降维和稀疏化中经常会用到。</p>
-<h1 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h1><p>这里用IPython做一个简单的功能演示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: x = np.random.random((<span class="number">3</span>,<span class="number">3</span>)) <span class="comment"># 生成一个随机3x3矩阵</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: x</span><br><span class="line">Out[<span class="number">3</span>]: </span><br><span class="line">array([[<span class="number">0.85976743</span>, <span class="number">0.98470964</span>, <span class="number">0.93286037</span>],</span><br><span class="line">       [<span class="number">0.4988825</span> , <span class="number">0.36451386</span>, <span class="number">0.68983566</span>],</span><br><span class="line">       [<span class="number">0.01818865</span>, <span class="number">0.27647914</span>, <span class="number">0.86250282</span>]])</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: vals, vecs = np.linalg.eig(x) <span class="comment"># 求解本征值和本征矩阵</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: vals <span class="comment"># 得到的本征值</span></span><br><span class="line">Out[<span class="number">5</span>]: array([-<span class="number">0.17227694</span>,  <span class="number">1.59456701</span>,  <span class="number">0.66449404</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: vecs <span class="comment"># 得到的本征列向量构成的矩阵</span></span><br><span class="line">Out[<span class="number">6</span>]: </span><br><span class="line">array([[-<span class="number">0.57443338</span>,  <span class="number">0.86571324</span>, -<span class="number">0.83117188</span>],</span><br><span class="line">       [ <span class="number">0.79327234</span>,  <span class="number">0.46077017</span>, -<span class="number">0.28656555</span>],</span><br><span class="line">       [-<span class="number">0.20185463</span>,  <span class="number">0.19552861</span>,  <span class="number">0.47648032</span>]])</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: np.allclose(vecs @ np.diag(vals) @ np.linalg.inv(vecs), x) <span class="comment"># 测试本征值分解EVD</span></span><br><span class="line">Out[<span class="number">7</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: np.allclose(x @ vecs[:, <span class="number">0</span>], vecs[:, <span class="number">0</span>] * vals[<span class="number">0</span>]) <span class="comment"># 测试本征向量</span></span><br><span class="line">Out[<span class="number">13</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: np.allclose(x @ vecs[:, <span class="number">1</span>], vecs[:, <span class="number">1</span>] * vals[<span class="number">1</span>]) <span class="comment"># 测试本征向量</span></span><br><span class="line">Out[<span class="number">14</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">15</span>]: np.allclose(x @ vecs[:, <span class="number">2</span>], vecs[:, <span class="number">2</span>] * vals[<span class="number">2</span>]) <span class="comment"># 测试本征向量</span></span><br><span class="line">Out[<span class="number">15</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
-<p>可以看到，EVD分解还原之后的矩阵跟原矩阵是保持一致的。这里逆矩阵的运算，也是用到了numpy的另外一个操作：矩阵求逆函数<code>numpy.linalg.inv</code>。</p>
+<h1 id="求解问题"><a href="#求解问题" class="headerlink" title="求解问题"></a>求解问题</h1><p>本征问题是求解形如：$\mathbf{A}\mathbf{v}=\lambda\mathbf{v}$的方程，其中$\mathbf{A}$为已知矩阵，$\mathbf{v}$为其中一个本征向量，$\lambda$是其中一个本征值。求解这个本征方程，就是找到所有符合条件的本征向量和对应的本征值。如果把所有的本征向量用一个本征矩阵$\mathbf{V}$来表示，那么就得到了一个特征值分解（EVD）：</p>
+<script type="math/tex; mode=display">
+\mathbf{A} = \mathbf{V}\Sigma\mathbf{V}^{-1}</script><p>其中$\Sigma$是由所有的特征值$\lambda$组成的对角矩阵。该形式的分解与另外一种SVD奇异值分解，在各种数据降维和稀疏化中经常会用到。</p>
+<h1 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h1><p>这里用IPython做一个简单的功能演示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: x = np.random.random((<span class="number">3</span>,<span class="number">3</span>)) <span class="comment"># 生成一个随机3x3矩阵</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: x</span><br><span class="line">Out[<span class="number">3</span>]: </span><br><span class="line">array([[<span class="number">0.85976743</span>, <span class="number">0.98470964</span>, <span class="number">0.93286037</span>],</span><br><span class="line">       [<span class="number">0.4988825</span> , <span class="number">0.36451386</span>, <span class="number">0.68983566</span>],</span><br><span class="line">       [<span class="number">0.01818865</span>, <span class="number">0.27647914</span>, <span class="number">0.86250282</span>]])</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: vals, vecs = np.linalg.eig(x) <span class="comment"># 求解本征值和本征矩阵</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: vals <span class="comment"># 得到的本征值</span></span><br><span class="line">Out[<span class="number">5</span>]: array([-<span class="number">0.17227694</span>,  <span class="number">1.59456701</span>,  <span class="number">0.66449404</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: vecs <span class="comment"># 得到的本征列向量构成的矩阵</span></span><br><span class="line">Out[<span class="number">6</span>]: </span><br><span class="line">array([[-<span class="number">0.57443338</span>,  <span class="number">0.86571324</span>, -<span class="number">0.83117188</span>],</span><br><span class="line">       [ <span class="number">0.79327234</span>,  <span class="number">0.46077017</span>, -<span class="number">0.28656555</span>],</span><br><span class="line">       [-<span class="number">0.20185463</span>,  <span class="number">0.19552861</span>,  <span class="number">0.47648032</span>]])</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: np.allclose(vecs @ np.diag(vals) @ np.linalg.inv(vecs), x) <span class="comment"># 测试本征值分解EVD</span></span><br><span class="line">Out[<span class="number">7</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: np.allclose(x @ vecs[:, <span class="number">0</span>], vecs[:, <span class="number">0</span>] * vals[<span class="number">0</span>]) <span class="comment"># 测试本征向量</span></span><br><span class="line">Out[<span class="number">13</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: np.allclose(x @ vecs[:, <span class="number">1</span>], vecs[:, <span class="number">1</span>] * vals[<span class="number">1</span>]) <span class="comment"># 测试本征向量</span></span><br><span class="line">Out[<span class="number">14</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">15</span>]: np.allclose(x @ vecs[:, <span class="number">2</span>], vecs[:, <span class="number">2</span>] * vals[<span class="number">2</span>]) <span class="comment"># 测试本征向量</span></span><br><span class="line">Out[<span class="number">15</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure><br>可以看到，EVD分解还原之后的矩阵跟原矩阵是保持一致的。这里逆矩阵的运算，也是用到了numpy的另外一个操作：矩阵求逆函数<code>numpy.linalg.inv</code>。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了一下使用Numpy计算矩阵的特征值求解和特征值分解问题。Numpy的eig特征求解函数可以直接输出给定矩阵所有的特征值，和对应的所有特征列向量所构成的矩阵。再使用Numpy的矩阵求逆函数，即可得到相关矩阵的EVD特征值分解。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/numpy-eig.html">https://www.cnblogs.com/dechinphy/p/numpy-eig.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -235,7 +234,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -246,7 +245,7 @@
 <nav class="article-nav">
   
     <a href="/2024/12/05/PCA%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90%E7%9A%84Python%E5%AE%9E%E7%8E%B0/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           PCA主成分分析的Python实现
@@ -256,7 +255,7 @@
   
   
     <a href="/2024/11/28/CudaSPONGE%E4%B9%8BPython%E6%8E%A5%E5%8F%A3/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">CudaSPONGE之Python接口</div>
     </a>
   
@@ -264,7 +263,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Numpy本征值求解 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F12%2F04%2FNumpy%25E6%259C%25AC%25E5%25BE%2581%25E5%2580%25BC%25E6%25B1%2582%25E8%25A7%25A3%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -419,6 +418,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

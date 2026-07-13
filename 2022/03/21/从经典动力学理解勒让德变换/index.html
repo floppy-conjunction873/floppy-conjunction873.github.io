@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuid9Q_HoW6Mn5eUAzXYzEtU5" class="article article-type-post" itemscope
+    <article id="post-cuid6rQg2ErVeTfhtUDFXjZQh" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,29 +210,93 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>为了通过一些实际问题来理解勒让德变换，我们假定了这样的一个场景：一个叫勒让德的人在足球场边上被不知来源的球砸中了脑袋，只能够判断足球砸到脑袋的一瞬间的速度方向。而通过勒让德变换的函数值，结合足球旋转的角速度，我们就可以得出足球的真实来源。同时，通过勒让德变换，我们还可以从拉格朗日力学推导到哈密顿力学。而且勒让德变换在热力学系统也有非常重要的应用场景。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>勒让德变换在经典力学和统计力学中是非常常用的一个数学工具，其变换了一个函数的所有（或部分）自变量，也改变了函数的形式，最终却不改变函数所表征的意义。最典型的案例是从拉格朗日动力学到哈密顿动力学的勒让德变换的应用，最终证明了两种力学框架的一致性。但是勒让德变换作为一个数学工具，光看形式的话很容易让人不明所以，这里我们代入一个经典动力学的案例，来看看勒让德变换的真实物理含义是什么。</p>
 <h1 id="场景假设"><a href="#场景假设" class="headerlink" title="场景假设"></a>场景假设</h1><p>假定某一个白天，勒让德正在一个操场上<strong>自南向北走</strong>过，突然他向右一转头，发现一个<strong>自东向西飞过来的足球</strong>，砸中了自己的脑袋。勒让德并<strong>没有看清楚球的具体轨迹</strong>，但是离勒让德不远的足球场上正站着三个人，一个人在勒让德的<strong>正东</strong>方，一个人在勒让德的<strong>东南</strong>方，一个人在勒让德的<strong>东北</strong>方。那么问题来了，是谁踢中了勒让德的脑袋呢？此时勒让德想起来球在<strong>砸到你的脑袋的一瞬间</strong>，是<strong>自东向西飞</strong>的，于是勒让德笃定就是在正东方的那个人踢过来的球【后人称之为勒让德变换】，然后勒让德跑过去把他打了一顿。但是勒让德不仅没打得过他，还被告知自己找错人了，这是怎么一回事呢？</p>
-<h1 id="动力学与勒让德变换"><a href="#动力学与勒让德变换" class="headerlink" title="动力学与勒让德变换"></a>动力学与勒让德变换</h1><p>我们首先给定一个经典动力学中的直线匀速运动方程：<br>$$<br>s(t)&#x3D;vt+s_0<br>$$<br>其中$s(t)$为$t$时刻的位置，$s_0$为$t&#x3D;0$时刻的位置，$v$表示速度，并且是一个常量。则该方程的全微分形式为：<br>$$<br>ds&#x3D;vdt<br>$$<br>而此时我们看着等式右边的表达式，想到了$vdt$可能是另外一个全微分形式的一部分：$d(vt)&#x3D;vdt+tdv$，将这个全微分形式移项再代入到上述的全微分表达式中有：<br>$$<br>ds&#x3D;d(vt)-tdv\<br>d(vt-s)&#x3D;tdv<br>$$<br>则，令函数$g(v)&#x3D;vt-s$就称之为$s(t)$的勒让德变换，需要注意的有：$\frac{\partial g}{\partial v}&#x3D;t$。类似的道理，我们也可以对$g(v)$再度做勒让德变换：<br>$$<br>dg&#x3D;tdv&#x3D;d(vt)-vdt\<br>d(vt-g)&#x3D;vdt<br>$$<br>于是我们发现，$s&#x3D;vt-g$又变回来了，因此$s(t)$和$g(v)$互为勒让德变换。那么在这种假定的前提条件下，上一个章节的场景假设中，勒让德应该没打错人，那是怎么一回事呢？我们考虑一个马格努斯力的场景：在流体中运动的球体，如果本身带有自旋，会受到一个前进速度与角速度平面法向的作用力，称之为马格努斯力，其形式为：<br>$$<br>F&#x3D;\frac{4}{3}(4\pi^2r^3\rho\omega v)<br>$$<br>其中$r$是球体半径，$\rho$是空气密度，$\omega$是球体自旋的角速度，$v$是球体前进的速度。相关的马格努力作用下的球体轨迹如下图所示：</p>
+<h1 id="动力学与勒让德变换"><a href="#动力学与勒让德变换" class="headerlink" title="动力学与勒让德变换"></a>动力学与勒让德变换</h1><p>我们首先给定一个经典动力学中的直线匀速运动方程：</p>
+<script type="math/tex; mode=display">
+s(t)=vt+s_0</script><p>其中$s(t)$为$t$时刻的位置，$s_0$为$t=0$时刻的位置，$v$表示速度，并且是一个常量。则该方程的全微分形式为：</p>
+<script type="math/tex; mode=display">
+ds=vdt</script><p>而此时我们看着等式右边的表达式，想到了$vdt$可能是另外一个全微分形式的一部分：$d(vt)=vdt+tdv$，将这个全微分形式移项再代入到上述的全微分表达式中有：</p>
+<script type="math/tex; mode=display">
+ds=d(vt)-tdv\\
+d(vt-s)=tdv</script><p>则，令函数$g(v)=vt-s$就称之为$s(t)$的勒让德变换，需要注意的有：$\frac{\partial g}{\partial v}=t$。类似的道理，我们也可以对$g(v)$再度做勒让德变换：</p>
+<script type="math/tex; mode=display">
+dg=tdv=d(vt)-vdt\\
+d(vt-g)=vdt</script><p>于是我们发现，$s=vt-g$又变回来了，因此$s(t)$和$g(v)$互为勒让德变换。那么在这种假定的前提条件下，上一个章节的场景假设中，勒让德应该没打错人，那是怎么一回事呢？我们考虑一个马格努斯力的场景：在流体中运动的球体，如果本身带有自旋，会受到一个前进速度与角速度平面法向的作用力，称之为马格努斯力，其形式为：</p>
+<script type="math/tex; mode=display">
+F=\frac{4}{3}(4\pi^2r^3\rho\omega v)</script><p>其中$r$是球体半径，$\rho$是空气密度，$\omega$是球体自旋的角速度，$v$是球体前进的速度。相关的马格努力作用下的球体轨迹如下图所示：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220321113333946-1435677166.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220321113333946-1435677166.png">
 </div>
 
-<p>因此马格努斯力对球体直线运动造成的偏移量为：<br>$$<br>s(t)&#x3D;vt+s_0+\frac{8}{3m}\pi^2r^3\rho\omega vt^2<br>$$<br>全微分形式变成了：<br>$$<br>ds&#x3D;vdt+\frac{16}{3m}\pi^2r^3\rho\omega vtdt&#x3D;vdt+a(v)tdt<br>$$<br>这里为了简写，假定了一个新的函数$a(v)&#x3D;\frac{16}{3m}\pi^2r^3\rho\omega v$，那么代入以下的两个变换：<br>$$<br>vdt&#x3D;d(vt)-tdv\<br>atdt&#x3D;d(\frac{1}{2}at^2)-\frac{1}{2}t^2da<br>$$<br>就可以得到：<br>$$<br>ds&#x3D;d(vt)-tdv+d(\frac{1}{2}at^2)-\frac{1}{2}t^2da\<br>d(vt+\frac{1}{2}at^2-s)&#x3D;tdv+\frac{1}{2}t^2da<br>$$<br>新的勒让德变换函数为：$g^<em>(v)&#x3D;vt+\frac{8}{3m}\pi^2r^3\rho\omega vt^2-s\neq vt-s&#x3D;g(v)$。通过这两个变换，我们逐渐发现了勒让德变换在这个案例中的物理含义：每一个时间点$\tau$都会有一个对应的矢量速度$v_{\tau}$，由于$s(t)$是连续函数，因此我们可以假设$\tau+\delta t$的小量时间内做匀速直线运动，那么勒让德变换就是一个扩展的假设，把整段$[0,\tau+\delta t]$时间内的运动看做是匀速直线运动。不论是$g^</em>(v)$还是$g(v)$，都有：<br>$$<br>s^<em>(t)&#x3D;(v_{\tau}+\frac{16}{3m}\pi^2r^3\rho\omega v_{\tau}\tau)t-g^</em>(v_{\tau})<br>$$<br>这个公式所表示的是$s(t)\approx s^<em>(t),t\in[0,\tau+\delta t]$，而$g^</em>(v_{\tau})&#x3D;s^<em>(0)$，即：勒让德变换表示的是在$\tau$时刻的球体轨迹切线方程在$t&#x3D;0$时刻的值$s^</em>(0)$，也就是勒让德以为的肇事者所在的位置，而实际上真正的肇事者在$g^<em>(v_0)&#x3D;s(0)\neq s^</em>(0)$，这就是勒让德找错肇事者的原因。而上一个章节中，只有在踢出来的球没有侧旋，即表达式中的$\omega&#x3D;0$时，运动轨迹变成了一个匀速直线运动（即：$s_{\omega&#x3D;0}(0)&#x3D;s^*_{\omega&#x3D;0}(0)$），此时勒让德对肇事者的判断才是准确的。</p>
+<p>因此马格努斯力对球体直线运动造成的偏移量为：</p>
+<script type="math/tex; mode=display">
+s(t)=vt+s_0+\frac{8}{3m}\pi^2r^3\rho\omega vt^2</script><p>全微分形式变成了：</p>
+<script type="math/tex; mode=display">
+ds=vdt+\frac{16}{3m}\pi^2r^3\rho\omega vtdt=vdt+a(v)tdt</script><p>这里为了简写，假定了一个新的函数$a(v)=\frac{16}{3m}\pi^2r^3\rho\omega v$，那么代入以下的两个变换：</p>
+<script type="math/tex; mode=display">
+vdt=d(vt)-tdv\\
+atdt=d(\frac{1}{2}at^2)-\frac{1}{2}t^2da</script><p>就可以得到：</p>
+<script type="math/tex; mode=display">
+ds=d(vt)-tdv+d(\frac{1}{2}at^2)-\frac{1}{2}t^2da\\
+d(vt+\frac{1}{2}at^2-s)=tdv+\frac{1}{2}t^2da</script><p>新的勒让德变换函数为：$g^<em>(v)=vt+\frac{8}{3m}\pi^2r^3\rho\omega vt^2-s\neq vt-s=g(v)$。通过这两个变换，我们逐渐发现了勒让德变换在这个案例中的物理含义：每一个时间点$\tau$都会有一个对应的矢量速度$v_{\tau}$，由于$s(t)$是连续函数，因此我们可以假设$\tau+\delta t$的小量时间内做匀速直线运动，那么勒让德变换就是一个扩展的假设，把整段$[0,\tau+\delta t]$时间内的运动看做是匀速直线运动。不论是$g^</em>(v)$还是$g(v)$，都有：</p>
+<script type="math/tex; mode=display">
+s^*(t)=(v_{\tau}+\frac{16}{3m}\pi^2r^3\rho\omega v_{\tau}\tau)t-g^*(v_{\tau})</script><p>这个公式所表示的是$s(t)\approx s^<em>(t),t\in[0,\tau+\delta t]$，而$g^</em>(v<em>{\tau})=s^<em>(0)$，即：勒让德变换表示的是在$\tau$时刻的球体轨迹切线方程在$t=0$时刻的值$s^</em>(0)$，也就是勒让德以为的肇事者所在的位置，而实际上真正的肇事者在$g^<em>(v_0)=s(0)\neq s^</em>(0)$，这就是勒让德找错肇事者的原因。而上一个章节中，只有在踢出来的球没有侧旋，即表达式中的$\omega=0$时，运动轨迹变成了一个匀速直线运动（即：$s</em>{\omega=0}(0)=s^*_{\omega=0}(0)$），此时勒让德对肇事者的判断才是准确的。</p>
 <p>可能看到这里还是会有人对于勒让德变换的物理含义表示不解，这里再做一下简单总结：<strong>勒让德变换在动力学过程中表示物体近似运动过程的出发点</strong>，对于凸函数，<strong>只有在初始的时刻才有勒让德变换的函数值与物体真实运动过程的出发点重合</strong>。</p>
-<h1 id="勒让德变换图像"><a href="#勒让德变换图像" class="headerlink" title="勒让德变换图像"></a>勒让德变换图像</h1><p>如下图片来自于参考链接3，用$y^<em>&#x3D;f’(x_0)x-f^</em>$的形式近似$y&#x3D;f(x)$在$x_0$处的值，其中对应的$x&#x3D;0$处的$y^<em>$的值$f^</em>$就是勒让德变换的函数值：</p>
+<h1 id="勒让德变换图像"><a href="#勒让德变换图像" class="headerlink" title="勒让德变换图像"></a>勒让德变换图像</h1><p>如下图片来自于参考链接3，用$y^<em>=f&#39;(x_0)x-f^</em>$的形式近似$y=f(x)$在$x_0$处的值，其中对应的$x=0$处的$y^<em>$的值$f^</em>$就是勒让德变换的函数值：</p>
 <div align=center>
-	<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/LegendreTransform1.png/300px-LegendreTransform1.png">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/LegendreTransform1.png/300px-LegendreTransform1.png">
 </div>
 
-<p>下图来自于参考链接1，其表述的内容与上图一致，但是需要注意的是，对于每一个函数$y&#x3D;f(x)$的点，都有一个对应的勒让德变换的函数值，新的自变量与这些函数值共同构成了勒让德变换的函数形式：</p>
+<p>下图来自于参考链接1，其表述的内容与上图一致，但是需要注意的是，对于每一个函数$y=f(x)$的点，都有一个对应的勒让德变换的函数值，新的自变量与这些函数值共同构成了勒让德变换的函数形式：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220321140612423-858196290.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220321140612423-858196290.png">
 </div>
 
-<h1 id="多变量勒让德变换"><a href="#多变量勒让德变换" class="headerlink" title="多变量勒让德变换"></a>多变量勒让德变换</h1><p>上述的案例主要是针对单变量和双变量的特殊勒让德变换的形式进行讲解，这里我们把勒让德变换写成更加一般的多变量形式，首先给定一个多变量函数$f(x_1,x_2,…,x_n)$的全微分形式：<br>$$<br>df&#x3D;\sum_{i&#x3D;1}^n\frac{\partial f}{\partial x_i}dx_i&#x3D;\sum_{i&#x3D;1}^ny_idx_i<br>$$<br>然后将$y_idx_i&#x3D;d(y_ix_i)-x_idy_i$代入，得到：<br>$$<br>df&#x3D;d\left(\sum_{i&#x3D;1}^ny_ix_i\right)-\sum_{i&#x3D;1}^nx_idy_i\<br>d\left(-f+\sum_{i&#x3D;1}^ny_ix_i\right)&#x3D;\sum_{i&#x3D;1}^nx_idy_i<br>$$<br>则函数$g&#x3D;-f+\sum_{i&#x3D;1}^ny_ix_i$称为函数$f$的勒让德变换，并且，勒让德变换还具备如下的关系：<br>$$<br>\frac{\partial g}{\partial y_i}&#x3D;x_i<br>$$<br>以上就是勒让德变换的多变量形式，变换本身并不是很复杂，重点关注一下在具体问题中的应用。</p>
-<h1 id="拉格朗日力学与哈密顿力学"><a href="#拉格朗日力学与哈密顿力学" class="headerlink" title="拉格朗日力学与哈密顿力学"></a>拉格朗日力学与哈密顿力学</h1><p>在拉格朗日力学中，我们一般用广义坐标$q$和广义速度$\dot{q}$来表征物体的动力学状态，对于每一个系统，动力学过程可以用拉格朗日量$L(q,\dot{q},t)&#x3D;T-V$来描述，其中$T$表示系统动能，$V$表示系统势能。根据保守系的欧拉-拉格朗日方程有：<br>$$<br>\frac{\partial L}{\partial q}&#x3D;\frac{d}{dt}\frac{\partial L}{\partial \dot{q}}<br>$$<br>由于拉格朗日量中只有动能项显含广义速度，因此可以得到一个新的参数，系统动量$p$与$q$的相互关系（此时注意我们的目标是把$(q,\dot{q})$的表象变换到$(p,q)$的表象）:<br>$$<br>p&#x3D;\frac{\partial L}{\partial \dot{q}},\dot{p}&#x3D;\frac{\partial L}{\partial q}<br>$$<br>则可得到拉格朗日量的全微分形式：<br>$$<br>\begin{align*}<br>dL&amp;&#x3D;\frac{\partial L}{\partial q}dq+\frac{\partial L}{\partial \dot{q}}d\dot{q}+\frac{\partial L}{\partial t}dt\<br>&amp;&#x3D;\dot{p}dq+pd\dot{q}+\frac{\partial L}{\partial t}dt\<br>&amp;&#x3D;\dot{p}dq+d(p\dot{q})-\dot{q}dp+\frac{\partial L}{\partial t}dt<br>\end{align*}<br>$$<br>等式左右交替位置，整理可得：<br>$$<br>dH&#x3D;d(p\dot{q}-L)&#x3D;\dot{q}dp-\dot{p}dq-\frac{\partial L}{\partial t}dt<br>$$<br>其中$H&#x3D;p\dot{q}-L$是拉格朗日量的一个勒让德变换，也被称为哈密顿量。同时由该哈密顿量，可以推导出哈密顿-正则运动方程：<br>$$<br>\frac{\partial H}{\partial p}&#x3D;\frac{dq}{dt}\<br>\frac{\partial H}{\partial q}&#x3D;-\frac{\partial L}{\partial q}&#x3D;-\frac{dp}{dt}<br>$$<br>同时，我们也可以通过勒让德变换的函数形式推断出哈密顿量的物理含义：$H&#x3D;p\dot{q}-L&#x3D;T+V$，也就表示着系统总能量。就这样通过勒让德变换，就可以证明拉格朗日力学跟哈密顿力学的等价性。</p>
-<h1 id="勒让德变换与统计力学"><a href="#勒让德变换与统计力学" class="headerlink" title="勒让德变换与统计力学"></a>勒让德变换与统计力学</h1><p>热力学的基本方程，是内能的全微分：<br>$$<br>dU&#x3D;-PdV+TdS<br>$$<br>代入$PdV&#x3D;d(PV)-VdP$做勒让德变换得：<br>$$<br>dU&#x3D;VdP-d(PV)+TdS\<br>dH&#x3D;d(U+PV)&#x3D;VdP+TdS<br>$$<br>其中$H&#x3D;U+PV$是热力学焓。类似的方法，对内能全微分代入$TdS&#x3D;d(TS)-SdT$做勒让德变换得：<br>$$<br>dU&#x3D;-PdV+d(TS)-SdT\<br>dF&#x3D;d(U-TS)&#x3D;-PdV-SdT<br>$$<br>其中$F&#x3D;U-TS$是亥姆赫兹自由能。接下来对焓的全微分代入$TdS&#x3D;d(TS)-SdT$做勒让德变换得：<br>$$<br>dH&#x3D;VdP+d(TS)-SdT\<br>dG&#x3D;d(H-TS)&#x3D;VdP-SdT<br>$$<br>其中$G&#x3D;H-TS&#x3D;U+PV-TS$是热力学系统的吉布斯自由能。并且由上述的四个$U,H,F,G$的表达式，可以推导出麦克斯韦关系式：<br>$$<br>dU&#x3D;-PdV+TdS&#x3D;\frac{\partial U}{\partial V}dV+\frac{\partial U}{\partial S}dS\<br>T&#x3D;\frac{\partial U}{\partial S},P&#x3D;-\frac{\partial U}{\partial V}\<br>\frac{\partial T}{\partial V}&#x3D;\frac{\partial^2 U}{\partial S\partial V}&#x3D;-\frac{\partial P}{\partial S}<br>$$<br>同理可以计算得：<br>$$<br>\frac{\partial T}{\partial P}&#x3D;\frac{\partial V}{\partial S}\<br>\frac{\partial S}{\partial V}&#x3D;\frac{\partial P}{\partial T}\<br>\frac{\partial S}{\partial P}&#x3D;-\frac{\partial V}{\partial T}<br>$$<br>这样，就可以通过勒让德变换，从热力学基本方程推导到麦克斯韦关系式。</p>
+<h1 id="多变量勒让德变换"><a href="#多变量勒让德变换" class="headerlink" title="多变量勒让德变换"></a>多变量勒让德变换</h1><p>上述的案例主要是针对单变量和双变量的特殊勒让德变换的形式进行讲解，这里我们把勒让德变换写成更加一般的多变量形式，首先给定一个多变量函数$f(x_1,x_2,...,x_n)$的全微分形式：</p>
+<script type="math/tex; mode=display">
+df=\sum_{i=1}^n\frac{\partial f}{\partial x_i}dx_i=\sum_{i=1}^ny_idx_i</script><p>然后将$y_idx_i=d(y_ix_i)-x_idy_i$代入，得到：</p>
+<script type="math/tex; mode=display">
+df=d\left(\sum_{i=1}^ny_ix_i\right)-\sum_{i=1}^nx_idy_i\\
+d\left(-f+\sum_{i=1}^ny_ix_i\right)=\sum_{i=1}^nx_idy_i</script><p>则函数$g=-f+\sum_{i=1}^ny_ix_i$称为函数$f$的勒让德变换，并且，勒让德变换还具备如下的关系：</p>
+<script type="math/tex; mode=display">
+\frac{\partial g}{\partial y_i}=x_i</script><p>以上就是勒让德变换的多变量形式，变换本身并不是很复杂，重点关注一下在具体问题中的应用。</p>
+<h1 id="拉格朗日力学与哈密顿力学"><a href="#拉格朗日力学与哈密顿力学" class="headerlink" title="拉格朗日力学与哈密顿力学"></a>拉格朗日力学与哈密顿力学</h1><p>在拉格朗日力学中，我们一般用广义坐标$q$和广义速度$\dot{q}$来表征物体的动力学状态，对于每一个系统，动力学过程可以用拉格朗日量$L(q,\dot{q},t)=T-V$来描述，其中$T$表示系统动能，$V$表示系统势能。根据保守系的欧拉-拉格朗日方程有：</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{\partial q}=\frac{d}{dt}\frac{\partial L}{\partial \dot{q}}</script><p>由于拉格朗日量中只有动能项显含广义速度，因此可以得到一个新的参数，系统动量$p$与$q$的相互关系（此时注意我们的目标是把$(q,\dot{q})$的表象变换到$(p,q)$的表象）:</p>
+<script type="math/tex; mode=display">
+p=\frac{\partial L}{\partial \dot{q}},\dot{p}=\frac{\partial L}{\partial q}</script><p>则可得到拉格朗日量的全微分形式：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+dL&=\frac{\partial L}{\partial q}dq+\frac{\partial L}{\partial \dot{q}}d\dot{q}+\frac{\partial L}{\partial t}dt\\
+&=\dot{p}dq+pd\dot{q}+\frac{\partial L}{\partial t}dt\\
+&=\dot{p}dq+d(p\dot{q})-\dot{q}dp+\frac{\partial L}{\partial t}dt
+\end{align*}</script><p>等式左右交替位置，整理可得：</p>
+<script type="math/tex; mode=display">
+dH=d(p\dot{q}-L)=\dot{q}dp-\dot{p}dq-\frac{\partial L}{\partial t}dt</script><p>其中$H=p\dot{q}-L$是拉格朗日量的一个勒让德变换，也被称为哈密顿量。同时由该哈密顿量，可以推导出哈密顿-正则运动方程：</p>
+<script type="math/tex; mode=display">
+\frac{\partial H}{\partial p}=\frac{dq}{dt}\\
+\frac{\partial H}{\partial q}=-\frac{\partial L}{\partial q}=-\frac{dp}{dt}</script><p>同时，我们也可以通过勒让德变换的函数形式推断出哈密顿量的物理含义：$H=p\dot{q}-L=T+V$，也就表示着系统总能量。就这样通过勒让德变换，就可以证明拉格朗日力学跟哈密顿力学的等价性。</p>
+<h1 id="勒让德变换与统计力学"><a href="#勒让德变换与统计力学" class="headerlink" title="勒让德变换与统计力学"></a>勒让德变换与统计力学</h1><p>热力学的基本方程，是内能的全微分：</p>
+<script type="math/tex; mode=display">
+dU=-PdV+TdS</script><p>代入$PdV=d(PV)-VdP$做勒让德变换得：</p>
+<script type="math/tex; mode=display">
+dU=VdP-d(PV)+TdS\\
+dH=d(U+PV)=VdP+TdS</script><p>其中$H=U+PV$是热力学焓。类似的方法，对内能全微分代入$TdS=d(TS)-SdT$做勒让德变换得：</p>
+<script type="math/tex; mode=display">
+dU=-PdV+d(TS)-SdT\\
+dF=d(U-TS)=-PdV-SdT</script><p>其中$F=U-TS$是亥姆赫兹自由能。接下来对焓的全微分代入$TdS=d(TS)-SdT$做勒让德变换得：</p>
+<script type="math/tex; mode=display">
+dH=VdP+d(TS)-SdT\\
+dG=d(H-TS)=VdP-SdT</script><p>其中$G=H-TS=U+PV-TS$是热力学系统的吉布斯自由能。并且由上述的四个$U,H,F,G$的表达式，可以推导出麦克斯韦关系式：</p>
+<script type="math/tex; mode=display">
+dU=-PdV+TdS=\frac{\partial U}{\partial V}dV+\frac{\partial U}{\partial S}dS\\
+T=\frac{\partial U}{\partial S},P=-\frac{\partial U}{\partial V}\\
+\frac{\partial T}{\partial V}=\frac{\partial^2 U}{\partial S\partial V}=-\frac{\partial P}{\partial S}</script><p>同理可以计算得：</p>
+<script type="math/tex; mode=display">
+\frac{\partial T}{\partial P}=\frac{\partial V}{\partial S}\\
+\frac{\partial S}{\partial V}=\frac{\partial P}{\partial T}\\
+\frac{\partial S}{\partial P}=-\frac{\partial V}{\partial T}</script><p>这样，就可以通过勒让德变换，从热力学基本方程推导到麦克斯韦关系式。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>为了通过一些实际问题来理解勒让德变换，我们假定了这样的一个场景：一个叫勒让德的人在足球场边上被不知来源的球砸中了脑袋，只能够判断足球砸到脑袋的一瞬间的速度方向。而通过勒让德变换的函数值，结合足球旋转的角速度，我们就可以得出足球的真实来源。同时，通过勒让德变换，我们还可以从拉格朗日力学推导到哈密顿力学。而且勒让德变换在热力学系统也有非常重要的应用场景。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/legendre.html">https://www.cnblogs.com/dechinphy/p/legendre.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -259,7 +323,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -270,7 +334,7 @@
 <nav class="article-nav">
   
     <a href="/2022/03/22/python%E4%B8%AD%E7%9A%84super%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           python中的super是什么？
@@ -280,7 +344,7 @@
   
   
     <a href="/2022/03/17/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6%E6%A8%A1%E6%8B%9F%E7%AE%97%E6%B3%95%E6%A1%86%E6%9E%B6/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">分子动力学模拟算法框架</div>
     </a>
   
@@ -288,7 +352,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=从经典动力学理解勒让德变换 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F03%2F21%2F%25E4%25BB%258E%25E7%25BB%258F%25E5%2585%25B8%25E5%258A%25A8%25E5%258A%259B%25E5%25AD%25A6%25E7%2590%2586%25E8%25A7%25A3%25E5%258B%2592%25E8%25AE%25A9%25E5%25BE%25B7%25E5%258F%2598%25E6%258D%25A2%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -443,6 +507,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

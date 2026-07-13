@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidZpDOVBo8qB89wtjGI2o4P" class="article article-type-post" itemscope
+    <article id="post-cuidnM0eLEkEYUtp05yFwK0rZ" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,21 +210,16 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>使用Git工具进行异步开发的优点是非常显而易见的，在开发效率和版本管理上得到非常大的进步。当然异步开发过程中也难免会遇到一些开发冲突，比如两个人同时修改了同一个文件，那最终仓库上的版本肯定只能保留一个版本，因此在pull下来的过程中就会提示合并冲突。此时可以使用PyCharm中的专业合并冲突解决工具来进行处理，该工具首先可以在界面上列举出来所有包含冲突的文件，其次是支持diff的界面，并且可以直接在界面上进行代码修改。通过三个界面上的代码可以清晰的看到异步开发过程中的不同修改，以及冲突发生前的最后一个版本，使用起来逻辑清晰操作简单，十分推荐。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面的一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/git-remote.html">博客</a>中，我们介绍了Fork到自己名下的本地仓库如何与远程原始仓库创建链接的方法。在这篇文章中，我们将要讲解如何应对在这种异步开发的过程中经常有可能会遇到的Git冲突问题，在Pycharm这个专业的Python开发工具中集成了一些处理Git冲突的工具，让我们一起来看看如何使用这个工具。</p>
-<h1 id="什么时候会出现冲突"><a href="#什么时候会出现冲突" class="headerlink" title="什么时候会出现冲突"></a>什么时候会出现冲突</h1><p>当我们从远程的仓库pull下来的时候，如果远程仓库跟本地仓库修改了同一个文件，在pull的过程中就会提示合并冲突：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ git pull remote develop</span><br><span class="line">remote: Enumerating objects: 27, <span class="keyword">done</span>.</span><br><span class="line">remote: Counting objects: 100% (27/27), <span class="keyword">done</span>.</span><br><span class="line">remote: Compressing objects: 100% (27/27), <span class="keyword">done</span>.</span><br><span class="line">remote: Total 27 (delta 10), reused 0 (delta 0), pack-reused 0</span><br><span class="line">展开对象中: 100% (27/27), 18.44 KiB | 248.00 KiB/s, 完成.</span><br><span class="line">来自 https://gitee.com/helloyesterday/mindsponge</span><br><span class="line"> * branch            develop    -&gt; FETCH_HEAD</span><br><span class="line">删除 mindsponge/system/dimension.py</span><br><span class="line">自动合并 mindsponge/system/__init__.py</span><br><span class="line">冲突（内容）：合并冲突于 mindsponge/system/__init__.py</span><br><span class="line">自动合并 mindsponge/__init__.py</span><br><span class="line">冲突（内容）：合并冲突于 mindsponge/__init__.py</span><br><span class="line">自动合并失败，修正冲突然后提交修正的结果。</span><br></pre></td></tr></table></figure>
-<p>这种类型的冲突一般需要我们去手动解决，我们可以先打开这些提示合并冲突的文件，看看合并冲突具体长什么样子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># __init__.py</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;Molecular system&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> .molecule <span class="keyword">import</span> Molecule, Protein, RigidBody, GetAminoDihedrals</span><br><span class="line"><span class="keyword">from</span> .residue <span class="keyword">import</span> Residue, AminoAcid</span><br><span class="line"></span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line">__all__ = [<span class="string">&#x27;Molecule&#x27;</span>, <span class="string">&#x27;Protein&#x27;</span>, <span class="string">&#x27;RigidBody&#x27;</span>, <span class="string">&#x27;Residue&#x27;</span>, <span class="string">&#x27;AminoAcid&#x27;</span>, <span class="string">&#x27;DIMENSION&#x27;</span>, <span class="string">&#x27;set_dimension&#x27;</span>, <span class="string">&#x27;GetAminoDihedrals&#x27;</span>]</span><br><span class="line">=======</span><br><span class="line">__all__ = [<span class="string">&#x27;Molecule&#x27;</span>, <span class="string">&#x27;Protein&#x27;</span>, <span class="string">&#x27;Residue&#x27;</span>, <span class="string">&#x27;AminoAcid&#x27;</span>]</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; 0ab7841a7671881acf2a2e912bfabcea7e8096e4</span><br></pre></td></tr></table></figure>
-<p>可以看到这里面多了三行非Python语法的标记，HEAD标记的是本地仓库的修改，下面那个一串数字的对应的是远程仓库的修改内容。我们所要做的，就是把这三行非Python语法的代码去掉，然后把相应的代码做一个正确的修改。常见的修改策略有：直接采纳远程仓库的修改，或者直接采纳本地的修改，或者手动整合两处的修改。</p>
+<h1 id="什么时候会出现冲突"><a href="#什么时候会出现冲突" class="headerlink" title="什么时候会出现冲突"></a>什么时候会出现冲突</h1><p>当我们从远程的仓库pull下来的时候，如果远程仓库跟本地仓库修改了同一个文件，在pull的过程中就会提示合并冲突：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ git pull remote develop</span><br><span class="line">remote: Enumerating objects: 27, <span class="keyword">done</span>.</span><br><span class="line">remote: Counting objects: 100% (27/27), <span class="keyword">done</span>.</span><br><span class="line">remote: Compressing objects: 100% (27/27), <span class="keyword">done</span>.</span><br><span class="line">remote: Total 27 (delta 10), reused 0 (delta 0), pack-reused 0</span><br><span class="line">展开对象中: 100% (27/27), 18.44 KiB | 248.00 KiB/s, 完成.</span><br><span class="line">来自 https://gitee.com/helloyesterday/mindsponge</span><br><span class="line"> * branch            develop    -&gt; FETCH_HEAD</span><br><span class="line">删除 mindsponge/system/dimension.py</span><br><span class="line">自动合并 mindsponge/system/__init__.py</span><br><span class="line">冲突（内容）：合并冲突于 mindsponge/system/__init__.py</span><br><span class="line">自动合并 mindsponge/__init__.py</span><br><span class="line">冲突（内容）：合并冲突于 mindsponge/__init__.py</span><br><span class="line">自动合并失败，修正冲突然后提交修正的结果。</span><br></pre></td></tr></table></figure><br>这种类型的冲突一般需要我们去手动解决，我们可以先打开这些提示合并冲突的文件，看看合并冲突具体长什么样子：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># __init__.py</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;Molecular system&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> .molecule <span class="keyword">import</span> Molecule, Protein, RigidBody, GetAminoDihedrals</span><br><span class="line"><span class="keyword">from</span> .residue <span class="keyword">import</span> Residue, AminoAcid</span><br><span class="line"></span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line">__all__ = [<span class="string">&#x27;Molecule&#x27;</span>, <span class="string">&#x27;Protein&#x27;</span>, <span class="string">&#x27;RigidBody&#x27;</span>, <span class="string">&#x27;Residue&#x27;</span>, <span class="string">&#x27;AminoAcid&#x27;</span>, <span class="string">&#x27;DIMENSION&#x27;</span>, <span class="string">&#x27;set_dimension&#x27;</span>, <span class="string">&#x27;GetAminoDihedrals&#x27;</span>]</span><br><span class="line">=======</span><br><span class="line">__all__ = [<span class="string">&#x27;Molecule&#x27;</span>, <span class="string">&#x27;Protein&#x27;</span>, <span class="string">&#x27;Residue&#x27;</span>, <span class="string">&#x27;AminoAcid&#x27;</span>]</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; 0ab7841a7671881acf2a2e912bfabcea7e8096e4</span><br></pre></td></tr></table></figure><br>可以看到这里面多了三行非Python语法的标记，HEAD标记的是本地仓库的修改，下面那个一串数字的对应的是远程仓库的修改内容。我们所要做的，就是把这三行非Python语法的代码去掉，然后把相应的代码做一个正确的修改。常见的修改策略有：直接采纳远程仓库的修改，或者直接采纳本地的修改，或者手动整合两处的修改。</p>
 <h1 id="如何解决冲突"><a href="#如何解决冲突" class="headerlink" title="如何解决冲突"></a>如何解决冲突</h1><p>接下来看看具体如何解决当前的冲突。其实如果需要修改的地方并不多、代码也不是很复杂的情况，我们可以直接在编辑器里面把相应的修改手动操作下，然后直接add-commit-push三步曲就推上去了，那接下来的方案也没必要看了。但是如果是对于代码比较复杂的情况，建议采取如下方案，使用PyCharm自带的冲突处理工具来解决Git冲突。首先点击Git -&gt; Resolve Conflicts，然后会弹出如下的窗口：</p>
 <div align=center>
-	<img src="https://img2023.cnblogs.com/blog/2277440/202304/2277440-20230406112703402-348815010.png">
+    <img src="https://img2023.cnblogs.com/blog/2277440/202304/2277440-20230406112703402-348815010.png">
 </div>
 
 <p>这个窗口的内容是包含了所有含有待解决冲突的文件信息，我们可以在这个列表中逐一的进行修改。比如我们选中一个文件，点击Merge，就会弹出来如下所示的对比窗口：</p>
 <div align=center>
-	<img src="https://img2023.cnblogs.com/blog/2277440/202304/2277440-20230406094954291-1698457091.png">
+    <img src="https://img2023.cnblogs.com/blog/2277440/202304/2277440-20230406094954291-1698457091.png">
 </div>
 
 <p>在这个对比窗口中，<strong>左边的是本地修改后的内容，中间的是未发生该冲突的最后一个分支，右边的是远程修改后的内容</strong>。那么此时操作上会容易很多，如果想要保留本地的修改，那就直接把本地的全选复制到中间的窗口中，选择Apply即可。如果要保留远程的修改，一样的把右边窗口的内容全选复制到中间result内容中即可。如果两边的修改内容都要保留，那就可以分别手动的去调整冲突，把相应的修改内容逐一复制到中间的result窗口中的相应位置，最后选择Apply即可。</p>
@@ -251,7 +246,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -262,7 +257,7 @@
 <nav class="article-nav">
   
     <a href="/2023/05/09/%E4%BD%BF%E7%94%A8Amber%E8%AE%A1%E7%AE%97%E5%8D%95%E7%82%B9%E8%83%BD%E4%B8%89%E6%AD%A5%E8%B5%B0/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           使用Amber计算单点能三步走
@@ -272,7 +267,7 @@
   
   
     <a href="/2023/04/04/Git%E9%93%BE%E6%8E%A5%E4%B8%8A%E6%B8%B8%E4%BB%93%E5%BA%93/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">Git链接上游仓库</div>
     </a>
   
@@ -280,7 +275,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=PyCharm解决Git冲突 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2023%2F04%2F06%2FPyCharm%25E8%25A7%25A3%25E5%2586%25B3Git%25E5%2586%25B2%25E7%25AA%2581%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -435,6 +430,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

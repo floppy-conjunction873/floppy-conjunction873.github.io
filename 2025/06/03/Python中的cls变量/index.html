@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidt9iaoGMtCpt9bf_PcdaM7" class="article article-type-post" itemscope
+    <article id="post-cuidSatpwHg2pdoRl39jxvzo8" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,67 +210,45 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文介绍了在Python的classmethod装饰的类方法的cls变量的意义，通过几个不同的示例对比，凸显cls变量在Python编程中的应用场景。对于大多数的场景来说，使用普通的Python类和函数定义即可。如果需要在类的外部使用类的内部函数，但是可能有多个不同初始化的类输入，那么可以使用staticmethod进行装饰。如果只有一个类，而有多种不同的输入场景下，可以使用classmethod进行装饰。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在Python的类型设计中，有时候会遇到一个<code>cls</code>参数。其实<code>cls</code>参数就是一个约定俗成的名称，用其他的名字也能正常运行但不建议这么用。它的作用类似于实例方法中的<code>self</code>参数，代表的是类本身，可以用于访问类的参数和类的方法。本文通过一些具体示例，来演示<code>cls</code>参数的功能和用法。</p>
-<h1 id="简单类实现"><a href="#简单类实现" class="headerlink" title="简单类实现"></a>简单类实现</h1><p>首先我们用普通的方法做一个最基本的测试案例：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.prefix = <span class="string">&quot;Hello\t&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">excute</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="built_in">print</span> (<span class="variable language_">self</span>.prefix+x)</span><br><span class="line"></span><br><span class="line">t = Test()</span><br><span class="line">x = <span class="string">&quot;Bob&quot;</span></span><br><span class="line">t.excute(x)</span><br><span class="line">x = <span class="string">&quot;Alice&quot;</span></span><br><span class="line">t.excute(x)</span><br></pre></td></tr></table></figure>
-<p>这里<code>Test</code>类型的操作逻辑是，在初始化函数中初始化一个prefix变量，然后在excute中调用打印函数，打印prefix变量和一个外部输入变量的整合字符串，执行效果如下：</p>
+<h1 id="简单类实现"><a href="#简单类实现" class="headerlink" title="简单类实现"></a>简单类实现</h1><p>首先我们用普通的方法做一个最基本的测试案例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.prefix = <span class="string">&quot;Hello\t&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">excute</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="built_in">print</span> (<span class="variable language_">self</span>.prefix+x)</span><br><span class="line"></span><br><span class="line">t = Test()</span><br><span class="line">x = <span class="string">&quot;Bob&quot;</span></span><br><span class="line">t.excute(x)</span><br><span class="line">x = <span class="string">&quot;Alice&quot;</span></span><br><span class="line">t.excute(x)</span><br></pre></td></tr></table></figure><br>这里<code>Test</code>类型的操作逻辑是，在初始化函数中初始化一个prefix变量，然后在excute中调用打印函数，打印prefix变量和一个外部输入变量的整合字符串，执行效果如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hello   Bob</span><br><span class="line">Hello   Alice</span><br></pre></td></tr></table></figure>
-
 <p>这个方法的一个局限性在于，类Test中的函数，如excute函数，必须要新建一个实例t之后，才能够调用到它的excute方法。如果跳过初始化的步骤直接调用excute方法：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.prefix = <span class="string">&quot;Hello\t&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">excute</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="built_in">print</span> (<span class="variable language_">self</span>.prefix+x)</span><br><span class="line"></span><br><span class="line">Test.excute()</span><br></pre></td></tr></table></figure>
-
 <p>运行结果会告诉你，这需要两个变量的输入才能够正常的运行：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;/home/test_cls.py&quot;</span>, line 8, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    Test.excute()</span><br><span class="line">TypeError: Test.excute() missing 2 required positional arguments: <span class="string">&#x27;self&#x27;</span> and <span class="string">&#x27;x&#x27;</span></span><br></pre></td></tr></table></figure>
-
 <p>例如，我们先初始化一个t实例，但是方法调用我们不调用t中的excute函数，而是直接调用Test类中的函数：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.prefix = <span class="string">&quot;Hello\t&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">excute</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="built_in">print</span> (<span class="variable language_">self</span>.prefix+x)</span><br><span class="line"></span><br><span class="line">t = Test()</span><br><span class="line">x = <span class="string">&quot;Bob&quot;</span></span><br><span class="line">Test.excute(t, x)</span><br></pre></td></tr></table></figure>
-
 <p>这样也是可以正常运行的：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello   Bob</span><br></pre></td></tr></table></figure>
-
 <h1 id="classmethod方法"><a href="#classmethod方法" class="headerlink" title="classmethod方法"></a>classmethod方法</h1><p>通过classmethod方法，可以允许我们不需要在外部对类初始化，而直接访问到类的内部属性、参数和函数。也就是对于classmethod装饰的函数，约定使用<code>cls</code>变量作为开头。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>:</span><br><span class="line">    prefix = <span class="string">&quot;Hello\t&quot;</span></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">excute</span>(<span class="params">cls, x</span>):</span><br><span class="line">        <span class="built_in">print</span> (cls.prefix+x)</span><br><span class="line"></span><br><span class="line">x = <span class="string">&quot;Bob&quot;</span></span><br><span class="line">Test.excute(x)</span><br></pre></td></tr></table></figure>
-
 <p>这样就可以直接在外部调用到类的内部函数：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello   Bob</span><br></pre></td></tr></table></figure>
-
 <p>当然，前面提到过，这里即使换一个变量名，也是可以正常运行的：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>:</span><br><span class="line">    prefix = <span class="string">&quot;Hello\t&quot;</span></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">excute</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="built_in">print</span> (<span class="variable language_">self</span>.prefix+x)</span><br><span class="line"></span><br><span class="line">x = <span class="string">&quot;Bob&quot;</span></span><br><span class="line">Test.excute(x)</span><br></pre></td></tr></table></figure>
-
 <p>因为第一个参数代表的是类本身，因此可以执行成功：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello   Bob</span><br></pre></td></tr></table></figure>
-
 <p>这里需要说明的是，classmethod装饰器的作用，就是把函数的第一个参数相关的内容给省去了，如果不使用classmethod进行装饰，例如：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>:</span><br><span class="line">    prefix = <span class="string">&quot;Hello\t&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">excute</span>(<span class="params">cls, x</span>):</span><br><span class="line">        <span class="built_in">print</span> (cls.prefix+x)</span><br><span class="line"></span><br><span class="line">x = <span class="string">&quot;Bob&quot;</span></span><br><span class="line">Test.excute(x)</span><br></pre></td></tr></table></figure>
-
 <p>这样运行会报错：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;/home/test_cls.py&quot;</span>, line 7, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    Test.excute(x)</span><br><span class="line">TypeError: Test.excute() missing 1 required positional argument: <span class="string">&#x27;x&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p>提示的内容是参数缺失，其实也就是少了一个初始化的步骤。那么有一种情况是，类似于prefix这种的类属性是在__init__函数中定义的，这是比较常见的情况。在这种情况下，如果不初始化一个实例，就无法访问到初始化参数。但是前面也提到了，cls就代表类本身，那么自然可以通过cls来访问类中的函数，包括初始化的函数：</p>
+<p>提示的内容是参数缺失，其实也就是少了一个初始化的步骤。那么有一种情况是，类似于prefix这种的类属性是在<strong>init</strong>函数中定义的，这是比较常见的情况。在这种情况下，如果不初始化一个实例，就无法访问到初始化参数。但是前面也提到了，cls就代表类本身，那么自然可以通过cls来访问类中的函数，包括初始化的函数：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.prefix = <span class="string">&quot;Hello\t&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">excute</span>(<span class="params">cls, x</span>):</span><br><span class="line">        cls.__init__(cls)</span><br><span class="line">        <span class="built_in">print</span> (cls.prefix+x)</span><br><span class="line"></span><br><span class="line">x = <span class="string">&quot;Bob&quot;</span></span><br><span class="line">Test.excute(x)</span><br></pre></td></tr></table></figure>
-
 <p>这个代码可以被正确执行：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello   Bob</span><br></pre></td></tr></table></figure>
-
 <p>同时，通过classmethod，可以修改类的属性：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>:</span><br><span class="line">    prefix = <span class="string">&quot;Hello\t&quot;</span></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">excute</span>(<span class="params">cls, x</span>):</span><br><span class="line">        <span class="built_in">print</span> (cls.prefix+x)</span><br><span class="line">        cls.prefix = cls.prefix+x+<span class="string">&quot;\t&quot;</span></span><br><span class="line"></span><br><span class="line">x = <span class="string">&quot;Bob&quot;</span></span><br><span class="line">Test.excute(x)</span><br><span class="line">x = <span class="string">&quot;Alice&quot;</span></span><br><span class="line">Test.excute(x)</span><br></pre></td></tr></table></figure>
-
 <p>这里在excute函数中，每次打印之后，都会修改一下prefix参数，所以打印输出结果如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hello   Bob</span><br><span class="line">Hello   Bob     Alice</span><br></pre></td></tr></table></figure>
-
 <p>当然，修改属性这样的操作，在普通的类实现中也是可以操作的：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.prefix = <span class="string">&quot;Hello\t&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">excute</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="built_in">print</span> (<span class="variable language_">self</span>.prefix+x)</span><br><span class="line">        <span class="variable language_">self</span>.prefix = <span class="variable language_">self</span>.prefix+x+<span class="string">&quot;\t&quot;</span></span><br><span class="line"></span><br><span class="line">t = Test()</span><br><span class="line">x = <span class="string">&quot;Bob&quot;</span></span><br><span class="line">t.excute(x)</span><br><span class="line">x = <span class="string">&quot;Alice&quot;</span></span><br><span class="line">t.excute(x)</span><br></pre></td></tr></table></figure>
-
 <p>用self得到的结果是一样的：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hello   Bob</span><br><span class="line">Hello   Bob     Alice</span><br></pre></td></tr></table></figure>
-
 <p>如果不使用classmethod，也可以通过staticmethod来实现一个类似功能：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.prefix = <span class="string">&quot;Hello\t&quot;</span></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">excute</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="built_in">print</span> (<span class="variable language_">self</span>.prefix+x)</span><br><span class="line">        <span class="variable language_">self</span>.prefix = <span class="variable language_">self</span>.prefix+x+<span class="string">&quot;\t&quot;</span></span><br><span class="line"></span><br><span class="line">t = Test()</span><br><span class="line">x = <span class="string">&quot;Bob&quot;</span></span><br><span class="line">Test.excute(t, x)</span><br><span class="line">x = <span class="string">&quot;Alice&quot;</span></span><br><span class="line">Test.excute(t, x)</span><br></pre></td></tr></table></figure>
-
 <p>但是staticmethod不对参数进行初始化，虽然可以在外部直接调用类函数，但是需要手动初始化一个实例。输出结果是一致的：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hello   Bob</span><br><span class="line">Hello   Bob     Alice</span><br></pre></td></tr></table></figure>
-
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了在Python的classmethod装饰的类方法的cls变量的意义，通过几个不同的示例对比，凸显cls变量在Python编程中的应用场景。对于大多数的场景来说，使用普通的Python类和函数定义即可。如果需要在类的外部使用类的内部函数，但是可能有多个不同初始化的类输入，那么可以使用staticmethod进行装饰。如果只有一个类，而有多种不同的输入场景下，可以使用classmethod进行装饰。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cls.html">https://www.cnblogs.com/dechinphy/p/cls.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -290,7 +268,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -301,7 +279,7 @@
 <nav class="article-nav">
   
     <a href="/2025/06/11/PyTorch%E4%B8%AD%E7%9A%84%E6%B1%82%E4%BD%99/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           PyTorch中的求余
@@ -311,7 +289,7 @@
   
   
     <a href="/2025/05/23/%E4%B8%80%E4%B8%AA%E7%BA%AF%E5%87%80%E7%9A%84%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86%E6%A1%86%E6%9E%B6%E2%80%94autograd/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">一个纯净的自动微分框架—autograd</div>
     </a>
   
@@ -319,7 +297,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Python中的cls变量 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2025%2F06%2F03%2FPython%25E4%25B8%25AD%25E7%259A%2584cls%25E5%258F%2598%25E9%2587%258F%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -474,6 +452,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

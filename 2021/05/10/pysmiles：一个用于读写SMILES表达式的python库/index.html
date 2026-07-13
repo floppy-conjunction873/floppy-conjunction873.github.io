@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidlEuGZWv8Bm82onoVPlmWA" class="article article-type-post" itemscope
+    <article id="post-cuidOC4kCtBFMu-IW3K_9Kjr9" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,28 +210,19 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文介绍了一款基于python语言的SMILES化学表达式的读写SDK，使用openSMILES表达式所定义的分子结构是非常精简的，但是其中的规则又非常的多，因此使用一款友好的SMILES表达式能够大大的缩减解析的成本。并且pysmiles结合了一款非常常用的python的拓扑网络结构表示SDK——networkx，使得对SMILES表达式的结果分析更加的人性化。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p><code>SMILES</code>表达式是化学里面常用的用于标定元素之间关系的字符串，旨在用最简短的语句来完整的表达一个分子体系内所蕴含的基本信息，比如元素、连接性以及连接属性等。由于SMILES表达式的定义种类太多，需要完整介绍的可以阅读这篇<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8c915de5ad4d">博客</a>或者是<a target="_blank" rel="noopener" href="http://opensmiles.org/opensmiles.html">opensmiles的官方网站</a>。这里我们简单介绍几种常见的情况：</p>
 <ol>
 <li>在SMILES表达式中，往往会去掉$H$元素，比如甲烷$CH_4$用SMILES表达式来表达的话就是$C$；</li>
-<li>双键用$&#x3D;$来表示，比如$C(&#x3D;O)&#x3D;O$表示一个二氧化碳；</li>
+<li>双键用$=$来表示，比如$C(=O)=O$表示一个二氧化碳；</li>
 <li>三键用$#$来表示，用法与双键一样；</li>
 <li>主干线不加标记，分支加圆括号，比如上面提到的二氧化碳，第一个$O$原子不在主分支上，因此加了括号；</li>
-<li>不成键的分子之间用<code>.</code>隔开，比如$O.C(&#x3D;O)&#x3D;O$表示一个水分子和一个二氧化碳分子；</li>
-<li>成环的要打开来写，并在开头和结尾加上断键标记，比如$C1CCCCC1$表示一个环己烷$C_6H_{12}$，这里的两个<code>1</code>前所对应的碳是相互连接的。</li>
+<li>不成键的分子之间用<code>.</code>隔开，比如$O.C(=O)=O$表示一个水分子和一个二氧化碳分子；</li>
+<li>成环的要打开来写，并在开头和结尾加上断键标记，比如$C1CCCCC1$表示一个环己烷$C<em>6H</em>{12}$，这里的两个<code>1</code>前所对应的碳是相互连接的。</li>
 </ol>
 <p>诸如此类的复杂的化学表达式解析，最好是能够有一个方便使用的工具来进行转化，这里介绍的是其中一款：pysmiles。</p>
-<p><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210510091746096-548495877.png"></p>
-<h1 id="pysmiles的安装"><a href="#pysmiles的安装" class="headerlink" title="pysmiles的安装"></a>pysmiles的安装</h1><p>pysmiles是一个纯粹用python写的sdk，其中借用了networkx的框架来存储元素之间的键连信息。那么我们可以直接使用pip来进行安装和管理：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/src/smile$ python3 -m pip install pysmiles</span><br><span class="line">Collecting pysmiles</span><br><span class="line">  Downloading pysmiles-1.0.1.tar.gz (34 kB)</span><br><span class="line">Collecting pbr</span><br><span class="line">  Using cached pbr-5.6.0-py2.py3-none-any.whl (111 kB)</span><br><span class="line">Requirement already satisfied: networkx~=2.0 <span class="keyword">in</span> /home/dechin/anaconda3/lib/python3.8/site-packages (from pysmiles) (2.5)</span><br><span class="line">Requirement already satisfied: decorator&gt;=4.3.0 <span class="keyword">in</span> /home/dechin/anaconda3/lib/python3.8/site-packages (from networkx~=2.0-&gt;pysmiles) (4.4.2)</span><br><span class="line">Building wheels <span class="keyword">for</span> collected packages: pysmiles</span><br><span class="line">  Building wheel <span class="keyword">for</span> pysmiles (setup.py) ... <span class="keyword">done</span></span><br><span class="line">  Created wheel <span class="keyword">for</span> pysmiles: filename=pysmiles-1.0.1-py2.py3-none-any.whl size=22016 sha256=9c9bf6bf2f1667bfdb0d9a3c96f6d4499b7749b0ba4fc63ff45512c9dd1af8db</span><br><span class="line">  Stored <span class="keyword">in</span> directory: /home/dechin/.cache/pip/wheels/1b/ae/65/19c5062b483dbf3a22b8a42e32dfe1bdfc17f3d31b475e0d2f</span><br><span class="line">Successfully built pysmiles</span><br><span class="line">Installing collected packages: pbr, pysmiles</span><br><span class="line">Successfully installed pbr-5.6.0 pysmiles-1.0.1</span><br></pre></td></tr></table></figure>
-<p>因为并没有什么特殊的依赖关系，所以安装还是比较顺利的。</p>
-<h1 id="pysmiles的使用"><a href="#pysmiles的使用" class="headerlink" title="pysmiles的使用"></a>pysmiles的使用</h1><p>这里我们通过一个简单的案例来展示一下pysmiles的使用方法（其中关于networkx的使用，可以参考这一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/qaa-maxcut.html">博客</a>）：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pysmiles <span class="keyword">import</span> read_smiles</span><br><span class="line"><span class="keyword">import</span> networkx <span class="keyword">as</span> nx</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">    </span><br><span class="line">smiles = <span class="string">&#x27;N#CC#N&#x27;</span> <span class="comment"># 给定的SMILES表达式</span></span><br><span class="line">mol = read_smiles(smiles) <span class="comment"># 读取到一个networkx的网络结构中</span></span><br><span class="line"><span class="built_in">print</span>(mol.nodes) <span class="comment"># 打印节点信息</span></span><br><span class="line"><span class="built_in">print</span>(mol.edges) <span class="comment"># 打印边信息</span></span><br><span class="line"><span class="built_in">print</span>(nx.to_numpy_matrix(mol)) <span class="comment"># 打印邻接矩阵信息</span></span><br><span class="line"></span><br><span class="line">elements = nx.get_node_attributes(mol, name = <span class="string">&quot;element&quot;</span>)</span><br><span class="line">nx.draw(mol, with_labels=<span class="literal">True</span>, labels=elements)</span><br><span class="line">plt.savefig(<span class="string">&#x27;pysmiles.png&#x27;</span>) <span class="comment"># 保存图层</span></span><br></pre></td></tr></table></figure>
-<p>上述是一个简单的SMILES表达式读取的程序，执行的结果如下所示：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/src/smile$ python3 pysmiles_test.py </span><br><span class="line">[0, 1, 2, 3]</span><br><span class="line">[(0, 1), (1, 2), (2, 3)]</span><br><span class="line">[[0. 1. 0. 0.]</span><br><span class="line"> [1. 0. 1. 0.]</span><br><span class="line"> [0. 1. 0. 1.]</span><br><span class="line"> [0. 0. 1. 0.]]</span><br></pre></td></tr></table></figure>
-<p>同时会在当前目录下生成一个利用networkx画出来的简单图片：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210510093149969-1105937659.png"><br>当然，这个结构有点过于的简单，如果对于分子模型的展示稍微有点追求的话，可以参考这篇文章所介绍的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/vmd.html">vmd的使用方法</a>。由于这里我们只是倾向于使用pysmiles的阅读功能，如果要使用pysmiles的写入功能，可以参考如下官方案例，这里不做过多的展开：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> networkx <span class="keyword">as</span> nx</span><br><span class="line"><span class="keyword">from</span> pysmiles <span class="keyword">import</span> write_smiles, fill_valence</span><br><span class="line"></span><br><span class="line">mol = nx.Graph()</span><br><span class="line">mol.add_edges_from([(<span class="number">0</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">3</span>), (<span class="number">3</span>, <span class="number">4</span>), (<span class="number">1</span>, <span class="number">5</span>), (<span class="number">3</span>, <span class="number">6</span>)])</span><br><span class="line"><span class="keyword">for</span> idx, ele <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="string">&#x27;CCCCOCO&#x27;</span>):</span><br><span class="line">    mol.nodes[idx][<span class="string">&#x27;element&#x27;</span>] = ele</span><br><span class="line">mol.nodes[<span class="number">4</span>][<span class="string">&#x27;charge&#x27;</span>] = -<span class="number">1</span></span><br><span class="line">mol.nodes[<span class="number">4</span>][<span class="string">&#x27;hcount&#x27;</span>] = <span class="number">0</span></span><br><span class="line">mol.edges[<span class="number">3</span>, <span class="number">6</span>][<span class="string">&#x27;order&#x27;</span>] = <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(write_smiles(mol))</span><br><span class="line"><span class="comment"># [O-]C(=O)C([C])([C])[C]</span></span><br><span class="line">fill_valence(mol, respect_hcount=<span class="literal">True</span>)</span><br><span class="line"><span class="built_in">print</span>(write_smiles(mol))</span><br><span class="line"><span class="comment"># [O-]C(=O)C(C)(C)C</span></span><br></pre></td></tr></table></figure>
-<p>其实本质上也是通过构建一个networkx的数据结构，再通过这个数据结构去产生一个smiles的字符串。</p>
+<p><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210510091746096-548495877.png" alt=""></p>
+<h1 id="pysmiles的安装"><a href="#pysmiles的安装" class="headerlink" title="pysmiles的安装"></a>pysmiles的安装</h1><p>pysmiles是一个纯粹用python写的sdk，其中借用了networkx的框架来存储元素之间的键连信息。那么我们可以直接使用pip来进行安装和管理：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/src/smile$ python3 -m pip install pysmiles</span><br><span class="line">Collecting pysmiles</span><br><span class="line">  Downloading pysmiles-1.0.1.tar.gz (34 kB)</span><br><span class="line">Collecting pbr</span><br><span class="line">  Using cached pbr-5.6.0-py2.py3-none-any.whl (111 kB)</span><br><span class="line">Requirement already satisfied: networkx~=2.0 <span class="keyword">in</span> /home/dechin/anaconda3/lib/python3.8/site-packages (from pysmiles) (2.5)</span><br><span class="line">Requirement already satisfied: decorator&gt;=4.3.0 <span class="keyword">in</span> /home/dechin/anaconda3/lib/python3.8/site-packages (from networkx~=2.0-&gt;pysmiles) (4.4.2)</span><br><span class="line">Building wheels <span class="keyword">for</span> collected packages: pysmiles</span><br><span class="line">  Building wheel <span class="keyword">for</span> pysmiles (setup.py) ... <span class="keyword">done</span></span><br><span class="line">  Created wheel <span class="keyword">for</span> pysmiles: filename=pysmiles-1.0.1-py2.py3-none-any.whl size=22016 sha256=9c9bf6bf2f1667bfdb0d9a3c96f6d4499b7749b0ba4fc63ff45512c9dd1af8db</span><br><span class="line">  Stored <span class="keyword">in</span> directory: /home/dechin/.cache/pip/wheels/1b/ae/65/19c5062b483dbf3a22b8a42e32dfe1bdfc17f3d31b475e0d2f</span><br><span class="line">Successfully built pysmiles</span><br><span class="line">Installing collected packages: pbr, pysmiles</span><br><span class="line">Successfully installed pbr-5.6.0 pysmiles-1.0.1</span><br></pre></td></tr></table></figure><br>因为并没有什么特殊的依赖关系，所以安装还是比较顺利的。</p>
+<h1 id="pysmiles的使用"><a href="#pysmiles的使用" class="headerlink" title="pysmiles的使用"></a>pysmiles的使用</h1><p>这里我们通过一个简单的案例来展示一下pysmiles的使用方法（其中关于networkx的使用，可以参考这一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/qaa-maxcut.html">博客</a>）：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pysmiles <span class="keyword">import</span> read_smiles</span><br><span class="line"><span class="keyword">import</span> networkx <span class="keyword">as</span> nx</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">    </span><br><span class="line">smiles = <span class="string">&#x27;N#CC#N&#x27;</span> <span class="comment"># 给定的SMILES表达式</span></span><br><span class="line">mol = read_smiles(smiles) <span class="comment"># 读取到一个networkx的网络结构中</span></span><br><span class="line"><span class="built_in">print</span>(mol.nodes) <span class="comment"># 打印节点信息</span></span><br><span class="line"><span class="built_in">print</span>(mol.edges) <span class="comment"># 打印边信息</span></span><br><span class="line"><span class="built_in">print</span>(nx.to_numpy_matrix(mol)) <span class="comment"># 打印邻接矩阵信息</span></span><br><span class="line"></span><br><span class="line">elements = nx.get_node_attributes(mol, name = <span class="string">&quot;element&quot;</span>)</span><br><span class="line">nx.draw(mol, with_labels=<span class="literal">True</span>, labels=elements)</span><br><span class="line">plt.savefig(<span class="string">&#x27;pysmiles.png&#x27;</span>) <span class="comment"># 保存图层</span></span><br></pre></td></tr></table></figure><br>上述是一个简单的SMILES表达式读取的程序，执行的结果如下所示：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/src/smile$ python3 pysmiles_test.py </span><br><span class="line">[0, 1, 2, 3]</span><br><span class="line">[(0, 1), (1, 2), (2, 3)]</span><br><span class="line">[[0. 1. 0. 0.]</span><br><span class="line"> [1. 0. 1. 0.]</span><br><span class="line"> [0. 1. 0. 1.]</span><br><span class="line"> [0. 0. 1. 0.]]</span><br></pre></td></tr></table></figure><br>同时会在当前目录下生成一个利用networkx画出来的简单图片：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210510093149969-1105937659.png" alt=""><br>当然，这个结构有点过于的简单，如果对于分子模型的展示稍微有点追求的话，可以参考这篇文章所介绍的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/vmd.html">vmd的使用方法</a>。由于这里我们只是倾向于使用pysmiles的阅读功能，如果要使用pysmiles的写入功能，可以参考如下官方案例，这里不做过多的展开：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> networkx <span class="keyword">as</span> nx</span><br><span class="line"><span class="keyword">from</span> pysmiles <span class="keyword">import</span> write_smiles, fill_valence</span><br><span class="line"></span><br><span class="line">mol = nx.Graph()</span><br><span class="line">mol.add_edges_from([(<span class="number">0</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">3</span>), (<span class="number">3</span>, <span class="number">4</span>), (<span class="number">1</span>, <span class="number">5</span>), (<span class="number">3</span>, <span class="number">6</span>)])</span><br><span class="line"><span class="keyword">for</span> idx, ele <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="string">&#x27;CCCCOCO&#x27;</span>):</span><br><span class="line">    mol.nodes[idx][<span class="string">&#x27;element&#x27;</span>] = ele</span><br><span class="line">mol.nodes[<span class="number">4</span>][<span class="string">&#x27;charge&#x27;</span>] = -<span class="number">1</span></span><br><span class="line">mol.nodes[<span class="number">4</span>][<span class="string">&#x27;hcount&#x27;</span>] = <span class="number">0</span></span><br><span class="line">mol.edges[<span class="number">3</span>, <span class="number">6</span>][<span class="string">&#x27;order&#x27;</span>] = <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(write_smiles(mol))</span><br><span class="line"><span class="comment"># [O-]C(=O)C([C])([C])[C]</span></span><br><span class="line">fill_valence(mol, respect_hcount=<span class="literal">True</span>)</span><br><span class="line"><span class="built_in">print</span>(write_smiles(mol))</span><br><span class="line"><span class="comment"># [O-]C(=O)C(C)(C)C</span></span><br></pre></td></tr></table></figure><br>其实本质上也是通过构建一个networkx的数据结构，再通过这个数据结构去产生一个smiles的字符串。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了一款基于python语言的SMILES化学表达式的读写SDK，使用openSMILES表达式所定义的分子结构是非常精简的，但是其中的规则又非常的多，因此使用一款友好的SMILES表达式能够大大的缩减解析的成本。并且pysmiles结合了一款非常常用的python的拓扑网络结构表示SDK——networkx，使得对SMILES表达式的结果分析更加的人性化。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/pysmiles.html">https://www.cnblogs.com/dechinphy/p/pysmiles.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
 
@@ -248,7 +239,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -259,7 +250,7 @@
 <nav class="article-nav">
   
     <a href="/2021/05/10/Open-Babel%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Open Babel的安装与使用
@@ -269,7 +260,7 @@
   
   
     <a href="/2021/05/08/Ubuntu-Linux%E4%B8%8B%E7%9A%84PDF%E9%98%85%E8%AF%BB%E5%99%A8%E6%8E%A8%E8%8D%90%E2%80%94%E2%80%94Okular/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">Ubuntu Linux下的PDF阅读器推荐——Okular</div>
     </a>
   
@@ -277,7 +268,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=pysmiles：一个用于读写SMILES表达式的python库 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F05%2F10%2Fpysmiles%25EF%25BC%259A%25E4%25B8%2580%25E4%25B8%25AA%25E7%2594%25A8%25E4%25BA%258E%25E8%25AF%25BB%25E5%2586%2599SMILES%25E8%25A1%25A8%25E8%25BE%25BE%25E5%25BC%258F%25E7%259A%2584python%25E5%25BA%2593%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -432,6 +423,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

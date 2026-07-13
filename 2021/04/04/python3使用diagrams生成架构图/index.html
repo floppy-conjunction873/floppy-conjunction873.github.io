@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidrZGo8celLy4vlscjAOGE0" class="article article-type-post" itemscope
+    <article id="post-cuidJ8TS0O8lLuN0Q0GHQi5tR" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,17 +210,10 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文中通过python库diagrams展示了基础的架构图绘制的方法，库中提供了常用的AWS和k8S等场景下常用的组件标签，使得我们用python代码也可以绘制精美清晰的架构图。这里组件之间的连接和耦合关系，也可以通过简单的符号进行实现，这也得益于python中所特有的魔法函数。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>对于一个架构师或者任何一个软件工程师而言，绘制架构图都是一个比较值得学习的技能。这就像我们学习的时候整理的一些Xmind那种思维逻辑图一样，不仅可以帮我们看到组件之间的联系和层级，还能够展示出组件的全貌。虽然我们也可以用Visio或者Edraw等专业绘图工具来绘制架构图，但是对于工程师而言，用代码来直接绘制架构图，会显得更加的优雅。这里我们介绍的<code>diagrams</code>，就是一个可以用来绘制架构图的python包。</p>
-<h1 id="diagrams的安装"><a href="#diagrams的安装" class="headerlink" title="diagrams的安装"></a>diagrams的安装</h1><p>与其他python库一样的，diagrams也可以通过pip来进行安装和管理，这里为了更快的安装，我们使用了腾讯的镜像源来加速：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro diagrams]$ python3 -m pip install diagrams -i https://mirrors.cloud.tencent.com/pypi/simple </span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://mirrors.cloud.tencent.com/pypi/simple</span><br><span class="line">Collecting diagrams</span><br><span class="line">  Downloading https://mirrors.cloud.tencent.com/pypi/packages/d6/4e/d4725222ac080375954d63d3c90243fdaa219fe085327d42b9dc68c71293/diagrams-0.19.1-py3-none-any.whl (19.2 MB)</span><br><span class="line">     |████████████████████████████████| 19.2 MB 6.7 MB/s </span><br><span class="line">Requirement already satisfied: graphviz&lt;0.17.0,&gt;=0.13.2 <span class="keyword">in</span> /home/dechin/anaconda3/lib/python3.8/site-packages (from diagrams) (0.16)</span><br><span class="line">Requirement already satisfied: jinja2&lt;3.0,&gt;=2.10 <span class="keyword">in</span> /home/dechin/anaconda3/lib/python3.8/site-packages (from diagrams) (2.11.2)</span><br><span class="line">Requirement already satisfied: MarkupSafe&gt;=0.23 <span class="keyword">in</span> /home/dechin/anaconda3/lib/python3.8/site-packages (from jinja2&lt;3.0,&gt;=2.10-&gt;diagrams) (1.1.1)</span><br><span class="line">Installing collected packages: diagrams</span><br><span class="line">Successfully installed diagrams-0.19.1</span><br></pre></td></tr></table></figure>
-
-<h1 id="基础逻辑关系图"><a href="#基础逻辑关系图" class="headerlink" title="基础逻辑关系图"></a>基础逻辑关系图</h1><p>首先我们用diagrams来绘制一个最简单的逻辑关系图，从负载均衡到服务器节点，再到具体的数据库：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># example1.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> diagrams <span class="keyword">import</span> Diagram</span><br><span class="line"><span class="keyword">from</span> diagrams.aws.compute <span class="keyword">import</span> EC2</span><br><span class="line"><span class="keyword">from</span> diagrams.aws.database <span class="keyword">import</span> RDS</span><br><span class="line"><span class="keyword">from</span> diagrams.aws.network <span class="keyword">import</span> ELB</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> Diagram(<span class="string">&quot;Web Service&quot;</span>, show=<span class="literal">False</span>):</span><br><span class="line">    ELB(<span class="string">&quot;lb&quot;</span>) &gt;&gt; EC2(<span class="string">&quot;web&quot;</span>) &gt;&gt; RDS(<span class="string">&quot;userdb&quot;</span>) <span class="comment"># 箭头关系</span></span><br></pre></td></tr></table></figure>
-<p>在这个案例中我们使用了AWS提供的一些基础架构组件的标签，并且可以指定各个组件模块的名称。上述代码可以直接执行：<code>python3 example1.py</code>，然后会在当前目录下生成一个这样的架构图：<br><img src="https://img2020.cnblogs.com/blog/2277440/202104/2277440-20210404103226445-212804140.png"><br>整体感觉还是比较精美的，只是如果使用专业工具如Visio等来画图的话，我们还可以直接对图片进行切割，操作起来会更加方便。</p>
-<h1 id="组件簇的定义"><a href="#组件簇的定义" class="headerlink" title="组件簇的定义"></a>组件簇的定义</h1><p>同样来自于<a target="_blank" rel="noopener" href="https://diagrams.mingrammer.com/docs/getting-started/installation">官方文档</a>中的示例，我们不仅可以定义单一的组件，还可以将概念中可以组成一个模块的多个组件组成一个耦合簇，在架构图中展现：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># example2.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> diagrams <span class="keyword">import</span> Diagram, Cluster</span><br><span class="line"><span class="keyword">from</span> diagrams.aws.compute <span class="keyword">import</span> EC2</span><br><span class="line"><span class="keyword">from</span> diagrams.aws.database <span class="keyword">import</span> RDS</span><br><span class="line"><span class="keyword">from</span> diagrams.aws.network <span class="keyword">import</span> ELB</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> Diagram(<span class="string">&quot;Web Service Cluster&quot;</span>, show=<span class="literal">False</span>):</span><br><span class="line">    <span class="keyword">with</span> Cluster(<span class="string">&quot;DB Cluster&quot;</span>):</span><br><span class="line">        db_master = RDS(<span class="string">&quot;master&quot;</span>)</span><br><span class="line">        db_master - [RDS(<span class="string">&quot;slave1&quot;</span>), RDS(<span class="string">&quot;slave2&quot;</span>)] <span class="comment"># 直线连接</span></span><br><span class="line">    ELB(<span class="string">&quot;lb&quot;</span>) &gt;&gt; EC2(<span class="string">&quot;web&quot;</span>) &gt;&gt; db_master</span><br></pre></td></tr></table></figure>
-<p>运行方式也是通过<code>python3 example2.py</code>，同样的会在当前目录下生成一个这样的图像文件：<br><img src="https://img2020.cnblogs.com/blog/2277440/202104/2277440-20210404103719407-697686864.png"><br>我们可以看到刚才定义的几个数据库组件，被统一的收纳到了一个数据库的耦合簇中。</p>
+<h1 id="diagrams的安装"><a href="#diagrams的安装" class="headerlink" title="diagrams的安装"></a>diagrams的安装</h1><p>与其他python库一样的，diagrams也可以通过pip来进行安装和管理，这里为了更快的安装，我们使用了腾讯的镜像源来加速：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro diagrams]$ python3 -m pip install diagrams -i https://mirrors.cloud.tencent.com/pypi/simple </span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://mirrors.cloud.tencent.com/pypi/simple</span><br><span class="line">Collecting diagrams</span><br><span class="line">  Downloading https://mirrors.cloud.tencent.com/pypi/packages/d6/4e/d4725222ac080375954d63d3c90243fdaa219fe085327d42b9dc68c71293/diagrams-0.19.1-py3-none-any.whl (19.2 MB)</span><br><span class="line">     |████████████████████████████████| 19.2 MB 6.7 MB/s </span><br><span class="line">Requirement already satisfied: graphviz&lt;0.17.0,&gt;=0.13.2 <span class="keyword">in</span> /home/dechin/anaconda3/lib/python3.8/site-packages (from diagrams) (0.16)</span><br><span class="line">Requirement already satisfied: jinja2&lt;3.0,&gt;=2.10 <span class="keyword">in</span> /home/dechin/anaconda3/lib/python3.8/site-packages (from diagrams) (2.11.2)</span><br><span class="line">Requirement already satisfied: MarkupSafe&gt;=0.23 <span class="keyword">in</span> /home/dechin/anaconda3/lib/python3.8/site-packages (from jinja2&lt;3.0,&gt;=2.10-&gt;diagrams) (1.1.1)</span><br><span class="line">Installing collected packages: diagrams</span><br><span class="line">Successfully installed diagrams-0.19.1</span><br></pre></td></tr></table></figure></p>
+<h1 id="基础逻辑关系图"><a href="#基础逻辑关系图" class="headerlink" title="基础逻辑关系图"></a>基础逻辑关系图</h1><p>首先我们用diagrams来绘制一个最简单的逻辑关系图，从负载均衡到服务器节点，再到具体的数据库：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># example1.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> diagrams <span class="keyword">import</span> Diagram</span><br><span class="line"><span class="keyword">from</span> diagrams.aws.compute <span class="keyword">import</span> EC2</span><br><span class="line"><span class="keyword">from</span> diagrams.aws.database <span class="keyword">import</span> RDS</span><br><span class="line"><span class="keyword">from</span> diagrams.aws.network <span class="keyword">import</span> ELB</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> Diagram(<span class="string">&quot;Web Service&quot;</span>, show=<span class="literal">False</span>):</span><br><span class="line">    ELB(<span class="string">&quot;lb&quot;</span>) &gt;&gt; EC2(<span class="string">&quot;web&quot;</span>) &gt;&gt; RDS(<span class="string">&quot;userdb&quot;</span>) <span class="comment"># 箭头关系</span></span><br></pre></td></tr></table></figure><br>在这个案例中我们使用了AWS提供的一些基础架构组件的标签，并且可以指定各个组件模块的名称。上述代码可以直接执行：<code>python3 example1.py</code>，然后会在当前目录下生成一个这样的架构图：<br><img src="https://img2020.cnblogs.com/blog/2277440/202104/2277440-20210404103226445-212804140.png" alt=""><br>整体感觉还是比较精美的，只是如果使用专业工具如Visio等来画图的话，我们还可以直接对图片进行切割，操作起来会更加方便。</p>
+<h1 id="组件簇的定义"><a href="#组件簇的定义" class="headerlink" title="组件簇的定义"></a>组件簇的定义</h1><p>同样来自于<a target="_blank" rel="noopener" href="https://diagrams.mingrammer.com/docs/getting-started/installation">官方文档</a>中的示例，我们不仅可以定义单一的组件，还可以将概念中可以组成一个模块的多个组件组成一个耦合簇，在架构图中展现：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># example2.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> diagrams <span class="keyword">import</span> Diagram, Cluster</span><br><span class="line"><span class="keyword">from</span> diagrams.aws.compute <span class="keyword">import</span> EC2</span><br><span class="line"><span class="keyword">from</span> diagrams.aws.database <span class="keyword">import</span> RDS</span><br><span class="line"><span class="keyword">from</span> diagrams.aws.network <span class="keyword">import</span> ELB</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> Diagram(<span class="string">&quot;Web Service Cluster&quot;</span>, show=<span class="literal">False</span>):</span><br><span class="line">    <span class="keyword">with</span> Cluster(<span class="string">&quot;DB Cluster&quot;</span>):</span><br><span class="line">        db_master = RDS(<span class="string">&quot;master&quot;</span>)</span><br><span class="line">        db_master - [RDS(<span class="string">&quot;slave1&quot;</span>), RDS(<span class="string">&quot;slave2&quot;</span>)] <span class="comment"># 直线连接</span></span><br><span class="line">    ELB(<span class="string">&quot;lb&quot;</span>) &gt;&gt; EC2(<span class="string">&quot;web&quot;</span>) &gt;&gt; db_master</span><br></pre></td></tr></table></figure><br>运行方式也是通过<code>python3 example2.py</code>，同样的会在当前目录下生成一个这样的图像文件：<br><img src="https://img2020.cnblogs.com/blog/2277440/202104/2277440-20210404103719407-697686864.png" alt=""><br>我们可以看到刚才定义的几个数据库组件，被统一的收纳到了一个数据库的耦合簇中。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文中通过python库diagrams展示了基础的架构图绘制的方法，库中提供了常用的AWS和k8S等场景下常用的组件标签，使得我们用python代码也可以绘制精美清晰的架构图。这里组件之间的连接和耦合关系，也可以通过简单的符号进行实现，这也得益于python中所特有的魔法函数。</p>
 <h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
 <li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/baby123/p/14246824.html">https://www.cnblogs.com/baby123/p/14246824.html</a></li>
@@ -240,7 +233,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -251,7 +244,7 @@
 <nav class="article-nav">
   
     <a href="/2021/04/04/Manjaro-Linux%E5%AE%89%E8%A3%85singularity-container/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Manjaro Linux安装singularity-container
@@ -261,7 +254,7 @@
   
   
     <a href="/2021/04/03/python3%E4%BD%BF%E7%94%A8kivy%E7%94%9F%E6%88%90%E5%AE%89%E5%8D%93%E7%A8%8B%E5%BA%8F/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">python3使用kivy生成安卓程序</div>
     </a>
   
@@ -269,7 +262,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=python3使用diagrams生成架构图 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F04%2F04%2Fpython3%25E4%25BD%25BF%25E7%2594%25A8diagrams%25E7%2594%259F%25E6%2588%2590%25E6%259E%25B6%25E6%259E%2584%25E5%259B%25BE%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -424,6 +417,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

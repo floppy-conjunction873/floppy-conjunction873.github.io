@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidWi2KxPUpBMTG26t3prnCG" class="article article-type-post" itemscope
+    <article id="post-cuidCTHrkFkcT_HI6SfLfr1oS" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,14 +201,14 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
         </div>
 
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
-            <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在早期的文章中，我们也曾经介绍过一些<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/magic.html">量子计算简单模拟</a>的工作，不过这篇文章还只是基于一些常用的矩阵乘积来做的。虽然在功能上已经是完全足够的了，但是如果我们希望能够更进一步优化量子计算模拟的话，就有可能需要借用到<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/tensor.html">张量网络技术</a>。比如京东最新发布的工作QUDIO和腾讯最新发布的TensorCircuit，都是基于张量网络技术的量子计算模拟。通过张量网络技术，甚至可以在量子霸权&#x2F;量子优越性的证明上，进一步抬高经典算力的上限。</p>
+            <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在早期的文章中，我们也曾经介绍过一些<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/magic.html">量子计算简单模拟</a>的工作，不过这篇文章还只是基于一些常用的矩阵乘积来做的。虽然在功能上已经是完全足够的了，但是如果我们希望能够更进一步优化量子计算模拟的话，就有可能需要借用到<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/tensor.html">张量网络技术</a>。比如京东最新发布的工作QUDIO和腾讯最新发布的TensorCircuit，都是基于张量网络技术的量子计算模拟。通过张量网络技术，甚至可以在量子霸权/量子优越性的证明上，进一步抬高经典算力的上限。</p>
 <h1 id="量子计算基础概念"><a href="#量子计算基础概念" class="headerlink" title="量子计算基础概念"></a>量子计算基础概念</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># qc.py</span><br><span class="line">import numpy as np</span><br><span class="line">from opt_einsum import contract</span><br><span class="line"></span><br><span class="line">H = np.array([[1,1],</span><br><span class="line">              [1,-1]],np.float32)/np.sqrt(2)</span><br><span class="line">CX = np.array([[[[1,0],[0,0]],</span><br><span class="line">                [[0,1],[0,0]]],</span><br><span class="line">               [[[0,0],[0,1]],</span><br><span class="line">                [[0,0],[1,0]]]],np.float32)</span><br><span class="line">q0 = np.array([1,0],np.float32)</span><br><span class="line">q1 = np.array([0,1],np.float32)</span><br><span class="line"></span><br><span class="line">print (contract(&#x27;i,j,ki,lmkj-&gt;lm&#x27;,q0,q0,H,CX))</span><br><span class="line"># [[0.70710677 0.        ]</span><br><span class="line">#  [0.         0.70710677]]</span><br><span class="line">print (contract(&#x27;i,j,ki,lmkj-&gt;lm&#x27;,q0,q1,H,CX))</span><br><span class="line"># [[0.         0.70710677]</span><br><span class="line">#  [0.70710677 0.        ]]</span><br><span class="line">print (contract(&#x27;i,j,ki,lmkj-&gt;lm&#x27;,q1,q0,H,CX))</span><br><span class="line"># [[ 0.70710677  0.        ]</span><br><span class="line">#  [ 0.         -0.70710677]]</span><br><span class="line">print (contract(&#x27;i,j,ki,lmkj-&gt;lm&#x27;,q1,q1,H,CX))</span><br><span class="line"># [[ 0.          0.70710677]</span><br><span class="line">#  [-0.70710677  0.        ]]</span><br></pre></td></tr></table></figure>
         </div>
 
@@ -223,7 +223,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -234,7 +234,7 @@
 <nav class="article-nav">
   
     <a href="/2022/05/09/Python3%E8%8E%B7%E5%8F%965000%E4%B8%AA%E5%85%83%E7%B4%A0%E7%9A%84%E5%8D%95%E5%AD%97%E7%AC%A6%E8%A1%A8/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Python3获取5000个元素的单字符表
@@ -244,7 +244,7 @@
   
   
     <a href="/2022/05/06/%E8%9B%8B%E7%99%BD%E8%B4%A8%E5%9F%BA%E7%A1%80%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">蛋白质基础组成结构</div>
     </a>
   
@@ -252,7 +252,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=基于张量缩并的量子计算简单模拟 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F05%2F07%2F%25E5%259F%25BA%25E4%25BA%258E%25E5%25BC%25A0%25E9%2587%258F%25E7%25BC%25A9%25E5%25B9%25B6%25E7%259A%2584%25E9%2587%258F%25E5%25AD%2590%25E8%25AE%25A1%25E7%25AE%2597%25E7%25AE%2580%25E5%258D%2595%25E6%25A8%25A1%25E6%258B%259F%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -407,6 +407,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

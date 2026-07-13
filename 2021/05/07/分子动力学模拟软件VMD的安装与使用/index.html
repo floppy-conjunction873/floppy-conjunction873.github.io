@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuid5Faj9lGEoKasndSC7zMee" class="article article-type-post" itemscope
+    <article id="post-cuidVxWVh5_7oT6RcspLuqvuE" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,20 +210,9 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文重点介绍了VMD分子动力学模拟可视化软件的安装与基本使用方法，VMD是一款非常小而精致的可视化工具，在业界也备受推崇。如果只是用于做分子模型的展示，功能是完全足够的，如果要执行更多的操作，需要掌握tcl语言，当然这也是一个坑点。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在分子动力学模拟过程中会遇到一些拓扑结构非常复杂的分子模型，所谓的复杂不仅仅是包含众多的原子，还有各种原子之间的成键关系与成键类型等。这时候就非常能够体现一个好的可视化软件的重要性了，这里我们介绍的VMD是一个业界非常常用、功能也非常强大的一款软件。</p>
-<h1 id="VMD的安装"><a href="#VMD的安装" class="headerlink" title="VMD的安装"></a>VMD的安装</h1><p>首先访问<a target="_blank" rel="noopener" href="https://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD">VMD官方网站</a>，找到适合自己本地OS和硬件系统的版本进行下载。这里我们本地是Ubuntu20.04的系统，所以下载了一个Linux通用的版本：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210507144105494-1179417828.png"><br>下载到本地之后，找到一个合适的文件夹进行解压：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/vmd$ tar -xvf vmd-1.9.4a51.bin.LINUXAMD64-CUDA102-OptiX650-OSPRay185.opengl.tar.gz </span><br></pre></td></tr></table></figure>
-<p>解压之后进入主目录，运行<code>configure</code>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/vmd/vmd-1.9.4a51$ ./configure </span><br><span class="line">using configure.options: LINUXAMD64 OPENGL OPENGLPBUFFER FLTK TK ACTC CUDA IMD LIBSBALL XINERAMA XINPUT LIBOPTIX LIBOSPRAY LIBTACHYON LIBPNG ZLIB VRPN NETCDF COLVARS TCL PYTHON PTHREADS NUMPY SILENT ICC</span><br></pre></td></tr></table></figure>
-<p>最后进入<code>src</code>目录，执行<code>make install</code>完成安装：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/vmd/vmd-1.9.4a51$ <span class="built_in">cd</span> src/</span><br><span class="line">dechin@ubuntu2004:~/projects/vmd/vmd-1.9.4a51/src$ <span class="built_in">sudo</span> make install</span><br><span class="line">[<span class="built_in">sudo</span>] dechin 的密码： </span><br><span class="line">Info: /bin/csh shell not found, installing Bourne shell startup script instead</span><br><span class="line">Make sure /usr/local/bin/vmd is <span class="keyword">in</span> your path.</span><br><span class="line">VMD installation complete.  Enjoy!</span><br></pre></td></tr></table></figure>
-<p>安装成功后，在终端窗口中执行<code>vmd</code>会弹出两个窗口，一个用于显示加载的文件和配置：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210507144437169-1850008283.png"><br>另一个窗口用于显示输入分子模型的3D结构，如果没有输入任何分子模型数据的情况下，这个界面会展示一个一直旋转的<code>VMD</code>字样的模型：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210507144909506-1312005684.png"></p>
-<h1 id="VMD的使用"><a href="#VMD的使用" class="headerlink" title="VMD的使用"></a>VMD的使用</h1><p>VMD的使用方法有很多中，tcl的语言也使得可以执行更高阶更灵活的操作，比如参考链接1中的操作就非常的华丽。但是这里我们仅仅为了可视化静态的3D分子模型，所以只介绍一些基本用法。首先我们需要在本地构建一个分子模型的文件，一般以<code>.xyz</code>结尾。文件的格式为：开头的分子数，第二行的标记，这里使用的是<code>mol</code>这种标记，后面的所有行数是标定每一个分子的具体三维坐标，也就是空间位置。这里直接使用了参考链接1中所给出的xyz文件：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/src/vmd$ vim file.xyz</span><br></pre></td></tr></table></figure>
-<p>具体的file.xyz文件内容如下所示：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">24</span><br><span class="line">mol</span><br><span class="line"> C    -1.615  -0.739  -3.043</span><br><span class="line"> C    -0.076  -0.706  -3.045</span><br><span class="line"> H    -1.963  -1.227  -3.929</span><br><span class="line"> H    -1.959  -1.275  -2.183</span><br><span class="line"> C     0.469  -2.145  -3.087</span><br><span class="line"> H     0.268  -0.169  -3.905</span><br><span class="line"> H     0.272  -0.218  -2.159</span><br><span class="line"> H     1.539  -2.122  -3.089</span><br><span class="line"> H     0.126  -2.682  -2.227</span><br><span class="line"> H     0.122  -2.633  -3.974</span><br><span class="line"> C    -2.160   0.701  -3.001</span><br><span class="line"> C    -3.700   0.667  -2.999</span><br><span class="line"> H    -1.817   1.237  -3.861</span><br><span class="line"> H    -1.812   1.188  -2.114</span><br><span class="line"> C    -4.245   2.107  -2.957</span><br><span class="line"> H    -4.047   0.179  -3.885</span><br><span class="line"> H    -4.043   0.131  -2.139</span><br><span class="line"> H    -3.897   2.594  -2.070</span><br><span class="line"> H    -3.901   2.643  -3.817</span><br><span class="line"> C    -5.784   2.073  -2.955</span><br><span class="line"> O    -6.394   1.131  -3.525</span><br><span class="line"> N    -6.541   3.141  -2.286</span><br><span class="line"> H    -7.407   2.773  -1.946</span><br><span class="line"> H    -6.007   3.500  -1.521</span><br></pre></td></tr></table></figure>
-<p>保存后，直接运行<code>vmd file.xyz</code>即可弹出相关分子模型的可视化界面：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210507150715276-731563279.png"><br>默认打开的3D分子模型是<code>Line</code>格式的，也就是都被抽象为线条：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210507150800781-1104863879.png"><br>此时可以点击界面上的<code>Graphic</code>-&gt;<code>Representations</code>，可以弹出一个表示格式的框：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210507151110227-242225299.png"><br>在<code>Drawing Method</code>下找到<code>CPK</code>模式，点击<code>Apply</code>即可应用到图层当中：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210507151256811-1638211809.png"><br>在这种模式下可以看到每个原子以及原子跟原子之间的成键关系，是非常常用的一个模式。</p>
+<h1 id="VMD的安装"><a href="#VMD的安装" class="headerlink" title="VMD的安装"></a>VMD的安装</h1><p>首先访问<a target="_blank" rel="noopener" href="https://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD">VMD官方网站</a>，找到适合自己本地OS和硬件系统的版本进行下载。这里我们本地是Ubuntu20.04的系统，所以下载了一个Linux通用的版本：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210507144105494-1179417828.png" alt=""><br>下载到本地之后，找到一个合适的文件夹进行解压：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/vmd$ tar -xvf vmd-1.9.4a51.bin.LINUXAMD64-CUDA102-OptiX650-OSPRay185.opengl.tar.gz </span><br></pre></td></tr></table></figure><br>解压之后进入主目录，运行<code>configure</code>：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/vmd/vmd-1.9.4a51$ ./configure </span><br><span class="line">using configure.options: LINUXAMD64 OPENGL OPENGLPBUFFER FLTK TK ACTC CUDA IMD LIBSBALL XINERAMA XINPUT LIBOPTIX LIBOSPRAY LIBTACHYON LIBPNG ZLIB VRPN NETCDF COLVARS TCL PYTHON PTHREADS NUMPY SILENT ICC</span><br></pre></td></tr></table></figure><br>最后进入<code>src</code>目录，执行<code>make install</code>完成安装：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/vmd/vmd-1.9.4a51$ <span class="built_in">cd</span> src/</span><br><span class="line">dechin@ubuntu2004:~/projects/vmd/vmd-1.9.4a51/src$ <span class="built_in">sudo</span> make install</span><br><span class="line">[<span class="built_in">sudo</span>] dechin 的密码： </span><br><span class="line">Info: /bin/csh shell not found, installing Bourne shell startup script instead</span><br><span class="line">Make sure /usr/local/bin/vmd is <span class="keyword">in</span> your path.</span><br><span class="line">VMD installation complete.  Enjoy!</span><br></pre></td></tr></table></figure><br>安装成功后，在终端窗口中执行<code>vmd</code>会弹出两个窗口，一个用于显示加载的文件和配置：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210507144437169-1850008283.png" alt=""><br>另一个窗口用于显示输入分子模型的3D结构，如果没有输入任何分子模型数据的情况下，这个界面会展示一个一直旋转的<code>VMD</code>字样的模型：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210507144909506-1312005684.png" alt=""></p>
+<h1 id="VMD的使用"><a href="#VMD的使用" class="headerlink" title="VMD的使用"></a>VMD的使用</h1><p>VMD的使用方法有很多中，tcl的语言也使得可以执行更高阶更灵活的操作，比如参考链接1中的操作就非常的华丽。但是这里我们仅仅为了可视化静态的3D分子模型，所以只介绍一些基本用法。首先我们需要在本地构建一个分子模型的文件，一般以<code>.xyz</code>结尾。文件的格式为：开头的分子数，第二行的标记，这里使用的是<code>mol</code>这种标记，后面的所有行数是标定每一个分子的具体三维坐标，也就是空间位置。这里直接使用了参考链接1中所给出的xyz文件：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/src/vmd$ vim file.xyz</span><br></pre></td></tr></table></figure><br>具体的file.xyz文件内容如下所示：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">24</span><br><span class="line">mol</span><br><span class="line"> C    -1.615  -0.739  -3.043</span><br><span class="line"> C    -0.076  -0.706  -3.045</span><br><span class="line"> H    -1.963  -1.227  -3.929</span><br><span class="line"> H    -1.959  -1.275  -2.183</span><br><span class="line"> C     0.469  -2.145  -3.087</span><br><span class="line"> H     0.268  -0.169  -3.905</span><br><span class="line"> H     0.272  -0.218  -2.159</span><br><span class="line"> H     1.539  -2.122  -3.089</span><br><span class="line"> H     0.126  -2.682  -2.227</span><br><span class="line"> H     0.122  -2.633  -3.974</span><br><span class="line"> C    -2.160   0.701  -3.001</span><br><span class="line"> C    -3.700   0.667  -2.999</span><br><span class="line"> H    -1.817   1.237  -3.861</span><br><span class="line"> H    -1.812   1.188  -2.114</span><br><span class="line"> C    -4.245   2.107  -2.957</span><br><span class="line"> H    -4.047   0.179  -3.885</span><br><span class="line"> H    -4.043   0.131  -2.139</span><br><span class="line"> H    -3.897   2.594  -2.070</span><br><span class="line"> H    -3.901   2.643  -3.817</span><br><span class="line"> C    -5.784   2.073  -2.955</span><br><span class="line"> O    -6.394   1.131  -3.525</span><br><span class="line"> N    -6.541   3.141  -2.286</span><br><span class="line"> H    -7.407   2.773  -1.946</span><br><span class="line"> H    -6.007   3.500  -1.521</span><br></pre></td></tr></table></figure><br>保存后，直接运行<code>vmd file.xyz</code>即可弹出相关分子模型的可视化界面：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210507150715276-731563279.png" alt=""><br>默认打开的3D分子模型是<code>Line</code>格式的，也就是都被抽象为线条：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210507150800781-1104863879.png" alt=""><br>此时可以点击界面上的<code>Graphic</code>-&gt;<code>Representations</code>，可以弹出一个表示格式的框：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210507151110227-242225299.png" alt=""><br>在<code>Drawing Method</code>下找到<code>CPK</code>模式，点击<code>Apply</code>即可应用到图层当中：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210507151256811-1638211809.png" alt=""><br>在这种模式下可以看到每个原子以及原子跟原子之间的成键关系，是非常常用的一个模式。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文重点介绍了VMD分子动力学模拟可视化软件的安装与基本使用方法，VMD是一款非常小而精致的可视化工具，在业界也备受推崇。如果只是用于做分子模型的展示，功能是完全足够的，如果要执行更多的操作，需要掌握tcl语言，当然这也是一个坑点。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/vmd.html">https://www.cnblogs.com/dechinphy/p/vmd.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
 <h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
@@ -244,7 +233,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -255,7 +244,7 @@
 <nav class="article-nav">
   
     <a href="/2021/05/08/Ubuntu-Linux%E4%B8%8B%E7%9A%84PDF%E9%98%85%E8%AF%BB%E5%99%A8%E6%8E%A8%E8%8D%90%E2%80%94%E2%80%94Okular/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Ubuntu Linux下的PDF阅读器推荐——Okular
@@ -265,7 +254,7 @@
   
   
     <a href="/2021/05/06/%E5%9F%BA%E4%BA%8EDocker%E5%AE%89%E8%A3%85%E7%9A%84MindSpore-1.2-GPU%E7%89%88%E6%9C%AC/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">基于Docker安装的MindSpore-1.2 GPU版本</div>
     </a>
   
@@ -273,7 +262,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=分子动力学模拟软件VMD的安装与使用 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F05%2F07%2F%25E5%2588%2586%25E5%25AD%2590%25E5%258A%25A8%25E5%258A%259B%25E5%25AD%25A6%25E6%25A8%25A1%25E6%258B%259F%25E8%25BD%25AF%25E4%25BB%25B6VMD%25E7%259A%2584%25E5%25AE%2589%25E8%25A3%2585%25E4%25B8%258E%25E4%25BD%25BF%25E7%2594%25A8%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -428,6 +417,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

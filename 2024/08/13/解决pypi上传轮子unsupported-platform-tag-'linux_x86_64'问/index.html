@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidaBuJ-ZBX2edQ1RxS0OWcQ" class="article article-type-post" itemscope
+    <article id="post-cuidMZEgOZLVrdGFOV6fc7KZo" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,23 +210,14 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>对于一个纯Python的项目，从构建到发布是比较容易的。但是如果构建的轮子中含有C代码或者生成的动态链接库，那么构建发布有另外一套规则。我们需要经过manylinux平台的验证，以及动态链接库的固化等过程，还需要当心动态链接库的存放地址等信息。本文主要是提供了一个流程化的思路，具体操作对于不同的项目和平台来说差异是比较大的。</p>
 <span id="more"></span>
-
-<h1 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h1><p>在上传某轮子时出现了这样的一个报错：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ twine upload --repository-url https://upload.pypi.org/legacy/ dist/*</span><br><span class="line">Uploading distributions to https://upload.pypi.org/legacy/</span><br><span class="line">Enter your username: __token__</span><br><span class="line">Uploading xxx-1.0-cp37-cp37m-linux_x86_64.whl</span><br><span class="line">100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 347.0/347.0 kB • 00:00 • 6.2 MB/s</span><br><span class="line">WARNING  Error during upload. Retry with the --verbose option <span class="keyword">for</span> more details.   </span><br><span class="line">ERROR    HTTPError: 400 Bad Request from https://upload.pypi.org/legacy/          </span><br><span class="line">         Binary wheel <span class="string">&#x27;xxx-1.0-cp37-cp37m-linux_x86_64.whl&#x27;</span> has an unsupported  </span><br><span class="line">         platform tag <span class="string">&#x27;linux_x86_64&#x27;</span>. </span><br></pre></td></tr></table></figure>
-<p>遂发现当前的pypi对于轮子中含有C&#x2F;C++等代码的库要求不同于纯Python的代码，需要经过many_linux平台的测试验证才能发布。</p>
+<h1 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h1><p>在上传某轮子时出现了这样的一个报错：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ twine upload --repository-url https://upload.pypi.org/legacy/ dist/*</span><br><span class="line">Uploading distributions to https://upload.pypi.org/legacy/</span><br><span class="line">Enter your username: __token__</span><br><span class="line">Uploading xxx-1.0-cp37-cp37m-linux_x86_64.whl</span><br><span class="line">100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 347.0/347.0 kB • 00:00 • 6.2 MB/s</span><br><span class="line">WARNING  Error during upload. Retry with the --verbose option <span class="keyword">for</span> more details.   </span><br><span class="line">ERROR    HTTPError: 400 Bad Request from https://upload.pypi.org/legacy/          </span><br><span class="line">         Binary wheel <span class="string">&#x27;xxx-1.0-cp37-cp37m-linux_x86_64.whl&#x27;</span> has an unsupported  </span><br><span class="line">         platform tag <span class="string">&#x27;linux_x86_64&#x27;</span>. </span><br></pre></td></tr></table></figure><br>遂发现当前的pypi对于轮子中含有C/C++等代码的库要求不同于纯Python的代码，需要经过many_linux平台的测试验证才能发布。</p>
 <h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>经过一番检索，解决该问题的流程大致为：</p>
 <ol>
 <li>选择一个合适的manylinux docker镜像，例如我这里代码中包含了CUDA，因此选择使用<code>pytorch/manylinux-cuda111</code>这个镜像；</li>
 <li>基于docker镜像构建一个开发环境，然后用其中包含的几个不同版本的Python对代码进行构建，例如<code>/opt/_internal/cpython-3.7.5/bin/python3 setup.py sdist bdist_wheel --universal</code>，这样就会在dist目录下生成一个whl包；</li>
 <li>使用auditwheel对前面生成的whl包进行修复：<code>/opt/_internal/cpython-3.7.5/bin/python3 -m auditwheel repair dist/xxx-*-cp37-cp37m-linux_x86_64.whl --plat manylinux2014_x86_64 -w fix-dist/</code>，以固化动态链接库（如有），最终会在<code>fix-dist/</code>路径下得到一个可以发布的轮子。</li>
 </ol>
-<h1 id="setup-py关于data-files的配置"><a href="#setup-py关于data-files的配置" class="headerlink" title="setup.py关于data_files的配置"></a>setup.py关于data_files的配置</h1><p>有一些动态构建的动态链接库，直接使用MANIFEST.in或者package_data配置不生效。那么有一种解决的办法是，动态构建完成后，将生成的文件保存到<code>build/</code>路径（Python包构建默认路径）下，然后使用<code>data_files</code>的配置把相关文件包含进来：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">data_files=[(<span class="string">&#x27;xxx&#x27;</span>, [<span class="string">&#x27;build/xxx/libxxx.so&#x27;</span>,</span><br><span class="line">                        <span class="string">&#x27;build/xxx/libxxx.1.so&#x27;</span>])]</span><br></pre></td></tr></table></figure>
-<p>如果不使用data_files进行包装，仅仅设置<code>packages</code>和<code>include_package_data</code>，得到的最终轮子内容是这样的：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ unzip -l dist/xxx-1.7-cp37-cp37m-linux_x86_64.whl </span><br><span class="line">Archive:  dist/xxx-1.7-cp37-cp37m-linux_x86_64.whl</span><br><span class="line">  Length      Date    Time    Name</span><br><span class="line">---------  ---------- -----   ----</span><br><span class="line">  1111024  2024-08-12 09:03   xxx.cpython-37m-x86_64-linux-gnu.so</span><br><span class="line">  1100448  2024-08-12 09:03   xxx.cpython-37m-x86_64-linux-gnu.so</span><br><span class="line">     1265  2024-08-12 01:23   xxx/__init__.py</span><br><span class="line">     3012  2024-08-12 06:05   xxx/__main__.py</span><br><span class="line">  1176880  2024-08-12 09:03   xxx/xxx.c</span><br><span class="line">  1181116  2024-08-12 09:03   xxx/xxx.c</span><br><span class="line">        0  2024-08-12 03:15   xxx/kernels/__init__.py</span><br><span class="line">     1063  2024-08-12 09:03   xxx-1.7.dist-info/LICENSE</span><br><span class="line">     2071  2024-08-12 09:03   xxx-1.7.dist-info/METADATA</span><br><span class="line">      104  2024-08-12 09:03   xxx-1.7.dist-info/WHEEL</span><br><span class="line">       26  2024-08-12 09:03   xxx-1.7.dist-info/top_level.txt</span><br><span class="line">      950  2024-08-12 09:04   xxx-1.7.dist-info/RECORD</span><br><span class="line">---------                     -------</span><br><span class="line">  4577959                     12 files</span><br></pre></td></tr></table></figure>
-<p>如果加上这个<code>data_files</code>的配置，whl包中会多出这么两个动态链接库：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">844648  2024-08-13 02:06   xxx-1.7.data/data/xxx/xxx.1.so</span><br><span class="line">844648  2024-08-13 02:06   xxx-1.7.data/data/xxx/xxx.so</span><br></pre></td></tr></table></figure>
-<p>需要注意的是，使用这个轮子pip安装以后，这两个文件存放的地址跟其他文件不一样（跟Python版本有关，这里我们考虑通用情景）。其他文件是存放在对应的site-packages路径下，如<code>/usr/local/python-3.7.5/lib/python3.7/site-packages/xxx/</code>，而<code>data_files</code>一般是存放在Python路径下，如<code>/usr/local/python-3.7.5/xxx/</code>。知道这个信息之后，我们就可以从对应的路径下去索引动态链接库了。</p>
+<h1 id="setup-py关于data-files的配置"><a href="#setup-py关于data-files的配置" class="headerlink" title="setup.py关于data_files的配置"></a>setup.py关于data_files的配置</h1><p>有一些动态构建的动态链接库，直接使用MANIFEST.in或者package_data配置不生效。那么有一种解决的办法是，动态构建完成后，将生成的文件保存到<code>build/</code>路径（Python包构建默认路径）下，然后使用<code>data_files</code>的配置把相关文件包含进来：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">data_files=[(<span class="string">&#x27;xxx&#x27;</span>, [<span class="string">&#x27;build/xxx/libxxx.so&#x27;</span>,</span><br><span class="line">                        <span class="string">&#x27;build/xxx/libxxx.1.so&#x27;</span>])]</span><br></pre></td></tr></table></figure><br>如果不使用data_files进行包装，仅仅设置<code>packages</code>和<code>include_package_data</code>，得到的最终轮子内容是这样的：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ unzip -l dist/xxx-1.7-cp37-cp37m-linux_x86_64.whl </span><br><span class="line">Archive:  dist/xxx-1.7-cp37-cp37m-linux_x86_64.whl</span><br><span class="line">  Length      Date    Time    Name</span><br><span class="line">---------  ---------- -----   ----</span><br><span class="line">  1111024  2024-08-12 09:03   xxx.cpython-37m-x86_64-linux-gnu.so</span><br><span class="line">  1100448  2024-08-12 09:03   xxx.cpython-37m-x86_64-linux-gnu.so</span><br><span class="line">     1265  2024-08-12 01:23   xxx/__init__.py</span><br><span class="line">     3012  2024-08-12 06:05   xxx/__main__.py</span><br><span class="line">  1176880  2024-08-12 09:03   xxx/xxx.c</span><br><span class="line">  1181116  2024-08-12 09:03   xxx/xxx.c</span><br><span class="line">        0  2024-08-12 03:15   xxx/kernels/__init__.py</span><br><span class="line">     1063  2024-08-12 09:03   xxx-1.7.dist-info/LICENSE</span><br><span class="line">     2071  2024-08-12 09:03   xxx-1.7.dist-info/METADATA</span><br><span class="line">      104  2024-08-12 09:03   xxx-1.7.dist-info/WHEEL</span><br><span class="line">       26  2024-08-12 09:03   xxx-1.7.dist-info/top_level.txt</span><br><span class="line">      950  2024-08-12 09:04   xxx-1.7.dist-info/RECORD</span><br><span class="line">---------                     -------</span><br><span class="line">  4577959                     12 files</span><br></pre></td></tr></table></figure><br>如果加上这个<code>data_files</code>的配置，whl包中会多出这么两个动态链接库：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">844648  2024-08-13 02:06   xxx-1.7.data/data/xxx/xxx.1.so</span><br><span class="line">844648  2024-08-13 02:06   xxx-1.7.data/data/xxx/xxx.so</span><br></pre></td></tr></table></figure><br>需要注意的是，使用这个轮子pip安装以后，这两个文件存放的地址跟其他文件不一样（跟Python版本有关，这里我们考虑通用情景）。其他文件是存放在对应的site-packages路径下，如<code>/usr/local/python-3.7.5/lib/python3.7/site-packages/xxx/</code>，而<code>data_files</code>一般是存放在Python路径下，如<code>/usr/local/python-3.7.5/xxx/</code>。知道这个信息之后，我们就可以从对应的路径下去索引动态链接库了。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>对于一个纯Python的项目，从构建到发布是比较容易的。但是如果构建的轮子中含有C代码或者生成的动态链接库，那么构建发布有另外一套规则。我们需要经过manylinux平台的验证，以及动态链接库的固化等过程，还需要当心动态链接库的存放地址等信息。本文主要是提供了一个流程化的思路，具体操作对于不同的项目和平台来说差异是比较大的。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/pypi-manylinux.html">https://www.cnblogs.com/dechinphy/p/pypi-manylinux.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -246,7 +237,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -257,7 +248,7 @@
 <nav class="article-nav">
   
     <a href="/2024/08/19/%E4%BD%BF%E7%94%A8CyFES%E5%AF%B9%E9%85%8D%E4%BD%93%E8%BF%90%E5%8A%A8%E8%BD%A8%E8%BF%B9%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E9%80%8F%E8%A7%86/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           使用CyFES对配体运动轨迹进行数据透视
@@ -267,7 +258,7 @@
   
   
     <a href="/2024/08/09/docker-pull%E5%AE%9E%E7%8E%B0%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">docker pull实现断点续传</div>
     </a>
   
@@ -275,7 +266,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=解决pypi上传轮子unsupported platform tag 'linux_x86_64'问题 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F08%2F13%2F%25E8%25A7%25A3%25E5%2586%25B3pypi%25E4%25B8%258A%25E4%25BC%25A0%25E8%25BD%25AE%25E5%25AD%2590unsupported-platform-tag-'linux_x86_64'%25E9%2597%25AE%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -430,6 +421,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

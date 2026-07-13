@@ -8,7 +8,7 @@
     
     <title>Python定位函数定义地址 | Hexo</title>
 
-    <meta name="description" content="&lt;p&gt;Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get_parameters跟Cell类本身的get_parameters冲突，因此可以使用Python的内置函数__code__对冲突函数的地址进行定位，然后进行修改。&lt;/p&gt;">
+    <meta name="description" content="&lt;p&gt;Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get&lt;em&gt;parameters跟Cell类本身的get&lt;em&gt;parameters冲突，因此可以使用Python的内置函数__code&lt;/em&gt;&lt;/em&gt;对冲突函数的地址进行定位，然后进行修改。&lt;/p&gt;">
     <meta name="keywords" content="">
 
     
@@ -16,17 +16,17 @@
     <meta property="og:locale" content="en" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content= "Python定位函数定义地址 | Hexo"  />
-    <meta property="og:description" content= "&lt;p&gt;Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get_parameters跟Cell类本身的get_parameters冲突，因此可以使用Python的内置函数__code__对冲突函数的地址进行定位，然后进行修改。&lt;/p&gt;" />
+    <meta property="og:description" content= "&lt;p&gt;Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get&lt;em&gt;parameters跟Cell类本身的get&lt;em&gt;parameters冲突，因此可以使用Python的内置函数__code&lt;/em&gt;&lt;/em&gt;对冲突函数的地址进行定位，然后进行修改。&lt;/p&gt;" />
     <meta property="og:url" content="http://dechinphy.github.io/2024/03/11/Python%E5%AE%9A%E4%BD%8D%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89%E5%9C%B0%E5%9D%80/index.html" />
     <meta property="og:site_name" content="" />
     <meta property="article:author" content="John Doe" />
     <meta property="article:publisher" content="" />
-    <meta property="og:description" content="&lt;p&gt;Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get_parameters跟Cell类本身的get_parameters冲突，因此可以使用Python的内置函数__code__对冲突函数的地址进行定位，然后进行修改。&lt;/p&gt;" />
+    <meta property="og:description" content="&lt;p&gt;Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get&lt;em&gt;parameters跟Cell类本身的get&lt;em&gt;parameters冲突，因此可以使用Python的内置函数__code&lt;/em&gt;&lt;/em&gt;对冲突函数的地址进行定位，然后进行修改。&lt;/p&gt;" />
     <meta name="twitter:title" content="Python定位函数定义地址 | Hexo"/>
-    <meta name="twitter:description" content="&lt;p&gt;Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get_parameters跟Cell类本身的get_parameters冲突，因此可以使用Python的内置函数__code__对冲突函数的地址进行定位，然后进行修改。&lt;/p&gt;"/>
+    <meta name="twitter:description" content="&lt;p&gt;Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get&lt;em&gt;parameters跟Cell类本身的get&lt;em&gt;parameters冲突，因此可以使用Python的内置函数__code&lt;/em&gt;&lt;/em&gt;对冲突函数的地址进行定位，然后进行修改。&lt;/p&gt;"/>
     <script type="application/ld+json">
         {
-            "description": "&lt;p&gt;Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get_parameters跟Cell类本身的get_parameters冲突，因此可以使用Python的内置函数__code__对冲突函数的地址进行定位，然后进行修改。&lt;/p&gt;",
+            "description": "&lt;p&gt;Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get&lt;em&gt;parameters跟Cell类本身的get&lt;em&gt;parameters冲突，因此可以使用Python的内置函数__code&lt;/em&gt;&lt;/em&gt;对冲突函数的地址进行定位，然后进行修改。&lt;/p&gt;",
             "author": { "@type": "Person", "name": "John Doe" },
             "@type": "BlogPosting",
             "url": "http://dechinphy.github.io/2024/03/11/Python%E5%AE%9A%E4%BD%8D%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89%E5%9C%B0%E5%9D%80/index.html",
@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuid9s6LAbzP3ERntoJEq0oPb" class="article article-type-post" itemscope
+    <article id="post-cuidKi3lE8SDn7poGxosC_UmT" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,31 +201,24 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
         </div>
 
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
-            <p>Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get_parameters跟Cell类本身的get_parameters冲突，因此可以使用Python的内置函数__code__对冲突函数的地址进行定位，然后进行修改。</p>
+            <p>Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get<em>parameters跟Cell类本身的get<em>parameters冲突，因此可以使用Python的内置函数__code</em></em>对冲突函数的地址进行定位，然后进行修改。</p>
 <span id="more"></span>
-
-<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>事情是这样的，在一次使用MindSpore编程的过程中，遇到一个报错”TypeError: get_parameters() got an unexpected keyword argument ‘expand’”。首先我定位到了这个报错的函数，然后找到相关函数的定义：”def get_parameters(self, expand&#x3D;True):”，我们发现这里是有带expand参数的。更奇怪的是，当使用MindSpore的静态图模式时会报错，而如果想切换到动态图模式去定位这个问题时，程序又能够正常运行。</p>
-<h1 id="问题思路"><a href="#问题思路" class="headerlink" title="问题思路"></a>问题思路</h1><p>首先，我们能够在定义的位置查到这个这个函数，并且函数自带了这个参数，因此只有一种可能性–使用函数的时候索引到了其他函数的位置。因此，解决问题的思路就变成了：先在报错的函数体内，打印被调用的函数地址，查找到实际调用的函数位置和相关的定义。然后解决函数调用的冲突，基本方法就是改变其中一个函数的名称，最简单的方案就是在其中一个函数下加一条下划线。但是既然是我们自己本地开发的函数跟MindSpore框架的函数名有冲突，那么自然是应该修改本地的函数名称定义。最后，我们可以通过打印函数调用位置，再次确认下调用的函数位置是否正确。</p>
-<h1 id="相关代码"><a href="#相关代码" class="headerlink" title="相关代码"></a>相关代码</h1><p>要打印一个函数的调用位置很简单，只需要加上<code>__code__</code>即可：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> (get_parameters.__code__)</span><br></pre></td></tr></table></figure>
-<p>第一次运行的时候，打印出来的内容为：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;code object get_parameters at 0x7f48f004ced0, file <span class="string">&quot;../../sponge/potential/energy/bond.py&quot;</span>, line 167&gt;</span><br></pre></td></tr></table></figure>
-<p>找到本地调用的函数后，就可以进入到这个文件中，把冲突的函数名做一个调整。到这里并没有结束，为了避免同样的问题在其他函数体内出现，我们应该替换掉所有相似的问题函数名。这里使用的开发工具是VS Code，在VS Code的侧边栏有一个搜索功能，可以搜索出当前项目内所有包含这个函数名称的文件内容：</p>
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>事情是这样的，在一次使用MindSpore编程的过程中，遇到一个报错&quot;TypeError: get_parameters() got an unexpected keyword argument &#39;expand&#39;&quot;。首先我定位到了这个报错的函数，然后找到相关函数的定义：&quot;def get_parameters(self, expand=True):&quot;，我们发现这里是有带expand参数的。更奇怪的是，当使用MindSpore的静态图模式时会报错，而如果想切换到动态图模式去定位这个问题时，程序又能够正常运行。</p>
+<h1 id="问题思路"><a href="#问题思路" class="headerlink" title="问题思路"></a>问题思路</h1><p>首先，我们能够在定义的位置查到这个这个函数，并且函数自带了这个参数，因此只有一种可能性--使用函数的时候索引到了其他函数的位置。因此，解决问题的思路就变成了：先在报错的函数体内，打印被调用的函数地址，查找到实际调用的函数位置和相关的定义。然后解决函数调用的冲突，基本方法就是改变其中一个函数的名称，最简单的方案就是在其中一个函数下加一条下划线。但是既然是我们自己本地开发的函数跟MindSpore框架的函数名有冲突，那么自然是应该修改本地的函数名称定义。最后，我们可以通过打印函数调用位置，再次确认下调用的函数位置是否正确。</p>
+<h1 id="相关代码"><a href="#相关代码" class="headerlink" title="相关代码"></a>相关代码</h1><p>要打印一个函数的调用位置很简单，只需要加上<code>__code__</code>即可：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> (get_parameters.__code__)</span><br></pre></td></tr></table></figure><br>第一次运行的时候，打印出来的内容为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;code object get_parameters at 0x7f48f004ced0, file <span class="string">&quot;../../sponge/potential/energy/bond.py&quot;</span>, line 167&gt;</span><br></pre></td></tr></table></figure><br>找到本地调用的函数后，就可以进入到这个文件中，把冲突的函数名做一个调整。到这里并没有结束，为了避免同样的问题在其他函数体内出现，我们应该替换掉所有相似的问题函数名。这里使用的开发工具是VS Code，在VS Code的侧边栏有一个搜索功能，可以搜索出当前项目内所有包含这个函数名称的文件内容：</p>
 <div align=center>
-	<img src="https://img2024.cnblogs.com/blog/2277440/202403/2277440-20240311154538291-665093830.png">
+    <img src="https://img2024.cnblogs.com/blog/2277440/202403/2277440-20240311154538291-665093830.png">
 </div>
 
-<p>然后我们就可以找到对应的文件全部修改一遍。修改完成后，再次执行打印函数地址的代码，得到的结果是：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;code object jit_forbidden at 0x7fdfc5612270, file <span class="string">&quot;/home/dechin/anaconda3/envs/mindspore-latest/lib/python3.7/site-packages/mindspore/_check_jit_forbidden_api.py&quot;</span>, line 33&gt;</span><br></pre></td></tr></table></figure>
-<p>这里就是一个正常的调用地址了。同时，我们的代码也执行成功没有报错了，问题解决完成。</p>
-<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get_parameters跟Cell类本身的get_parameters冲突，因此可以使用Python的内置函数__code__对冲突函数的地址进行定位，然后进行修改。</p>
+<p>然后我们就可以找到对应的文件全部修改一遍。修改完成后，再次执行打印函数地址的代码，得到的结果是：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;code object jit_forbidden at 0x7fdfc5612270, file <span class="string">&quot;/home/dechin/anaconda3/envs/mindspore-latest/lib/python3.7/site-packages/mindspore/_check_jit_forbidden_api.py&quot;</span>, line 33&gt;</span><br></pre></td></tr></table></figure><br>这里就是一个正常的调用地址了。同时，我们的代码也执行成功没有报错了，问题解决完成。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get<em>parameters跟Cell类本身的get<em>parameters冲突，因此可以使用Python的内置函数__code</em></em>对冲突函数的地址进行定位，然后进行修改。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/func-path.html">https://www.cnblogs.com/dechinphy/p/func-path.html</a></p>
 <p>作者ID：DechinPhy</p>
 <p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
@@ -244,7 +237,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -255,7 +248,7 @@
 <nav class="article-nav">
   
     <a href="/2024/03/12/MindSpore%E8%87%AA%E5%AE%9A%E4%B9%89%E7%AE%97%E5%AD%90%E4%B8%AD%E7%9A%84%E5%BC%A0%E9%87%8F%E7%BB%B4%E5%BA%A6%E9%97%AE%E9%A2%98/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           MindSpore自定义算子中的张量维度问题
@@ -265,7 +258,7 @@
   
   
     <a href="/2024/03/11/%E5%B0%86MindSpore%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C%E8%BE%93%E5%87%BA%E5%88%B0log%E6%96%87%E4%BB%B6/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">将MindSpore运行结果输出到log文件</div>
     </a>
   
@@ -273,7 +266,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Python定位函数定义地址 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F03%2F11%2FPython%25E5%25AE%259A%25E4%25BD%258D%25E5%2587%25BD%25E6%2595%25B0%25E5%25AE%259A%25E4%25B9%2589%25E5%259C%25B0%25E5%259D%2580%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -428,6 +421,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

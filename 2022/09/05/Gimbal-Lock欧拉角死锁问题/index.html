@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidHRxFWVek-LLN4M0fqRxvg" class="article article-type-post" itemscope
+    <article id="post-cuidBGyibvoIe9FSAbATYo37H" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,73 +210,280 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文通过两个案例——旋转矩阵和分子动力学模拟中的SETTLE约束算法，介绍了一下Gimbal Lock问题，简单来说就是，用旋转矩阵去表示三维空间的向量旋转有可能会遇到奇点，使得三维空间原本的三个自由度在某一个点变成两个自由度。而使用我们这里所介绍的四元数Quaternion则不会有这样的问题，同时本文也介绍了一些四元数的基本运算法则和sympy中的代码实现。后续会再单独写三篇博客介绍一下四元数的具体运算细则、四元数在SETTLE算法中的应用以及四元数的物理含义等，敬请期待。</p>
 <span id="more"></span>
-
-<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面几篇跟SETTLE约束算法相关的文章（<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/settle.html">1</a>, <a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/batch-settle.html">2</a>, <a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/xyz-transform.html">3</a>）中，都涉及到了大量的向量旋转的问题–通过一个旋转矩阵，给定三个空间上的欧拉角$\alpha, \beta, \gamma$，将指定的向量绕对应轴进行旋转操作。而本文主要就阐述这些旋转操作中，有可能面临到的一个重要问题–万向节死锁问题（Gimbal Lock）。</p>
-<p>一般大家觉得用图像化的方式来展示问题会显得更加的直观，但是这里我们准备直接用公式来陈述一下这个问题，也许会更直接。首先我们知道几个熟悉的旋转矩阵：<br>$$<br>R_Y(\alpha)&#x3D;\left(<br>\begin{matrix}<br>cos\alpha &amp;&amp; 0 &amp;&amp; sin\alpha\<br>0 &amp;&amp; 1 &amp;&amp; 0\<br>-sin\alpha &amp;&amp; 0 &amp;&amp; cos\alpha<br>\end{matrix}<br>\right)\<br>R_X(\beta)&#x3D;\left(<br>\begin{matrix}<br>1 &amp;&amp; 0 &amp;&amp; 0\<br>0 &amp;&amp; cos\beta &amp;&amp; -sin\beta\<br>0 &amp;&amp; sin\beta &amp;&amp; cos\beta<br>\end{matrix}<br>\right)\<br>R_Z(\gamma)&#x3D;\left(<br>\begin{matrix}<br>cos\gamma &amp;&amp; -sin\gamma &amp;&amp; 0\<br>sin\gamma &amp;&amp; cos\gamma &amp;&amp; 0\<br>0 &amp;&amp; 0 &amp;&amp; 1<br>\end{matrix}<br>\right)<br>$$</p>
-<p>这些旋转矩阵分别表示绕$Y, X, Z$轴旋转指定的角度的操作。如果我们将这些旋转操作按照顺序作用在一个向量上，由于矩阵运算的结合律，我们可以得到这样一个等效的操作矩阵：<br>$$<br>R(\alpha, \beta, \gamma)&#x3D;R_Y(\alpha)R_X(\beta)R_Z(\gamma)&#x3D;\left(<br>\begin{matrix}<br>cos\alpha\ cos\gamma+sin\alpha\ sin\beta\ sin\gamma&amp;-cos\alpha\ sin\gamma+sin\alpha\ sin\beta\ cos\gamma&amp;+sin\alpha\ cos\beta\<br>cos\beta\ sin\gamma&amp;cos\beta\ cos\gamma&amp;-sin\beta\<br>-sin\alpha\ cos\gamma+cos\alpha\ sin\beta\ sin\gamma&amp;sin\alpha\ sin\gamma+cos\alpha\ sin\beta\ cos\gamma&amp;cos\alpha\ cos\beta<br>\end{matrix}<br>\right)<br>$$<br>为了简化写法，我们可以定义：<br>$$<br>c_1&#x3D;cos\alpha&#x3D;cos(Y), s_1&#x3D;sin\alpha&#x3D;sin(Y)\<br>c_2&#x3D;cos\beta&#x3D;cos(X), s_2&#x3D;sin\beta&#x3D;sin(X)\<br>c_3&#x3D;cos\gamma&#x3D;cos(Z), s_3&#x3D;sin\gamma&#x3D;sin(Z)<br>$$<br>那么就有：<br>$$<br>R(\alpha, \beta, \gamma)&#x3D;\left(<br>\begin{matrix}<br>c_1c_3+s_1s_2s_3&amp;-c_1s_3+s_1s_2c_3&amp;+s_1c_2\<br>c_2s_3&amp;c_2c_3&amp;-s_2\<br>-s_1c_3+c_1s_2s_3&amp;s_1s_3+c_1s_2c_3&amp;c_1c_2<br>\end{matrix}<br>\right)<br>$$<br>其实按照不同的顺序进行旋转的话，得到的结果会有6种可能性：$R_XR_YR_Z,R_XR_ZR_Y,R_YR_XR_Z,R_YR_ZR_X,R_ZR_XR_Y,R_ZR_YR_X$，但是这里一般人为的规定使用$R_YR_XR_Z$顺规，也就是先绕$Z$轴旋转，再绕$X$轴旋转，最后再绕$Y$轴旋转的顺序。</p>
-<p>如果这里假定$\beta&#x3D;\frac{\pi}{2}$，也就是绕$X$轴旋转的角度是90度，那么得到的新的旋转矩阵为：<br>$$<br>R(\alpha, \frac{\pi}{2}, \gamma)&#x3D;R_Y(\alpha)R_X(\frac{\pi}{2})R_Z(\gamma)&#x3D;\left(<br>\begin{matrix}<br>c_1c_3+s_1s_3&amp;-c_1s_3+s_1c_3&amp;0\<br>0&amp;0&amp;-1\<br>-s_1c_3+c_1s_3&amp;s_1s_3+c_1c_3&amp;0<br>\end{matrix}<br>\right)<br>$$<br>再回顾下三角函数公式：<br>$$<br>sin(a\pm b)&#x3D;sin(a)cos(b)\pm sin(b)cos(a)\<br>cos(a\pm b)&#x3D;cos(a)cos(b)\mp sin(a)sin(b)<br>$$<br>代入可得：<br>$$<br>R(\alpha, \frac{\pi}{2}, \gamma)&#x3D;\left(<br>\begin{matrix}<br>cos(\alpha-\gamma)&amp;sin(\alpha-\gamma)&amp;0\<br>0&amp;0&amp;-1\<br>-sin(\alpha-\gamma)&amp;cos(\alpha-\gamma)&amp;0<br>\end{matrix}<br>\right)<br>$$<br>类似地：<br>$$<br>R(\alpha, -\frac{\pi}{2}, \gamma)&#x3D;\left(<br>\begin{matrix}<br>cos(\alpha+\gamma)&amp;-sin(\alpha+\gamma)&amp;0\<br>0&amp;0&amp;1\<br>-sin(\alpha+\gamma)&amp;-cos(\alpha+\gamma)&amp;0<br>\end{matrix}<br>\right)<br>$$<br>到这里，端倪初现，按照上面的这个公式，改变$\alpha$和改变$\gamma$的值，得到的效果是一样的。换句话说，如果在一个欧拉角的旋转矩阵中，在$X$轴的方向将其旋转了90度之后，接下来不论是绕$Y$轴旋转，还是绕$Z$轴旋转，得到的效果是一样的。那么，本来应该是三个方向的自由度，现在变成了两个，这就是问题所在。</p>
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面几篇跟SETTLE约束算法相关的文章（<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/settle.html">1</a>, <a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/batch-settle.html">2</a>, <a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/xyz-transform.html">3</a>）中，都涉及到了大量的向量旋转的问题--通过一个旋转矩阵，给定三个空间上的欧拉角$\alpha, \beta, \gamma$，将指定的向量绕对应轴进行旋转操作。而本文主要就阐述这些旋转操作中，有可能面临到的一个重要问题--万向节死锁问题（Gimbal Lock）。</p>
+<p>一般大家觉得用图像化的方式来展示问题会显得更加的直观，但是这里我们准备直接用公式来陈述一下这个问题，也许会更直接。首先我们知道几个熟悉的旋转矩阵：</p>
+<script type="math/tex; mode=display">
+R_Y(\alpha)=\left(
+\begin{matrix}
+cos\alpha && 0 && sin\alpha\\
+0 && 1 && 0\\
+-sin\alpha && 0 && cos\alpha
+\end{matrix}
+\right)\\
+R_X(\beta)=\left(
+\begin{matrix}
+1 && 0 && 0\\
+0 && cos\beta && -sin\beta\\
+0 && sin\beta && cos\beta
+\end{matrix}
+\right)\\
+R_Z(\gamma)=\left(
+\begin{matrix}
+cos\gamma && -sin\gamma && 0\\
+sin\gamma && cos\gamma && 0\\
+0 && 0 && 1
+\end{matrix}
+\right)</script><p>这些旋转矩阵分别表示绕$Y, X, Z$轴旋转指定的角度的操作。如果我们将这些旋转操作按照顺序作用在一个向量上，由于矩阵运算的结合律，我们可以得到这样一个等效的操作矩阵：</p>
+<script type="math/tex; mode=display">
+R(\alpha, \beta, \gamma)=R_Y(\alpha)R_X(\beta)R_Z(\gamma)=\left(
+\begin{matrix}
+cos\alpha\ cos\gamma+sin\alpha\ sin\beta\ sin\gamma&-cos\alpha\ sin\gamma+sin\alpha\ sin\beta\ cos\gamma&+sin\alpha\ cos\beta\\
+cos\beta\ sin\gamma&cos\beta\ cos\gamma&-sin\beta\\
+-sin\alpha\ cos\gamma+cos\alpha\ sin\beta\ sin\gamma&sin\alpha\ sin\gamma+cos\alpha\ sin\beta\ cos\gamma&cos\alpha\ cos\beta
+\end{matrix}
+\right)</script><p>为了简化写法，我们可以定义：</p>
+<script type="math/tex; mode=display">
+c_1=cos\alpha=cos(Y), s_1=sin\alpha=sin(Y)\\
+c_2=cos\beta=cos(X), s_2=sin\beta=sin(X)\\
+c_3=cos\gamma=cos(Z), s_3=sin\gamma=sin(Z)</script><p>那么就有：</p>
+<script type="math/tex; mode=display">
+R(\alpha, \beta, \gamma)=\left(
+\begin{matrix}
+c_1c_3+s_1s_2s_3&-c_1s_3+s_1s_2c_3&+s_1c_2\\
+c_2s_3&c_2c_3&-s_2\\
+-s_1c_3+c_1s_2s_3&s_1s_3+c_1s_2c_3&c_1c_2
+\end{matrix}
+\right)</script><p>其实按照不同的顺序进行旋转的话，得到的结果会有6种可能性：$R_XR_YR_Z,R_XR_ZR_Y,R_YR_XR_Z,R_YR_ZR_X,R_ZR_XR_Y,R_ZR_YR_X$，但是这里一般人为的规定使用$R_YR_XR_Z$顺规，也就是先绕$Z$轴旋转，再绕$X$轴旋转，最后再绕$Y$轴旋转的顺序。</p>
+<p>如果这里假定$\beta=\frac{\pi}{2}$，也就是绕$X$轴旋转的角度是90度，那么得到的新的旋转矩阵为：</p>
+<script type="math/tex; mode=display">
+R(\alpha, \frac{\pi}{2}, \gamma)=R_Y(\alpha)R_X(\frac{\pi}{2})R_Z(\gamma)=\left(
+\begin{matrix}
+c_1c_3+s_1s_3&-c_1s_3+s_1c_3&0\\
+0&0&-1\\
+-s_1c_3+c_1s_3&s_1s_3+c_1c_3&0
+\end{matrix}
+\right)</script><p>再回顾下三角函数公式：</p>
+<script type="math/tex; mode=display">
+sin(a\pm b)=sin(a)cos(b)\pm sin(b)cos(a)\\
+cos(a\pm b)=cos(a)cos(b)\mp sin(a)sin(b)</script><p>代入可得：</p>
+<script type="math/tex; mode=display">
+R(\alpha, \frac{\pi}{2}, \gamma)=\left(
+\begin{matrix}
+cos(\alpha-\gamma)&sin(\alpha-\gamma)&0\\
+0&0&-1\\
+-sin(\alpha-\gamma)&cos(\alpha-\gamma)&0
+\end{matrix}
+\right)</script><p>类似地：</p>
+<script type="math/tex; mode=display">
+R(\alpha, -\frac{\pi}{2}, \gamma)=\left(
+\begin{matrix}
+cos(\alpha+\gamma)&-sin(\alpha+\gamma)&0\\
+0&0&1\\
+-sin(\alpha+\gamma)&-cos(\alpha+\gamma)&0
+\end{matrix}
+\right)</script><p>到这里，端倪初现，按照上面的这个公式，改变$\alpha$和改变$\gamma$的值，得到的效果是一样的。换句话说，如果在一个欧拉角的旋转矩阵中，在$X$轴的方向将其旋转了90度之后，接下来不论是绕$Y$轴旋转，还是绕$Z$轴旋转，得到的效果是一样的。那么，本来应该是三个方向的自由度，现在变成了两个，这就是问题所在。</p>
 <h1 id="SETTLE约束算法的局限性"><a href="#SETTLE约束算法的局限性" class="headerlink" title="SETTLE约束算法的局限性"></a>SETTLE约束算法的局限性</h1><p>这里我们先回顾一下SETTLE算法中的一个环节，这个环节中涉及到了旋转矩阵的使用。首先是给定一个三角形$\Delta a_0b_0c_0$：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220302142913777-1263891797.png" style="zoom:100%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220302142913777-1263891797.png" style="zoom:100%">
 </div>
 
 <p>然后将其按照这样的一个顺序进行旋转操作：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220908174306097-1998447209.png" style="zoom:100%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220908174306097-1998447209.png" style="zoom:100%">
 </div>
 
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220302145506052-2019550534.png" style="zoom:100%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220302145506052-2019550534.png" style="zoom:100%">
 </div>
 
-<p>旋转之后可以得到新的三角形$\Delta a_3b_3c_3$。按照<strong>SETTLE: An Analytical Version of the SHAKE and RATTLE Algorithm for Rigid Water Models</strong>这篇文章的推导，我们可以得到所需的三个旋转的欧拉角的计算公式为（这里有一个需要注意的问题，<code>SETTLE文章里面的</code>$\alpha,\beta,\gamma$<code>三个参数跟我们前面提到的旋转欧拉角的意义不同，在这篇文章中分别用</code>$\psi,\phi,\theta$<code>来表示绕</code>$Y,X,Z$<code>轴的旋转</code>）：<br>$$<br>\begin{align*}<br>\phi&amp;&#x3D;arcsin\left(\frac{Z’<em>{a_3}}{r_a}\right)\<br>\psi&amp;&#x3D;arcsin\left(\frac{Z’</em>{b_3}-Z’<em>{c_3}}{2r_ccos\phi}\right)\<br>\theta&amp;&#x3D;arcsin\left(\frac{\gamma}{\sqrt{\alpha^2+\beta^2}}\right)-arctan\left(\frac{\beta}{\alpha}\right)<br>\end{align*}<br>$$<br>其中$\alpha$、$\beta$和$\gamma$的取值如下：<br>$$<br>\begin{align*}<br>\alpha&amp;&#x3D;-r_ccos\psi(X’</em>{b_0}-X’<em>{c_0})+(-r_bcos\phi-r_csin\psi sin\phi)(Y’</em>{b_0}-Y’<em>{a_0})+(-r_bcos\phi+r_csin\psi sin\phi)(Y’</em>{c_0}-Y’<em>{a_0})\<br>\beta&amp;&#x3D;-r_ccos\psi(Y’</em>{c_0}-Y’<em>{b_0})+(-r_bcos\phi-r_csin\psi sin\phi)(X’</em>{b_0}-X’<em>{a_0})+(-r_bcos\phi+r_csin\psi sin\phi)(X’</em>{c_0}-X’<em>{a_0})\<br>\gamma&amp;&#x3D;Y’</em>{b_1}(X’<em>{b_0}-X’</em>{a_0})-X’<em>{b_1}(Y’</em>{b_0}-Y’<em>{a_0})+Y’</em>{c_1}(X’<em>{c_0}-X’</em>{a_0})-X’<em>{c_1}(Y’</em>{c_0}-Y’_{a_0})<br>\end{align*}<br>$$<br>那么在这个计算公式中，如果我们取$X$轴的旋转角度为90度，也就是：<br>$$<br>\phi&#x3D;\pm\frac{\pi}{2}<br>$$<br>此时，由于$cos\phi&#x3D;0$，在计算$\psi$的时候，就会直接出现报错，SETTLE算法无法继续执行。那么在其他类似的欧拉角求解的场景下，一样有可能出现类似的问题，导致无法正常计算欧拉角。并且，如果给定欧拉角，那么从原始的向量到终点的向量是一一对应的，但是如果给定两个向量，其对应的旋转矩阵不是唯一的。或者说，两个向量之间变换的轨迹不是唯一的。</p>
+<p>旋转之后可以得到新的三角形$\Delta a_3b_3c_3$。按照<strong>SETTLE: An Analytical Version of the SHAKE and RATTLE Algorithm for Rigid Water Models</strong>这篇文章的推导，我们可以得到所需的三个旋转的欧拉角的计算公式为（这里有一个需要注意的问题，<code>SETTLE文章里面的$$\alpha,\beta,\gamma$$三个参数跟我们前面提到的旋转欧拉角的意义不同，在这篇文章中分别用$$\psi,\phi,\theta$$来表示绕$$Y,X,Z$$轴的旋转</code>）：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+\phi&=arcsin\left(\frac{Z'_{a_3}}{r_a}\right)\\
+\psi&=arcsin\left(\frac{Z'_{b_3}-Z'_{c_3}}{2r_ccos\phi}\right)\\
+\theta&=arcsin\left(\frac{\gamma}{\sqrt{\alpha^2+\beta^2}}\right)-arctan\left(\frac{\beta}{\alpha}\right)
+\end{align*}</script><p>其中$\alpha$、$\beta$和$\gamma$的取值如下：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+\alpha&=-r_ccos\psi(X'_{b_0}-X'_{c_0})+(-r_bcos\phi-r_csin\psi sin\phi)(Y'_{b_0}-Y'_{a_0})+(-r_bcos\phi+r_csin\psi sin\phi)(Y'_{c_0}-Y'_{a_0})\\
+\beta&=-r_ccos\psi(Y'_{c_0}-Y'_{b_0})+(-r_bcos\phi-r_csin\psi sin\phi)(X'_{b_0}-X'_{a_0})+(-r_bcos\phi+r_csin\psi sin\phi)(X'_{c_0}-X'_{a_0})\\
+\gamma&=Y'_{b_1}(X'_{b_0}-X'_{a_0})-X'_{b_1}(Y'_{b_0}-Y'_{a_0})+Y'_{c_1}(X'_{c_0}-X'_{a_0})-X'_{c_1}(Y'_{c_0}-Y'_{a_0})
+\end{align*}</script><p>那么在这个计算公式中，如果我们取$X$轴的旋转角度为90度，也就是：</p>
+<script type="math/tex; mode=display">
+\phi=\pm\frac{\pi}{2}</script><p>此时，由于$cos\phi=0$，在计算$\psi$的时候，就会直接出现报错，SETTLE算法无法继续执行。那么在其他类似的欧拉角求解的场景下，一样有可能出现类似的问题，导致无法正常计算欧拉角。并且，如果给定欧拉角，那么从原始的向量到终点的向量是一一对应的，但是如果给定两个向量，其对应的旋转矩阵不是唯一的。或者说，两个向量之间变换的轨迹不是唯一的。</p>
 <h1 id="Gimbal平衡环架中的死锁"><a href="#Gimbal平衡环架中的死锁" class="headerlink" title="Gimbal平衡环架中的死锁"></a>Gimbal平衡环架中的死锁</h1><p>在参考链接2中，作者自己画了一个平衡环架用于表示欧拉角死锁的问题。非常的直观，本章节中的图片都来自于参考链接2。首先我们给定一个这样的Gimbal：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220909113046732-1318948276.png" style="zoom:100%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220909113046732-1318948276.png" style="zoom:100%">
 </div>
 
 <p>其中每一个颜色的环都可以绕对应轴进行旋转，比如绕绿轴的旋转：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220909113235526-1915855625.gif" style="zoom:100%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220909113235526-1915855625.gif" style="zoom:100%">
 </div>
 
 <p>绕红轴的旋转：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220909144524343-1053401549.gif" style="zoom:100%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220909144524343-1053401549.gif" style="zoom:100%">
 </div>
 
 <p>绕蓝轴的旋转：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220909144609716-1395633269.gif" style="zoom:100%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220909144609716-1395633269.gif" style="zoom:100%">
 </div>
 
 <p>有了这三个轴的话，不论怎么旋转，都可以保持中间那根棍子的位置和朝向不变，达到一个稳定的效果。这个三轴稳定器已经被大量应用在航空航海领域，而后面要讲的四元数的概念，其实也是Hamilton在一次坐船的过程中提出来的一个概念。但是有这样一个特殊的场景，有可能会破坏这个稳定结构。假设我们先把红色这个圈，旋转90度到跟蓝色圈共面的位置：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220909144926107-431806107.png" style="zoom:100%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220909144926107-431806107.png" style="zoom:100%">
 </div>
 
 <p>那么接下来我们就会发现，原本在三个轴向的旋转下都可以保持稳定的棍子，居然摇晃起来了：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220909145323708-1939870780.gif" style="zoom:100%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220909145323708-1939870780.gif" style="zoom:100%">
 </div>
 
 <p>这就是有名的万向节死锁，死锁出现的时候，原本三个方向旋转的自由度，变成了两个，就失去了一个自由度。接下来我们可以看一看，有没有什么方案可以解决万向节死锁的问题。</p>
 <h1 id="四元数（Quaternion）的定义"><a href="#四元数（Quaternion）的定义" class="headerlink" title="四元数（Quaternion）的定义"></a>四元数（Quaternion）的定义</h1><p>应该说，四元数的出现，并不是为了解决欧拉角死锁的问题。但是在后来长期的应用中，人们发现了四元数在几何旋转表示中的独特优势。在蛋白质折叠软件AlphaFold2和MEGAProtein中都使用到了四元数，用于表征分子结构的三维旋转。关于四元数的介绍材料，可以参考一下参考链接3、4，分别是英文版和中文翻译版。</p>
-<p>要理解四元数，至少需要了解复数，可以把四元数当做是复数的一个推广形式。一个复数是由实部和虚部组成，很多时候我们也会将其写成指数形式或者是向量形式：<br>$$<br>z&#x3D;x+i\ y&#x3D;\sqrt{x^2+y^2}e^{i\ arctan(\frac{y}{x})}&#x3D;\left[<br>\begin{matrix}<br>x\y<br>\end{matrix}<br>\right]<br>$$<br>其中$x,y$是实数，$x$称为复数$z$的实部，$y$称为复数$z$的虚部，$i^2&#x3D;-1$是虚数单位。正因为复数可以被看做是一个矢量，所以我们才会想到复数跟向量旋转之间的联系，比如我们有一个单位长度的复数$z’&#x3D;cos\theta+i\ sin\theta$，那么就有以下的复数乘法关系：<br>$$<br>z’z&#x3D;(cos\theta+i\ sin\theta)(x+i\ y)&#x3D;xcos\theta+iycos\theta+ixsin\theta-ysin\theta&#x3D;\left[<br>\begin{matrix}<br>xcos\theta-ysin\theta\<br>ycos\theta+xsin\theta<br>\end{matrix}<br>\right]&#x3D;\left[<br>\begin{matrix}<br>cos\theta&amp;-sin\theta\<br>sin\theta&amp;cos\theta<br>\end{matrix}<br>\right]\left[<br>\begin{matrix}<br>x\y<br>\end{matrix}<br>\right]<br>$$<br>如此一来，我们就得到了一个二维向量的旋转矩阵：<br>$$<br>R_2(\theta)&#x3D;\left[<br>\begin{matrix}<br>cos\theta&amp;-sin\theta\<br>sin\theta&amp;cos\theta<br>\end{matrix}<br>\right]<br>$$<br>有了复数的概念基础，我们可以将其扩展成一个四元数：<br>$$<br>z&#x3D;x+iy_i+jy_j+ky_k&#x3D;\left[<br>\begin{matrix}<br>x\y_i\y_j\y_k<br>\end{matrix}<br>\right]<br>$$<br>比较特殊的，相比于复数的定义有一些补充定义：<br>$$<br>i^2&#x3D;j^2&#x3D;k^2&#x3D;ijk&#x3D;-1\<br>ij&#x3D;k,jk&#x3D;i,ki&#x3D;j\<br>ji&#x3D;-k,kj&#x3D;-i,ik&#x3D;-j<br>$$<br>这些关系，其实很容易让我们联想到向量的叉乘。类似于单位长度复数的定义，这里我们可以定义一个单位长度的四元数：<br>$$<br>\begin{align*}<br>q&amp;&#x3D;(cos\alpha+j\ sin\alpha)(cos\beta+i\ sin\beta)(cos\gamma+k\ sin\gamma)\<br>&amp;&#x3D;(cos\alpha\ cos\beta\ cos\gamma + sin\alpha\ sin\beta\ sin\gamma)+i(cos\alpha\ sin\beta\ cos\gamma+sin\alpha\ cos\beta\ sin\gamma)+j(sin\alpha\ cos\beta\ cos\gamma-cos\alpha\ sin\beta\ sin\gamma)+k(cos\alpha\ cos\beta\ sin\gamma-sin\alpha\ sin\beta\ cos\gamma)\<br>&amp;&#x3D;(c_1c_2c_3+s_1s_2s_3)+i(c_1s_2c_3+s_1c_2s_3)+j(s_1c_2c_3-c_1s_2s_3)+k(c_1c_2s_3-s_1s_2c_3)\<br>&amp;&#x3D;s+ix+jy+kz<br>\end{align*}<br>$$<br>这里我们假定：<br>$$<br>s&#x3D;c_1c_2c_3+s_1s_2s_3\<br>x&#x3D;c_1s_2c_3+s_1c_2s_3\<br>y&#x3D;s_1c_2c_3-c_1s_2s_3\<br>z&#x3D;c_1c_2s_3-s_1s_2c_3<br>$$<br>因为我们要使得$q$是一个单位四元数，因此有：<br>$$<br>s^2+x^2+y^2+z^2&#x3D;1<br>$$</p>
-<h2 id="四元数与旋转矩阵"><a href="#四元数与旋转矩阵" class="headerlink" title="四元数与旋转矩阵"></a>四元数与旋转矩阵</h2><p>四元数与复数的旋转矩阵略有不同，给定一个单位四元数$q$和一个三维空间向量（纯四元数，即$s&#x3D;0$）：$\textbf{v}&#x3D;0+i\ v_i+j\ v_j+k\ v_k$，那么向量$\textbf{v}$关于$q$的旋转被定义为：$q\textbf{v}q^{<em>}$。这里$q^{</em>}&#x3D;s-ix-jy-kz$，是$q$的共轭四元数。对于一个单位四元数而言，$q^{<em>}&#x3D;q^{-1}$。那么我们可以计算一下对应的旋转矩阵$R_q$：<br>$$<br>\begin{align</em>}<br>R_q\textbf{v}&amp;&#x3D;q\textbf{v}q^{<em>}\<br>&amp;&#x3D;(s+ix+jy+kz)\left[<br>v_ix+v_jy+v_kz+i(v_is-v_jz+v_ky)+j(v_iz+v_js-v_kx)+k(-v_iy+v_jx+v_ks)<br>\right]\<br>&amp;&#x3D;\left[<br>\begin{matrix}<br>s^2+x^2-y^2-z^2&amp;&amp;2xy-2sz&amp;&amp;2xz+2sy\<br>2sz+2xy&amp;&amp;s^2-x^2+y^2-z^2&amp;&amp;2yz-2sx\<br>2xz-2sy&amp;&amp;2sx+2yz&amp;&amp;s^2-x^2-y^2+z^2<br>\end{matrix}<br>\right]\left[<br>\begin{matrix}<br>v_i\v_j\v_k<br>\end{matrix}<br>\right]<br>\end{align</em>}<br>$$<br>即，四元数所代表的旋转矩阵为：<br>$$<br>\begin{align*}<br>R(\alpha,\beta,\gamma)&amp;&#x3D;\left[<br>\begin{matrix}<br>s^2+x^2-y^2-z^2&amp;&amp;2xy-2sz&amp;&amp;2xz+2sy\<br>2sz+2xy&amp;&amp;s^2-x^2+y^2-z^2&amp;&amp;2yz-2sx\<br>2xz-2sy&amp;&amp;2sx+2yz&amp;&amp;s^2-x^2-y^2+z^2<br>\end{matrix}<br>\right]\<br>&amp;&#x3D;\left[<br>\begin{matrix}<br>cos2\alpha\ cos2\gamma+sin2\alpha\ sin2\beta\ sin2\gamma&amp;&amp;sin2\alpha\ sin2\beta\ cos2\gamma-cos2\alpha\ sin2\gamma&amp;&amp;sin2\alpha\ cos2\beta\<br>cos2\beta\ sin2\gamma&amp;&amp;cos2\beta\ cos2\gamma&amp;&amp;-sin2\beta\<br>cos2\alpha\ sin2\beta\ sin2\gamma-sin2\alpha\ cos2\gamma&amp;&amp;sin2\alpha\ sin2\gamma+cos2\alpha\ sin2\beta\ cos2\gamma&amp;&amp;cos2\alpha\ cos2\beta<br>\end{matrix}<br>\right]<br>\end{align*}<br>$$</p>
-<p>可以发现这里得到的旋转矩阵跟前面的$R_YR_XR_Z$顺规结果是一致的。但有一点不同的是，在这个结果中我们还发现了一个比较重要的变换：<code>所有的角度在旋转矩阵中都翻了1倍</code>。这里给了我们一个重要启示：<code>在使用四元数对向量进行旋转时，需要先把角度除以2</code>。</p>
-<h2 id="四元数Python代码实现"><a href="#四元数Python代码实现" class="headerlink" title="四元数Python代码实现"></a>四元数Python代码实现</h2><p>在Python的符号计算库Sympy中，已经支持了四元数的相关运算：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sympy <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> sympy.algebras.quaternion <span class="keyword">import</span> Quaternion</span><br><span class="line"></span><br><span class="line">s, x, y, z = symbols(<span class="string">&#x27;s x y z&#x27;</span>, real=<span class="literal">True</span>, positive=<span class="literal">True</span>)</span><br><span class="line">a, b, g = symbols(<span class="string">&#x27;a b g&#x27;</span>)</span><br><span class="line">vi, vj, vk = symbols(<span class="string">&#x27;v_i v_j v_k&#x27;</span>)</span><br><span class="line">tvi, tvj, tvk = symbols(<span class="string">&#x27;t_i, t_j, t_k&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义三个轴的旋转四元数</span></span><br><span class="line">qa = Quaternion(cos(a), <span class="number">0</span>, sin(a), <span class="number">0</span>)</span><br><span class="line">qb = Quaternion(cos(b), sin(b), <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">qg = Quaternion(cos(g), <span class="number">0</span>, <span class="number">0</span>, sin(g))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按顺序合并旋转四元数为一个单位四元数</span></span><br><span class="line">q = qa.mul(qb.mul(qg))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;The unit quaternion q is: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(pretty(q)))</span><br><span class="line"><span class="comment"># The quaternion q is: (sin(a)*sin(b)*sin(g) + cos(a)*cos(b)*cos(g)) + (sin(a)*sin(g)*cos(b) + sin(b)*cos(a)*cos(g))*i +</span></span><br><span class="line"><span class="comment"># (sin(a)*cos(b)*cos(g) - sin(b)*sin(g)*cos(a))*j + (-sin(a)*sin(b)*cos(g) + sin(g)*cos(a)*cos(b))*k</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个普通四元数</span></span><br><span class="line">q = Quaternion(s, x, y, z)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;The normal quaternion q is: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(pretty(q)))</span><br><span class="line"><span class="comment"># The normal quaternion q is: s + x*i + y*j + z*k</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 四元数求共轭</span></span><br><span class="line">cq = conjugate(q)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;The conjugate quaternion cq is: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(pretty(cq)))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个纯四元数</span></span><br><span class="line">v = Quaternion(<span class="number">0</span>, vi, vj, vk)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;The pure quaternion v is: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(pretty(v)))</span><br><span class="line"><span class="comment"># The pure quaternion v is: 0 + v_i*i + v_j*j + v_k*k</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算四元数的旋转qvq*</span></span><br><span class="line">tv = simplify(q.mul(v.mul(cq)))</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;Transformed pure quaternion tv is: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(pretty(tv)))</span><br><span class="line"><span class="comment"># Transformed pure quaternion tv is: 0 +</span></span><br><span class="line"><span class="comment"># (s*(s*v_i - v_j*z + v_k*y) + x*(v_i*x + v_j*y + v_k*z) + y*(s*v_k - v_i*y + v_j*x) - z*(s*v_j + v_i*z - v_k*x))*i +</span></span><br><span class="line"><span class="comment"># (s*(s*v_j + v_i*z - v_k*x) - x*(s*v_k - v_i*y + v_j*x) + y*(v_i*x + v_j*y + v_k*z) + z*(s*v_i - v_j*z + v_k*y))*j +</span></span><br><span class="line"><span class="comment"># (s*(s*v_k - v_i*y + v_j*x) + x*(s*v_j + v_i*z - v_k*x) - y*(s*v_i - v_j*z + v_k*y) + z*(v_i*x + v_j*y + v_k*z))*k</span></span><br></pre></td></tr></table></figure>
-<p>那么有了Sympy这样强大的四元数处理的工具，可以节省我们很多手算的时间。</p>
+<p>要理解四元数，至少需要了解复数，可以把四元数当做是复数的一个推广形式。一个复数是由实部和虚部组成，很多时候我们也会将其写成指数形式或者是向量形式：</p>
+<script type="math/tex; mode=display">
+z=x+i\ y=\sqrt{x^2+y^2}e^{i\ arctan(\frac{y}{x})}=\left[
+\begin{matrix}
+x\\y
+\end{matrix}
+\right]</script><p>其中$x,y$是实数，$x$称为复数$z$的实部，$y$称为复数$z$的虚部，$i^2=-1$是虚数单位。正因为复数可以被看做是一个矢量，所以我们才会想到复数跟向量旋转之间的联系，比如我们有一个单位长度的复数$z&#39;=cos\theta+i\ sin\theta$，那么就有以下的复数乘法关系：</p>
+<script type="math/tex; mode=display">
+z'z=(cos\theta+i\ sin\theta)(x+i\ y)=xcos\theta+iycos\theta+ixsin\theta-ysin\theta=\left[
+\begin{matrix}
+xcos\theta-ysin\theta\\
+ycos\theta+xsin\theta
+\end{matrix}
+\right]=\left[
+\begin{matrix}
+cos\theta&-sin\theta\\
+sin\theta&cos\theta
+\end{matrix}
+\right]\left[
+\begin{matrix}
+x\\y
+\end{matrix}
+\right]</script><p>如此一来，我们就得到了一个二维向量的旋转矩阵：</p>
+<script type="math/tex; mode=display">
+R_2(\theta)=\left[
+\begin{matrix}
+cos\theta&-sin\theta\\
+sin\theta&cos\theta
+\end{matrix}
+\right]</script><p>有了复数的概念基础，我们可以将其扩展成一个四元数：</p>
+<script type="math/tex; mode=display">
+z=x+iy_i+jy_j+ky_k=\left[
+\begin{matrix}
+x\\y_i\\y_j\\y_k
+\end{matrix}
+\right]</script><p>比较特殊的，相比于复数的定义有一些补充定义：</p>
+<script type="math/tex; mode=display">
+i^2=j^2=k^2=ijk=-1\\
+ij=k,jk=i,ki=j\\
+ji=-k,kj=-i,ik=-j</script><p>这些关系，其实很容易让我们联想到向量的叉乘。类似于单位长度复数的定义，这里我们可以定义一个单位长度的四元数：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+q&=(cos\alpha+j\ sin\alpha)(cos\beta+i\ sin\beta)(cos\gamma+k\ sin\gamma)\\
+&=(cos\alpha\ cos\beta\ cos\gamma + sin\alpha\ sin\beta\ sin\gamma)+i(cos\alpha\ sin\beta\ cos\gamma+sin\alpha\ cos\beta\ sin\gamma)+j(sin\alpha\ cos\beta\ cos\gamma-cos\alpha\ sin\beta\ sin\gamma)+k(cos\alpha\ cos\beta\ sin\gamma-sin\alpha\ sin\beta\ cos\gamma)\\
+&=(c_1c_2c_3+s_1s_2s_3)+i(c_1s_2c_3+s_1c_2s_3)+j(s_1c_2c_3-c_1s_2s_3)+k(c_1c_2s_3-s_1s_2c_3)\\
+&=s+ix+jy+kz
+\end{align*}</script><p>这里我们假定：</p>
+<script type="math/tex; mode=display">
+s=c_1c_2c_3+s_1s_2s_3\\
+x=c_1s_2c_3+s_1c_2s_3\\
+y=s_1c_2c_3-c_1s_2s_3\\
+z=c_1c_2s_3-s_1s_2c_3</script><p>因为我们要使得$q$是一个单位四元数，因此有：</p>
+<script type="math/tex; mode=display">
+s^2+x^2+y^2+z^2=1</script><h2 id="四元数与旋转矩阵"><a href="#四元数与旋转矩阵" class="headerlink" title="四元数与旋转矩阵"></a>四元数与旋转矩阵</h2><p>四元数与复数的旋转矩阵略有不同，给定一个单位四元数$q$和一个三维空间向量（纯四元数，即$s=0$）：$\textbf{v}=0+i\ v_i+j\ v_j+k\ v_k$，那么向量$\textbf{v}$关于$q$的旋转被定义为：$q\textbf{v}q^{<em>}$。这里$q^{</em>}=s-ix-jy-kz$，是$q$的共轭四元数。对于一个单位四元数而言，$q^{*}=q^{-1}$。那么我们可以计算一下对应的旋转矩阵$R_q$：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+R_q\textbf{v}&=q\textbf{v}q^{*}\\
+&=(s+ix+jy+kz)\left[
+v_ix+v_jy+v_kz+i(v_is-v_jz+v_ky)+j(v_iz+v_js-v_kx)+k(-v_iy+v_jx+v_ks)
+\right]\\
+&=\left[
+\begin{matrix}
+s^2+x^2-y^2-z^2&&2xy-2sz&&2xz+2sy\\
+2sz+2xy&&s^2-x^2+y^2-z^2&&2yz-2sx\\
+2xz-2sy&&2sx+2yz&&s^2-x^2-y^2+z^2
+\end{matrix}
+\right]\left[
+\begin{matrix}
+v_i\\v_j\\v_k
+\end{matrix}
+\right]
+\end{align*}</script><p>即，四元数所代表的旋转矩阵为：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+R(\alpha,\beta,\gamma)&=\left[
+\begin{matrix}
+s^2+x^2-y^2-z^2&&2xy-2sz&&2xz+2sy\\
+2sz+2xy&&s^2-x^2+y^2-z^2&&2yz-2sx\\
+2xz-2sy&&2sx+2yz&&s^2-x^2-y^2+z^2
+\end{matrix}
+\right]\\
+&=\left[
+\begin{matrix}
+cos2\alpha\ cos2\gamma+sin2\alpha\ sin2\beta\ sin2\gamma&&sin2\alpha\ sin2\beta\ cos2\gamma-cos2\alpha\ sin2\gamma&&sin2\alpha\ cos2\beta\\
+cos2\beta\ sin2\gamma&&cos2\beta\ cos2\gamma&&-sin2\beta\\
+cos2\alpha\ sin2\beta\ sin2\gamma-sin2\alpha\ cos2\gamma&&sin2\alpha\ sin2\gamma+cos2\alpha\ sin2\beta\ cos2\gamma&&cos2\alpha\ cos2\beta
+\end{matrix}
+\right]
+\end{align*}</script><p>可以发现这里得到的旋转矩阵跟前面的$R_YR_XR_Z$顺规结果是一致的。但有一点不同的是，在这个结果中我们还发现了一个比较重要的变换：<code>所有的角度在旋转矩阵中都翻了1倍</code>。这里给了我们一个重要启示：<code>在使用四元数对向量进行旋转时，需要先把角度除以2</code>。</p>
+<h2 id="四元数Python代码实现"><a href="#四元数Python代码实现" class="headerlink" title="四元数Python代码实现"></a>四元数Python代码实现</h2><p>在Python的符号计算库Sympy中，已经支持了四元数的相关运算：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sympy <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> sympy.algebras.quaternion <span class="keyword">import</span> Quaternion</span><br><span class="line"></span><br><span class="line">s, x, y, z = symbols(<span class="string">&#x27;s x y z&#x27;</span>, real=<span class="literal">True</span>, positive=<span class="literal">True</span>)</span><br><span class="line">a, b, g = symbols(<span class="string">&#x27;a b g&#x27;</span>)</span><br><span class="line">vi, vj, vk = symbols(<span class="string">&#x27;v_i v_j v_k&#x27;</span>)</span><br><span class="line">tvi, tvj, tvk = symbols(<span class="string">&#x27;t_i, t_j, t_k&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义三个轴的旋转四元数</span></span><br><span class="line">qa = Quaternion(cos(a), <span class="number">0</span>, sin(a), <span class="number">0</span>)</span><br><span class="line">qb = Quaternion(cos(b), sin(b), <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">qg = Quaternion(cos(g), <span class="number">0</span>, <span class="number">0</span>, sin(g))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按顺序合并旋转四元数为一个单位四元数</span></span><br><span class="line">q = qa.mul(qb.mul(qg))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;The unit quaternion q is: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(pretty(q)))</span><br><span class="line"><span class="comment"># The quaternion q is: (sin(a)*sin(b)*sin(g) + cos(a)*cos(b)*cos(g)) + (sin(a)*sin(g)*cos(b) + sin(b)*cos(a)*cos(g))*i +</span></span><br><span class="line"><span class="comment"># (sin(a)*cos(b)*cos(g) - sin(b)*sin(g)*cos(a))*j + (-sin(a)*sin(b)*cos(g) + sin(g)*cos(a)*cos(b))*k</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个普通四元数</span></span><br><span class="line">q = Quaternion(s, x, y, z)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;The normal quaternion q is: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(pretty(q)))</span><br><span class="line"><span class="comment"># The normal quaternion q is: s + x*i + y*j + z*k</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 四元数求共轭</span></span><br><span class="line">cq = conjugate(q)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;The conjugate quaternion cq is: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(pretty(cq)))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个纯四元数</span></span><br><span class="line">v = Quaternion(<span class="number">0</span>, vi, vj, vk)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;The pure quaternion v is: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(pretty(v)))</span><br><span class="line"><span class="comment"># The pure quaternion v is: 0 + v_i*i + v_j*j + v_k*k</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算四元数的旋转qvq*</span></span><br><span class="line">tv = simplify(q.mul(v.mul(cq)))</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;Transformed pure quaternion tv is: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(pretty(tv)))</span><br><span class="line"><span class="comment"># Transformed pure quaternion tv is: 0 +</span></span><br><span class="line"><span class="comment"># (s*(s*v_i - v_j*z + v_k*y) + x*(v_i*x + v_j*y + v_k*z) + y*(s*v_k - v_i*y + v_j*x) - z*(s*v_j + v_i*z - v_k*x))*i +</span></span><br><span class="line"><span class="comment"># (s*(s*v_j + v_i*z - v_k*x) - x*(s*v_k - v_i*y + v_j*x) + y*(v_i*x + v_j*y + v_k*z) + z*(s*v_i - v_j*z + v_k*y))*j +</span></span><br><span class="line"><span class="comment"># (s*(s*v_k - v_i*y + v_j*x) + x*(s*v_j + v_i*z - v_k*x) - y*(s*v_i - v_j*z + v_k*y) + z*(v_i*x + v_j*y + v_k*z))*k</span></span><br></pre></td></tr></table></figure><br>那么有了Sympy这样强大的四元数处理的工具，可以节省我们很多手算的时间。</p>
 <h2 id="四元数是否解决了Gimbal-Lock问题？"><a href="#四元数是否解决了Gimbal-Lock问题？" class="headerlink" title="四元数是否解决了Gimbal Lock问题？"></a>四元数是否解决了Gimbal Lock问题？</h2><p>在最前面的章节中，我们讲Gimbal Lock欧拉角死锁问题时，提到了一个比较重要的点：<code>在特定条件下（如绕一个指定的轴旋转90度），两个空间向量中间可以对应无穷多个欧拉角的组合</code>。这个现象也体现出了，用欧拉角的方式无法一一对应的表示每两个空间向量之间的旋转关系。因此我们需要找到一个新的表示方法，基于新的表示方法，不仅要使得每一组输入参数对应一个特定的旋转，还需要使得给定任意的两个空间向量，所计算得到的参数要是唯一的，这样才能构成一一对应的映射关系。我们先介绍一下从两个空间向量$\textbf{v}_1, \textbf{v}_2$中去计算四元数的方法，再结合一些实际案例，看看是否会出现欧拉角旋转矩阵中出现的奇点。</p>
-<p>假设两个向量之间的夹角为$\theta$，则对应的旋转四元数可以表示为：<br>$$<br>\textbf{u}&#x3D;\textbf{v}_1\times\textbf{v}_2\<br>cos\theta&#x3D;\frac{\textbf{v}_1\cdot\textbf{v}_2}{|\textbf{v}_1||\textbf{v}_2|}\<br>q&#x3D;cos\frac{\theta}{2}+i\ sin\frac{\theta}{2}\textbf{u}\cdot i+j\ sin\frac{\theta}{2}\textbf{u}\cdot j+k\ sin\frac{\theta}{2}\textbf{u}\cdot k<br>$$</p>
-<h3 id="案例重现"><a href="#案例重现" class="headerlink" title="案例重现"></a>案例重现</h3><p>那么如果我们使用前面提到的欧拉角奇点的案例，假定一个空间向量$\textbf{v}_0&#x3D;i$，也就是处于三维坐标系的X轴正方向上的一个单位向量，我们给它设计一个路径：先绕Z轴旋转$\gamma$的角度，然后绕X轴旋转90度，最后再绕Y轴旋转$\alpha$的角度，那么对应的四元数为：<br>$$<br>\begin{align*}<br>q&amp;&#x3D;(cos\frac{\alpha}{2}-j\ sin\frac{\alpha}{2})(\frac{\sqrt{2}}{2}+i\frac{\sqrt{2}}{2})(cos\frac{\gamma}{2}+k\ sin\frac{\gamma}{2})\<br>&amp;&#x3D;\frac{\sqrt{2}}{2}\left[<br>cos(\frac{\alpha}{2}+\frac{\gamma}{2})+i\ cos(\frac{\alpha}{2}+\frac{\gamma}{2})-j\ sin(\frac{\alpha}{2}+\frac{\gamma}{2})+k\ sin(\frac{\alpha}{2}+\frac{\gamma}{2})<br>\right]<br>\end{align*}<br>$$<br>因为在四元数中我们并不关心具体每个旋转角度的值，我们只需要四元数的四个元素就可以了，所以这里令$x&#x3D;cos(\frac{\alpha}{2}+\frac{\gamma}{2}), y&#x3D;sin(\frac{\alpha}{2}+\frac{\gamma}{2})$，则有：<br>$$<br>q&#x3D;\frac{\sqrt{2}}{2}(x+ix-jy+ky)\<br>x^2+y^2&#x3D;1<br>$$<br>使用Hamilton Product作用在$\textbf{v}_0$上可以得到：<br>$$<br>\textbf{v}_1&#x3D;q\textbf{v}_0q^{*}&#x3D;i(x^2-y^2)+2kxy<br>$$</p>
-<p>为了简化计算量，假定我们得到的结果是$\textbf{v}_1&#x3D;k$，在三维坐标系下，这个矢量位于$Z$轴的正方向上，也就是：<br>$$<br>\textbf{v}_1&#x3D;q\textbf{v}_0q^{*}&#x3D;i(x^2-y^2)+2kxy&#x3D;k<br>$$<br>则有对应关系：<br>$$<br>\left{<br>\begin{matrix}<br>x^2-y^2&#x3D;0\<br>x^2+y^2&#x3D;1\<br>xy&#x3D;\frac{1}{2}<br>\end{matrix}<br>\right.<br>$$<br>那么得到两组解：<br>$$<br>\left{<br>\begin{matrix}<br>x&#x3D;\frac{\sqrt{2}}{2}, y&#x3D;\frac{\sqrt{2}}{2}\<br>x&#x3D;-\frac{\sqrt{2}}{2}, y&#x3D;-\frac{\sqrt{2}}{2}<br>\end{matrix}<br>\right.<br>$$<br>也就是说，这个旋转过程有两个可能对应的四元数：<br>$$<br>\left{<br>\begin{matrix}<br>q_1&#x3D;\frac{\sqrt{2}}{2}+\frac{\sqrt{2}}{2}i-\frac{\sqrt{2}}{2}j+\frac{\sqrt{2}}{2}k\<br>q_2&#x3D;-\frac{\sqrt{2}}{2}-\frac{\sqrt{2}}{2}i+\frac{\sqrt{2}}{2}j-\frac{\sqrt{2}}{2}k<br>\end{matrix}<br>\right.<br>$$<br>而在这个计算过程中，我们依然发现，如果使用欧拉角来进行旋转的话，只能计算出$\alpha+\gamma$的值，但是无法对其进行求解，而四元数则不存在这样的奇点。</p>
-<h3 id="案例拓展"><a href="#案例拓展" class="headerlink" title="案例拓展"></a>案例拓展</h3><p>在上面这个案例中，我们其实是已经给定了一个轨迹所对应的四元数。而如果只是知道起始点$i$和终点$k$，其实我们也可以用上述计算旋转四元数的方法来进行求解：<br>$$<br>\textbf{u}&#x3D;i\times k&#x3D;-j\<br>cos\theta&#x3D;i\cdot k&#x3D;0\<br>$$<br>这就可以计算得四元数：<br>$$<br>\begin{align*}<br>q&amp;&#x3D;cos\frac{\theta}{2}+i\ sin\frac{\theta}{2}\textbf{u}\cdot i+j\ sin\frac{\theta}{2}\textbf{u}\cdot j+k\ sin\frac{\theta}{2}\textbf{u}\cdot k\<br>&amp;&#x3D;\frac{\sqrt{2}}{2}-\frac{\sqrt{2}}{2}j<br>\end{align*}<br>$$<br>虽然这个计算过程很容易，但是我们依然可以使用sympy来验算一下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> sympy <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">from</span> sympy.algebras.quaternion <span class="keyword">import</span> Quaternion</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: q=Quaternion(np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,<span class="number">0</span>,-np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: v=Quaternion(<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: q.mul(v.mul(conjugate(q)))</span><br><span class="line">Out[<span class="number">6</span>]: <span class="number">0</span> + <span class="number">0</span>*i + <span class="number">0</span>*j + <span class="number">1.0</span>*k</span><br></pre></td></tr></table></figure>
-<p>类似的，我们也可以验证一下上一个模块中提到的指定轨迹和起始点与终点所得到的旋转四元数：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">7</span>]: q=Quaternion(np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,-np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,np.sqrt(<span class="number">2</span>)/<span class="number">2</span>)/np.sqrt(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: q.mul(v.mul(conjugate(q)))</span><br><span class="line">Out[<span class="number">8</span>]: <span class="number">0</span> + <span class="number">0</span>*i + <span class="number">0</span>*j + <span class="number">1.0</span>*k</span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: q=-<span class="number">1</span>*Quaternion(np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,-np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,np.sqrt(<span class="number">2</span>)/<span class="number">2</span>)/np.sqrt(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">10</span>]: q.mul(v.mul(conjugate(q)))</span><br><span class="line">Out[<span class="number">10</span>]: <span class="number">0</span> + <span class="number">0</span>*i + <span class="number">0</span>*j + <span class="number">1.0</span>*k</span><br></pre></td></tr></table></figure>
-
+<p>假设两个向量之间的夹角为$\theta$，则对应的旋转四元数可以表示为：</p>
+<script type="math/tex; mode=display">
+\textbf{u}=\textbf{v}_1\times\textbf{v}_2\\
+cos\theta=\frac{\textbf{v}_1\cdot\textbf{v}_2}{|\textbf{v}_1||\textbf{v}_2|}\\
+q=cos\frac{\theta}{2}+i\ sin\frac{\theta}{2}\textbf{u}\cdot i+j\ sin\frac{\theta}{2}\textbf{u}\cdot j+k\ sin\frac{\theta}{2}\textbf{u}\cdot k</script><h3 id="案例重现"><a href="#案例重现" class="headerlink" title="案例重现"></a>案例重现</h3><p>那么如果我们使用前面提到的欧拉角奇点的案例，假定一个空间向量$\textbf{v}_0=i$，也就是处于三维坐标系的X轴正方向上的一个单位向量，我们给它设计一个路径：先绕Z轴旋转$\gamma$的角度，然后绕X轴旋转90度，最后再绕Y轴旋转$\alpha$的角度，那么对应的四元数为：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+q&=(cos\frac{\alpha}{2}-j\ sin\frac{\alpha}{2})(\frac{\sqrt{2}}{2}+i\frac{\sqrt{2}}{2})(cos\frac{\gamma}{2}+k\ sin\frac{\gamma}{2})\\
+&=\frac{\sqrt{2}}{2}\left[
+cos(\frac{\alpha}{2}+\frac{\gamma}{2})+i\ cos(\frac{\alpha}{2}+\frac{\gamma}{2})-j\ sin(\frac{\alpha}{2}+\frac{\gamma}{2})+k\ sin(\frac{\alpha}{2}+\frac{\gamma}{2})
+\right]
+\end{align*}</script><p>因为在四元数中我们并不关心具体每个旋转角度的值，我们只需要四元数的四个元素就可以了，所以这里令$x=cos(\frac{\alpha}{2}+\frac{\gamma}{2}), y=sin(\frac{\alpha}{2}+\frac{\gamma}{2})$，则有：</p>
+<script type="math/tex; mode=display">
+q=\frac{\sqrt{2}}{2}(x+ix-jy+ky)\\
+x^2+y^2=1</script><p>使用Hamilton Product作用在$\textbf{v}_0$上可以得到：</p>
+<script type="math/tex; mode=display">
+\textbf{v}_1=q\textbf{v}_0q^{*}=i(x^2-y^2)+2kxy</script><p>为了简化计算量，假定我们得到的结果是$\textbf{v}_1=k$，在三维坐标系下，这个矢量位于$Z$轴的正方向上，也就是：</p>
+<script type="math/tex; mode=display">
+\textbf{v}_1=q\textbf{v}_0q^{*}=i(x^2-y^2)+2kxy=k</script><p>则有对应关系：</p>
+<script type="math/tex; mode=display">
+\left\{
+\begin{matrix}
+x^2-y^2=0\\
+x^2+y^2=1\\
+xy=\frac{1}{2}
+\end{matrix}
+\right.</script><p>那么得到两组解：</p>
+<script type="math/tex; mode=display">
+\left\{
+\begin{matrix}
+x=\frac{\sqrt{2}}{2}, y=\frac{\sqrt{2}}{2}\\
+x=-\frac{\sqrt{2}}{2}, y=-\frac{\sqrt{2}}{2}
+\end{matrix}
+\right.</script><p>也就是说，这个旋转过程有两个可能对应的四元数：</p>
+<script type="math/tex; mode=display">
+\left\{
+\begin{matrix}
+q_1=\frac{\sqrt{2}}{2}+\frac{\sqrt{2}}{2}i-\frac{\sqrt{2}}{2}j+\frac{\sqrt{2}}{2}k\\
+q_2=-\frac{\sqrt{2}}{2}-\frac{\sqrt{2}}{2}i+\frac{\sqrt{2}}{2}j-\frac{\sqrt{2}}{2}k
+\end{matrix}
+\right.</script><p>而在这个计算过程中，我们依然发现，如果使用欧拉角来进行旋转的话，只能计算出$\alpha+\gamma$的值，但是无法对其进行求解，而四元数则不存在这样的奇点。</p>
+<h3 id="案例拓展"><a href="#案例拓展" class="headerlink" title="案例拓展"></a>案例拓展</h3><p>在上面这个案例中，我们其实是已经给定了一个轨迹所对应的四元数。而如果只是知道起始点$i$和终点$k$，其实我们也可以用上述计算旋转四元数的方法来进行求解：</p>
+<script type="math/tex; mode=display">
+\textbf{u}=i\times k=-j\\
+cos\theta=i\cdot k=0\\</script><p>这就可以计算得四元数：</p>
+<script type="math/tex; mode=display">
+\begin{align*}
+q&=cos\frac{\theta}{2}+i\ sin\frac{\theta}{2}\textbf{u}\cdot i+j\ sin\frac{\theta}{2}\textbf{u}\cdot j+k\ sin\frac{\theta}{2}\textbf{u}\cdot k\\
+&=\frac{\sqrt{2}}{2}-\frac{\sqrt{2}}{2}j
+\end{align*}</script><p>虽然这个计算过程很容易，但是我们依然可以使用sympy来验算一下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> sympy <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">from</span> sympy.algebras.quaternion <span class="keyword">import</span> Quaternion</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: q=Quaternion(np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,<span class="number">0</span>,-np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: v=Quaternion(<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: q.mul(v.mul(conjugate(q)))</span><br><span class="line">Out[<span class="number">6</span>]: <span class="number">0</span> + <span class="number">0</span>*i + <span class="number">0</span>*j + <span class="number">1.0</span>*k</span><br></pre></td></tr></table></figure><br>类似的，我们也可以验证一下上一个模块中提到的指定轨迹和起始点与终点所得到的旋转四元数：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">7</span>]: q=Quaternion(np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,-np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,np.sqrt(<span class="number">2</span>)/<span class="number">2</span>)/np.sqrt(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: q.mul(v.mul(conjugate(q)))</span><br><span class="line">Out[<span class="number">8</span>]: <span class="number">0</span> + <span class="number">0</span>*i + <span class="number">0</span>*j + <span class="number">1.0</span>*k</span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: q=-<span class="number">1</span>*Quaternion(np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,-np.sqrt(<span class="number">2</span>)/<span class="number">2</span>,np.sqrt(<span class="number">2</span>)/<span class="number">2</span>)/np.sqrt(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">10</span>]: q.mul(v.mul(conjugate(q)))</span><br><span class="line">Out[<span class="number">10</span>]: <span class="number">0</span> + <span class="number">0</span>*i + <span class="number">0</span>*j + <span class="number">1.0</span>*k</span><br></pre></td></tr></table></figure></p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文通过两个案例——旋转矩阵和分子动力学模拟中的SETTLE约束算法，介绍了一下Gimbal Lock问题，简单来说就是，用旋转矩阵去表示三维空间的向量旋转有可能会遇到奇点，使得三维空间原本的三个自由度在某一个点变成两个自由度。而使用我们这里所介绍的四元数Quaternion则不会有这样的问题，同时本文也介绍了一些四元数的基本运算法则和sympy中的代码实现。后续会再单独写三篇博客介绍一下四元数的具体运算细则、四元数在SETTLE算法中的应用以及四元数的物理含义等，敬请期待。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/quaternion.html">https://www.cnblogs.com/dechinphy/p/quaternion.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -307,7 +514,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -318,7 +525,7 @@
 <nav class="article-nav">
   
     <a href="/2022/09/07/%E5%8F%AF%E4%BB%A5%E7%94%A8%E7%88%B1%E5%9B%A0%E6%96%AF%E5%9D%A6%E6%B1%82%E5%92%8C%E6%9B%BF%E4%BB%A3%E7%9A%84%E9%82%A3%E4%BA%9B%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           可以用爱因斯坦求和替代的那些矩阵运算
@@ -328,7 +535,7 @@
   
   
     <a href="/2022/08/30/SETTLE%E7%BA%A6%E6%9D%9F%E7%AE%97%E6%B3%95%E4%B8%AD%E7%9A%84%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2%E9%97%AE%E9%A2%98/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">SETTLE约束算法中的坐标变换问题</div>
     </a>
   
@@ -336,7 +543,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Gimbal Lock欧拉角死锁问题 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F09%2F05%2FGimbal-Lock%25E6%25AC%25A7%25E6%258B%2589%25E8%25A7%2592%25E6%25AD%25BB%25E9%2594%2581%25E9%2597%25AE%25E9%25A2%2598%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -491,6 +698,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

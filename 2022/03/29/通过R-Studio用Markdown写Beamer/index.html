@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidsSb3dXp8KPkP9SH7uXK8Y" class="article article-type-post" itemscope
+    <article id="post-cuidn6QKRppFEpfkAnlRixnT4" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,89 +210,87 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>虽说在科研和工程中，最重要的还应该聚焦于研究的内容本身，但是如何去更好更严肃的展示自己的研究成果，并且不耗费太多的时间成本，这也是一个长期被讨论的话题。本文中介绍了R Markdown这样的一个解决方案，可以用于构建Beamer演示文档，用更少的工作量去构建一个效果更好的演示文档，对科学研究而言也是一个值得称道的工作。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在写一些学术演示文档时，经常有可能用到Beamer——一种Latex的学术风PPT模板，比如下图所示的这种：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329161005136-1694474482.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329161005136-1694474482.png">
 </div>
 
 <p>这种风格的演示文档有几个明显的优点：简约、严肃、可以用Latex敲公式和推导、可微调、定制化程度高，而且一般都是免费的。当然也有一些明显的缺点：写Latex麻烦，部署Latex环境更麻烦。因此，更多的人都是硬着头皮在Overleaf上写Latex，这也是被逼无奈。但是我们看到在各大平台用Markdown写博客，或者在开源代码仓库中用Markdown写说明文档，都是非常的美观，那有没有可能用Markdown替代Latex，至少在演示文档上用Markdown替代Latex呢？对于这个问题，R Markdown给出了肯定的回答。</p>
 <h1 id="安装R-Studio"><a href="#安装R-Studio" class="headerlink" title="安装R Studio"></a>安装R Studio</h1><p>配置R Markdown的环境，相比于Latex而言容易了很多，大致就分为如下所示的两个步骤：先安装R语言环境，再安装R Studio：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329144306353-234412458.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329144306353-234412458.png">
 </div>
 
 <p>当然，这里少了一个关于pdflatex环境的安装，本文的最后会解释这个问题。首先我们现在访问<a target="_blank" rel="noopener" href="https://cran.rstudio.com/">R语言的官网</a>，下载一个exe安装文件，在本地环境中进行安装，本文用于测试的环境是Win11操作系统。下载完成后按照提示一步一步安装就可以了：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329144144032-1079840836.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329144144032-1079840836.png">
 </div>
 
 <p>安装好R语言的环境之后，再开始安装R Studio，同样的访问<a target="_blank" rel="noopener" href="https://www.rstudio.com/products/rstudio/download/#download">R Studio的官方网站</a>，下载最新的安装文件进行安装。安装过程大概长这个样子：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329144405778-1555120493.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329144405778-1555120493.png">
 </div>
 
 <p>时间上可能比R语言的安装要更久一些，要耐心等待，按照提示一步一步往下走，就可以很容易完成安装。安装成功后，打开R Studio的界面是这样的：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329144544338-1699902536.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329144544338-1699902536.png">
 </div>
 
 <h1 id="新建Rmd文件"><a href="#新建Rmd文件" class="headerlink" title="新建Rmd文件"></a>新建Rmd文件</h1><p>R Markdown的Beamer PPT格式都是Rmd的后缀，用于写R Markdown，然后按顺序编译成Latex和对应的Pdf格式，而R Studio就提供了一个把Rmd文件编译成Latex文件的编译环境。首先我们选择新建一个文件：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329144647900-1985753350.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329144647900-1985753350.png">
 </div>
 
 <p>然后在配置时选择Presentation，也就是构建演示文档，并在弹窗中完成一系列的参数配置：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329145245380-29669525.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329145245380-29669525.png">
 </div>
 
 <p>注意我们最终想用的是Beamer风格的演示文档，因此在这里一定要选择Beamer模式，至于具体的Beamer模板的选择，在后续的设置中会介绍。创建好Rmd文件之后，会有一个默认的Rmd文档，这也是基于Beamer模板生成的markdown格式的文档：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329145807595-1118080590.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329145807595-1118080590.png">
 </div>
 
 <p>我们可以将这个默认的案例修改为我们自己的案例（注意，这个markdown内容不能直接用，为了避免这个文件中的代码块模块所包含的点号跟本博客内容所带的点号引起错误配对，下面的代码中的每个点号之间都加了空格，使用时需删去）：</p>
 <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: &quot;Test<span class="emphasis">_R_</span>Markdown&quot;</span><br><span class="line">author: &quot;Dechin&quot;</span><br><span class="line">date: &quot;<span class="code">`2022.03.29`</span>&quot;</span><br><span class="line">output: </span><br><span class="line">  beamer<span class="emphasis">_presentation: </span></span><br><span class="line"><span class="emphasis">    theme: Dresden</span></span><br><span class="line"><span class="emphasis">    colortheme: seagull</span></span><br><span class="line"><span class="emphasis">---</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">## R Markdown</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <span class="language-xml">&lt;http://rmarkdown.rstudio.com&gt;</span>.</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">When you click the <span class="strong">**Knit**</span> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">## Slide with Bullets</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">-   Bullet 1</span></span><br><span class="line"><span class="emphasis">-   Bullet 2</span></span><br><span class="line"><span class="emphasis">-   Bullet 3</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">## Slide with R Output</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">` ` ` python</span></span><br><span class="line"><span class="emphasis">import numpy as np</span></span><br><span class="line"><span class="emphasis">print (&#x27;This is a python code block&#x27;)</span></span><br><span class="line"><span class="emphasis">` ` `</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">## Slide with Equation</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">Test Equation input</span></span><br><span class="line"><span class="emphasis">$$</span></span><br><span class="line"><span class="emphasis">-i\hbar\frac&#123;\partial&#125;&#123;\partial t&#125;\left|\psi\right&gt;=E\left|\psi\right&gt;</span></span><br><span class="line"><span class="emphasis">$$</span></span><br></pre></td></tr></table></figure>
-
 <p>从这个语法中我们也可以看出，跟我们日常所使用的markdown并无太大的出入，只是在Markdown中额外支持了R语言的一些操作，甚至从官方文档中看到，还支持了bash和python的一些操作。写完了Rmd文件之后，如果本地环境已经安装好了pdflatex，可以直接点击Knit中的Beamer模式，直接生成Beamer文档的pdf文件，也可以在R Studio中预览：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329151341107-318381794.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329151341107-318381794.png">
 </div>
 
 <p>但问题是，博主本机Win11的电脑中没有Latex的环境，根据以往对Latex环境的操作经验，遂不打算搭建一个本地的Latex环境。在上图的步骤中，我们已经同时构建了tex文件，只是在从tex文件编译到pdf文件的这个过程中报了错，因此，我们可以直接将这一个tex文件复制到Overleaf的latex环境中进行编译，如下图所示便是预览效果：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329151609606-199376911.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329151609606-199376911.png">
 </div>
 
 <p>还有文档中的代码块以及公式部分的效果一览：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329151636821-2002326341.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329151636821-2002326341.png">
 </div>
 
 <h1 id="Beamer模板配置"><a href="#Beamer模板配置" class="headerlink" title="Beamer模板配置"></a>Beamer模板配置</h1><p>在上面的结果中我们看到的还只是一个default模式的Beamer模板，其实我们可以在<a target="_blank" rel="noopener" href="https://deic.uab.cat/~iblanes/beamer_gallery/index_by_theme_and_color.html">Beamer示例网站</a>上找到众多的Beamer模板的名称，比如下面这样的模板风格：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329152056507-278582106.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329152056507-278582106.png">
 </div>
 
 <p>我们先在这个网站上面找到一个自己想要的模板，然后把名称记录下来，因为R Studio中的模板名称和Beamer的模板是一一对应的关系。在R Studio中点击设置，找到Output Option：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329152406811-382898284.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329152406811-382898284.png">
 </div>
 
 <p>在弹窗中可以选择主题和颜色主题，比如博主选择了Dresden-seagull这个主题：</p>
 <div align=center>
-	<img src="(https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329152307123-1242597076.png">
+    <img src="(https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329152307123-1242597076.png">
 </div>
 
 <p>然后就可以回到主界面上点击Knit进行构建，当然，前面也提到了，因为本地没有latex的环境，因此会提示构建失败：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329152502344-1604775160.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329152502344-1604775160.png">
 </div>
 
 <p>但是没有关系，因为本地的tex文件是已经正常构建完成了，找一个文本编辑器打开这个tex文件，再将其内容复制到Overleaf上进行编译，就可以get到这样的结果：</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329152629412-60713731.png">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329152629412-60713731.png">
 </div>
 
 <p>接下来使用R Markdown去构建好自己的演示文档，在Overleaf上编译构建后下载下来，就完成了使用Markdown构建Beamer的流程。如果说确实有需求一定要在本地构建一个pdf文件，并且同时你使用的是Linux的某个发行版的话，可以看下我之前写过的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/pdflatex.html">这篇博客</a>使用Docker去配置一个专属的Latex编译环境。</p>
@@ -319,7 +317,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -330,7 +328,7 @@
 <nav class="article-nav">
   
     <a href="/2022/03/29/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9F%A9%E9%98%B5%E8%AF%AD%E8%A8%80/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           量子计算基础——矩阵语言
@@ -340,7 +338,7 @@
   
   
     <a href="/2022/03/28/Python%E4%B8%AD%E5%B0%86%E5%AD%97%E5%85%B8%E8%BD%AC%E4%B8%BA%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">Python中将字典转为成员变量</div>
     </a>
   
@@ -348,7 +346,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=通过R Studio用Markdown写Beamer - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F03%2F29%2F%25E9%2580%259A%25E8%25BF%2587R-Studio%25E7%2594%25A8Markdown%25E5%2586%2599Beamer%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -503,6 +501,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

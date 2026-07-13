@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidfwi04qaJ8DBinrcdWJ9c9" class="article article-type-post" itemscope
+    <article id="post-cuid30r3r6ruK6EesUNwnxezN" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,32 +210,67 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>在已知两个三角形顶点坐标的情况下，我们要以其中的一个三角形平面去构造一个新的坐标系，并且需要找到新旧坐标系之间的变换关系。这是一个比较简单的立体几何的问题，寻找两个坐标系之间的变换矩阵。如果是常规思路，可以先根据两个三角形之间的相对位置去计算一下在新坐标系下两个三角形的新的顶点坐标，从而可以取三个点来构造一个坐标变换矩阵，进而推广到所有向量在这两个坐标系之间的变换关系。而本文提供了一种相对更容易求解、也比较直接的思路，并给出了相关的Python代码实现过程。</p>
 <span id="more"></span>
-
-<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在之前的两篇文章中，我们分别讲解了<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/settle.html">SETTLE算法的原理和基本实现</a>和<a href="cnblogs.com/dechinphy/p/batch-settle.html">SETTLE约束算法的批量化处理</a>。SETTLE约束算法在水分子体系中经常被用到，该约束算法具有速度快、可并行、精度高的优点。本文我们需要探讨的是该约束算法中的一个细节，问题是这样定义的，给定坐标系$XYZ$下的两个已知三角形$\Delta A_0B_0C_0$和三角形$\Delta A_1B_1C_1$，以三角形$\Delta A_0B_0C_0$构造一个平面$\pi_0$，将$\pi_0$平移到三角形$\Delta A_1B_1C_1$的质心位置，作为新坐标系的$X’Y’$平面，再使得$Y’Z’$平面过$A_1$点，以此来构造一个新的坐标系$X’Y’Z’$，求两个坐标系之间的变换。</p>
-<h1 id="理论推导"><a href="#理论推导" class="headerlink" title="理论推导"></a>理论推导</h1><p>坐标系$OXYZ$和$O’X’Y’Z’$之间的变换，只有平移和旋转，没有伸缩。那么关于平移的部分，我们只需要考虑两个原点位置之间的向量差即可。而旋转部分，需要一些技巧，至少我们需要找到三个合适的点用于计算这个旋转矩阵。比如说，假定三角形$\Delta A_1B_1C_1$在坐标系$OXYZ$和$O’X’Y’Z’$之中的位置都是已知的，那么我们就可以按照下述公式来计算旋转矩阵$R$：</p>
-<p>$$<br>R\left[<br>\begin{matrix}<br>X_A &amp;&amp; X_B &amp;&amp; X_C\<br>Y_A &amp;&amp; Y_B &amp;&amp; Y_C\<br>Z_A &amp;&amp; Z_B &amp;&amp; Z_C<br>\end{matrix}<br>\right]&#x3D;<br>\left[<br>\begin{matrix}<br>X’_A &amp;&amp; X’_B &amp;&amp; X’_C\<br>Y’_A &amp;&amp; Y’_B &amp;&amp; Y’_C\<br>Z’_A &amp;&amp; Z’_B &amp;&amp; Z’_C<br>\end{matrix}<br>\right]<br>$$</p>
-<p>然后在等式两边各乘上一个逆矩阵就可以得到旋转矩阵：</p>
-<p>$$<br>R&#x3D;\left[<br>\begin{matrix}<br>X’_A &amp;&amp; X’_B &amp;&amp; X’_C\<br>Y’_A &amp;&amp; Y’_B &amp;&amp; Y’_C\<br>Z’_A &amp;&amp; Z’_B &amp;&amp; Z’_C<br>\end{matrix}<br>\right]\left[<br>\begin{matrix}<br>X_A &amp;&amp; X_B &amp;&amp; X_C\<br>Y_A &amp;&amp; Y_B &amp;&amp; Y_C\<br>Z_A &amp;&amp; Z_B &amp;&amp; Z_C<br>\end{matrix}<br>\right]^{-1}<br>$$</p>
-<p>然而不幸的是，我们并不能直接得到三角形$\Delta A_1B_1C_1$在坐标系$O’X’Y’Z’$之中的位置，这需要一些计算。因此，我们可以考虑另辟蹊径，找其他更容易计算的三个向量，用来计算我们所需要的旋转矩阵。</p>
-<h2 id="第一个向量"><a href="#第一个向量" class="headerlink" title="第一个向量"></a>第一个向量</h2><p>我们找的第一个向量是$Z’$轴，或者用向量表示就是$\vec{O’Z’}&#x3D;[0, 0, 1]^T$，因为$Z’$轴跟平面$\pi_0$是垂直的关系，也就是垂直于三角形$\Delta A_0B_0C_0$。因此对应的可以用三角形$\Delta A_0B_0C_0$的任意两条边的外积来计算向量$\vec{O’Z’}&#x3D;R\cdot[\vec{A_0B_0}\times \vec{A_0C_0}]$（注意做归一化处理）。</p>
-<h2 id="第二个向量"><a href="#第二个向量" class="headerlink" title="第二个向量"></a>第二个向量</h2><p>如果分别用$D_1$和$D’_1$来表示三角形$\Delta A_1B_1C_1$在坐标系$OXYZ$和坐标系$O’X’Y’Z’$下的质心位置。这里我们找的第二个向量，就是$\vec{D’_1A’_1}$。这里因为$A’<em>1$点在$Y’Z’$平面上，因此$X’</em>{A’_1}&#x3D;0$。而向量$\vec{D’_1A’_1}$和$Z’$轴的夹角，我们可以在坐标系$OXYZ$下计算：</p>
-<p>$$<br>cos \theta&#x3D;\frac{(\vec{A_0B_0}\times \vec{A_0C_0})\cdot\vec{D_1A_1}}{|\vec{A_0B_0}\times \vec{A_0C_0}|\cdot|\vec{D_1A_1}|},   sin \theta&#x3D;\sqrt{1-cos^2\theta}<br>$$</p>
-<p>计算出来夹角之后，就可以得到$\vec{D’_1A’_1}&#x3D;[0, sin\theta, cos\theta]^T$，即：$\vec{D’_1A’_1}&#x3D;R\cdot\vec{D_1A_1}$。</p>
-<h2 id="第三个向量"><a href="#第三个向量" class="headerlink" title="第三个向量"></a>第三个向量</h2><p>到这一步为止，其实我们还是没有计算出$\vec{D’_1B’_1}$和$\vec{D’_1C’_1}$的值，因此我们第三个向量，在前两个向量的基础之上，用叉乘的方法再构造一个$X’$轴的向量，即$\vec{O’X’}&#x3D;[1, 0, 0]^T$，旋转矩阵计算方法为：</p>
-<p>$$<br>\vec{O’X’}&#x3D;R\cdot \left[(\vec{A_0B_0}\times \vec{A_0C_0})\times \vec{D_1A_1}\right]<br>$$</p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这样一来，我们就得到了三个向量在两个坐标系下的坐标，可以用于建立方程组，计算两个坐标之间的变换关系，如果写成矩阵乘法形式就是：</p>
-<p>$$<br>R &#x3D; \left[<br>\begin{matrix}<br>0&amp;&amp;0&amp;&amp;1\<br>0&amp;&amp;\sqrt{1-(\frac{(\vec{A_0B_0}\times \vec{A_0C_0})\cdot\vec{D_1A_1}}{|\vec{A_0B_0}\times \vec{A_0C_0}|\cdot|\vec{D_1A_1}|})^2}&amp;&amp;0\<br>1&amp;&amp;\frac{(\vec{A_0B_0}\times \vec{A_0C_0})\cdot\vec{D_1A_1}}{|\vec{A_0B_0}\times \vec{A_0C_0}|\cdot|\vec{D_1A_1}|}&amp;&amp;0<br>\end{matrix}<br>\right]\left(\left[<br>\begin{matrix}<br>\vec{A_0B_0}\times \vec{A_0C_0}\<br>\vec{D_1A_1}\<br>(\vec{A_0B_0}\times \vec{A_0C_0})\times \vec{D_1A_1}<br>\end{matrix}<br>\right]^{T}\right)^{-1}<br>$$</p>
-<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>这里先提一下代码实现和测试的思路。我们首先用Python来构造2个三角形，得到一个新的三角形。然后我们再根据上述的公式，计算得到一个坐标旋转矩阵。最后我们再输入一些便于手动计算的点（或者是直接用前面三角形的三个角，或者是中间的一些向量都是可以的），用旋转矩阵进行变换，来测试一下是否我们所需要的坐标变换之后的结果。</p>
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在之前的两篇文章中，我们分别讲解了<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/settle.html">SETTLE算法的原理和基本实现</a>和<a href="cnblogs.com/dechinphy/p/batch-settle.html">SETTLE约束算法的批量化处理</a>。SETTLE约束算法在水分子体系中经常被用到，该约束算法具有速度快、可并行、精度高的优点。本文我们需要探讨的是该约束算法中的一个细节，问题是这样定义的，给定坐标系$XYZ$下的两个已知三角形$\Delta A_0B_0C_0$和三角形$\Delta A_1B_1C_1$，以三角形$\Delta A_0B_0C_0$构造一个平面$\pi_0$，将$\pi_0$平移到三角形$\Delta A_1B_1C_1$的质心位置，作为新坐标系的$X&#39;Y&#39;$平面，再使得$Y&#39;Z&#39;$平面过$A_1$点，以此来构造一个新的坐标系$X&#39;Y&#39;Z&#39;$，求两个坐标系之间的变换。</p>
+<h1 id="理论推导"><a href="#理论推导" class="headerlink" title="理论推导"></a>理论推导</h1><p>坐标系$OXYZ$和$O&#39;X&#39;Y&#39;Z&#39;$之间的变换，只有平移和旋转，没有伸缩。那么关于平移的部分，我们只需要考虑两个原点位置之间的向量差即可。而旋转部分，需要一些技巧，至少我们需要找到三个合适的点用于计算这个旋转矩阵。比如说，假定三角形$\Delta A_1B_1C_1$在坐标系$OXYZ$和$O&#39;X&#39;Y&#39;Z&#39;$之中的位置都是已知的，那么我们就可以按照下述公式来计算旋转矩阵$R$：</p>
+<script type="math/tex; mode=display">
+R\left[
+\begin{matrix}
+X_A && X_B && X_C\\
+Y_A && Y_B && Y_C\\
+Z_A && Z_B && Z_C
+\end{matrix}
+\right]=
+\left[
+\begin{matrix}
+X'_A && X'_B && X'_C\\
+Y'_A && Y'_B && Y'_C\\
+Z'_A && Z'_B && Z'_C
+\end{matrix}
+\right]</script><p>然后在等式两边各乘上一个逆矩阵就可以得到旋转矩阵：</p>
+<script type="math/tex; mode=display">
+R=\left[
+\begin{matrix}
+X'_A && X'_B && X'_C\\
+Y'_A && Y'_B && Y'_C\\
+Z'_A && Z'_B && Z'_C
+\end{matrix}
+\right]\left[
+\begin{matrix}
+X_A && X_B && X_C\\
+Y_A && Y_B && Y_C\\
+Z_A && Z_B && Z_C
+\end{matrix}
+\right]^{-1}</script><p>然而不幸的是，我们并不能直接得到三角形$\Delta A_1B_1C_1$在坐标系$O&#39;X&#39;Y&#39;Z&#39;$之中的位置，这需要一些计算。因此，我们可以考虑另辟蹊径，找其他更容易计算的三个向量，用来计算我们所需要的旋转矩阵。</p>
+<h2 id="第一个向量"><a href="#第一个向量" class="headerlink" title="第一个向量"></a>第一个向量</h2><p>我们找的第一个向量是$Z&#39;$轴，或者用向量表示就是$\vec{O&#39;Z&#39;}=[0, 0, 1]^T$，因为$Z&#39;$轴跟平面$\pi_0$是垂直的关系，也就是垂直于三角形$\Delta A_0B_0C_0$。因此对应的可以用三角形$\Delta A_0B_0C_0$的任意两条边的外积来计算向量$\vec{O&#39;Z&#39;}=R\cdot[\vec{A_0B_0}\times \vec{A_0C_0}]$（注意做归一化处理）。</p>
+<h2 id="第二个向量"><a href="#第二个向量" class="headerlink" title="第二个向量"></a>第二个向量</h2><p>如果分别用$D<em>1$和$D&#39;_1$来表示三角形$\Delta A_1B_1C_1$在坐标系$OXYZ$和坐标系$O&#39;X&#39;Y&#39;Z&#39;$下的质心位置。这里我们找的第二个向量，就是$\vec{D&#39;_1A&#39;_1}$。这里因为$A&#39;_1$点在$Y&#39;Z&#39;$平面上，因此$X&#39;</em>{A&#39;_1}=0$。而向量$\vec{D&#39;_1A&#39;_1}$和$Z&#39;$轴的夹角，我们可以在坐标系$OXYZ$下计算：</p>
+<script type="math/tex; mode=display">
+cos \theta=\frac{(\vec{A_0B_0}\times \vec{A_0C_0})\cdot\vec{D_1A_1}}{|\vec{A_0B_0}\times \vec{A_0C_0}|\cdot|\vec{D_1A_1}|},   sin \theta=\sqrt{1-cos^2\theta}</script><p>计算出来夹角之后，就可以得到$\vec{D&#39;_1A&#39;_1}=[0, sin\theta, cos\theta]^T$，即：$\vec{D&#39;_1A&#39;_1}=R\cdot\vec{D_1A_1}$。</p>
+<h2 id="第三个向量"><a href="#第三个向量" class="headerlink" title="第三个向量"></a>第三个向量</h2><p>到这一步为止，其实我们还是没有计算出$\vec{D&#39;_1B&#39;_1}$和$\vec{D&#39;_1C&#39;_1}$的值，因此我们第三个向量，在前两个向量的基础之上，用叉乘的方法再构造一个$X&#39;$轴的向量，即$\vec{O&#39;X&#39;}=[1, 0, 0]^T$，旋转矩阵计算方法为：</p>
+<script type="math/tex; mode=display">
+\vec{O'X'}=R\cdot \left[(\vec{A_0B_0}\times \vec{A_0C_0})\times \vec{D_1A_1}\right]</script><h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这样一来，我们就得到了三个向量在两个坐标系下的坐标，可以用于建立方程组，计算两个坐标之间的变换关系，如果写成矩阵乘法形式就是：</p>
+<script type="math/tex; mode=display">
+R = \left[
+\begin{matrix}
+0&&0&&1\\
+0&&\sqrt{1-(\frac{(\vec{A_0B_0}\times \vec{A_0C_0})\cdot\vec{D_1A_1}}{|\vec{A_0B_0}\times \vec{A_0C_0}|\cdot|\vec{D_1A_1}|})^2}&&0\\
+1&&\frac{(\vec{A_0B_0}\times \vec{A_0C_0})\cdot\vec{D_1A_1}}{|\vec{A_0B_0}\times \vec{A_0C_0}|\cdot|\vec{D_1A_1}|}&&0
+\end{matrix}
+\right]\left(\left[
+\begin{matrix}
+\vec{A_0B_0}\times \vec{A_0C_0}\\
+\vec{D_1A_1}\\
+(\vec{A_0B_0}\times \vec{A_0C_0})\times \vec{D_1A_1}
+\end{matrix}
+\right]^{T}\right)^{-1}</script><h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>这里先提一下代码实现和测试的思路。我们首先用Python来构造2个三角形，得到一个新的三角形。然后我们再根据上述的公式，计算得到一个坐标旋转矩阵。最后我们再输入一些便于手动计算的点（或者是直接用前面三角形的三个角，或者是中间的一些向量都是可以的），用旋转矩阵进行变换，来测试一下是否我们所需要的坐标变换之后的结果。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: T0 = np.array([[<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>], [<span class="number">0</span>, -<span class="number">1</span>, <span class="number">0</span>],[<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>]], np.float32)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: T1 = np.array([[<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>], [<span class="number">0</span>, -<span class="number">1</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>]], np.float32)</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: D0 = np.mean(T0, axis=-<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: D1 = np.mean(T1, axis=-<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: A0B0 = T0[<span class="number">1</span>]-T0[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: A0C0 = T0[<span class="number">2</span>]-T0[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: v0 = np.cross(A0B0, A0C0)</span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: v0 /= np.linalg.norm(v0)</span><br><span class="line"></span><br><span class="line">In [<span class="number">10</span>]: v1 = T1[<span class="number">0</span>]-D1</span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: v1 /= np.linalg.norm(v1)</span><br><span class="line"></span><br><span class="line">In [<span class="number">12</span>]: v2 = np.cross(v0, v1)</span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: v2 /= np.linalg.norm(v2)</span><br><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: M1 = np.vstack((v0, v1, v2))</span><br><span class="line"></span><br><span class="line">In [<span class="number">15</span>]: M1 = M1.T</span><br><span class="line"></span><br><span class="line">In [<span class="number">16</span>]: iM1 = np.linalg.inv(M1)</span><br><span class="line"></span><br><span class="line">In [<span class="number">17</span>]: cost = np.dot(v0, v1)/np.linalg.norm(v0)/np.linalg.norm(v1)</span><br><span class="line"></span><br><span class="line">In [<span class="number">18</span>]: M0 = np.array([[<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>], [<span class="number">0</span>, np.sqrt(<span class="number">1</span> - cost**<span class="number">2</span>), <span class="number">0</span>], [<span class="number">1</span>, cost, <span class="number">0</span>]])</span><br><span class="line"></span><br><span class="line">In [<span class="number">19</span>]: R = np.dot(M0, iM1)</span><br><span class="line"></span><br><span class="line">In [<span class="number">20</span>]: R</span><br><span class="line">Out[<span class="number">20</span>]: </span><br><span class="line">array([[ <span class="number">0.00000000e+00</span>, -<span class="number">1.00000000e+00</span>,  <span class="number">0.00000000e+00</span>],</span><br><span class="line">       [ <span class="number">0.00000000e+00</span>,  <span class="number">0.00000000e+00</span>,  <span class="number">9.99999916e-01</span>],</span><br><span class="line">       [ <span class="number">1.00000000e+00</span>,  <span class="number">0.00000000e+00</span>,  <span class="number">5.00651538e-08</span>]])</span><br><span class="line"></span><br><span class="line">In [<span class="number">21</span>]: np.dot(R, v0)</span><br><span class="line">Out[<span class="number">21</span>]: array([<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">22</span>]: np.dot(R, v1)</span><br><span class="line">Out[<span class="number">22</span>]: array([<span class="number">0.</span>        , <span class="number">0.70710671</span>, <span class="number">0.7071068</span> ])</span><br><span class="line"></span><br><span class="line">In [<span class="number">23</span>]: np.dot(R, v2)</span><br><span class="line">Out[<span class="number">23</span>]: array([<span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">24</span>]: np.dot(R, T1[<span class="number">0</span>]-D1)</span><br><span class="line">Out[<span class="number">24</span>]: array([<span class="number">0.</span>        , <span class="number">0.66666657</span>, <span class="number">0.66666666</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">25</span>]: np.dot(R, T1[<span class="number">1</span>]-D1)</span><br><span class="line">Out[<span class="number">25</span>]: array([ <span class="number">1.</span>        , -<span class="number">0.33333332</span>, -<span class="number">0.33333336</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">26</span>]: np.dot(R, T1[<span class="number">2</span>]-D1)</span><br><span class="line">Out[<span class="number">26</span>]: array([-<span class="number">1.</span>        , -<span class="number">0.33333332</span>, -<span class="number">0.33333336</span>])</span><br></pre></td></tr></table></figure>
-
-<p>上面这个案例的流程是这样的，我们先创建两个不一样大小的绿色三角形和红色三角形，我们将要做的事情是以绿色三角形为$X’Y’$平面，红色三角形的质心为原点，并使得$Y’Z’$平面过$A_1$点，以此来构造一个新的坐标系，并计算前后两个坐标系之间的变换。</p>
+<p>上面这个案例的流程是这样的，我们先创建两个不一样大小的绿色三角形和红色三角形，我们将要做的事情是以绿色三角形为$X&#39;Y&#39;$平面，红色三角形的质心为原点，并使得$Y&#39;Z&#39;$平面过$A_1$点，以此来构造一个新的坐标系，并计算前后两个坐标系之间的变换。</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202208/2277440-20220831110103199-890163978.png" style="zoom:70%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202208/2277440-20220831110103199-890163978.png" style="zoom:70%">
 </div>
 
-<p>这里需要一些空间想象能力，我们可以先将绿色的三角形平面平移到过红色三角形的质心位置，同时将坐标系原点移动到红色三角形的质心位置，再旋转坐标轴，使得$Y’Z’$平面过$A_1$点。这样一来通过上一个章节中的旋转矩阵的构造方法，我们就可以计算出所有的向量在两个坐标系下的旋转变换。</p>
+<p>这里需要一些空间想象能力，我们可以先将绿色的三角形平面平移到过红色三角形的质心位置，同时将坐标系原点移动到红色三角形的质心位置，再旋转坐标轴，使得$Y&#39;Z&#39;$平面过$A_1$点。这样一来通过上一个章节中的旋转矩阵的构造方法，我们就可以计算出所有的向量在两个坐标系下的旋转变换。</p>
 <div align=center>
-	<img src="https://img2022.cnblogs.com/blog/2277440/202208/2277440-20220831110644759-297526985.png" style="zoom:70%">
+    <img src="https://img2022.cnblogs.com/blog/2277440/202208/2277440-20220831110644759-297526985.png" style="zoom:70%">
 </div>
 
 <p>当然，需要注意的是，这个变换只是一个旋转变换，由于坐标系发生了平移，所以需要有一个固定的参考点，才能够精确的得到某一个给定的点的坐标变换。比如我们上述python代码中的24、25、26都是对红色三角形的三个顶点关于质心的相对位置的坐标变换，在坐标变换前后，顶点坐标都需要减去质心的坐标。</p>
@@ -261,7 +296,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -272,7 +307,7 @@
 <nav class="article-nav">
   
     <a href="/2022/09/05/Gimbal-Lock%E6%AC%A7%E6%8B%89%E8%A7%92%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Gimbal Lock欧拉角死锁问题
@@ -282,7 +317,7 @@
   
   
     <a href="/2022/08/19/%E4%BD%BF%E7%94%A8MindSpore%E8%AE%A1%E7%AE%97%E6%97%8B%E8%BD%AC%E7%9F%A9%E9%98%B5/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">使用MindSpore计算旋转矩阵</div>
     </a>
   
@@ -290,7 +325,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=SETTLE约束算法中的坐标变换问题 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F08%2F30%2FSETTLE%25E7%25BA%25A6%25E6%259D%259F%25E7%25AE%2597%25E6%25B3%2595%25E4%25B8%25AD%25E7%259A%2584%25E5%259D%2590%25E6%25A0%2587%25E5%258F%2598%25E6%258D%25A2%25E9%2597%25AE%25E9%25A2%2598%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -445,6 +480,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

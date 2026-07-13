@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidYNmRfgXqQG_o_LhGcH4z0" class="article article-type-post" itemscope
+    <article id="post-cuidyC5y7pjhkL-ndBck2kMtd" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,27 +210,10 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>如果我们遇到[[1],[2,3],[4,5,6]]这样的一个python列表，想把他展平为一个一维的列表，这个时候你会使用什么样的方法呢？for循环？while循环？其实python的内置函数sum中简单的支持了一下这样的功能，使得我们可以更加简便的把一个高维且长度不固定的列表展平为一个规则的一维列表。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>其实如果没有专门去研究python的一些内置函数的话，我们都没办法发现一些很神奇的功能，即使是我们最熟悉的python中的<code>sum</code>函数。不知道还有多少人，以为这只是一个只能用来做求和的函数？</p>
 <h1 id="对列表求和"><a href="#对列表求和" class="headerlink" title="对列表求和"></a>对列表求和</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: my_list = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="built_in">sum</span>(my_list)</span><br><span class="line">Out[<span class="number">2</span>]: <span class="number">15</span></span><br></pre></td></tr></table></figure>
-<p>当然，这也是sum函数的基本功能，类似于sum函数的还有min求最小值函数和max求最大值函数等：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">3</span>]: <span class="built_in">min</span>(my_list)</span><br><span class="line">Out[<span class="number">3</span>]: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: <span class="built_in">max</span>(my_list)</span><br><span class="line">Out[<span class="number">4</span>]: <span class="number">5</span></span><br></pre></td></tr></table></figure>
-<p>当然，其实sum函数也不仅仅是可以对list这种数据结构进行求和，对tuple中的所有元素进行求和，也是可以的。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">6</span>]: my_tuple</span><br><span class="line">Out[<span class="number">6</span>]: (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: <span class="built_in">sum</span>(my_tuple)</span><br><span class="line">Out[<span class="number">7</span>]: <span class="number">15</span></span><br></pre></td></tr></table></figure>
-<p>如果对一个字典使用sum函数，求得的结果是字典中所有键值的和：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">8</span>]: my_dict = &#123;<span class="number">1</span>:<span class="number">2</span>,<span class="number">2</span>:<span class="number">4</span>,<span class="number">3</span>:<span class="number">6</span>,<span class="number">4</span>:<span class="number">8</span>,<span class="number">5</span>:<span class="number">10</span>&#125;</span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: <span class="built_in">sum</span>(my_dict)</span><br><span class="line">Out[<span class="number">9</span>]: <span class="number">15</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="对异形列表进行展开"><a href="#对异形列表进行展开" class="headerlink" title="对异形列表进行展开"></a>对异形列表进行展开</h1><p>接下来是本文的重点，如果我们要对如下这样的一个异形list进行展开，我们会使用什么样的办法呢？</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">14</span>]: my_list = [[<span class="number">1</span>],[<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]]</span><br></pre></td></tr></table></figure>
-<p>一般我们会想到采用一个for循环来解决该问题：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">28</span>]: my_list_for = []</span><br><span class="line"></span><br><span class="line">In [<span class="number">29</span>]: <span class="keyword">for</span> l <span class="keyword">in</span> my_list:</span><br><span class="line">    ...:     my_list_for.extend(l)</span><br><span class="line">    ...:</span><br><span class="line"></span><br><span class="line">In [<span class="number">30</span>]: my_list_for</span><br><span class="line">Out[<span class="number">30</span>]: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br></pre></td></tr></table></figure>
-<p>但是其实同样的操作，我们可以使用python内置的sum函数对该问题进行求解，这样在形式上就简便了很多：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">31</span>]: <span class="built_in">sum</span>(my_list,[])</span><br><span class="line">Out[<span class="number">31</span>]: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br></pre></td></tr></table></figure>
-<p>非常简单，只需要一行代码，就可以实现对一个list进行展开的操作。当然，这个方法对于二维的list是可以正常使用的，可对于更加高维的嵌套异形list，使用sum函数，是得不到我们想要的效果的：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">35</span>]: my_list = [[<span class="number">1</span>],[<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,[<span class="number">6</span>]]]</span><br><span class="line"></span><br><span class="line">In [<span class="number">36</span>]: <span class="built_in">sum</span>(my_list,[])</span><br><span class="line">Out[<span class="number">36</span>]: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, [<span class="number">6</span>]]</span><br></pre></td></tr></table></figure>
-<p>如果是规则的list，可以多用几次sum函数即可解决，如果是异形的list，在执行的过程中很有可能报错。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">39</span>]: my_list = [[[<span class="number">1</span>]],[[<span class="number">2</span>],[<span class="number">3</span>]],[[<span class="number">4</span>],[<span class="number">5</span>],[<span class="number">6</span>]]]</span><br><span class="line"></span><br><span class="line">In [<span class="number">40</span>]: <span class="built_in">sum</span>(my_list,[])</span><br><span class="line">Out[<span class="number">40</span>]: [[<span class="number">1</span>], [<span class="number">2</span>], [<span class="number">3</span>], [<span class="number">4</span>], [<span class="number">5</span>], [<span class="number">6</span>]]</span><br><span class="line"></span><br><span class="line">In [<span class="number">41</span>]: <span class="built_in">sum</span>(<span class="built_in">sum</span>(my_list,[]),[])</span><br><span class="line">Out[<span class="number">41</span>]: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br></pre></td></tr></table></figure>
-<p>其实相比于for循环，或者是高纬度下的while循环，这个方法只是在使用上简便一些，但是之前确实没有发现内置的sum函数还有这样的功能。</p>
+<p>当然，这也是sum函数的基本功能，类似于sum函数的还有min求最小值函数和max求最大值函数等：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">3</span>]: <span class="built_in">min</span>(my_list)</span><br><span class="line">Out[<span class="number">3</span>]: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: <span class="built_in">max</span>(my_list)</span><br><span class="line">Out[<span class="number">4</span>]: <span class="number">5</span></span><br></pre></td></tr></table></figure><br>当然，其实sum函数也不仅仅是可以对list这种数据结构进行求和，对tuple中的所有元素进行求和，也是可以的。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">6</span>]: my_tuple</span><br><span class="line">Out[<span class="number">6</span>]: (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: <span class="built_in">sum</span>(my_tuple)</span><br><span class="line">Out[<span class="number">7</span>]: <span class="number">15</span></span><br></pre></td></tr></table></figure><br>如果对一个字典使用sum函数，求得的结果是字典中所有键值的和：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">8</span>]: my_dict = &#123;<span class="number">1</span>:<span class="number">2</span>,<span class="number">2</span>:<span class="number">4</span>,<span class="number">3</span>:<span class="number">6</span>,<span class="number">4</span>:<span class="number">8</span>,<span class="number">5</span>:<span class="number">10</span>&#125;</span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: <span class="built_in">sum</span>(my_dict)</span><br><span class="line">Out[<span class="number">9</span>]: <span class="number">15</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="对异形列表进行展开"><a href="#对异形列表进行展开" class="headerlink" title="对异形列表进行展开"></a>对异形列表进行展开</h1><p>接下来是本文的重点，如果我们要对如下这样的一个异形list进行展开，我们会使用什么样的办法呢？<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">14</span>]: my_list = [[<span class="number">1</span>],[<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]]</span><br></pre></td></tr></table></figure><br>一般我们会想到采用一个for循环来解决该问题：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">28</span>]: my_list_for = []</span><br><span class="line"></span><br><span class="line">In [<span class="number">29</span>]: <span class="keyword">for</span> l <span class="keyword">in</span> my_list:</span><br><span class="line">    ...:     my_list_for.extend(l)</span><br><span class="line">    ...:</span><br><span class="line"></span><br><span class="line">In [<span class="number">30</span>]: my_list_for</span><br><span class="line">Out[<span class="number">30</span>]: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br></pre></td></tr></table></figure><br>但是其实同样的操作，我们可以使用python内置的sum函数对该问题进行求解，这样在形式上就简便了很多：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">31</span>]: <span class="built_in">sum</span>(my_list,[])</span><br><span class="line">Out[<span class="number">31</span>]: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br></pre></td></tr></table></figure><br>非常简单，只需要一行代码，就可以实现对一个list进行展开的操作。当然，这个方法对于二维的list是可以正常使用的，可对于更加高维的嵌套异形list，使用sum函数，是得不到我们想要的效果的：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">35</span>]: my_list = [[<span class="number">1</span>],[<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,[<span class="number">6</span>]]]</span><br><span class="line"></span><br><span class="line">In [<span class="number">36</span>]: <span class="built_in">sum</span>(my_list,[])</span><br><span class="line">Out[<span class="number">36</span>]: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, [<span class="number">6</span>]]</span><br></pre></td></tr></table></figure><br>如果是规则的list，可以多用几次sum函数即可解决，如果是异形的list，在执行的过程中很有可能报错。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">39</span>]: my_list = [[[<span class="number">1</span>]],[[<span class="number">2</span>],[<span class="number">3</span>]],[[<span class="number">4</span>],[<span class="number">5</span>],[<span class="number">6</span>]]]</span><br><span class="line"></span><br><span class="line">In [<span class="number">40</span>]: <span class="built_in">sum</span>(my_list,[])</span><br><span class="line">Out[<span class="number">40</span>]: [[<span class="number">1</span>], [<span class="number">2</span>], [<span class="number">3</span>], [<span class="number">4</span>], [<span class="number">5</span>], [<span class="number">6</span>]]</span><br><span class="line"></span><br><span class="line">In [<span class="number">41</span>]: <span class="built_in">sum</span>(<span class="built_in">sum</span>(my_list,[]),[])</span><br><span class="line">Out[<span class="number">41</span>]: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br></pre></td></tr></table></figure><br>其实相比于for循环，或者是高纬度下的while循环，这个方法只是在使用上简便一些，但是之前确实没有发现内置的sum函数还有这样的功能。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>如果我们遇到[[1],[2,3],[4,5,6]]这样的一个python列表，想把他展平为一个一维的列表，这个时候你会使用什么样的方法呢？for循环？while循环？其实python的内置函数sum中简单的支持了一下这样的功能，使得我们可以更加简便的把一个高维且长度不固定的列表展平为一个规则的一维列表。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/sum-builtin.html">https://www.cnblogs.com/dechinphy/p/sum-builtin.html</a></p>
 <p>作者ID：DechinPhy</p>
@@ -253,7 +236,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -264,7 +247,7 @@
 <nav class="article-nav">
   
     <a href="/2023/02/16/Python3%E4%B8%AD%E7%9A%84%E2%80%9C%E6%8C%87%E9%92%88%E2%80%9D/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           Python3中的“指针”
@@ -274,7 +257,7 @@
   
   
     <a href="/2022/11/21/%E5%9C%A8%E5%8D%9A%E5%AE%A2%E5%9B%AD%E9%9A%8F%E7%AC%94%E4%B8%AD%E6%8F%92%E5%85%A53D%E5%88%86%E5%AD%90%E6%A8%A1%E5%9E%8B/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">在博客园随笔中插入3D分子模型</div>
     </a>
   
@@ -282,7 +265,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=Python3中的“加和”函数 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2023%2F02%2F14%2FPython3%25E4%25B8%25AD%25E7%259A%2584%25E2%2580%259C%25E5%258A%25A0%25E5%2592%258C%25E2%2580%259D%25E5%2587%25BD%25E6%2595%25B0%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -437,6 +420,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

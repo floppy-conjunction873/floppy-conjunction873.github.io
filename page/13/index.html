@@ -260,7 +260,7 @@ class="article article-type-post"
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>本文主要介绍了一个在使用MindSpore框架进行编程的时候遇到的一个小问题–重复设定运算设备的编号。之所以会出现这个问题，是因为在调用的包里面有对MindSpore的引用，里面还包含了一些基于MindSpore的运算和即时编译，因此如果不给定设备编号的话，MindSpore内部会默认分配一个设备编号。而如果我们在自己的测试案例中又希望指定一个设备编号，那么就要把这个set_context句柄放在引用的最前面。</p>
+        <p>本文主要介绍了一个在使用MindSpore框架进行编程的时候遇到的一个小问题--重复设定运算设备的编号。之所以会出现这个问题，是因为在调用的包里面有对MindSpore的引用，里面还包含了一些基于MindSpore的运算和即时编译，因此如果不给定设备编号的话，MindSpore内部会默认分配一个设备编号。而如果我们在自己的测试案例中又希望指定一个设备编号，那么就要把这个set_context句柄放在引用的最前面。</p>
         
     </div>
     </div>
@@ -307,7 +307,7 @@ class="article article-type-post"
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>当我们使用GPU进行快速运算时，虽然可以用成熟的深度学习框架如MindSpore和PyTorch等进行实现，但其实从速度上来说，最快不过直接使用C&#x2F;C++的CUDA来实现。也正是因为如此，在MindSpore框架中支持了对CUDA实现的算子的直接调用，只是在格式规范上有一定的要求。本文主要介绍MindSpore调用本地CUDA算子的一些规范化和技巧。</p>
+        <p>当我们使用GPU进行快速运算时，虽然可以用成熟的深度学习框架如MindSpore和PyTorch等进行实现，但其实从速度上来说，最快不过直接使用C/C++的CUDA来实现。也正是因为如此，在MindSpore框架中支持了对CUDA实现的算子的直接调用，只是在格式规范上有一定的要求。本文主要介绍MindSpore调用本地CUDA算子的一些规范化和技巧。</p>
         
     </div>
     </div>
@@ -354,7 +354,7 @@ class="article article-type-post"
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get_parameters跟Cell类本身的get_parameters冲突，因此可以使用Python的内置函数__code__对冲突函数的地址进行定位，然后进行修改。</p>
+        <p>Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get<em>parameters跟Cell类本身的get<em>parameters冲突，因此可以使用Python的内置函数__code</em></em>对冲突函数的地址进行定位，然后进行修改。</p>
         
     </div>
     </div>
@@ -741,6 +741,21 @@ class="article article-type-post"
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

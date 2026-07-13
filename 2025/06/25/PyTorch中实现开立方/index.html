@@ -162,7 +162,7 @@
             <section class="inner">
                 <section class="inner-main">
                     <div class="post">
-    <article id="post-cuidasGhL2E9A5hDdO7-uK8sR" class="article article-type-post" itemscope
+    <article id="post-cuidMKfhr1ybanrCq3GTxLFTA" class="article article-type-post" itemscope
     itemprop="blogPost">
 
     <div class="article-inner">
@@ -201,7 +201,7 @@
 
             
             <div class="article-busuanzi">
-                <span id="busuanzi_value_page_pv">N</span> 人看过
+                <span id="busuanzi_value_page_pv">N</span> views
             </div>
             
 
@@ -210,16 +210,11 @@
         <div class="article-entry post-inner-html hairline" itemprop="articleBody">
             <p>本文介绍了在PyTorch中直接使用幂次函数计算有可能导致的计算结果异常的问题。由于PyTorch中并未像Numpy和MindSpore一样直接支持cbrt开立方函数，因此这里也提供了一个在PyTorch中计算开立方的函数。</p>
 <span id="more"></span>
-
 <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在PyTorch中，没有直接实现cbrt这一算子。这个算子是用于计算一个数的开立方，例如，最简单的-8开立方就是-2。但这里有个问题是，在PyTorch中，因为没有cbrt算子，如果直接用幂次计算去操作数字，就有可能出现问题。</p>
-<h1 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h1><p>首先看一下numpy做开立方的代码示例：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: a = np.array(-<span class="number">8</span>, np.float32)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: a**(<span class="number">1</span>/<span class="number">3</span>)</span><br><span class="line">&lt;ipython-<span class="built_in">input</span>-<span class="number">3</span>-f6e83d4e282e&gt;:<span class="number">1</span>: RuntimeWarning: invalid value encountered <span class="keyword">in</span> power</span><br><span class="line">  a**(<span class="number">1</span>/<span class="number">3</span>)</span><br><span class="line">Out[<span class="number">3</span>]: np.float32(nan)</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: np.cbrt(a)</span><br><span class="line">Out[<span class="number">4</span>]: np.float32(-<span class="number">2.0</span>)</span><br></pre></td></tr></table></figure>
-<p>在这个示例中，如果直接开立方，结果会是一个nan，很明显不是我们想要的一个结果。而cbrt是一个单独实现的开立方算子，可以支持负数的输入，计算结果也是正确的。在PyTorch的场景下，只能用幂次运算：</p>
+<h1 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h1><p>首先看一下numpy做开立方的代码示例：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: a = np.array(-<span class="number">8</span>, np.float32)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: a**(<span class="number">1</span>/<span class="number">3</span>)</span><br><span class="line">&lt;ipython-<span class="built_in">input</span>-<span class="number">3</span>-f6e83d4e282e&gt;:<span class="number">1</span>: RuntimeWarning: invalid value encountered <span class="keyword">in</span> power</span><br><span class="line">  a**(<span class="number">1</span>/<span class="number">3</span>)</span><br><span class="line">Out[<span class="number">3</span>]: np.float32(nan)</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: np.cbrt(a)</span><br><span class="line">Out[<span class="number">4</span>]: np.float32(-<span class="number">2.0</span>)</span><br></pre></td></tr></table></figure><br>在这个示例中，如果直接开立方，结果会是一个nan，很明显不是我们想要的一个结果。而cbrt是一个单独实现的开立方算子，可以支持负数的输入，计算结果也是正确的。在PyTorch的场景下，只能用幂次运算：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> torch <span class="keyword">as</span> tc</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: a=tc.tensor(-<span class="number">8</span>,dtype=tc.float32)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: a**(<span class="number">1</span>/<span class="number">3</span>)</span><br><span class="line">Out[<span class="number">3</span>]: tensor(nan)</span><br></pre></td></tr></table></figure>
-
 <p>这样得到的结果是错误的。因此需要我们自己实现一个cbrt函数：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> torch <span class="keyword">as</span> tc</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: cbrt=<span class="keyword">lambda</span> x: tc.sign(x)*tc.<span class="built_in">abs</span>(x)**(<span class="number">1</span>/<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: a=tc.tensor(-<span class="number">8</span>,dtype=tc.float32)</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: cbrt(a)</span><br><span class="line">Out[<span class="number">4</span>]: tensor(-<span class="number">2.</span>)</span><br></pre></td></tr></table></figure>
-
 <p>其实逻辑也比较简单，就是先把符号提取出来，然后再转化为正数正常计算就好了。</p>
 <h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了在PyTorch中直接使用幂次函数计算有可能导致的计算结果异常的问题。由于PyTorch中并未像Numpy和MindSpore一样直接支持cbrt开立方函数，因此这里也提供了一个在PyTorch中计算开立方的函数。</p>
 <h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cbrt.html">https://www.cnblogs.com/dechinphy/p/cbrt.html</a></p>
@@ -240,7 +235,7 @@
     
   <div class="article-copyright hairline">
     <p>
-      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+      本記事は  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">「表示 - 非営利 - 改変禁止 4.0 国際 (CC BY-NC-ND 4.0)」</a> を採用。
     </p>
   </div>
   
@@ -251,7 +246,7 @@
 <nav class="article-nav">
   
     <a href="/2025/07/08/PyTorch%E4%B8%AD%E7%9A%84%E5%BC%A0%E9%87%8F%E9%80%86%E5%BA%8F%E9%97%AE%E9%A2%98/" id="article-nav-newer" class="article-nav-link-wrap">
-      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-caption">次の記事</div>
       <div class="article-nav-title">
         
           PyTorch中的张量逆序问题
@@ -261,7 +256,7 @@
   
   
     <a href="/2025/06/23/conda%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2%E8%84%9A%E6%9C%AC/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-caption">前の記事</div>
       <div class="article-nav-title">conda环境部署脚本</div>
     </a>
   
@@ -269,7 +264,7 @@
 
 
     <section class="share">
-        <div class="share-title">分享</div>
+        <div class="share-title">シェア</div>
         <a class="share-item" target="_blank"
             href="https://twitter.com/share?text=PyTorch中实现开立方 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2025%2F06%2F25%2FPyTorch%25E4%25B8%25AD%25E5%25AE%259E%25E7%258E%25B0%25E5%25BC%2580%25E7%25AB%258B%25E6%2596%25B9%2F">
             <ion-icon name="logo-twitter"></ion-icon>
@@ -424,6 +419,21 @@
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

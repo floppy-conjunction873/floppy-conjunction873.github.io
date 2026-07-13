@@ -354,7 +354,7 @@ class="article article-type-post"
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>如果使用Python第三方包的某一个版本有问题，而不同版本Python所对应的软件最新版本又不一致，这种情况下如何在requirements.txt文件中指定软件最高版本是非常重要的。这里根据PEP 508的规范，做了一个Numpy版本要求numpy&lt;&#x3D;1.21.6 || 1.28&gt;numpy&gt;&#x3D;1.23的示例。</p>
+        <p>如果使用Python第三方包的某一个版本有问题，而不同版本Python所对应的软件最新版本又不一致，这种情况下如何在requirements.txt文件中指定软件最高版本是非常重要的。这里根据PEP 508的规范，做了一个Numpy版本要求numpy&lt;=1.21.6 || 1.28&gt;numpy&gt;=1.23的示例。</p>
         
     </div>
     </div>
@@ -542,7 +542,7 @@ class="article article-type-post"
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>这篇文章介绍了在Cython中定义结构体，并在Python的Numpy数组&#x2F;MemoryView和自定义结构体之间进行数据转换的方法。Cython有着非常Pythonic的编程范式，又具有接近于C语言的性能，对于Python开发者而言确实是一个很棒的工具。</p>
+        <p>这篇文章介绍了在Cython中定义结构体，并在Python的Numpy数组/MemoryView和自定义结构体之间进行数据转换的方法。Cython有着非常Pythonic的编程范式，又具有接近于C语言的性能，对于Python开发者而言确实是一个很棒的工具。</p>
         
     </div>
     </div>
@@ -741,6 +741,21 @@ class="article article-type-post"
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>
