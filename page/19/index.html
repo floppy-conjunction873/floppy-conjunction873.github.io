@@ -151,100 +151,6 @@
   
     
       <article
-id="post-关闭StackExchange等平台的privacy收集窗口"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2022/06/09/%E5%85%B3%E9%97%ADStackExchange%E7%AD%89%E5%B9%B3%E5%8F%B0%E7%9A%84privacy%E6%94%B6%E9%9B%86%E7%AA%97%E5%8F%A3/">关闭StackExchange等平台的privacy收集窗口</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>StackOverflow和StackExchange等等都是程序员常用的问题反馈和解决平台，相当于是专业性更强的知乎。但是很多类似的网站界面打开后总是有一个privacy收集的窗口无法关闭，在很大情况下影响了我们平时的阅读。因此我们通过前端的屏蔽方法，可以取消privacy位置收集窗口的固定，从而达到隐藏privacy收集窗口的目的。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2022-06-09T07:09:31.000Z" itemprop="datePublished">2022-06-09</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-git-clone指定分支"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2022/05/17/git-clone%E6%8C%87%E5%AE%9A%E5%88%86%E6%94%AF/">git clone指定分支</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>当我们使用Gitee和Github等通过Git来进行代码版本管理的平台时，有时会面临这样的一个问题：某一个代码仓里面划分了很多个分支，而我只需要其中的某一个特性分支，此时如果直接克隆下来，就会导致一系列的麻烦操作。而我们只需要在clone的指令加上一条配置，就可以直接指定分支进行拉取，方便后续的操作。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2022-05-17T01:55:56.000Z" itemprop="datePublished">2022-05-17</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
 id="post-Python3获取5000个元素的单字符表"
 class="article article-type-post"
 >
@@ -620,6 +526,101 @@ class="article article-type-post"
 
     
   
+    
+      <article
+id="post-变分量子本征求解器"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2022/04/02/%E5%8F%98%E5%88%86%E9%87%8F%E5%AD%90%E6%9C%AC%E5%BE%81%E6%B1%82%E8%A7%A3%E5%99%A8/">变分量子本征求解器</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p><img src="https://img2022.cnblogs.com/blog/2277440/202204/2277440-20220402202819448-1551702393.png" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> openfermionpyscf <span class="keyword">import</span> run_pyscf</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">from</span> openfermion.chem <span class="keyword">import</span> MolecularData, geometry_from_pubchem</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: <span class="keyword">from</span> openfermion.transforms <span class="keyword">import</span> get_fermion_operator, jordan_wigner</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: multiplicity=<span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: basis=<span class="string">&quot;sto-3g&quot;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: geometry=geometry_from_pubchem(<span class="string">&#x27;h2o&#x27;</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: geometry</span><br><span class="line">Out[<span class="number">7</span>]:</span><br><span class="line">[(<span class="string">&#x27;O&#x27;</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)),</span><br><span class="line"> (<span class="string">&#x27;H&#x27;</span>, (<span class="number">0.2774</span>, <span class="number">0.8929</span>, <span class="number">0.2544</span>)),</span><br><span class="line"> (<span class="string">&#x27;H&#x27;</span>, (<span class="number">0.6068</span>, -<span class="number">0.2383</span>, -<span class="number">0.7169</span>))]</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: molecule = MolecularData(geometry, basis, multiplicity)</span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: molecule = run_pyscf(molecule ,run_mp2=<span class="literal">True</span>, run_cisd=<span class="literal">True</span> ,run_ccsd=<span class="literal">True</span>, run_fci=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">10</span>]: <span class="built_in">print</span>(molecule.fci_energy, molecule.ccsd_energy, molecule.hf_energy)</span><br><span class="line">-<span class="number">75.01553018949156</span> -<span class="number">75.01540899923555</span> -<span class="number">74.96444758276995</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: mh = molecule.get_molecular_hamiltonian()</span><br><span class="line"></span><br><span class="line">In [<span class="number">12</span>]: fh = get_fermion_operator(mh)</span><br><span class="line"><span class="number">9.08436451197603</span> [] +</span><br><span class="line">-<span class="number">32.68991541360028</span> [<span class="number">0</span>^ <span class="number">0</span>] +</span><br><span class="line"><span class="number">2.3723529797919625</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">0</span>] +</span><br><span class="line">-<span class="number">0.20870450678118344</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">2</span>] +</span><br><span class="line">-<span class="number">1.3696880086319053e-07</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">4</span>] +</span><br><span class="line"><span class="number">0.09152338506995344</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">6</span>] +</span><br><span class="line">-<span class="number">0.11727907659025232</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">10</span>] +</span><br><span class="line"><span class="number">4.994906556311282e-07</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">12</span>] +</span><br><span class="line">-<span class="number">0.2087045067811834</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">2</span> <span class="number">0</span>] +</span><br><span class="line"><span class="number">0.02917682895944584</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">2</span> <span class="number">2</span>] + ...</span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: jw = jordan_wigner(fh)</span><br><span class="line">(-<span class="number">46.46560078195154</span>+<span class="number">0j</span>) [] +</span><br><span class="line">(-<span class="number">0.01458841447972292</span>+<span class="number">0j</span>) [X0 X1 Y2 Y3] +</span><br><span class="line">(<span class="number">0.005639816627633215</span>+<span class="number">0j</span>) [X0 X1 Y2 Z3 Z4 Z5 Z6 Y7] +</span><br><span class="line">(-<span class="number">0.008830198814313132</span>+<span class="number">0j</span>) [X0 X1 Y2 Z3 Z4 Z5 Z6 Z7 Z8 Z9 Z10 Y11] +</span><br><span class="line">(<span class="number">0.005639816627633215</span>+<span class="number">0j</span>) [X0 X1 X3 Z4 Z5 X6] +</span><br><span class="line">(-<span class="number">0.008830198814313132</span>+<span class="number">0j</span>) [X0 X1 X3 Z4 Z5 Z6 Z7 Z8 Z9 X10] +</span><br><span class="line">(-<span class="number">0.002741354103185628</span>+<span class="number">0j</span>) [X0 X1 Y4 Y5] + ...</span><br></pre></td></tr></table></figure>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2022-04-02T12:28:43.000Z" itemprop="datePublished">2022-04-02</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-量子计算基础——量子测量"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2022/04/02/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E9%87%8F%E5%AD%90%E6%B5%8B%E9%87%8F/">量子计算基础——量子测量</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>量子的世界与经典的世界存在着信息的隔阂，我们可以通过多个量子比特所构成的量子态去存储大量的信息，以及进行规模大到经典计算机所无法执行的运算。但是毕竟我们还依然生活在经典的世界中，最终我们还是需要将量子态坍缩到经典比特再进行读取，而这个使得量子态坍缩的过程，就是一种量子测量的方法。通过大量的量子测量，我们就可以近似的获得到量子态矢量中所存储的信息。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2022-04-02T09:31:08.000Z" itemprop="datePublished">2022-04-02</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
 
   
     <nav class="pagination">
@@ -660,14 +661,6 @@ class="article article-type-post"
       <ul>
         
           <li>
-            <a href="/2026/07/13/hello-world-1/">hello-world</a>
-          </li>
-        
-          <li>
-            <a href="/2026/07/13/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
             <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
           </li>
         
@@ -677,6 +670,14 @@ class="article article-type-post"
         
           <li>
             <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+          <li>
+            <a href="/2026/03/19/Docker%E9%83%A8%E7%BD%B2Ollama%E6%A8%A1%E5%9E%8B/">Docker部署Ollama模型</a>
+          </li>
+        
+          <li>
+            <a href="/2026/03/11/Win11+Docker+qwen3.5%E6%9C%AC%E5%9C%B0%E5%8C%96%E5%85%BB%E8%99%BE/">Win11+Docker+qwen3.5本地化养虾</a>
           </li>
         
       </ul>

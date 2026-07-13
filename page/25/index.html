@@ -151,100 +151,6 @@
   
     
       <article
-id="post-MindSpore保存与加载模型"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/05/16/MindSpore%E4%BF%9D%E5%AD%98%E4%B8%8E%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9E%8B/">MindSpore保存与加载模型</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文主要从工程实现的角度测试了一下MindSpore的机器学习模型保存与加载的功能，通过这个功能，我们可以将自己训练好的机器学习模型发布出去供更多的人使用，我们也可以直接使用别人在更好的硬件体系上训练好的模型，或者应用于迁移学习。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-05-16T14:36:04.000Z" itemprop="datePublished">2021-05-16</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-使用ProjectQ生成量子算法指令集"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/05/15/%E4%BD%BF%E7%94%A8ProjectQ%E7%94%9F%E6%88%90%E9%87%8F%E5%AD%90%E7%AE%97%E6%B3%95%E6%8C%87%E4%BB%A4%E9%9B%86/">使用ProjectQ生成量子算法指令集</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文主要从工程实现的角度，讲解在ProjectQ开源量子计算模拟器框架中，实现量子门操作分解与输出的方法。通过这个方法，可以限制量子指令集的范围，将量子算法中不被支持的量子门操作等价（或近似地）变化到量子硬件体系所支持的量子指令集上。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-05-15T02:59:51.000Z" itemprop="datePublished">2021-05-15</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
 id="post-使用MindSpore的线性神经网络拟合非线性函数"
 class="article article-type-post"
 >
@@ -619,6 +525,100 @@ class="article article-type-post"
 
     
   
+    
+      <article
+id="post-基于Docker配置本地Gitlab"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/05/04/%E5%9F%BA%E4%BA%8EDocker%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0Gitlab/">基于Docker配置本地Gitlab</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文按照操作流程的时间顺序，分别介绍了Gitlab的Docker容器部署、Gitlab平台的基本配置以及基于Git的代码仓基本管理与同步方法。通过掌握这一套的流程，就可以实现在本地构建一个类似于Github的代码托管系统，在企业内网更好的管理私有代码仓库，避免因为在Github上进行代码开发而被其他企业窃取核心技术。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-05-04T08:07:19.000Z" itemprop="datePublished">2021-05-04</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-python3函数可变输入参量"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/05/03/python3%E5%87%BD%E6%95%B0%E5%8F%AF%E5%8F%98%E8%BE%93%E5%85%A5%E5%8F%82%E9%87%8F/">python3函数可变输入参量</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>为了使得输入参数的可扩展性更好，python中自带了args和kwargs两种方法，可以用于表示一个tuple类型的可变长度入参。其中args是一系列的一元变量的输入，kwargs是一系列键值对的输入，可以认为是一个二元变量的输入。虽然这两种方案也都可以用自行实现的tuple来替代，但是直接使用这两种定义会节省很多自定义可变入参的繁琐。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-05-03T10:48:34.000Z" itemprop="datePublished">2021-05-03</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
 
   
     <nav class="pagination">
@@ -659,14 +659,6 @@ class="article article-type-post"
       <ul>
         
           <li>
-            <a href="/2026/07/13/hello-world-1/">hello-world</a>
-          </li>
-        
-          <li>
-            <a href="/2026/07/13/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
             <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
           </li>
         
@@ -676,6 +668,14 @@ class="article article-type-post"
         
           <li>
             <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+          <li>
+            <a href="/2026/03/19/Docker%E9%83%A8%E7%BD%B2Ollama%E6%A8%A1%E5%9E%8B/">Docker部署Ollama模型</a>
+          </li>
+        
+          <li>
+            <a href="/2026/03/11/Win11+Docker+qwen3.5%E6%9C%AC%E5%9C%B0%E5%8C%96%E5%85%BB%E8%99%BE/">Win11+Docker+qwen3.5本地化养虾</a>
           </li>
         
       </ul>

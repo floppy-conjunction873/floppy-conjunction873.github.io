@@ -151,100 +151,6 @@
   
     
       <article
-id="post-Python3实现打格点算法的GPU加速"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/09/02/Python3%E5%AE%9E%E7%8E%B0%E6%89%93%E6%A0%BC%E7%82%B9%E7%AE%97%E6%B3%95%E7%9A%84GPU%E5%8A%A0%E9%80%9F/">Python3实现打格点算法的GPU加速</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>在这篇文章中，我们主要介绍了打格点算法在分子动力学模拟中的重要价值，以及几种不同的实现方式。其中最普通的for循环的实现效率比较低下，从算法复杂度上来讲却已经是极致。而基于CPU上的向量化运算的技术，可以对计算过程进行非常深度的优化。当然，这个案例在不同的硬件上也能够发挥出明显不同的加速效果，在GPU的加持之下，可以获得100倍以上的加速效果。这也是一个在Python上实现GPU加速算法的一个典型案例。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-09-02T08:00:59.000Z" itemprop="datePublished">2021-09-02</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-用CUDA写出比Numpy更快的规约求和函数"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/08/31/%E7%94%A8CUDA%E5%86%99%E5%87%BA%E6%AF%94Numpy%E6%9B%B4%E5%BF%AB%E7%9A%84%E8%A7%84%E7%BA%A6%E6%B1%82%E5%92%8C%E5%87%BD%E6%95%B0/">用CUDA写出比Numpy更快的规约求和函数</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>我们知道GPU加速在可并行化程度比较高的算法中，能够发挥出比较大的作用，展示出明显的加速效果，而对于一些线程之间存在依赖这样的场景就不一定能够起到很大的加速作用。CUDA官方针对此类问题，提供了atomic的内置函数解决方案，包含有求和、求最大值等常用函数。而这些函数的特点就在于，线程与线程之间需要有一个时序的依赖关系。就比如说求最大值的函数，它会涉及到不同线程之间的轮询。经过测试，CUDA的这种atomic的方案，实现起来非常方便，性能也很乐观，相比于自己动手实现一个不断切割、递归的规约函数，还是要容易快捷的多。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-08-31T03:00:42.000Z" itemprop="datePublished">2021-08-31</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
 id="post-Python的GPU编程实例——近邻表计算"
 class="article article-type-post"
 >
@@ -630,6 +536,100 @@ class="article article-type-post"
 
     
   
+    
+      <article
+id="post-MindSpore自定义模型损失函数"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/06/21/MindSpore%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0/">MindSpore自定义模型损失函数</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>在不同的训练场景中，我们时常需要使用不同的损失函数来衡量一个模型的计算结果的优劣，本文重点介绍了在MindSpore中如何去自定义一个损失函数。基于MindSpore中的Loss类，我们可以通过继承该类后，再重写construct函数和get_loss函数来实现全面自定义的损失函数形式与内容。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-06-21T03:44:19.000Z" itemprop="datePublished">2021-06-21</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-从零开始制作PyTorch的Singularity容器镜像"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/06/15/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9CPyTorch%E7%9A%84Singularity%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F/">从零开始制作PyTorch的Singularity容器镜像</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>这篇文章主要介绍Facebook所主导的机器学习框架PyTorch的容器化安装方法，基于HPC环境常用的Singularity高性能容器，并且兼容与结合了Docker容器镜像的生态，非常的友好。在容器化的编程环境中，我们不仅可以避免不同框架对于python库或者系统软件版本的依赖冲突，还可以很大程度上解决因为没有root权限以及网络外访权限的环境下所带来的极大的麻烦，故推荐使用这种方案进行安装和运行。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-06-15T02:53:24.000Z" itemprop="datePublished">2021-06-15</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
 
   
     <nav class="pagination">
@@ -670,14 +670,6 @@ class="article article-type-post"
       <ul>
         
           <li>
-            <a href="/2026/07/13/hello-world-1/">hello-world</a>
-          </li>
-        
-          <li>
-            <a href="/2026/07/13/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
             <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
           </li>
         
@@ -687,6 +679,14 @@ class="article article-type-post"
         
           <li>
             <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+          <li>
+            <a href="/2026/03/19/Docker%E9%83%A8%E7%BD%B2Ollama%E6%A8%A1%E5%9E%8B/">Docker部署Ollama模型</a>
+          </li>
+        
+          <li>
+            <a href="/2026/03/11/Win11+Docker+qwen3.5%E6%9C%AC%E5%9C%B0%E5%8C%96%E5%85%BB%E8%99%BE/">Win11+Docker+qwen3.5本地化养虾</a>
           </li>
         
       </ul>

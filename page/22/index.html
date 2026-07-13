@@ -151,100 +151,6 @@
   
     
       <article
-id="post-分子动力学模拟之基于自动微分的LINCS约束"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2022/02/09/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6%E6%A8%A1%E6%8B%9F%E4%B9%8B%E5%9F%BA%E4%BA%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86%E7%9A%84LINCS%E7%BA%A6%E6%9D%9F/">分子动力学模拟之基于自动微分的LINCS约束</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文通过完整的案例及其算法实现的过程，介绍了LINCS（Linear Constraint Solver）这一分子动力学模拟过程常用的约束算法。得益于Jax这一框架的便用性及其对numpy的强大支持、对GPU计算的优化、还有自动微分与向量化运算等技术的实现，使得我们实现LINCS这一算法变的不再困难。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2022-02-09T03:35:52.000Z" itemprop="datePublished">2022-02-09</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-在pyqt5中展示pyecharts生成的图像"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2022/01/15/%E5%9C%A8pyqt5%E4%B8%AD%E5%B1%95%E7%A4%BApyecharts%E7%94%9F%E6%88%90%E7%9A%84%E5%9B%BE%E5%83%8F/">在pyqt5中展示pyecharts生成的图像</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文通过一个实际的散点图案例，展示了如何使用pyqt5嵌套一个pyecharts图层的方法，通过这个技巧，可以在pyqt5的框架中也实现精美的数据可视化的功能模块。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2022-01-15T15:26:34.000Z" itemprop="datePublished">2022-01-15</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
 id="post-py3nvml实现GPU相关信息读取"
 class="article article-type-post"
 >
@@ -619,6 +525,100 @@ class="article article-type-post"
 
     
   
+    
+      <article
+id="post-Python3实现打格点算法的GPU加速"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/09/02/Python3%E5%AE%9E%E7%8E%B0%E6%89%93%E6%A0%BC%E7%82%B9%E7%AE%97%E6%B3%95%E7%9A%84GPU%E5%8A%A0%E9%80%9F/">Python3实现打格点算法的GPU加速</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>在这篇文章中，我们主要介绍了打格点算法在分子动力学模拟中的重要价值，以及几种不同的实现方式。其中最普通的for循环的实现效率比较低下，从算法复杂度上来讲却已经是极致。而基于CPU上的向量化运算的技术，可以对计算过程进行非常深度的优化。当然，这个案例在不同的硬件上也能够发挥出明显不同的加速效果，在GPU的加持之下，可以获得100倍以上的加速效果。这也是一个在Python上实现GPU加速算法的一个典型案例。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-09-02T08:00:59.000Z" itemprop="datePublished">2021-09-02</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-用CUDA写出比Numpy更快的规约求和函数"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/08/31/%E7%94%A8CUDA%E5%86%99%E5%87%BA%E6%AF%94Numpy%E6%9B%B4%E5%BF%AB%E7%9A%84%E8%A7%84%E7%BA%A6%E6%B1%82%E5%92%8C%E5%87%BD%E6%95%B0/">用CUDA写出比Numpy更快的规约求和函数</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>我们知道GPU加速在可并行化程度比较高的算法中，能够发挥出比较大的作用，展示出明显的加速效果，而对于一些线程之间存在依赖这样的场景就不一定能够起到很大的加速作用。CUDA官方针对此类问题，提供了atomic的内置函数解决方案，包含有求和、求最大值等常用函数。而这些函数的特点就在于，线程与线程之间需要有一个时序的依赖关系。就比如说求最大值的函数，它会涉及到不同线程之间的轮询。经过测试，CUDA的这种atomic的方案，实现起来非常方便，性能也很乐观，相比于自己动手实现一个不断切割、递归的规约函数，还是要容易快捷的多。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-08-31T03:00:42.000Z" itemprop="datePublished">2021-08-31</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
 
   
     <nav class="pagination">
@@ -659,14 +659,6 @@ class="article article-type-post"
       <ul>
         
           <li>
-            <a href="/2026/07/13/hello-world-1/">hello-world</a>
-          </li>
-        
-          <li>
-            <a href="/2026/07/13/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
             <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
           </li>
         
@@ -676,6 +668,14 @@ class="article article-type-post"
         
           <li>
             <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+          <li>
+            <a href="/2026/03/19/Docker%E9%83%A8%E7%BD%B2Ollama%E6%A8%A1%E5%9E%8B/">Docker部署Ollama模型</a>
+          </li>
+        
+          <li>
+            <a href="/2026/03/11/Win11+Docker+qwen3.5%E6%9C%AC%E5%9C%B0%E5%8C%96%E5%85%BB%E8%99%BE/">Win11+Docker+qwen3.5本地化养虾</a>
           </li>
         
       </ul>

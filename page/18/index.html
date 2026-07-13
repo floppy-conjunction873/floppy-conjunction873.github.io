@@ -151,100 +151,6 @@
   
     
       <article
-id="post-四元数Quaternion的基本运算"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2022/09/19/%E5%9B%9B%E5%85%83%E6%95%B0Quaternion%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97/">四元数Quaternion的基本运算</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文主要介绍四元数Quaternion的一些基本运算法则。四元数的概念，更像是复数的一个推广，在图形学和工程学中有大量的应用，在蛋白质结构预测软件AlphaFold和MEGA-Protein中都大量的使用了四元数的计算。而大部分的四元数的教材中写的计算法则，经常把各类乘法混在一起使用，阅读起来非常难受，因此只好自己总结一下四元数的相关运算。并且跟我们所熟悉的复数运算有一定的对比，更加容易去理解四元数的概念。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2022-09-19T06:07:26.000Z" itemprop="datePublished">2022-09-19</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-可以用爱因斯坦求和替代的那些矩阵运算"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2022/09/07/%E5%8F%AF%E4%BB%A5%E7%94%A8%E7%88%B1%E5%9B%A0%E6%96%AF%E5%9D%A6%E6%B1%82%E5%92%8C%E6%9B%BF%E4%BB%A3%E7%9A%84%E9%82%A3%E4%BA%9B%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/">可以用爱因斯坦求和替代的那些矩阵运算</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文主要基于Python的Numpy库，介绍一些爱因斯坦求和算子Einsum的应用场景，包括求和、求内外积、求转置等等。我们需要明确的是，爱因斯坦求和算子的意义主要在于矩阵的多重运算时，可以通过爱因斯坦求和约定将这种复杂问题定义成一个张量网络，通过图模型去找到一个更好的缩并路径，以得到更好的算法复杂度。而如果只是普通的点乘求和之类的运算，其实并不是Einsum的主要功能。但是这些功能也可以用爱因斯坦求和的形式来实现，也说明了这个约定的先进性。当然，也有众多的矩阵运算功能是无法直接通过爱因斯坦求和算子来实现的，比如矩阵求逆、求本征值、矩阵扩维、矩阵重构还有向量叉乘等等。只有在合适的地方使用Einsum，才能体现它的真正价值。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2022-09-07T06:05:49.000Z" itemprop="datePublished">2022-09-07</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
 id="post-Gimbal-Lock欧拉角死锁问题"
 class="article article-type-post"
 >
@@ -619,6 +525,100 @@ class="article article-type-post"
 
     
   
+    
+      <article
+id="post-关闭StackExchange等平台的privacy收集窗口"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2022/06/09/%E5%85%B3%E9%97%ADStackExchange%E7%AD%89%E5%B9%B3%E5%8F%B0%E7%9A%84privacy%E6%94%B6%E9%9B%86%E7%AA%97%E5%8F%A3/">关闭StackExchange等平台的privacy收集窗口</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>StackOverflow和StackExchange等等都是程序员常用的问题反馈和解决平台，相当于是专业性更强的知乎。但是很多类似的网站界面打开后总是有一个privacy收集的窗口无法关闭，在很大情况下影响了我们平时的阅读。因此我们通过前端的屏蔽方法，可以取消privacy位置收集窗口的固定，从而达到隐藏privacy收集窗口的目的。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2022-06-09T07:09:31.000Z" itemprop="datePublished">2022-06-09</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-git-clone指定分支"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2022/05/17/git-clone%E6%8C%87%E5%AE%9A%E5%88%86%E6%94%AF/">git clone指定分支</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>当我们使用Gitee和Github等通过Git来进行代码版本管理的平台时，有时会面临这样的一个问题：某一个代码仓里面划分了很多个分支，而我只需要其中的某一个特性分支，此时如果直接克隆下来，就会导致一系列的麻烦操作。而我们只需要在clone的指令加上一条配置，就可以直接指定分支进行拉取，方便后续的操作。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2022-05-17T01:55:56.000Z" itemprop="datePublished">2022-05-17</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
 
   
     <nav class="pagination">
@@ -659,14 +659,6 @@ class="article article-type-post"
       <ul>
         
           <li>
-            <a href="/2026/07/13/hello-world-1/">hello-world</a>
-          </li>
-        
-          <li>
-            <a href="/2026/07/13/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
             <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
           </li>
         
@@ -676,6 +668,14 @@ class="article article-type-post"
         
           <li>
             <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+          <li>
+            <a href="/2026/03/19/Docker%E9%83%A8%E7%BD%B2Ollama%E6%A8%A1%E5%9E%8B/">Docker部署Ollama模型</a>
+          </li>
+        
+          <li>
+            <a href="/2026/03/11/Win11+Docker+qwen3.5%E6%9C%AC%E5%9C%B0%E5%8C%96%E5%85%BB%E8%99%BE/">Win11+Docker+qwen3.5本地化养虾</a>
           </li>
         
       </ul>

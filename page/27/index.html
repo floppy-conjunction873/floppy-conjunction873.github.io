@@ -151,100 +151,6 @@
   
     
       <article
-id="post-Manjaro-Linux安装singularity-container"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/04/04/Manjaro-Linux%E5%AE%89%E8%A3%85singularity-container/">Manjaro Linux安装singularity-container</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>这篇文章主要介绍Singularity容器在Manjaro平台的安装，以及一些常见的使用场景：拉取沙箱制作容器镜像、远程制作容器镜像以及修改容器镜像的方法。总体而言Singularity是一个对非root用户非常友好的容器解决方案，在速度上没有实际测试过，只是在一些场景下可以看到比Docker性能要好一些。而且这个容器还支持非root的安装以及非root的使用方法，当然在基于RH的系统下有一些默认的配置项还是需要用root权限去修改后，才能够用非root的账户使用Singularity容器，最典型的就比如要将<code>/proc/sys/user/max_user_namespaces</code>这里面的对应参数配置为非零，否则使用会报错。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-04-04T13:57:04.000Z" itemprop="datePublished">2021-04-04</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-python3使用diagrams生成架构图"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/04/04/python3%E4%BD%BF%E7%94%A8diagrams%E7%94%9F%E6%88%90%E6%9E%B6%E6%9E%84%E5%9B%BE/">python3使用diagrams生成架构图</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文中通过python库diagrams展示了基础的架构图绘制的方法，库中提供了常用的AWS和k8S等场景下常用的组件标签，使得我们用python代码也可以绘制精美清晰的架构图。这里组件之间的连接和耦合关系，也可以通过简单的符号进行实现，这也得益于python中所特有的魔法函数。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-04-04T02:41:01.000Z" itemprop="datePublished">2021-04-04</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
 id="post-python3使用kivy生成安卓程序"
 class="article article-type-post"
 >
@@ -619,6 +525,100 @@ class="article article-type-post"
 
     
   
+    
+      <article
+id="post-创建ortools的Dockerfile"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/03/29/%E5%88%9B%E5%BB%BAortools%E7%9A%84Dockerfile/">创建ortools的Dockerfile</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>在本地构建基于Docker的编程环境是一个兼容性和可用性非常强的解决方案，这里我们介绍了一个使用Dockerfile来构建Docker容器镜像的简单实例。同时也用谷歌所主导的开源线性规划求解器ortools来测试这个容器化的编程环境解决方案，最终我们用ortools成功的求解了一个单背包问题，并且跟前面一篇博客中所介绍的IBM主导的cplex一样都得到了问题的最优解。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-03-29T10:39:02.000Z" itemprop="datePublished">2021-03-29</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-在docker容器中使用cplex-python37"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/03/28/%E5%9C%A8docker%E5%AE%B9%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8cplex-python37/">在docker容器中使用cplex-python37</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>在这篇文章中我们介绍了如何使用docker去搭建一个cplex线性规划求解器的编程环境，制作完docker容器，我们也展示了如何写一个线性规划问题定义的文件，并使用cplex对给定一个背包问题的线性规划（实际上是一个二元规划问题）文件进行求解。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-03-28T14:31:44.000Z" itemprop="datePublished">2021-03-28</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
 
   
     <nav class="pagination">
@@ -659,14 +659,6 @@ class="article article-type-post"
       <ul>
         
           <li>
-            <a href="/2026/07/13/hello-world-1/">hello-world</a>
-          </li>
-        
-          <li>
-            <a href="/2026/07/13/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
             <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
           </li>
         
@@ -676,6 +668,14 @@ class="article article-type-post"
         
           <li>
             <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+          <li>
+            <a href="/2026/03/19/Docker%E9%83%A8%E7%BD%B2Ollama%E6%A8%A1%E5%9E%8B/">Docker部署Ollama模型</a>
+          </li>
+        
+          <li>
+            <a href="/2026/03/11/Win11+Docker+qwen3.5%E6%9C%AC%E5%9C%B0%E5%8C%96%E5%85%BB%E8%99%BE/">Win11+Docker+qwen3.5本地化养虾</a>
           </li>
         
       </ul>

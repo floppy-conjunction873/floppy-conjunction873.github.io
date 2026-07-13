@@ -151,100 +151,6 @@
   
     
       <article
-id="post-MindSponge分子动力学模拟——软件架构（2023.08）"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2023/08/17/MindSponge%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6%E6%A8%A1%E6%8B%9F%E2%80%94%E2%80%94%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84%EF%BC%882023.08%EF%BC%89/">MindSponge分子动力学模拟——软件架构（2023.08）</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>分子模拟具有众多的应用场景，比如制药领域和材料领域，做好分子模拟的工作，可以极大程度上缩减新药物新材料的研发成本和研发周期。近几年随着GPT-4和Diffusion Model的大火，让大家意识到了AI已经具备了相当的解决问题的能力。因此基于AI的框架和模型，对比AI训练与分子模拟之间的共性，可以实现一个面向AI时代的分子模拟框架。本文主要介绍基于MindSpore框架实现的，MindSponge分子动力学模拟框架的软件架构。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2023-08-17T02:38:31.000Z" itemprop="datePublished">2023-08-17</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-MindSponge分子动力学模拟——安装与使用（2023.08）"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2023/08/11/MindSponge%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6%E6%A8%A1%E6%8B%9F%E2%80%94%E2%80%94%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8%EF%BC%882023.08%EF%BC%89/">MindSponge分子动力学模拟——安装与使用（2023.08）</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文主要介绍MindSponge框架的免安装使用和编译构建使用这两种使用方法，MindSponge是一款可以在MindSpore上进行分子动力学模拟的，模块化、高通量、端到端可微的下一代智能分子模拟程序库。通过MindSponge，我们可以在GPU上更加便捷的开发分子动力学模拟算法和应用，并且原生的支持神经网络力场和增强采样，使得我们可以用一个框架就完成绝大部分的分子模拟工作。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2023-08-11T09:16:43.000Z" itemprop="datePublished">2023-08-11</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
 id="post-在Python中使用LooseVersion进行软件版本号比对"
 class="article article-type-post"
 >
@@ -619,6 +525,100 @@ class="article article-type-post"
 
     
   
+    
+      <article
+id="post-Python3程序捕获Ctrl+C终止信号"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2023/03/13/Python3%E7%A8%8B%E5%BA%8F%E6%8D%95%E8%8E%B7Ctrl+C%E7%BB%88%E6%AD%A2%E4%BF%A1%E5%8F%B7/">Python3程序捕获Ctrl+C终止信号</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>当我们准备去杀死一个进程时，从程序设计的本身来考虑，我们应当要设计一定的保护方案来确保程序被非正常终止时，相应的计算结果也能够被很好的保存下来。在Python中可以使用signal.signal函数来实现这样的功能，但是如果要实现数据的保存功能，需要结合一个实际的类来实现。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2023-03-13T03:14:07.000Z" itemprop="datePublished">2023-03-13</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-Python3中的“指针”"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2023/02/16/Python3%E4%B8%AD%E7%9A%84%E2%80%9C%E6%8C%87%E9%92%88%E2%80%9D/">Python3中的“指针”</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>假如你在Python中初始化了一个变量a的值，然后用a来初始化另一个变量b，此时你希望得到的b的数值是跟a同步变化的，还是独立变化的呢？Python这个编程语言虽然没有指针类型，但是Python中的可变参量也可以像指针一样，改变一个数值之后，所有指向该数值的可变参量都会随之而改变。就比如说改变a的值，会同步的去改变b的值。那么我们应该对这种类型的赋值有所了解，才能够避免在实际的编程中犯错。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2023-02-16T03:21:06.000Z" itemprop="datePublished">2023-02-16</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
 
   
     <nav class="pagination">
@@ -659,14 +659,6 @@ class="article article-type-post"
       <ul>
         
           <li>
-            <a href="/2026/07/13/hello-world-1/">hello-world</a>
-          </li>
-        
-          <li>
-            <a href="/2026/07/13/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
             <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
           </li>
         
@@ -676,6 +668,14 @@ class="article article-type-post"
         
           <li>
             <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+          <li>
+            <a href="/2026/03/19/Docker%E9%83%A8%E7%BD%B2Ollama%E6%A8%A1%E5%9E%8B/">Docker部署Ollama模型</a>
+          </li>
+        
+          <li>
+            <a href="/2026/03/11/Win11+Docker+qwen3.5%E6%9C%AC%E5%9C%B0%E5%8C%96%E5%85%BB%E8%99%BE/">Win11+Docker+qwen3.5本地化养虾</a>
           </li>
         
       </ul>
