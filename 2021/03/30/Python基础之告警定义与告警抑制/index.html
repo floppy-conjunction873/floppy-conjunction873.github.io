@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>Python基础之告警定义与告警抑制 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;告警和异常信息的定义与处理，在网络编程项目和各种实际计算的场景中都会被用到。这里我们通过两篇博客进行了比较简单的介绍，对于没有特殊要求的用户而言，按照示例中给出的样板直接修改就能够使用。更多的时候是规范的要求，我们可能需要修改异常和告警所继承的类型。同时对于异常和告警信息，我们也能够有方案去进行抑制，更加适配各种不同的场景需求。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "Python基础之告警定义与告警抑制 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;告警和异常信息的定义与处理，在网络编程项目和各种实际计算的场景中都会被用到。这里我们通过两篇博客进行了比较简单的介绍，对于没有特殊要求的用户而言，按照示例中给出的样板直接修改就能够使用。更多的时候是规范的要求，我们可能需要修改异常和告警所继承的类型。同时对于异常和告警信息，我们也能够有方案去进行抑制，更加适配各种不同的场景需求。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2021/03/30/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%91%8A%E8%AD%A6%E5%AE%9A%E4%B9%89%E4%B8%8E%E5%91%8A%E8%AD%A6%E6%8A%91%E5%88%B6/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;告警和异常信息的定义与处理，在网络编程项目和各种实际计算的场景中都会被用到。这里我们通过两篇博客进行了比较简单的介绍，对于没有特殊要求的用户而言，按照示例中给出的样板直接修改就能够使用。更多的时候是规范的要求，我们可能需要修改异常和告警所继承的类型。同时对于异常和告警信息，我们也能够有方案去进行抑制，更加适配各种不同的场景需求。&lt;/p&gt;" />
+    <meta name="twitter:title" content="Python基础之告警定义与告警抑制 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;告警和异常信息的定义与处理，在网络编程项目和各种实际计算的场景中都会被用到。这里我们通过两篇博客进行了比较简单的介绍，对于没有特殊要求的用户而言，按照示例中给出的样板直接修改就能够使用。更多的时候是规范的要求，我们可能需要修改异常和告警所继承的类型。同时对于异常和告警信息，我们也能够有方案去进行抑制，更加适配各种不同的场景需求。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;告警和异常信息的定义与处理，在网络编程项目和各种实际计算的场景中都会被用到。这里我们通过两篇博客进行了比较简单的介绍，对于没有特殊要求的用户而言，按照示例中给出的样板直接修改就能够使用。更多的时候是规范的要求，我们可能需要修改异常和告警所继承的类型。同时对于异常和告警信息，我们也能够有方案去进行抑制，更加适配各种不同的场景需求。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2021/03/30/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%91%8A%E8%AD%A6%E5%AE%9A%E4%B9%89%E4%B8%8E%E5%91%8A%E8%AD%A6%E6%8A%91%E5%88%B6/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "Python基础之告警定义与告警抑制 | Hexo",
+            "datePublished": "2021-03-30T14:30:46.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2021/03/30/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%91%8A%E8%AD%A6%E5%AE%9A%E4%B9%89%E4%B8%8E%E5%91%8A%E8%AD%A6%E6%8A%91%E5%88%B6/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidhfzS6XZrJ3WZSqd-ZYoKx" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      Python基础之告警定义与告警抑制
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2021-03-30T14:30:46.000Z" itemprop="datePublished">2021-03-30</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>告警和异常信息的定义与处理，在网络编程项目和各种实际计算的场景中都会被用到。这里我们通过两篇博客进行了比较简单的介绍，对于没有特殊要求的用户而言，按照示例中给出的样板直接修改就能够使用。更多的时候是规范的要求，我们可能需要修改异常和告警所继承的类型。同时对于异常和告警信息，我们也能够有方案去进行抑制，更加适配各种不同的场景需求。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/exception.html">博客</a>中我们介绍了在python中自定义异常以及异常的捕获。这里我们要介绍另外一种形式的用户提醒：告警。我们这里就不给出一些过于官方或者技术的定义了，在实际项目中的使用场景主要有这么一点区别：异常信息表示程序中的某一个步骤输入不正确而导致没办法继续往下执行，但是用户自己可以选择抑制这些异常信息继续往下执行。也就是说，能否继续执行的决定权在用户手里，而我们的程序后端给出的建议是终止运行。告警信息与异常信息的最大区别就在于，我们在程序后端就判定这个问题并不影响程序的执行，我们只播报出这个告警信息给用户，表明我们在后端是没有处理这个信息的，由用户来决定是否修改或者终止运行。这里我们可以看出主要的区别在于后端对这个异常事件的性质的判定，后端决定停止就抛出异常，后端决定继续就抛出告警，这是实际项目中的经验之谈。</p>
+<h1 id="Python告警定义"><a href="#Python告警定义" class="headerlink" title="Python告警定义"></a>Python告警定义</h1><p>这里有一篇<a target="_blank" rel="noopener" href="https://blog.konghy.cn/2017/12/16/python-warnings/">博客</a>比较全面的介绍了在python中定义告警的类别和方法，这里我们选取一种最容易使用也最常用的方法，直接使用<code>warnings.warn</code>的功能：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># warning_test.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> warnings</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> sys.argv[<span class="number">1</span>] == <span class="string">&#x27;-w&#x27;</span>:</span><br><span class="line">    warnings.warn(<span class="string">&#x27;This is the warning message you wanted!&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;No warnings!&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>在这个示例代码中，我们从命令行的输入来获取参数，如果获取到命令行的参数是<code>-w</code>，就抛出这个告警，在日常的项目程序中这表示一个异常情况的判定开关。如果没有满足判定条件，就打印<code>No warnings</code>信息。我们先来看下有异常情况下所抛出的告警信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro warning]$ python3 warning_test.py -w</span><br><span class="line">warning_test.py:7: UserWarning: This is the warning message you wanted!</span><br><span class="line">  warnings.warn(<span class="string">&#x27;This is the warning message you wanted!&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>另外再看一下没有满足判定条件情况下的输出：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro warning]$ python3 warning_test.py -n</span><br><span class="line">No warnings!</span><br></pre></td></tr></table></figure>
+<p>这里从结果中可以看到，我们对告警的定义就完成了。</p>
+<h1 id="Python告警抑制"><a href="#Python告警抑制" class="headerlink" title="Python告警抑制"></a>Python告警抑制</h1><p>在前面一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/exception.html">博客</a>中我们介绍了异常的抑制，同样的我们也可以抑制告警信息。但是这里用<code>抑制</code>来形容这个行为可能并不是很合适，只是一个习惯性的叫法，因为告警本身就不影响程序的正常运行，应该说只是过滤掉告警信息的打印输出。告警抑制的方案也很简单，<code>warnings.filterwarnings</code>就自带了这个功能，具体代码实现如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># warning_test.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> warnings</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">warnings.filterwarnings(<span class="string">&#x27;ignore&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> sys.argv[<span class="number">1</span>] == <span class="string">&#x27;-w&#x27;</span>:</span><br><span class="line">    warnings.warn(<span class="string">&#x27;This is the warning message you wanted!&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;No warnings!&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;Continue to running.&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>可以看到我们只是在代码中加了一行<code>warnings.filterwarnings</code>的代码，过滤掉了所有的告警信息的输出。此外我们在程序的最后加了一行打印信息，以确认我们在抛出告警信息并且被抑制之后，还能够继续执行后面的程序（注意，不抑制也能继续执行）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro warning]$ python3 warning_test.py -w</span><br><span class="line">Continue to running.</span><br></pre></td></tr></table></figure>
+<p>最后我们发现，告警被成功抑制，并且告警之后的程序也能够正常的运行。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>告警和异常信息的定义与处理，在网络编程项目和各种实际计算的场景中都会被用到。这里我们通过两篇博客进行了比较简单的介绍，对于没有特殊要求的用户而言，按照示例中给出的样板直接修改就能够使用。更多的时候是规范的要求，我们可能需要修改异常和告警所继承的类型。同时对于异常和告警信息，我们也能够有方案去进行抑制，更加适配各种不同的场景需求。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/warnings.html">https://www.cnblogs.com/dechinphy/p/warnings.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2021/03/31/%E4%B8%BA%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97%E8%80%8C%E7%94%9F%E7%9A%84Julia%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8EManjaro-Linux%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E5%85%A5%E9%97%A8/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          为科学计算而生的Julia——基于Manjaro Linux的安装与入门
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/03/30/Python3%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%9E%84%E5%BB%BAsetup.py/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">Python3基础之构建setup.py</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=Python基础之告警定义与告警抑制 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F03%2F30%2FPython%25E5%259F%25BA%25E7%25A1%2580%25E4%25B9%258B%25E5%2591%258A%25E8%25AD%25A6%25E5%25AE%259A%25E4%25B9%2589%25E4%25B8%258E%25E5%2591%258A%25E8%25AD%25A6%25E6%258A%2591%25E5%2588%25B6%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=Python基础之告警定义与告警抑制 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2021%2F03%2F30%2FPython%25E5%259F%25BA%25E7%25A1%2580%25E4%25B9%258B%25E5%2591%258A%25E8%25AD%25A6%25E5%25AE%259A%25E4%25B9%2589%25E4%25B8%258E%25E5%2591%258A%25E8%25AD%25A6%25E6%258A%2591%25E5%2588%25B6%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=Python基础之告警定义与告警抑制 - Hexo&url=http://dechinphy.github.io/2021/03/30/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%91%8A%E8%AD%A6%E5%AE%9A%E4%B9%89%E4%B8%8E%E5%91%8A%E8%AD%A6%E6%8A%91%E5%88%B6/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

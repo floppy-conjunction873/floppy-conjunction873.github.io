@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>py3nvml实现GPU相关信息读取 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;在深度学习或者其他类型的GPU运算过程中，对于GPU信息的监测也是一个非常常用的功能。如果仅仅是使用系统级的GPU监测工具，就没办法非常细致的去跟踪每一步的显存和使用率的变化。如果是用profiler，又显得过于细致，而且环境配置、信息输出和筛选并不是很方便。此时就可以考虑使用py3nvml这样的工具，针对于GPU任务执行的过程进行细化的分析，有助于提升GPU的利用率和程序执行的性能。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "py3nvml实现GPU相关信息读取 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;在深度学习或者其他类型的GPU运算过程中，对于GPU信息的监测也是一个非常常用的功能。如果仅仅是使用系统级的GPU监测工具，就没办法非常细致的去跟踪每一步的显存和使用率的变化。如果是用profiler，又显得过于细致，而且环境配置、信息输出和筛选并不是很方便。此时就可以考虑使用py3nvml这样的工具，针对于GPU任务执行的过程进行细化的分析，有助于提升GPU的利用率和程序执行的性能。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2022/01/12/py3nvml%E5%AE%9E%E7%8E%B0GPU%E7%9B%B8%E5%85%B3%E4%BF%A1%E6%81%AF%E8%AF%BB%E5%8F%96/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;在深度学习或者其他类型的GPU运算过程中，对于GPU信息的监测也是一个非常常用的功能。如果仅仅是使用系统级的GPU监测工具，就没办法非常细致的去跟踪每一步的显存和使用率的变化。如果是用profiler，又显得过于细致，而且环境配置、信息输出和筛选并不是很方便。此时就可以考虑使用py3nvml这样的工具，针对于GPU任务执行的过程进行细化的分析，有助于提升GPU的利用率和程序执行的性能。&lt;/p&gt;" />
+    <meta name="twitter:title" content="py3nvml实现GPU相关信息读取 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;在深度学习或者其他类型的GPU运算过程中，对于GPU信息的监测也是一个非常常用的功能。如果仅仅是使用系统级的GPU监测工具，就没办法非常细致的去跟踪每一步的显存和使用率的变化。如果是用profiler，又显得过于细致，而且环境配置、信息输出和筛选并不是很方便。此时就可以考虑使用py3nvml这样的工具，针对于GPU任务执行的过程进行细化的分析，有助于提升GPU的利用率和程序执行的性能。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;在深度学习或者其他类型的GPU运算过程中，对于GPU信息的监测也是一个非常常用的功能。如果仅仅是使用系统级的GPU监测工具，就没办法非常细致的去跟踪每一步的显存和使用率的变化。如果是用profiler，又显得过于细致，而且环境配置、信息输出和筛选并不是很方便。此时就可以考虑使用py3nvml这样的工具，针对于GPU任务执行的过程进行细化的分析，有助于提升GPU的利用率和程序执行的性能。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2022/01/12/py3nvml%E5%AE%9E%E7%8E%B0GPU%E7%9B%B8%E5%85%B3%E4%BF%A1%E6%81%AF%E8%AF%BB%E5%8F%96/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "py3nvml实现GPU相关信息读取 | Hexo",
+            "datePublished": "2022-01-12T09:00:14.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2022/01/12/py3nvml%E5%AE%9E%E7%8E%B0GPU%E7%9B%B8%E5%85%B3%E4%BF%A1%E6%81%AF%E8%AF%BB%E5%8F%96/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidBji3nGAHeM2GibZBvmHxn" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      py3nvml实现GPU相关信息读取
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2022-01-12T09:00:14.000Z" itemprop="datePublished">2022-01-12</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>在深度学习或者其他类型的GPU运算过程中，对于GPU信息的监测也是一个非常常用的功能。如果仅仅是使用系统级的GPU监测工具，就没办法非常细致的去跟踪每一步的显存和使用率的变化。如果是用profiler，又显得过于细致，而且环境配置、信息输出和筛选并不是很方便。此时就可以考虑使用py3nvml这样的工具，针对于GPU任务执行的过程进行细化的分析，有助于提升GPU的利用率和程序执行的性能。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>随着模型运算量的增长和硬件技术的发展，使用GPU来完成各种任务的计算已经渐渐成为算法实现的主流手段。而对于运行期间的一些GPU的占用，比如每一步的显存使用率等诸如此类的信息，就需要一些比较细致的GPU信息读取的工具，这里我们重点推荐使用py3nvml来对python代码运行的一个过程进行监控。</p>
+<h1 id="常规信息读取"><a href="#常规信息读取" class="headerlink" title="常规信息读取"></a>常规信息读取</h1><p>一般大家比较常用的就是<code>nvidia-smi</code>这个指令，来读取GPU的使用率和显存占用、驱动版本等信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">$ nvidia-smi</span><br><span class="line">Wed Jan 12 15:52:04 2022</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI 470.42.01    Driver Version: 470.42.01    CUDA Version: 11.4     |</span><br><span class="line">|-------------------------------+----------------------+----------------------+</span><br><span class="line">| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|                               |                      |               MIG M. |</span><br><span class="line">|===============================+======================+======================|</span><br><span class="line">|   0  Quadro RTX 4000     On   | 00000000:03:00.0  On |                  N/A |</span><br><span class="line">| 30%   39C    P8    20W / 125W |    538MiB /  7979MiB |     16%      Default |</span><br><span class="line">|                               |                      |                  N/A |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line">|   1  Quadro RTX 4000     On   | 00000000:A6:00.0 Off |                  N/A |</span><br><span class="line">| 30%   32C    P8     7W / 125W |      6MiB /  7982MiB |      0%      Default |</span><br><span class="line">|                               |                      |                  N/A |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line"></span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| Processes:                                                                  |</span><br><span class="line">|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |</span><br><span class="line">|        ID   ID                                                   Usage      |</span><br><span class="line">|=============================================================================|</span><br><span class="line">|    0   N/A  N/A      1643      G   /usr/lib/xorg/Xorg                412MiB |</span><br><span class="line">|    0   N/A  N/A      2940      G   /usr/bin/gnome-shell               76MiB |</span><br><span class="line">|    0   N/A  N/A     47102      G   ...AAAAAAAAA= --shared-files       35MiB |</span><br><span class="line">|    0   N/A  N/A    172424      G   ...AAAAAAAAA= --shared-files       11MiB |</span><br><span class="line">|    1   N/A  N/A      1643      G   /usr/lib/xorg/Xorg                  4MiB |</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>但是如果不使用profile仅仅使用<code>nvidia-smi</code>这个指令的输出的话，是没有办法非常细致的分析程序运行过程中的变化的。这里顺便推荐一个比较精致的跟<code>nvidia-smi</code>用法非常类似的小工具：gpustat。这个工具可以直接使用pip进行安装和管理：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install gpustat</span><br><span class="line">Collecting gpustat</span><br><span class="line">  Downloading gpustat-0.6.0.tar.gz (78 kB)</span><br><span class="line">     |████████████████████████████████| 78 kB 686 kB/s</span><br><span class="line">Requirement already satisfied: six&gt;=1.7 <span class="keyword">in</span> /home/dechin/.local/lib/python3.8/site-packages (from gpustat) (1.16.0)</span><br><span class="line">Collecting nvidia-ml-py3&gt;=7.352.0</span><br><span class="line">  Downloading nvidia-ml-py3-7.352.0.tar.gz (19 kB)</span><br><span class="line">Requirement already satisfied: psutil <span class="keyword">in</span> /home/dechin/.local/lib/python3.8/site-packages (from gpustat) (5.8.0)</span><br><span class="line">Collecting blessings&gt;=1.6</span><br><span class="line">  Downloading blessings-1.7-py3-none-any.whl (18 kB)</span><br><span class="line">Building wheels <span class="keyword">for</span> collected packages: gpustat, nvidia-ml-py3</span><br><span class="line">  Building wheel <span class="keyword">for</span> gpustat (setup.py) ... <span class="keyword">done</span></span><br><span class="line">  Created wheel <span class="keyword">for</span> gpustat: filename=gpustat-0.6.0-py3-none-any.whl size=12617 sha256=4158e741b609c7a1bc6db07d76224db51cd7656a6f2e146e0b81185ce4e960ba</span><br><span class="line">  Stored <span class="keyword">in</span> directory: /home/dechin/.cache/pip/wheels/0d/d9/80/b6cbcdc9946c7b50ce35441cc9e7d8c5a9d066469ba99bae44</span><br><span class="line">  Building wheel <span class="keyword">for</span> nvidia-ml-py3 (setup.py) ... <span class="keyword">done</span></span><br><span class="line">  Created wheel <span class="keyword">for</span> nvidia-ml-py3: filename=nvidia_ml_py3-7.352.0-py3-none-any.whl size=19191 sha256=70cd8ffc92286944ad9f5dc4053709af76fc0e79928dc61b98a9819a719f1e31</span><br><span class="line">  Stored <span class="keyword">in</span> directory: /home/dechin/.cache/pip/wheels/b9/b1/68/cb4feab29709d4155310d29a421389665dcab9eb3b679b527b</span><br><span class="line">Successfully built gpustat nvidia-ml-py3</span><br><span class="line">Installing collected packages: nvidia-ml-py3, blessings, gpustat</span><br><span class="line">Successfully installed blessings-1.7 gpustat-0.6.0 nvidia-ml-py3-7.352.0</span><br></pre></td></tr></table></figure>
+<p>使用的时候也是跟nvidia-smi非常类似的操作：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ watch --color -n1 gpustat -cpu </span><br></pre></td></tr></table></figure>
+<p>返回结果如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Every 1.0s: gpustat -cpu                   ubuntu2004: Wed Jan 12 15:58:59 2022</span><br><span class="line"></span><br><span class="line">ubuntu2004           Wed Jan 12 15:58:59 2022  470.42.01</span><br><span class="line">[0] Quadro RTX 4000  | 39<span class="string">&#x27;C,   3 % |   537 /  7979 MB | root:Xorg/1643(412M) de</span></span><br><span class="line"><span class="string">chin:gnome-shell/2940(75M) dechin:slack/47102(35M) dechin:chrome/172424(11M)</span></span><br><span class="line"><span class="string">[1] Quadro RTX 4000  | 32&#x27;</span>C,   0 % |     6 /  7982 MB | root:Xorg/1643(4M)</span><br></pre></td></tr></table></figure>
+<p>通过<code>gpustat</code>返回的结果，包含了GPU的型号、使用率和显存使用大小和GPU当前的温度等常规信息。</p>
+<h1 id="py3nvml的安装与使用"><a href="#py3nvml的安装与使用" class="headerlink" title="py3nvml的安装与使用"></a>py3nvml的安装与使用</h1><p>接下来正式看下py3nvml的安装和使用方法，这是一个可以在python中实时查看和监测GPU信息的一个库，可以通过pip来安装和管理：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install py3nvml</span><br><span class="line">Collecting py3nvml</span><br><span class="line">  Downloading py3nvml-0.2.7-py3-none-any.whl (55 kB)</span><br><span class="line">     |████████████████████████████████| 55 kB 650 kB/s</span><br><span class="line">Requirement already satisfied: xmltodict <span class="keyword">in</span> /home/dechin/anaconda3/lib/python3.8/site-packages (from py3nvml) (0.12.0)</span><br><span class="line">Installing collected packages: py3nvml</span><br><span class="line">Successfully installed py3nvml-0.2.7</span><br></pre></td></tr></table></figure>
+<h2 id="py3nvml绑定GPU卡"><a href="#py3nvml绑定GPU卡" class="headerlink" title="py3nvml绑定GPU卡"></a>py3nvml绑定GPU卡</h2><p>有一些框架为了性能的最大化，在初始化的时候就会默认去使用到整个资源池里面的所有GPU卡，比如如下使用Jax来演示的一个案例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> py3nvml</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">from</span> jax <span class="keyword">import</span> numpy <span class="keyword">as</span> jnp</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: x = jnp.ones(<span class="number">1000000000</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: !nvidia-smi</span><br><span class="line">Wed Jan <span class="number">12</span> <span class="number">16</span>:08:<span class="number">32</span> <span class="number">2022</span></span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI <span class="number">470.42</span><span class="number">.01</span>    Driver Version: <span class="number">470.42</span><span class="number">.01</span>    CUDA Version: <span class="number">11.4</span>     |</span><br><span class="line">|-------------------------------+----------------------+----------------------+</span><br><span class="line">| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|                               |                      |               MIG M. |</span><br><span class="line">|===============================+======================+======================|</span><br><span class="line">|   <span class="number">0</span>  Quadro RTX <span class="number">4000</span>     On   | <span class="number">00000000</span>:03:<span class="number">00.0</span>  On |                  N/A |</span><br><span class="line">| <span class="number">30</span>%   41C    P0    38W / 125W |   7245MiB /  7979MiB |      <span class="number">0</span>%      Default |</span><br><span class="line">|                               |                      |                  N/A |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line">|   <span class="number">1</span>  Quadro RTX <span class="number">4000</span>     On   | <span class="number">00000000</span>:A6:<span class="number">00.0</span> Off |                  N/A |</span><br><span class="line">| <span class="number">30</span>%   35C    P0    35W / 125W |    101MiB /  7982MiB |      <span class="number">0</span>%      Default |</span><br><span class="line">|                               |                      |                  N/A |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line"></span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| Processes:                                                                  |</span><br><span class="line">|  GPU   GI   CI        PID   <span class="type">Type</span>   Process name                  GPU Memory |</span><br><span class="line">|        ID   ID                                                   Usage      |</span><br><span class="line">|=============================================================================|</span><br><span class="line">|    <span class="number">0</span>   N/A  N/A      <span class="number">1643</span>      G   /usr/lib/xorg/Xorg                412MiB |</span><br><span class="line">|    <span class="number">0</span>   N/A  N/A      <span class="number">2940</span>      G   /usr/<span class="built_in">bin</span>/gnome-shell               75MiB |</span><br><span class="line">|    <span class="number">0</span>   N/A  N/A     <span class="number">47102</span>      G   ...AAAAAAAAA= --shared-files       35MiB |</span><br><span class="line">|    <span class="number">0</span>   N/A  N/A    <span class="number">172424</span>      G   ...AAAAAAAAA= --shared-files       11MiB |</span><br><span class="line">|    <span class="number">0</span>   N/A  N/A    <span class="number">812125</span>      C   /usr/local/<span class="built_in">bin</span>/python            6705MiB |</span><br><span class="line">|    <span class="number">1</span>   N/A  N/A      <span class="number">1643</span>      G   /usr/lib/xorg/Xorg                  4MiB |</span><br><span class="line">|    <span class="number">1</span>   N/A  N/A    <span class="number">812125</span>      C   /usr/local/<span class="built_in">bin</span>/python              93MiB |</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>在这个案例中我们只是在显存中分配了一块空间用于存储一个向量，但是Jax在初始化之后，自动占据了本地的2张GPU卡。根据Jax官方提供的方法，我们可以使用如下的操作配置环境变量，使得Jax只能看到其中的1张卡，这样就不会扩张：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: os.environ[<span class="string">&quot;CUDA_VISIBLE_DEVICES&quot;</span>] = <span class="string">&quot;1&quot;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: <span class="keyword">from</span> jax <span class="keyword">import</span> numpy <span class="keyword">as</span> jnp</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: x = jnp.ones(<span class="number">1000000000</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: !nvidia-smi</span><br><span class="line">Wed Jan <span class="number">12</span> <span class="number">16</span>:<span class="number">10</span>:<span class="number">36</span> <span class="number">2022</span></span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI <span class="number">470.42</span><span class="number">.01</span>    Driver Version: <span class="number">470.42</span><span class="number">.01</span>    CUDA Version: <span class="number">11.4</span>     |</span><br><span class="line">|-------------------------------+----------------------+----------------------+</span><br><span class="line">| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|                               |                      |               MIG M. |</span><br><span class="line">|===============================+======================+======================|</span><br><span class="line">|   <span class="number">0</span>  Quadro RTX <span class="number">4000</span>     On   | <span class="number">00000000</span>:03:<span class="number">00.0</span>  On |                  N/A |</span><br><span class="line">| <span class="number">30</span>%   40C    P8    19W / 125W |    537MiB /  7979MiB |      <span class="number">0</span>%      Default |</span><br><span class="line">|                               |                      |                  N/A |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line">|   <span class="number">1</span>  Quadro RTX <span class="number">4000</span>     On   | <span class="number">00000000</span>:A6:<span class="number">00.0</span> Off |                  N/A |</span><br><span class="line">| <span class="number">30</span>%   35C    P0    35W / 125W |   7195MiB /  7982MiB |      <span class="number">0</span>%      Default |</span><br><span class="line">|                               |                      |                  N/A |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line"></span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| Processes:                                                                  |</span><br><span class="line">|  GPU   GI   CI        PID   <span class="type">Type</span>   Process name                  GPU Memory |</span><br><span class="line">|        ID   ID                                                   Usage      |</span><br><span class="line">|=============================================================================|</span><br><span class="line">|    <span class="number">0</span>   N/A  N/A      <span class="number">1643</span>      G   /usr/lib/xorg/Xorg                412MiB |</span><br><span class="line">|    <span class="number">0</span>   N/A  N/A      <span class="number">2940</span>      G   /usr/<span class="built_in">bin</span>/gnome-shell               75MiB |</span><br><span class="line">|    <span class="number">0</span>   N/A  N/A     <span class="number">47102</span>      G   ...AAAAAAAAA= --shared-files       35MiB |</span><br><span class="line">|    <span class="number">0</span>   N/A  N/A    <span class="number">172424</span>      G   ...AAAAAAAAA= --shared-files       11MiB |</span><br><span class="line">|    <span class="number">1</span>   N/A  N/A      <span class="number">1643</span>      G   /usr/lib/xorg/Xorg                  4MiB |</span><br><span class="line">|    <span class="number">1</span>   N/A  N/A    <span class="number">813030</span>      C   /usr/local/<span class="built_in">bin</span>/python            7187MiB |</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>可以看到结果中已经是只使用了1张GPU卡，达到了我们的目的，但是这种通过配置环境变量来实现的功能还是着实不够pythonic，因此py3nvml中也提供了这样的功能，可以指定某一系列的GPU卡用于执行任务：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> py3nvml</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">from</span> jax <span class="keyword">import</span> numpy <span class="keyword">as</span> jnp</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: py3nvml.grab_gpus(num_gpus=<span class="number">1</span>,gpu_select=[<span class="number">1</span>])</span><br><span class="line">Out[<span class="number">3</span>]: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: x = jnp.ones(<span class="number">1000000000</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: !nvidia-smi</span><br><span class="line">Wed Jan <span class="number">12</span> <span class="number">16</span>:<span class="number">12</span>:<span class="number">37</span> <span class="number">2022</span></span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI <span class="number">470.42</span><span class="number">.01</span>    Driver Version: <span class="number">470.42</span><span class="number">.01</span>    CUDA Version: <span class="number">11.4</span>     |</span><br><span class="line">|-------------------------------+----------------------+----------------------+</span><br><span class="line">| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|                               |                      |               MIG M. |</span><br><span class="line">|===============================+======================+======================|</span><br><span class="line">|   <span class="number">0</span>  Quadro RTX <span class="number">4000</span>     On   | <span class="number">00000000</span>:03:<span class="number">00.0</span>  On |                  N/A |</span><br><span class="line">| <span class="number">30</span>%   40C    P8    20W / 125W |    537MiB /  7979MiB |      <span class="number">0</span>%      Default |</span><br><span class="line">|                               |                      |                  N/A |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line">|   <span class="number">1</span>  Quadro RTX <span class="number">4000</span>     On   | <span class="number">00000000</span>:A6:<span class="number">00.0</span> Off |                  N/A |</span><br><span class="line">| <span class="number">30</span>%   36C    P0    35W / 125W |   7195MiB /  7982MiB |      <span class="number">0</span>%      Default |</span><br><span class="line">|                               |                      |                  N/A |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line"></span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| Processes:                                                                  |</span><br><span class="line">|  GPU   GI   CI        PID   <span class="type">Type</span>   Process name                  GPU Memory |</span><br><span class="line">|        ID   ID                                                   Usage      |</span><br><span class="line">|=============================================================================|</span><br><span class="line">|    <span class="number">0</span>   N/A  N/A      <span class="number">1643</span>      G   /usr/lib/xorg/Xorg                412MiB |</span><br><span class="line">|    <span class="number">0</span>   N/A  N/A      <span class="number">2940</span>      G   /usr/<span class="built_in">bin</span>/gnome-shell               75MiB |</span><br><span class="line">|    <span class="number">0</span>   N/A  N/A     <span class="number">47102</span>      G   ...AAAAAAAAA= --shared-files       35MiB |</span><br><span class="line">|    <span class="number">0</span>   N/A  N/A    <span class="number">172424</span>      G   ...AAAAAAAAA= --shared-files       11MiB |</span><br><span class="line">|    <span class="number">1</span>   N/A  N/A      <span class="number">1643</span>      G   /usr/lib/xorg/Xorg                  4MiB |</span><br><span class="line">|    <span class="number">1</span>   N/A  N/A    <span class="number">814673</span>      C   /usr/local/<span class="built_in">bin</span>/python            7187MiB |</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>可以看到结果中也是只使用了1张GPU卡，达到了跟上一步的操作一样的效果。</p>
+<h2 id="查看空闲GPU"><a href="#查看空闲GPU" class="headerlink" title="查看空闲GPU"></a>查看空闲GPU</h2><p>对于环境中可用的GPU，py3nvml的判断标准就是在这个GPU上已经没有任何的进程，那么这个就是一张可用的GPU卡：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> py3nvml</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: free_gpus = py3nvml.get_free_gpus()</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: free_gpus</span><br><span class="line">Out[<span class="number">3</span>]: [<span class="literal">True</span>, <span class="literal">True</span>]</span><br></pre></td></tr></table></figure>
+<p>当然这里需要说明的是，系统应用在这里不会被识别，应该是会判断守护进程。</p>
+<h2 id="命令行信息获取"><a href="#命令行信息获取" class="headerlink" title="命令行信息获取"></a>命令行信息获取</h2><p>跟<code>nvidia-smi</code>非常类似的，py3nvml也可以在命令行中通过调用<code>py3smi</code>来使用。值得一提的是，如果需要用<code>nvidia-smi</code>来实时的监测GPU的使用信息，往往是需要配合<code>watch -n</code>来使用的，但是如果是<code>py3smi</code>则不需要，直接用<code>py3smi -l</code>就可以实现类似的功能。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ py3smi -l 5</span><br><span class="line">Wed Jan 12 16:17:37 2022</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI                        Driver Version: 470.42.01                 |</span><br><span class="line">+---------------------------------+---------------------+---------------------+</span><br><span class="line">| GPU Fan  Temp Perf Pwr:Usage/Cap|        Memory-Usage | GPU-Util Compute M. |</span><br><span class="line">+=================================+=====================+=====================+</span><br><span class="line">|   0 30%   39C    8   19W / 125W |   537MiB /  7979MiB |       0%    Default |</span><br><span class="line">|   1 30%   33C    8    7W / 125W |     6MiB /  7982MiB |       0%    Default |</span><br><span class="line">+---------------------------------+---------------------+---------------------+</span><br><span class="line"></span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| Processes:                                                       GPU Memory |</span><br><span class="line">| GPU        Owner      PID      Uptime  Process Name                   Usage |</span><br><span class="line">+=============================================================================+</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>可以看到略有区别的是，这里并不像<code>nvidia-smi</code>列出来的进程那么多，应该是自动忽略了系统进程。</p>
+<h2 id="单独查看驱动版本和显卡型号"><a href="#单独查看驱动版本和显卡型号" class="headerlink" title="单独查看驱动版本和显卡型号"></a>单独查看驱动版本和显卡型号</h2><p>在py3nvml中把查看驱动和型号的功能单独列了出来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> py3nvml.py3nvml <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: nvmlInit()</span><br><span class="line">Out[<span class="number">2</span>]: &lt;CDLL <span class="string">&#x27;libnvidia-ml.so.1&#x27;</span>, handle 560ad4d07a60 at <span class="number">0x7fd13aa52340</span>&gt;</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: <span class="built_in">print</span>(<span class="string">&quot;Driver Version: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(nvmlSystemGetDriverVersion()))</span><br><span class="line">Driver Version: <span class="number">470.42</span><span class="number">.01</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: deviceCount = nvmlDeviceGetCount()</span><br><span class="line">   ...: <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(deviceCount):</span><br><span class="line">   ...:     handle = nvmlDeviceGetHandleByIndex(i)</span><br><span class="line">   ...:     <span class="built_in">print</span>(<span class="string">&quot;Device &#123;&#125;: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(i, nvmlDeviceGetName(handle)))</span><br><span class="line">   ...:</span><br><span class="line">Device <span class="number">0</span>: Quadro RTX <span class="number">4000</span></span><br><span class="line">Device <span class="number">1</span>: Quadro RTX <span class="number">4000</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: nvmlShutdown()</span><br></pre></td></tr></table></figure>
+<p>这样也不需要我们自己再去逐个的筛选，从灵活性和可扩展性上来说还是比较方便的。</p>
+<h2 id="单独查看显存信息"><a href="#单独查看显存信息" class="headerlink" title="单独查看显存信息"></a>单独查看显存信息</h2><p>这里同样的也是把显存的使用信息单独列了出来，不需要用户再去单独筛选这个信息，相对而言比较细致：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> py3nvml.py3nvml <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: nvmlInit()</span><br><span class="line">Out[<span class="number">2</span>]: &lt;CDLL <span class="string">&#x27;libnvidia-ml.so.1&#x27;</span>, handle 55ae42aadd90 at <span class="number">0x7f39c700e040</span>&gt;</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: handle = nvmlDeviceGetHandleByIndex(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: info = nvmlDeviceGetMemoryInfo(handle)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: <span class="built_in">print</span>(<span class="string">&quot;Total memory: &#123;&#125;MiB&quot;</span>.<span class="built_in">format</span>(info.total &gt;&gt; <span class="number">20</span>))</span><br><span class="line">Total memory: 7979MiB</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: <span class="built_in">print</span>(<span class="string">&quot;Free memory: &#123;&#125;MiB&quot;</span>.<span class="built_in">format</span>(info.free &gt;&gt; <span class="number">20</span>))</span><br><span class="line">Free memory: 7441MiB</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: <span class="built_in">print</span>(<span class="string">&quot;Used memory: &#123;&#125;MiB&quot;</span>.<span class="built_in">format</span>(info.used &gt;&gt; <span class="number">20</span>))</span><br><span class="line">Used memory: 537MiB</span><br></pre></td></tr></table></figure>
+<p>如果把这些代码插入到程序中，就可以获悉每一步所占用的显存的变化。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>在深度学习或者其他类型的GPU运算过程中，对于GPU信息的监测也是一个非常常用的功能。如果仅仅是使用系统级的GPU监测工具，就没办法非常细致的去跟踪每一步的显存和使用率的变化。如果是用profiler，又显得过于细致，而且环境配置、信息输出和筛选并不是很方便。此时就可以考虑使用py3nvml这样的工具，针对于GPU任务执行的过程进行细化的分析，有助于提升GPU的利用率和程序执行的性能。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/py3nvml.html">https://www.cnblogs.com/dechinphy/p/py3nvml.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>打赏专用链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<p>腾讯云专栏同步：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/91958">https://cloud.tencent.com/developer/column/91958</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/31558973">https://zhuanlan.zhihu.com/p/31558973</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2022/01/15/%E5%9C%A8pyqt5%E4%B8%AD%E5%B1%95%E7%A4%BApyecharts%E7%94%9F%E6%88%90%E7%9A%84%E5%9B%BE%E5%83%8F/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          在pyqt5中展示pyecharts生成的图像
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/12/21/JAX-MD%E5%9C%A8%E8%BF%91%E9%82%BB%E8%A1%A8%E7%9A%84%E8%AE%A1%E7%AE%97%E4%B8%AD%EF%BC%8C%E4%BD%BF%E7%94%A8%E4%BA%86%E4%BB%80%E4%B9%88%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7%EF%BC%9F%EF%BC%88%E4%B8%80%EF%BC%89/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">JAX-MD在近邻表的计算中，使用了什么奇技淫巧？（一）</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=py3nvml实现GPU相关信息读取 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F01%2F12%2Fpy3nvml%25E5%25AE%259E%25E7%258E%25B0GPU%25E7%259B%25B8%25E5%2585%25B3%25E4%25BF%25A1%25E6%2581%25AF%25E8%25AF%25BB%25E5%258F%2596%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=py3nvml实现GPU相关信息读取 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2022%2F01%2F12%2Fpy3nvml%25E5%25AE%259E%25E7%258E%25B0GPU%25E7%259B%25B8%25E5%2585%25B3%25E4%25BF%25A1%25E6%2581%25AF%25E8%25AF%25BB%25E5%258F%2596%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=py3nvml实现GPU相关信息读取 - Hexo&url=http://dechinphy.github.io/2022/01/12/py3nvml%E5%AE%9E%E7%8E%B0GPU%E7%9B%B8%E5%85%B3%E4%BF%A1%E6%81%AF%E8%AF%BB%E5%8F%96/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

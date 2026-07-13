@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>执行py文件需要可执行权限吗？ | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;我们知道可执行权限x在Linux系统中的重要性，那么在执行py文件的过程中，是否一定需要可执行权限呢？本文将会详细的分析几种测试案例。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "执行py文件需要可执行权限吗？ | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;我们知道可执行权限x在Linux系统中的重要性，那么在执行py文件的过程中，是否一定需要可执行权限呢？本文将会详细的分析几种测试案例。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2021/01/15/%E6%89%A7%E8%A1%8Cpy%E6%96%87%E4%BB%B6%E9%9C%80%E8%A6%81%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%9D%83%E9%99%90%E5%90%97%EF%BC%9F/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;我们知道可执行权限x在Linux系统中的重要性，那么在执行py文件的过程中，是否一定需要可执行权限呢？本文将会详细的分析几种测试案例。&lt;/p&gt;" />
+    <meta name="twitter:title" content="执行py文件需要可执行权限吗？ | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;我们知道可执行权限x在Linux系统中的重要性，那么在执行py文件的过程中，是否一定需要可执行权限呢？本文将会详细的分析几种测试案例。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;我们知道可执行权限x在Linux系统中的重要性，那么在执行py文件的过程中，是否一定需要可执行权限呢？本文将会详细的分析几种测试案例。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2021/01/15/%E6%89%A7%E8%A1%8Cpy%E6%96%87%E4%BB%B6%E9%9C%80%E8%A6%81%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%9D%83%E9%99%90%E5%90%97%EF%BC%9F/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "执行py文件需要可执行权限吗？ | Hexo",
+            "datePublished": "2021-01-15T10:26:06.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2021/01/15/%E6%89%A7%E8%A1%8Cpy%E6%96%87%E4%BB%B6%E9%9C%80%E8%A6%81%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%9D%83%E9%99%90%E5%90%97%EF%BC%9F/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidSBKr_JviiN1xnBwXkMbSz" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      执行py文件需要可执行权限吗？
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2021-01-15T10:26:06.000Z" itemprop="datePublished">2021-01-15</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>我们知道可执行权限x在Linux系统中的重要性，那么在执行py文件的过程中，是否一定需要可执行权限呢？本文将会详细的分析几种测试案例。</p>
+<span id="more"></span>
+
+<h1 id="案例解析"><a href="#案例解析" class="headerlink" title="案例解析"></a>案例解析</h1><p>这个问题描述起来有点违反直觉，要执行一个文件难道不应该需要可执行权限吗？让我们先来看一个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># module1.py</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;hello world!&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test()</span><br></pre></td></tr></table></figure>
+<p>这是一个名为<code>module1.py</code>的文件，这个文件仅有可读权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro excute]$ ll</span><br><span class="line">-r--r--r-- 1 dechin dechin   78  1月 15 17:06 module1.py</span><br></pre></td></tr></table></figure>
+<p>我们可以直接用python来运行一下这个文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro excute]$ python3 module1.py </span><br><span class="line">hello world!</span><br></pre></td></tr></table></figure>
+<p>我们发现即使只有可读权限，这个文件也是可以运行的。为了严格验证，我们这里创建另外一种模式的测试，通过import来导入python文件，是否也不需要可执行权限呢？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># module2.py</span></span><br><span class="line"><span class="keyword">from</span> module1 <span class="keyword">import</span> test</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    test()</span><br></pre></td></tr></table></figure>
+<p>同样的，我们新建的文件也未赋予可执行权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro excute]$ ll</span><br><span class="line">-r--r--r-- 1 dechin dechin   78  1月 15 17:06 module1.py</span><br><span class="line">-r--r--r-- 1 dechin dechin   64  1月 15 17:44 module2.py</span><br></pre></td></tr></table></figure>
+<p>我们执行一下<code>module2.py</code>这个文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro excute]$ python3 module2.py </span><br><span class="line">hello world!</span><br></pre></td></tr></table></figure>
+<p>那么我们的测试就完成了，经过验证，执行普通的py文件是不需要可执行权限的，这对我们的权限最小化约束就产生了一定的启发作用。</p>
+<h1 id="原理解释"><a href="#原理解释" class="headerlink" title="原理解释"></a>原理解释</h1><p>在stackoverrun上面有一条回复，作者<em>cedbeu</em>是这样描述的：<code>python</code>本身承担了语言解析器的角色，<code>py文件</code>不过是一个文本文件，真正执行的二进制文件是<code>python</code>而不是用户所创建的<code>py文件</code>。因此，即使去掉<code>py文件</code>的可执行权限，该<code>py文件</code>也是可以通过python来执行的。但是，如果我们去掉了<code>python</code>的可执行权限，那就无法正常执行这一条任务了。</p>
+<h1 id="扩展测试"><a href="#扩展测试" class="headerlink" title="扩展测试"></a>扩展测试</h1><p>如果将<code>py文件</code>编译成<code>pyc</code>和<code>pyo</code>格式的文件，此时的任务执行是否需要可执行权限呢？首先测试<code>pyc文件</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro excute]$ python3 -m py_compile module1.py</span><br></pre></td></tr></table></figure>
+<p>执行完编译，我们会在当前目录下发现一个<code>__pycache__</code>的文件夹，编译好的<code>pyc文件</code>就存储在这个目录下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro excute]$ tree</span><br><span class="line">.</span><br><span class="line">├── module1.py</span><br><span class="line">├── module2.py</span><br><span class="line">└── __pycache__</span><br><span class="line">    └── module1.cpython-38.pyc</span><br><span class="line"></span><br><span class="line">1 directory, 3 files</span><br><span class="line">[dechin@dechin-manjaro excute]$ <span class="built_in">cd</span> __pycache__/</span><br><span class="line">[dechin@dechin-manjaro __pycache__]$ ll</span><br><span class="line">总用量 4</span><br><span class="line">-rw-r--r-- 1 dechin dechin 259  1月 15 18:01 module1.cpython-38.pyc</span><br></pre></td></tr></table></figure>
+<p>这里我们看到<code>pyc文件</code>的文件名会固定有个后缀，同样也没有可执行权限，这里我们用同样的命令来执行<code>pyc文件</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro __pycache__]$ ll</span><br><span class="line">-r--r--r-- 1 dechin dechin 259  1月 15 18:01 module1.cpython-38.pyc</span><br><span class="line">-rw-r--r-- 1 dechin dechin 259  1月 15 18:13 module1.pyc</span><br><span class="line">-r--r--r-- 1 dechin dechin  64  1月 15 18:09 module2.py</span><br><span class="line">[dechin@dechin-manjaro __pycache__]$ python3 module1.cpython-38.pyc </span><br><span class="line">hello world!</span><br><span class="line">[dechin@dechin-manjaro __pycache__]$ python3 module2.py </span><br><span class="line">hello world!</span><br></pre></td></tr></table></figure>
+<p>这里我们可以发现，不论是直接执行<code>pyc文件</code>，或者是改名为<code>module1.pyc</code>之后再通过<code>module2.py</code>导入的方式，都可以正常的被执行，而且都不具有可执行权限。接下来我们再尝试一下pyo文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro excute]$ python3 -O -m py_compile module1.py </span><br></pre></td></tr></table></figure>
+<p>执行带有<code>opt</code>的<code>pyc文件</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro __pycache__]$ python3 module1.cpython-38.opt-1.pyc </span><br><span class="line">hello world!</span><br></pre></td></tr></table></figure>
+<p>同样的，都可以正常的被执行，即使没有可执行权限。</p>
+<h1 id="技术彩蛋"><a href="#技术彩蛋" class="headerlink" title="技术彩蛋"></a>技术彩蛋</h1><p>即使我们把<code>pyc文件</code>强行改名为<code>py文件</code>，同样也是不影响任务执行的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro __pycache__]$ <span class="built_in">cp</span> module1.cpython-38.opt-1.pyc module1.py</span><br><span class="line">[dechin@dechin-manjaro __pycache__]$ ll</span><br><span class="line">总用量 20</span><br><span class="line">-rw-r--r-- 1 dechin dechin 259  1月 15 18:17 module1.cpython-38.opt-1.pyc</span><br><span class="line">-r--r--r-- 1 dechin dechin 259  1月 15 18:01 module1.cpython-38.pyc</span><br><span class="line">-rw-r--r-- 1 dechin dechin 259  1月 15 18:20 module1.py</span><br><span class="line">-rw-r--r-- 1 dechin dechin 259  1月 15 18:13 module1.pyc</span><br><span class="line">-r--r--r-- 1 dechin dechin  64  1月 15 18:09 module2.py</span><br><span class="line">[dechin@dechin-manjaro __pycache__]$ python3 module1.py</span><br><span class="line">hello world!</span><br></pre></td></tr></table></figure>
+<p>在后续的文章中，我会专门写一篇文章，分析如何分辨<code>py文件</code>与<code>改名之后的pyc文件</code>。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/excutable.html">https://www.cnblogs.com/dechinphy/p/excutable.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2021/01/17/%E9%87%8F%E5%AD%90%E7%BB%9D%E7%83%AD%E7%AE%97%E6%B3%95%E6%B1%82%E8%A7%A3%E6%9C%80%E5%A4%A7%E5%88%87%E5%89%B2%E9%97%AE%E9%A2%98/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          量子绝热算法求解最大切割问题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/01/15/%E4%BD%BF%E7%94%A8%E7%BB%9D%E7%83%AD%E6%BC%94%E5%8C%96-%E9%87%8F%E5%AD%90%E9%80%80%E7%81%AB%E7%AE%97%E6%B3%95%E6%B1%82%E8%A7%A3%E7%9F%A9%E9%98%B5%E6%9C%AC%E5%BE%81%E6%80%81/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">使用绝热演化/量子退火算法求解矩阵本征态</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=执行py文件需要可执行权限吗？ - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F01%2F15%2F%25E6%2589%25A7%25E8%25A1%258Cpy%25E6%2596%2587%25E4%25BB%25B6%25E9%259C%2580%25E8%25A6%2581%25E5%258F%25AF%25E6%2589%25A7%25E8%25A1%258C%25E6%259D%2583%25E9%2599%2590%25E5%2590%2597%25EF%25BC%259F%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=执行py文件需要可执行权限吗？ - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2021%2F01%2F15%2F%25E6%2589%25A7%25E8%25A1%258Cpy%25E6%2596%2587%25E4%25BB%25B6%25E9%259C%2580%25E8%25A6%2581%25E5%258F%25AF%25E6%2589%25A7%25E8%25A1%258C%25E6%259D%2583%25E9%2599%2590%25E5%2590%2597%25EF%25BC%259F%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=执行py文件需要可执行权限吗？ - Hexo&url=http://dechinphy.github.io/2021/01/15/%E6%89%A7%E8%A1%8Cpy%E6%96%87%E4%BB%B6%E9%9C%80%E8%A6%81%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%9D%83%E9%99%90%E5%90%97%EF%BC%9F/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

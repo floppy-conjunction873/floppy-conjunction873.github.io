@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>Windows11本地部署DeepSeek加速 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文介绍了一个可以相比之下更快速的在本地部署DeepSeek的方法，除了在上一篇博客中介绍的从Github或者Github加速网站获取Ollama之外，还可以通过从国内的其他大模型文件平台下载模型文件，来加速本地模型的构建。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "Windows11本地部署DeepSeek加速 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文介绍了一个可以相比之下更快速的在本地部署DeepSeek的方法，除了在上一篇博客中介绍的从Github或者Github加速网站获取Ollama之外，还可以通过从国内的其他大模型文件平台下载模型文件，来加速本地模型的构建。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2025/02/07/Windows11%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2DeepSeek%E5%8A%A0%E9%80%9F/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文介绍了一个可以相比之下更快速的在本地部署DeepSeek的方法，除了在上一篇博客中介绍的从Github或者Github加速网站获取Ollama之外，还可以通过从国内的其他大模型文件平台下载模型文件，来加速本地模型的构建。&lt;/p&gt;" />
+    <meta name="twitter:title" content="Windows11本地部署DeepSeek加速 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文介绍了一个可以相比之下更快速的在本地部署DeepSeek的方法，除了在上一篇博客中介绍的从Github或者Github加速网站获取Ollama之外，还可以通过从国内的其他大模型文件平台下载模型文件，来加速本地模型的构建。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文介绍了一个可以相比之下更快速的在本地部署DeepSeek的方法，除了在上一篇博客中介绍的从Github或者Github加速网站获取Ollama之外，还可以通过从国内的其他大模型文件平台下载模型文件，来加速本地模型的构建。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2025/02/07/Windows11%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2DeepSeek%E5%8A%A0%E9%80%9F/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "Windows11本地部署DeepSeek加速 | Hexo",
+            "datePublished": "2025-02-07T06:34:11.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2025/02/07/Windows11%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2DeepSeek%E5%8A%A0%E9%80%9F/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidhkBBkSL3QGqtI_52wYrPC" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      Windows11本地部署DeepSeek加速
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2025-02-07T06:34:11.000Z" itemprop="datePublished">2025-02-07</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文介绍了一个可以相比之下更快速的在本地部署DeepSeek的方法，除了在上一篇博客中介绍的从Github或者Github加速网站获取Ollama之外，还可以通过从国内的其他大模型文件平台下载模型文件，来加速本地模型的构建。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在上一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18699554/deepseek">文章</a>中我们介绍了在Ubuntu Linux操作系统上部署了一个DeepSeek-R1：14B，再通过其他电脑远程调用模型进行生成的方法。这里我们介绍一下Windows11安装Ollama+DeepSeek-R1模型的加速方法，因为这几天DeepSeek实在太火了，导致官方模型下载渠道网络不是很稳定，但其实有其他的方法可以加速这个下载过程。</p>
+<h1 id="安装Ollama"><a href="#安装Ollama" class="headerlink" title="安装Ollama"></a>安装Ollama</h1><p>跟Ubuntu Linux上的操作比较类似，也是要从<a target="_blank" rel="noopener" href="https://ollama.com/download">Ollama官网</a>下载一个安装文件，然后直接双击安装就好了，没有配置安装路径的选项。安装完成后，可以在cmd中查看ollama的版本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\DeepSeek\models&gt; ollama --version</span><br><span class="line">ollama version is 0.5.7</span><br></pre></td></tr></table></figure>
+<p>因为还没有下载模型，所以这里模型列表是空的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">\DeepSeek\models&gt; ollama list</span><br><span class="line">NAME    ID    SIZE    MODIFIED</span><br><span class="line">\DeepSeek\models&gt;</span><br></pre></td></tr></table></figure>
+<p>接下来，我们要用ollama的create选项来构建一个本地模型，可以先查看这个操作的操作文档：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">\DeepSeek\models&gt; ollama create --<span class="built_in">help</span></span><br><span class="line">Create a model from a Modelfile</span><br><span class="line"></span><br><span class="line">Usage:</span><br><span class="line">  ollama create MODEL [flags]</span><br><span class="line"></span><br><span class="line">Flags:</span><br><span class="line">  -f, --file string       Name of the Modelfile (default <span class="string">&quot;Modelfile&quot;</span></span><br><span class="line">  -h, --<span class="built_in">help</span>              <span class="built_in">help</span> <span class="keyword">for</span> create</span><br><span class="line">  -q, --quantize string   Quantize model to this level (e.g. q4_0)</span><br><span class="line"></span><br><span class="line">Environment Variables:</span><br><span class="line">      OLLAMA_HOST                IP Address <span class="keyword">for</span> the ollama server (default 127.0.0.1:11434)</span><br></pre></td></tr></table></figure>
+
+<h1 id="模型文件下载"><a href="#模型文件下载" class="headerlink" title="模型文件下载"></a>模型文件下载</h1><p>最耗时的时间大概就是这一步，所以我建议是找一个下午启动这个任务，然后下载一个晚上，第二天再来构建。因为<code>ollama pull</code>近期存在网络不稳定的问题，这里提供的方案直接跳过这个操作，但这个操作也是最直接最方便的，头铁的也可以试一试。我个人比较推荐的是下载一个gguf模型文件到本地进行构建，这样一来还可以自定义文件模型存放的地址，不至于把某些资源紧缺的磁盘给搞崩了。关键的是下载的渠道，常规的是从huggingface官网去下载模型，但是网络可能会有问题。第二选择是去hf-mirror.com镜像网站下载模型，这也是比较多人推荐的，但是我本地访问这个镜像网站似乎也有问题。所以最终我选择了从阿里的<a target="_blank" rel="noopener" href="https://www.modelscope.cn/">ModelScope</a>下载模型guff文件，网络没有很快，但是非常稳定，而且我们本地最常使用的也是DeepSeek-R1从Qwen蒸馏出来的版本。我这次下载了<a target="_blank" rel="noopener" href="https://www.modelscope.cn/models/unsloth/DeepSeek-R1-Distill-Qwen-7B-GGUF/files">7B</a>和<a target="_blank" rel="noopener" href="https://www.modelscope.cn/models/unsloth/DeepSeek-R1-Distill-Qwen-32B-GGUF/files">32B</a>的模型，一般可以选择其中最大的那个模型下载到本地进行构建。</p>
+<p>再说一下硬件配置，我的单机硬件是3080Ti 16GB独显，运行32B显然是有点吃力，也就是能跑的样子。如果硬件条件跟我差不多的，建议上7B，如果是双显卡的，上14B这样压力会比较小，生成的速度也会比较快。</p>
+<h1 id="模型构建配置"><a href="#模型构建配置" class="headerlink" title="模型构建配置"></a>模型构建配置</h1><p>使用ollama进行模型构建时，需要在本地创建一个模型配置文件，一般命名为<code>Modelfile</code>，这里有一个比较简单的参考：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># gguf模型文件路径  </span><br><span class="line">FROM .\DeepSeek-R1-Distill-Qwen-32B-Q8_0.gguf</span><br><span class="line"></span><br><span class="line"># 模型模板配置  </span><br><span class="line">TEMPLATE &quot;&quot;&quot;&#123;&#123;- if .System &#125;&#125;&#123;&#123; .System &#125;&#125;&#123;&#123; end &#125;&#125;  </span><br><span class="line">&#123;&#123;- range $i, $_ := .Messages &#125;&#125;  </span><br><span class="line">&#123;&#123;- $last := eq (len (slice $.Messages $i)) 1&#125;&#125;  </span><br><span class="line">&#123;&#123;- if eq .Role &quot;user&quot; &#125;&#125;  </span><br><span class="line">  user: &#123;&#123; .Content &#125;&#125;  </span><br><span class="line">&#123;&#123;- else if eq .Role &quot;assistant&quot; &#125;&#125;  </span><br><span class="line">  assistant: &#123;&#123; .Content &#125;&#125;&#123;&#123;- if not $last &#125;&#125;  </span><br><span class="line">    &#123;&#123;- end &#125;&#125;  </span><br><span class="line">&#123;&#123;- end &#125;&#125;  </span><br><span class="line">&#123;&#123;- if and $last (ne .Role &quot;assistant&quot;) &#125;&#125;  </span><br><span class="line">  &#123;&#123;- end &#125;&#125;  </span><br><span class="line">&#123;&#123;- end &#125;&#125;&quot;&quot;&quot;  </span><br><span class="line"></span><br><span class="line">PARAMETER stop &quot;&lt;｜begin▁of▁sentence｜&gt;&quot;</span><br><span class="line">PARAMETER stop &quot;&lt;｜end▁of▁sentence｜&gt;&quot;</span><br><span class="line">PARAMETER stop &quot;&lt;｜User｜&gt;&quot;</span><br><span class="line">PARAMETER stop &quot;&lt;｜Assistant｜&gt;&quot;</span><br></pre></td></tr></table></figure>
+<p>这是一个32B的模型配置文件，7B的同理，只是改一下模型源文件的地址。然后使用ollama进行构建：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">\DeepSeek\models&gt; ollama create deepseek-r1-32B -f .\Modelfile</span><br><span class="line">gathering model components</span><br><span class="line">gathering model components</span><br><span class="line">copying file sha256:e74588a163eb2f861e5b298c0975101cf02ec7b10784832b8feab2abbf3090a7 100%</span><br><span class="line">parsing GGUF</span><br><span class="line">using existing layer sha256:e74588a163eb2f861e5b298c0975101cf02ec7b10784832b8feab2abbf3090a7</span><br><span class="line">creating new layer sha256:c6df2d7e28451caa13e70224d8333d5c06e2ab519086ecde7b7fe9422695ddbd</span><br><span class="line">creating new layer sha256:f4d24e9138dd4603380add165d2b0d970bef471fac194b436ebd50e6147c6588</span><br><span class="line">writing manifest</span><br><span class="line">success</span><br></pre></td></tr></table></figure>
+<p>这里<code>deepseek-r1-32B</code>是自定义的本地模型名称，两个模型都构建完成后，可以在本地查看模型列表：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PS A:\DeepSeek\models&gt; ollama list</span><br><span class="line">NAME                      ID              SIZE      MODIFIED</span><br><span class="line">deepseek-r1-7B:latest     d4d0e06b9cc3    8.1 GB    6 seconds ago</span><br><span class="line">deepseek-r1-32B:latest    ac5d447875fb    34 GB     4 hours ago</span><br></pre></td></tr></table></figure>
+<p>然后推荐在本地安装一个ChatBox跟大模型进行交互，但是这里不重新介绍了，ChatBox这部分可以参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18699554/deepseek">上一篇博客</a>。</p>
+<h1 id="DeepSeek精彩对话"><a href="#DeepSeek精彩对话" class="headerlink" title="DeepSeek精彩对话"></a>DeepSeek精彩对话</h1><p>以下对话使用的是7B的模型，也许7B对于很多场景来说能力有点欠缺，但是DeepSeek的这个逻辑能力确实是惊艳到我了，这还只是一个在笔记本上运行的小模型。</p>
+<h2 id="978294263579是质数吗"><a href="#978294263579是质数吗" class="headerlink" title="978294263579是质数吗"></a>978294263579是质数吗</h2><p>经过分析和计算，我们发现978,294,263,579可以被17整除，余数为0。因此，这个数是一个合数。</p>
+<p>$\boxed{\text{否}}$</p>
+<h2 id="2的13次方-1是多少"><a href="#2的13次方-1是多少" class="headerlink" title="2的13次方-1是多少"></a>2的13次方-1是多少</h2><p>好的，让我来计算一下2的13次方减去1等于多少。</p>
+<p>首先，计算2的幂：<br>$$<br>\left[<br>\begin{align*}<br>2^1 &amp;&#x3D; 2 \<br>2^2 &amp;&#x3D; 4 \<br>2^3 &amp;&#x3D; 8 \<br>2^4 &amp;&#x3D; 16 \<br>2^5 &amp;&#x3D; 32 \<br>2^6 &amp;&#x3D; 64 \<br>2^7 &amp;&#x3D; 128 \<br>2^8 &amp;&#x3D; 256 \<br>2^9 &amp;&#x3D; 512 \<br>2^{10} &amp;&#x3D; 1024 \<br>2^{11} &amp;&#x3D; 2048 \<br>2^{12} &amp;&#x3D; 4096 \<br>2^{13} &amp;&#x3D; 8192 \<br>\end{align*}<br>\right]<br>$$<br>然后，计算2的13次方减去1：<br>$$<br>\left[<br>8192 - 1 &#x3D; 8191<br>\right]<br>$$<br>接下来，检查一下8191是否为质数。通过一些简单的测试，比如试除法，可以发现它不能被除了1和自身之外的任何小质数整除。因此，我们可以确认8191是一个质数。</p>
+<p>最终答案是：<br>$$<br>\left[<br>\boxed{8191}<br>\right]<br>$$</p>
+<h1 id="资源占用"><a href="#资源占用" class="headerlink" title="资源占用"></a>资源占用</h1><h2 id="7B模型"><a href="#7B模型" class="headerlink" title="7B模型"></a>7B模型</h2><p>7B模型下载下来大概7.54GB，显存占用情况如下：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202502/2277440-20250207150328245-2123861373.png">
+</div>
+
+<h2 id="32B模型"><a href="#32B模型" class="headerlink" title="32B模型"></a>32B模型</h2><p>32B模型下载下来大概32.4GB，这个模型压缩率已经很高了，就算用7Z格式压缩，也只能压到31GB。显存占用情况如下：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202502/2277440-20250207150331242-634631695.png">
+</div>
+
+<p>这个基本上就是超显存了，所以运行起来一个字一个字的吐，相比之下7B的相应速度要快很多，体验也会好很多。B站上有人用<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1bxwaeAELQ/">32B模型解高中数学题</a>，看起来似乎效果还不错。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了一个可以相比之下更快速的在本地部署DeepSeek的方法，除了在上一篇博客中介绍的从Github或者Github加速网站获取Ollama之外，还可以通过从国内的其他大模型文件平台下载模型文件，来加速本地模型的构建。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/deepseek2.html">https://www.cnblogs.com/dechinphy/p/deepseek2.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/xx_nm98/article/details/145460770">https://blog.csdn.net/xx_nm98/article/details/145460770</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1bxwaeAELQ/">https://www.bilibili.com/video/BV1bxwaeAELQ/</a></li>
+<li>Ollama模型配置文件：<a target="_blank" rel="noopener" href="https://www.llamafactory.cn/ollama-docs/modelfile.html#template">https://www.llamafactory.cn/ollama-docs/modelfile.html#template</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2025/02/08/DeepSeek%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0%E7%9F%A5%E8%AF%86%E5%BA%93/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          DeepSeek部署本地知识库
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/02/05/Ubuntu-Linux%E9%83%A8%E7%BD%B2DeepSeek/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">Ubuntu Linux部署DeepSeek</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=Windows11本地部署DeepSeek加速 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2025%2F02%2F07%2FWindows11%25E6%259C%25AC%25E5%259C%25B0%25E9%2583%25A8%25E7%25BD%25B2DeepSeek%25E5%258A%25A0%25E9%2580%259F%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=Windows11本地部署DeepSeek加速 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2025%2F02%2F07%2FWindows11%25E6%259C%25AC%25E5%259C%25B0%25E9%2583%25A8%25E7%25BD%25B2DeepSeek%25E5%258A%25A0%25E9%2580%259F%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=Windows11本地部署DeepSeek加速 - Hexo&url=http://dechinphy.github.io/2025/02/07/Windows11%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2DeepSeek%E5%8A%A0%E9%80%9F/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>python并行计算之mpi4py的安装与基本使用 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;在这篇文章中，我们并没有介绍非常多的MPI的应用，其实在普通的并行或者分布式任务中，掌握了各个进程的任务处理过程以及进程间的通信方法就足够了。总体来说，MPI是一个非常通用也非常高效的并行计算软件。有了这些专业的并行化任务调度软件，我们就可以专注于专业任务的代码和算法上，而不需要过多的去关注并行任务的调度和分配问题。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "python并行计算之mpi4py的安装与基本使用 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;在这篇文章中，我们并没有介绍非常多的MPI的应用，其实在普通的并行或者分布式任务中，掌握了各个进程的任务处理过程以及进程间的通信方法就足够了。总体来说，MPI是一个非常通用也非常高效的并行计算软件。有了这些专业的并行化任务调度软件，我们就可以专注于专业任务的代码和算法上，而不需要过多的去关注并行任务的调度和分配问题。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2021/11/29/python%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E4%B9%8Bmpi4py%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;在这篇文章中，我们并没有介绍非常多的MPI的应用，其实在普通的并行或者分布式任务中，掌握了各个进程的任务处理过程以及进程间的通信方法就足够了。总体来说，MPI是一个非常通用也非常高效的并行计算软件。有了这些专业的并行化任务调度软件，我们就可以专注于专业任务的代码和算法上，而不需要过多的去关注并行任务的调度和分配问题。&lt;/p&gt;" />
+    <meta name="twitter:title" content="python并行计算之mpi4py的安装与基本使用 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;在这篇文章中，我们并没有介绍非常多的MPI的应用，其实在普通的并行或者分布式任务中，掌握了各个进程的任务处理过程以及进程间的通信方法就足够了。总体来说，MPI是一个非常通用也非常高效的并行计算软件。有了这些专业的并行化任务调度软件，我们就可以专注于专业任务的代码和算法上，而不需要过多的去关注并行任务的调度和分配问题。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;在这篇文章中，我们并没有介绍非常多的MPI的应用，其实在普通的并行或者分布式任务中，掌握了各个进程的任务处理过程以及进程间的通信方法就足够了。总体来说，MPI是一个非常通用也非常高效的并行计算软件。有了这些专业的并行化任务调度软件，我们就可以专注于专业任务的代码和算法上，而不需要过多的去关注并行任务的调度和分配问题。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2021/11/29/python%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E4%B9%8Bmpi4py%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "python并行计算之mpi4py的安装与基本使用 | Hexo",
+            "datePublished": "2021-11-29T07:08:33.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2021/11/29/python%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E4%B9%8Bmpi4py%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidbhYjVaVeGRVE6MS-rT_Ix" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      python并行计算之mpi4py的安装与基本使用
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2021-11-29T07:08:33.000Z" itemprop="datePublished">2021-11-29</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>在这篇文章中，我们并没有介绍非常多的MPI的应用，其实在普通的并行或者分布式任务中，掌握了各个进程的任务处理过程以及进程间的通信方法就足够了。总体来说，MPI是一个非常通用也非常高效的并行计算软件。有了这些专业的并行化任务调度软件，我们就可以专注于专业任务的代码和算法上，而不需要过多的去关注并行任务的调度和分配问题。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在之前的博客中我们介绍过<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/concurrent.html">concurrent</a>等python多进程任务的方案，而之所以我们又在考虑MPI等方案来实现python并行计算的原因，其实是将python的计算任务与并行计算的任务调度分层实现。在concurrent和multiprocessing等方案中，我们的python计算任务和调度任务是一体化的，而且还有一个比较大的限制是没办法跨节点操作的，这对于任务与环境的定制化程度要求是比较高的。而MPI的方案在设计初期就考虑到了多节点之间通信的问题，而这种分层式的任务调度解决方案其实在架构上看也更加的合理。做计算的人只要考虑单个进程下的任务如何执行就可以了，至于任务如何并行如何调度，那就是上层的MPI该做的事情了。</p>
+<h1 id="mpi4py的安装"><a href="#mpi4py的安装" class="headerlink" title="mpi4py的安装"></a>mpi4py的安装</h1><p>这里推荐使用conda直接安装，如果采用pip安装的话，可能会有些环境依赖的问题出现：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">$ conda install mpi4py</span><br><span class="line">Collecting package metadata (current_repodata.json): <span class="keyword">done</span></span><br><span class="line">Solving environment: <span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## Package Plan ##</span></span><br><span class="line"></span><br><span class="line">  environment location: /home/dechin/anaconda3</span><br><span class="line"></span><br><span class="line">  added / updated specs:</span><br><span class="line">    - mpi4py</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The following packages will be downloaded:</span><br><span class="line"></span><br><span class="line">    package                    |            build</span><br><span class="line">    ---------------------------|-----------------</span><br><span class="line">    mpi-1.0                    |            mpich          13 KB  defaults</span><br><span class="line">    mpi4py-3.0.3               |   py38h028fd6f_0         572 KB  defaults</span><br><span class="line">    mpich-3.3.2                |       hc856adb_0         3.8 MB  defaults</span><br><span class="line">    ------------------------------------------------------------</span><br><span class="line">                                           Total:         4.4 MB</span><br><span class="line"></span><br><span class="line">The following NEW packages will be INSTALLED:</span><br><span class="line"></span><br><span class="line">  mpi                pkgs/main/linux-64::mpi-1.0-mpich</span><br><span class="line">  mpi4py             pkgs/main/linux-64::mpi4py-3.0.3-py38h028fd6f_0</span><br><span class="line">  mpich              pkgs/main/linux-64::mpich-3.3.2-hc856adb_0</span><br><span class="line"></span><br><span class="line">The following packages will be UPDATED:</span><br><span class="line"></span><br><span class="line">  ca-certificates                      2021.9.30-h06a4308_1 --&gt; 2021.10.26-h06a4308_2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Proceed ([y]/n)? y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Downloading and Extracting Packages</span><br><span class="line">mpi4py-3.0.3         | 572 KB    | <span class="comment">############################################## | 100% </span></span><br><span class="line">mpich-3.3.2          | 3.8 MB    | <span class="comment">############################################## | 100% </span></span><br><span class="line">mpi-1.0              | 13 KB     | <span class="comment">############################################## | 100% </span></span><br><span class="line">Preparing transaction: <span class="keyword">done</span></span><br><span class="line">Verifying transaction: <span class="keyword">done</span></span><br><span class="line">Executing transaction: <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>安装完成后可以通过<code>python3 -c &quot;from mpi4py import MPI&quot;</code>来检查是否安装成功，下面我们来看一些具体的使用案例。</p>
+<h1 id="使用案例"><a href="#使用案例" class="headerlink" title="使用案例"></a>使用案例</h1><p>首先了解下mpi的基本使用方法，如果我们使用<code>mpirun -n 3 python3 test.py</code>这样的指令去运行一个程序，那么就会给每一个不同的<code>test.py</code>中发送一个互不相同的rank，这个rank的范围是从0开始数的。比如如下案例我们使用<code>Get_rank()</code>方法就可以获取到mpi所传递下来的rank id，这样进程就知道了自己所处的进程编号，我们写好每个编号下所需要执行的任务即可：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mpi4py <span class="keyword">import</span> MPI</span><br><span class="line"></span><br><span class="line">comm = MPI.COMM_WORLD</span><br><span class="line">rank = comm.Get_rank()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;My rank is &#x27;</span>,rank)</span><br></pre></td></tr></table></figure>
+<p>执行效果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ mpirun -n 4 python3 mpi_test.py</span><br><span class="line">My rank is  2</span><br><span class="line">My rank is  1</span><br><span class="line">My rank is  0</span><br><span class="line">My rank is  3</span><br></pre></td></tr></table></figure>
+<p>当然，因为每个任务都是平级的关系，因此mpi的rank id也是随机发放的，这个没办法控制，但是我们可以用如下的方法在进程间通信：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mpi4py <span class="keyword">import</span> MPI</span><br><span class="line"></span><br><span class="line">comm = MPI.COMM_WORLD</span><br><span class="line">rank = comm.Get_rank()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> rank == <span class="number">0</span>:</span><br><span class="line">    idata = <span class="number">1</span></span><br><span class="line">    comm.send(idata, dest=<span class="number">1</span>)</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;This is process &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(rank), <span class="string">&#x27;\nData send to process 1 successfully!&#x27;</span>)</span><br><span class="line"><span class="keyword">elif</span> rank == <span class="number">1</span>:</span><br><span class="line">    idata = comm.recv(source=<span class="number">0</span>)</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;This is process &#123;&#125;, data is &#x27;</span>.<span class="built_in">format</span>(rank),idata)</span><br></pre></td></tr></table></figure>
+<p>在这个案例中，我们从rank id为0的进程向rank id为1的进程发送了一个整数变量的数据。因为我们并不知道这个脚本什么时候会被分配到rank 0什么时候会被分配到rank 1，因此在同一个脚本内我们就需要分别对这两种可能发生的情况进行针对性的处理。运行结果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ mpirun -n 2 python3 mpi_test.py</span><br><span class="line">This is process 0 </span><br><span class="line">Data send to process 1 successfully!</span><br><span class="line">This is process 1, data is  1</span><br></pre></td></tr></table></figure>
+<p>整数型的变量被成功的传递，当然，这里面其实还有个更加重要的意义是，rank为1的进程实际上是对rank为0的进程有时间序列上的依赖的，我们必须执行完rank 0中的任务，才能再执行rank 1中的任务，这个是有可能在实际的应用过程中被频繁使用的功能，尤其是任务之间互相有依赖的情况下。当然，进程之间的通信不仅仅可以传递整数型的变量，还可以传递其他类型，比如字典或者一个numpy的数组：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mpi4py <span class="keyword">import</span> MPI</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">comm = MPI.COMM_WORLD</span><br><span class="line">rank = comm.Get_rank()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> rank == <span class="number">0</span>:</span><br><span class="line">    numData = <span class="number">10</span></span><br><span class="line">    comm.send(numData, dest=<span class="number">1</span>)</span><br><span class="line">    data = np.linspace(<span class="number">0.0</span>, <span class="number">3.14</span>, numData)</span><br><span class="line">    comm.Send(data, dest=<span class="number">1</span>)</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;This is process &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(rank), <span class="string">&#x27;\nData send to process 1 successfully!&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">elif</span> rank == <span class="number">1</span>:</span><br><span class="line">    numData = comm.recv(source=<span class="number">0</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Number of data to receive: &#x27;</span>, numData)</span><br><span class="line"></span><br><span class="line">    data = np.empty(numData, dtype=<span class="string">&#x27;d&#x27;</span>)</span><br><span class="line">    comm.Recv(data, source=<span class="number">0</span>)</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;This is process &#123;&#125;, data is &#x27;</span>.<span class="built_in">format</span>(rank),data)</span><br></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ mpirun -n 2 python3 mpi_test.py</span><br><span class="line">This is process 0 </span><br><span class="line">Data send to process 1 successfully!</span><br><span class="line">Number of data to receive:  10</span><br><span class="line">This is process 1, data is  [0.         0.34888889 0.69777778 1.04666667 1.39555556 1.74444444</span><br><span class="line"> 2.09333333 2.44222222 2.79111111 3.14      ]</span><br></pre></td></tr></table></figure>
+<p>可以看到结果是被成功的接收了的。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>在这篇文章中，我们并没有介绍非常多的MPI的应用，其实在普通的并行或者分布式任务中，掌握了各个进程的任务处理过程以及进程间的通信方法就足够了。总体来说，MPI是一个非常通用也非常高效的并行计算软件。有了这些专业的并行化任务调度软件，我们就可以专注于专业任务的代码和算法上，而不需要过多的去关注并行任务的调度和分配问题。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/mpi4py.html">https://www.cnblogs.com/dechinphy/p/mpi4py.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>打赏专用链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<p>腾讯云专栏同步：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/91958">https://cloud.tencent.com/developer/column/91958</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2021/12/09/GPU%E9%9A%8F%E6%9C%BA%E9%87%87%E6%A0%B7%E9%80%9F%E5%BA%A6%E6%AF%94%E8%BE%83/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          GPU随机采样速度比较
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/11/05/%E4%BD%BF%E7%94%A8jax%E5%8A%A0%E9%80%9FHamming-Distance%E7%9A%84%E8%AE%A1%E7%AE%97/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">使用jax加速Hamming Distance的计算</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=python并行计算之mpi4py的安装与基本使用 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F11%2F29%2Fpython%25E5%25B9%25B6%25E8%25A1%258C%25E8%25AE%25A1%25E7%25AE%2597%25E4%25B9%258Bmpi4py%25E7%259A%2584%25E5%25AE%2589%25E8%25A3%2585%25E4%25B8%258E%25E5%259F%25BA%25E6%259C%25AC%25E4%25BD%25BF%25E7%2594%25A8%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=python并行计算之mpi4py的安装与基本使用 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2021%2F11%2F29%2Fpython%25E5%25B9%25B6%25E8%25A1%258C%25E8%25AE%25A1%25E7%25AE%2597%25E4%25B9%258Bmpi4py%25E7%259A%2584%25E5%25AE%2589%25E8%25A3%2585%25E4%25B8%258E%25E5%259F%25BA%25E6%259C%25AC%25E4%25BD%25BF%25E7%2594%25A8%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=python并行计算之mpi4py的安装与基本使用 - Hexo&url=http://dechinphy.github.io/2021/11/29/python%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E4%B9%8Bmpi4py%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

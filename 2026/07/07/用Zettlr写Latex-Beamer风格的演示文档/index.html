@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>用Zettlr写Latex Beamer风格的演示文档 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;Latex Beamer是我个人非常喜欢的一个演示文稿风格，该文稿类型，不仅对于公式、代码块有很好的展示效果，同时在演示文稿的架构上有非常清晰的层次感，甚至可以直接支持mermaid这样的流程图，内容专业而丰富。所以我也一直有在探索有什么工具可以更好的结合Markdown的简明语法和Latex Beamer的专业演示，从这点上来说，我觉得Zettlr是一个不错的开始。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "用Zettlr写Latex Beamer风格的演示文档 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;Latex Beamer是我个人非常喜欢的一个演示文稿风格，该文稿类型，不仅对于公式、代码块有很好的展示效果，同时在演示文稿的架构上有非常清晰的层次感，甚至可以直接支持mermaid这样的流程图，内容专业而丰富。所以我也一直有在探索有什么工具可以更好的结合Markdown的简明语法和Latex Beamer的专业演示，从这点上来说，我觉得Zettlr是一个不错的开始。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;Latex Beamer是我个人非常喜欢的一个演示文稿风格，该文稿类型，不仅对于公式、代码块有很好的展示效果，同时在演示文稿的架构上有非常清晰的层次感，甚至可以直接支持mermaid这样的流程图，内容专业而丰富。所以我也一直有在探索有什么工具可以更好的结合Markdown的简明语法和Latex Beamer的专业演示，从这点上来说，我觉得Zettlr是一个不错的开始。&lt;/p&gt;" />
+    <meta name="twitter:title" content="用Zettlr写Latex Beamer风格的演示文档 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;Latex Beamer是我个人非常喜欢的一个演示文稿风格，该文稿类型，不仅对于公式、代码块有很好的展示效果，同时在演示文稿的架构上有非常清晰的层次感，甚至可以直接支持mermaid这样的流程图，内容专业而丰富。所以我也一直有在探索有什么工具可以更好的结合Markdown的简明语法和Latex Beamer的专业演示，从这点上来说，我觉得Zettlr是一个不错的开始。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;Latex Beamer是我个人非常喜欢的一个演示文稿风格，该文稿类型，不仅对于公式、代码块有很好的展示效果，同时在演示文稿的架构上有非常清晰的层次感，甚至可以直接支持mermaid这样的流程图，内容专业而丰富。所以我也一直有在探索有什么工具可以更好的结合Markdown的简明语法和Latex Beamer的专业演示，从这点上来说，我觉得Zettlr是一个不错的开始。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "用Zettlr写Latex Beamer风格的演示文档 | Hexo",
+            "datePublished": "2026-07-07T08:15:29.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidZx3lIDSTZgITuEGmQoUYr" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      用Zettlr写Latex Beamer风格的演示文档
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2026-07-07T08:15:29.000Z" itemprop="datePublished">2026-07-07</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>Latex Beamer是我个人非常喜欢的一个演示文稿风格，该文稿类型，不仅对于公式、代码块有很好的展示效果，同时在演示文稿的架构上有非常清晰的层次感，甚至可以直接支持mermaid这样的流程图，内容专业而丰富。所以我也一直有在探索有什么工具可以更好的结合Markdown的简明语法和Latex Beamer的专业演示，从这点上来说，我觉得Zettlr是一个不错的开始。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面的几篇文章中，我们介绍过<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/rmarkdown.html">在RMarkdown中编写Latex Beamer风格的演讲文档</a>，还有<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18630783/pandoc">使用pandoc直接编译Markdown文档为Beamer的方法</a>。pandoc是这些不同方案背后的核心编译工具，核心用法还是把markdown转译成Beamer风格的tex文件，然后再用latex编译器将其编译为pdf格式的文档。目前除了RMarkdown之外，还有一些VSCode插件的方法可以用。但是本文我要推荐的是另外一个Markdown撰写工具：<code>Zettlr</code>。非常简洁的一个开源软件，有所见即所得模式和源码模式，而且配置好之后，还可以直接输出Latex Beamer风格的文档。</p>
+<h1 id="Zettlr下载"><a href="#Zettlr下载" class="headerlink" title="Zettlr下载"></a>Zettlr下载</h1><p>重要的事情说三遍：<code>不要从官网下载</code>！<code>不要从官网下载</code>！<code>不要从官网下载</code>！这个软件近期都还在开源仓库上有更新，可以直接从<a target="_blank" rel="noopener" href="https://github.com/Zettlr/Zettlr/releases/tag/v4.6.0">Github的release</a>中下载一个最新版本的tag，例如当前的最新版本是4.6.0：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202607/2277440-20260707161524546-997697299.png">
+</div>
+
+<p>我这里使用的是Windows的平台，下载完exe文件之后，直接双击就可以开始安装和使用了。</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202607/2277440-20260707161616446-1408561558.png">
+</div>
+
+<h1 id="TinyTex下载安装"><a href="#TinyTex下载安装" class="headerlink" title="TinyTex下载安装"></a>TinyTex下载安装</h1><p>前面有提到，要生成Latex Beamer风格的演示文档，需要用到pandoc来进行转译，而pandoc转为tex之后，又需要通过xelatex来进行编译构建，所以我们还是需要一个latex的编译器。而TinyTex是一个不错的选择，它的大包中就包含了xelatex，所以我们可以直接从<a target="_blank" rel="noopener" href="https://github.com/rstudio/tinytex-releases/releases/tag/v2026.07">tinytex-releases</a>这个开源的release项目中下载最新版本的TinyTex安装包。需要注意的是，这里每一个平台都提供了三个安装包选项，我们选择体积最大的那个即可。</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202607/2277440-20260707165608829-626312143.png">
+</div>
+
+
+<p>下载解压缩运行之后，要把这个<code>bin/windows</code>的路径添加到系统路径中。如果配置正确，在Power Shell中应该可以运行得到：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&gt; xelatex --version</span><br><span class="line">XeTeX 3.141592653-2.6-0.999998 (TeX Live 2026)</span><br><span class="line">kpathsea version 6.4.2</span><br><span class="line">Copyright 2026 SIL International, Jonathan Kew and Khaled Hosny.</span><br><span class="line">There is NO warranty.  Redistribution of this software is</span><br><span class="line">covered by the terms of both the XeTeX copyright and</span><br><span class="line">the Lesser GNU General Public License.</span><br><span class="line">For more information about these matters, see the file</span><br><span class="line">named COPYING and the XeTeX <span class="built_in">source</span>.</span><br><span class="line">Primary author of XeTeX: Jonathan Kew.</span><br><span class="line">Compiled with ICU version 78.2; using 78.2</span><br><span class="line">Compiled with zlib version 1.3.2; using 1.3.2</span><br><span class="line">Compiled with FreeType2 version 2.14.1; using 2.14.1</span><br><span class="line">Compiled with Graphite2 version 1.3.14; using 1.3.14</span><br><span class="line">Compiled with HarfBuzz version 12.3.2; using 12.3.2</span><br><span class="line">Compiled with libpng version 1.6.55; using 1.6.55</span><br><span class="line">Compiled with pplib version v2.2</span><br><span class="line">Compiled with fontconfig version 2.15.0; using 2.15.0</span><br></pre></td></tr></table></figure>
+
+<h1 id="Ctex中文支持"><a href="#Ctex中文支持" class="headerlink" title="Ctex中文支持"></a>Ctex中文支持</h1><p>像latex这样的产品，对于中文的直接支持还是差一点，有可能编译出来会是一个方框。如果需要中文支持的话，可以按照如下方式装一个ctex：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">&gt; tlmgr update --self</span><br><span class="line">tlmgr.pl: package repository https://tlnet.yihui.org (not verified: gpg unavailable)</span><br><span class="line">tlmgr.pl: Preparing TeX Live infrastructure update...</span><br><span class="line">DO NOT CLOSE THIS WINDOW!</span><br><span class="line">TeX Live infrastructure update <span class="keyword">in</span> progress ...</span><br><span class="line">Detailed <span class="built_in">command</span> logging to <span class="string">&quot;S:\TinyTex\TinyTeX\temp\update-self.log&quot;</span></span><br><span class="line">self update: texlive.infra (79365 -&gt; 79511)</span><br><span class="line">Infrastructure update finished successfully.</span><br><span class="line">You may now close this window.</span><br><span class="line"></span><br><span class="line">&gt; tlmgr install ctex</span><br><span class="line">tlmgr.pl: package repository https://tlnet.yihui.org (not verified: gpg unavailable)</span><br><span class="line">[1/44, ??:??/??:??] install: adobemapping [2128k]</span><br><span class="line">[2/44, 00:04/02:37] install: arphic [26742k]</span><br><span class="line">[3/44, 00:23/01:06] install: chinese-jfm [3k]</span><br><span class="line">[4/44, 00:24/01:09] install: cjk [58k]</span><br><span class="line">[5/44, 00:25/01:12] install: cjkpunct [4k]</span><br><span class="line">[6/44, 00:26/01:15] install: cns [2916k]</span><br><span class="line">[7/44, 00:32/01:24] install: ctablestack [2k]</span><br><span class="line">[8/44, 00:33/01:26] install: ctex [131k]</span><br><span class="line">[9/44, 00:34/01:29] install: everyhook [3k]</span><br><span class="line">[10/44, 00:34/01:29] install: fandol [21077k]</span><br><span class="line">[11/44, 00:44/01:09] install: fonts-tlwg [4932k]</span><br><span class="line">[12/44, 00:47/01:07] install: garuda-c90 [4k]</span><br><span class="line">[13/44, 00:49/01:10] install: l3backend-dev [17k]</span><br><span class="line">[14/44, 00:49/01:10] install: l3kernel-dev [187k]</span><br><span class="line">[15/44, 00:51/01:13] install: latex-base-dev [258k]</span><br><span class="line">[16/44, 00:52/01:14] install: latex-firstaid-dev [5k]</span><br><span class="line">[17/44, 00:53/01:15] install: luatexbase [4k]</span><br><span class="line">[18/44, 00:54/01:17] install: luatexja [196k]</span><br><span class="line">[19/44, 00:55/01:18] install: mptopdf.windows [3k]</span><br><span class="line">[20/44, 00:55/01:18] install: mptopdf [37k]</span><br><span class="line">[21/44, 00:56/01:19] install: norasi-c90 [9k]</span><br><span class="line">[22/44, 00:57/01:21] install: platex.windows [3k]</span><br><span class="line">[23/44, 00:58/01:22] install: platex [42k]</span><br><span class="line">[24/44, 00:58/01:22] install: platex-tools [9k]</span><br><span class="line">[25/44, 00:59/01:24] install: ptex.windows [1156k]</span><br><span class="line">[26/44, 01:01/01:25] install: ptex [1k]</span><br><span class="line">[27/44, 01:01/01:25] install: ptex-base [10k]</span><br><span class="line">[28/44, 01:02/01:26] install: ptex-fonts [14k]</span><br><span class="line">[29/44, 01:03/01:28] install: ttfutils.windows [519k]</span><br><span class="line">[30/44, 01:04/01:28] install: ttfutils [107k]</span><br><span class="line">[31/44, 01:05/01:29] install: uhc [3516k]</span><br><span class="line">[32/44, 01:16/01:39] install: uplatex.windows [3k]</span><br><span class="line">[33/44, 01:17/01:40] install: uplatex [15k]</span><br><span class="line">[34/44, 01:18/01:41] install: uptex.windows [1398k]</span><br><span class="line">[35/44, 01:19/01:41] install: uptex [1k]</span><br><span class="line">[36/44, 01:20/01:42] install: uptex-base [10k]</span><br><span class="line">[37/44, 01:22/01:44] install: uptex-fonts [165k]</span><br><span class="line">[38/44, 01:23/01:45] install: wadalab [17357k]</span><br><span class="line">[39/44, 01:39/01:39] install: xcjk2uni [196k]</span><br><span class="line">[40/44, 01:41/01:41] install: xecjk [231k]</span><br><span class="line">[41/44, 01:42/01:42] install: xpinyin [197k]</span><br><span class="line">[42/44, 01:43/01:43] install: zhmetrics [59k]</span><br><span class="line">[43/44, 01:47/01:47] install: zhmetrics-uptex [31k]</span><br><span class="line">[44/44, 01:47/01:47] install: zhnumber [9k]</span><br><span class="line">running mktexlsr ...</span><br><span class="line"><span class="keyword">done</span> running mktexlsr.</span><br><span class="line">running updmap-sys ...</span><br><span class="line"><span class="keyword">done</span> running updmap-sys.</span><br><span class="line">regenerating fmtutil.cnf <span class="keyword">in</span> S:/TinyTex/TinyTeX/texmf-dist</span><br><span class="line">running fmtutil-sys --byengine euptex --no-error-if-no-format --no-error-if-no-engine=luametatex,luajithbtex,luajittex,mfluajit,xetex --status-file=C:\Users\dechi\AppData\Local\Temp\YhLR1fpn3j\ENydfFIEH2 ...</span><br><span class="line">  OK: euptex.fmt/euptex uptex.fmt/euptex uplatex.fmt/euptex platex-dev.fmt/euptex ptex.fmt/euptex eptex.fmt/euptex platex.fmt/euptex uplatex-dev.fmt/euptex</span><br><span class="line">running fmtutil-sys --byfmt mptopdf --no-error-if-no-engine=luametatex,luajithbtex,luajittex,mfluajit,xetex --status-file=C:\Users\dechi\AppData\Local\Temp\YhLR1fpn3j\ENydfFIEH2 ...</span><br><span class="line">  OK: euptex.fmt/euptex uptex.fmt/euptex uplatex.fmt/euptex platex-dev.fmt/euptex ptex.fmt/euptex eptex.fmt/euptex platex.fmt/euptex uplatex-dev.fmt/euptex mptopdf.fmt/pdftex</span><br><span class="line">tlmgr.pl: package <span class="built_in">log</span> updated: S:/TinyTex/TinyTeX/texmf-var/web2c/tlmgr.log</span><br><span class="line">tlmgr.pl: <span class="built_in">command</span> <span class="built_in">log</span> updated: S:/TinyTex/TinyTeX/texmf-var/web2c/tlmgr-commands.log</span><br></pre></td></tr></table></figure>
+
+<h1 id="Zettlr-Beamer格式配置"><a href="#Zettlr-Beamer格式配置" class="headerlink" title="Zettlr Beamer格式配置"></a>Zettlr Beamer格式配置</h1><p>重启Zettlr，配置一个Beamer输出格式：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202607/2277440-20260707174733217-19447160.png">
+</div>
+
+<p>内容为：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">reader:</span> <span class="string">markdown</span></span><br><span class="line"><span class="attr">writer:</span> <span class="string">beamer</span></span><br><span class="line"></span><br><span class="line"><span class="attr">pdf-engine:</span> <span class="string">xelatex</span></span><br><span class="line"><span class="attr">variables:</span></span><br><span class="line">  <span class="attr">documentclass:</span> <span class="string">beamer</span></span><br><span class="line">  <span class="attr">classoption:</span> <span class="string">aspectratio=169</span></span><br></pre></td></tr></table></figure>
+<p>就可以编译出Beamer格式的pdf了</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202607/2277440-20260707175334786-1755971772.png">
+</div>
+
+<p>这个演示文档所对应的Markdown原文内容为：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: &quot;My Beamer&quot;</span><br><span class="line">author: &quot;Dechin&quot; </span><br><span class="line">institute: &quot;My Institute&quot;</span><br><span class="line">date: &quot;2025-01-20&quot;</span><br><span class="line">documentclass: beamer</span><br><span class="line">header-includes:</span><br><span class="line"><span class="bullet">  -</span> \usetheme&#123;Dresden&#125;</span><br><span class="line"><span class="section">  - \usepackage&#123;ctex&#125; </span></span><br><span class="line"><span class="section">---</span></span><br><span class="line"></span><br><span class="line"><span class="section"># Markdown </span></span><br><span class="line">This is an Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <span class="language-xml">&lt;http://rmarkdown.rstudio.com&gt;</span>. </span><br><span class="line"></span><br><span class="line">When you click the <span class="strong">**Knit**</span> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. </span><br><span class="line"></span><br><span class="line"><span class="section"># Slide with Bullets </span></span><br><span class="line"><span class="bullet">-</span> Bullet 1</span><br><span class="line"><span class="bullet">-</span> Bullet 2</span><br><span class="line"><span class="bullet">-</span> Bullet 3</span><br><span class="line"></span><br><span class="line"><span class="section"># Slide with Python Output </span></span><br><span class="line">\<span class="code">`\`</span>\`python</span><br><span class="line">import numpy as np </span><br><span class="line">print (&#x27;This is a python code block&#x27;) </span><br><span class="line">\<span class="code">`\`</span>\` </span><br><span class="line"></span><br><span class="line"><span class="section"># Slide with Equation </span></span><br><span class="line">Test Equation input </span><br><span class="line">$$ -i\hbar\frac&#123;\partial&#125;&#123;\partial t&#125;\left|\psi\right&gt;=E\left|\psi\right&gt; $$</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>Latex Beamer是我个人非常喜欢的一个演示文稿风格，该文稿类型，不仅对于公式、代码块有很好的展示效果，同时在演示文稿的架构上有非常清晰的层次感，甚至可以直接支持mermaid这样的流程图，内容专业而丰富。所以我也一直有在探索有什么工具可以更好的结合Markdown的简明语法和Latex Beamer的专业演示，从这点上来说，我觉得Zettlr是一个不错的开始。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/zettlr.html">https://www.cnblogs.com/dechinphy/p/zettlr.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2026/07/13/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          Hello World
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">SGLang本地大模型服务缓存清理</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=用Zettlr写Latex Beamer风格的演示文档 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2026%2F07%2F07%2F%25E7%2594%25A8Zettlr%25E5%2586%2599Latex-Beamer%25E9%25A3%258E%25E6%25A0%25BC%25E7%259A%2584%25E6%25BC%2594%25E7%25A4%25BA%25E6%2596%2587%25E6%25A1%25A3%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=用Zettlr写Latex Beamer风格的演示文档 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2026%2F07%2F07%2F%25E7%2594%25A8Zettlr%25E5%2586%2599Latex-Beamer%25E9%25A3%258E%25E6%25A0%25BC%25E7%259A%2584%25E6%25BC%2594%25E7%25A4%25BA%25E6%2596%2587%25E6%25A1%25A3%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=用Zettlr写Latex Beamer风格的演示文档 - Hexo&url=http://dechinphy.github.io/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

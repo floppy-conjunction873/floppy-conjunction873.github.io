@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>h5py文件写入之——flush和update | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;hdf5是一个在量子化学和分子动力学模拟中经常有可能被用到的一种数据存储格式，得益于其良好的压缩率和完整性校验，一定程度上保障了其数据&amp;#x2F;轨迹存储的可靠性。本文介绍了关于hdf5文件的两个操作：更新已有的hdf5文件中的数据内容，以及flush同步更新的方法。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "h5py文件写入之——flush和update | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;hdf5是一个在量子化学和分子动力学模拟中经常有可能被用到的一种数据存储格式，得益于其良好的压缩率和完整性校验，一定程度上保障了其数据&amp;#x2F;轨迹存储的可靠性。本文介绍了关于hdf5文件的两个操作：更新已有的hdf5文件中的数据内容，以及flush同步更新的方法。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2024/07/29/h5py%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E4%B9%8B%E2%80%94%E2%80%94flush%E5%92%8Cupdate/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;hdf5是一个在量子化学和分子动力学模拟中经常有可能被用到的一种数据存储格式，得益于其良好的压缩率和完整性校验，一定程度上保障了其数据&amp;#x2F;轨迹存储的可靠性。本文介绍了关于hdf5文件的两个操作：更新已有的hdf5文件中的数据内容，以及flush同步更新的方法。&lt;/p&gt;" />
+    <meta name="twitter:title" content="h5py文件写入之——flush和update | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;hdf5是一个在量子化学和分子动力学模拟中经常有可能被用到的一种数据存储格式，得益于其良好的压缩率和完整性校验，一定程度上保障了其数据&amp;#x2F;轨迹存储的可靠性。本文介绍了关于hdf5文件的两个操作：更新已有的hdf5文件中的数据内容，以及flush同步更新的方法。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;hdf5是一个在量子化学和分子动力学模拟中经常有可能被用到的一种数据存储格式，得益于其良好的压缩率和完整性校验，一定程度上保障了其数据&amp;#x2F;轨迹存储的可靠性。本文介绍了关于hdf5文件的两个操作：更新已有的hdf5文件中的数据内容，以及flush同步更新的方法。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2024/07/29/h5py%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E4%B9%8B%E2%80%94%E2%80%94flush%E5%92%8Cupdate/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "h5py文件写入之——flush和update | Hexo",
+            "datePublished": "2024-07-29T01:53:58.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2024/07/29/h5py%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E4%B9%8B%E2%80%94%E2%80%94flush%E5%92%8Cupdate/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidIDjXHjFTokdN3dX67d2EF" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      h5py文件写入之——flush和update
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2024-07-29T01:53:58.000Z" itemprop="datePublished">2024-07-29</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>hdf5是一个在量子化学和分子动力学模拟中经常有可能被用到的一种数据存储格式，得益于其良好的压缩率和完整性校验，一定程度上保障了其数据&#x2F;轨迹存储的可靠性。本文介绍了关于hdf5文件的两个操作：更新已有的hdf5文件中的数据内容，以及flush同步更新的方法。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面的一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/h5md.html">博客</a>中，我们介绍过使用VMD可视化H5MD标准化格式的轨迹文件的方法。H5MD本质上就是一个有<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1308.6382">规范格式</a>的hdf5二进制文件，本文主要介绍两个关于hdf5的内容更新操作。</p>
+<h1 id="写入和更新数据"><a href="#写入和更新数据" class="headerlink" title="写入和更新数据"></a>写入和更新数据</h1><p>我们通常使用到的一个功能就是，通过<code>h5py.File</code>函数来打开或者创建一个hdf5文件，然后用<code>create_dataset</code>在文件中创建表单，再持续的向表单中填写数据。那么如果要更新文件中的数据怎么办呢？操作逻辑是比较简单的，直接加载对应的表单并获取返回值，然后直接在返回值中更新数据内容即可。如下是一个代码示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> h5py  </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np  </span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">h5_name = <span class="string">&#x27;example.h5&#x27;</span></span><br><span class="line"><span class="keyword">if</span> os.path.exists(h5_name):</span><br><span class="line">    <span class="keyword">with</span> h5py.File(<span class="string">&#x27;example.h5&#x27;</span>, <span class="string">&#x27;r+&#x27;</span>) <span class="keyword">as</span> file:  </span><br><span class="line">        dataset = file[<span class="string">&#x27;my_dataset&#x27;</span>]  </span><br><span class="line">        new_data = np.random.rand(dataset.shape[<span class="number">0</span>])</span><br><span class="line">        dataset[...] = new_data</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># 创建一个新的HDF5文件  </span></span><br><span class="line">    <span class="keyword">with</span> h5py.File(h5_name, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:  </span><br><span class="line">        dset = f.create_dataset(<span class="string">&quot;my_dataset&quot;</span>, (<span class="number">10</span>,), dtype=<span class="string">&#x27;f&#x27;</span>)  </span><br><span class="line">        data = np.arange(<span class="number">10</span>)  </span><br><span class="line">        dset[...] = data  </span><br></pre></td></tr></table></figure>
+<p>这个代码分成了两个部分，如果在指定的目录下不存在这个hdf5文件，我们就首先创建一个hdf5文件，表单内容为1~10的数字（这里使用了一个VSCode中的插件加H5Web来对h5文件进行可视化）：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202407/2277440-20240729102648048-129458741.png">
+</div>
+
+<p>如果在路径下已经存在对应的h5文件，则修改其中的表单内容。例如我们把上述的测试代码执行两次，那么我们得到的h5文件内容是这样的：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202407/2277440-20240729102655389-1003501972.png">
+</div>
+
+<h1 id="刷新文件"><a href="#刷新文件" class="headerlink" title="刷新文件"></a>刷新文件</h1><p>hdf5文件作为一个规范格式的二进制文件，有严格的完整性校验。那么就会产生一个问题，如果在写入的过程中进程被中断，那么这个hdf5文件就会损坏：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202407/2277440-20240729102704888-1356540391.png">
+</div>
+
+<p>当然，如果是<code>Ctrl+C</code>手动停止进程，那我们是可以参考这篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/ctrlc.html">博客</a>的内容进行终止信号的监听和管理的。但问题是如果被系统<code>kill -9</code>强行终止，是没办法捕获相关信号的。所以这里有一个方案，是通过flush，对中间过程进行保存，案例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> h5py  </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np  </span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">h5_name = <span class="string">&#x27;example.h5&#x27;</span></span><br><span class="line"><span class="comment"># 创建一个新的HDF5文件  </span></span><br><span class="line"><span class="keyword">with</span> h5py.File(h5_name, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:  </span><br><span class="line">    dset = f.create_dataset(<span class="string">&quot;my_dataset&quot;</span>, (<span class="number">10</span>,), dtype=<span class="string">&#x27;f&#x27;</span>)  </span><br><span class="line">    data = np.arange(<span class="number">10</span>)  </span><br><span class="line">    dset[...] = data </span><br><span class="line">    new_data = np.random.rand(dset.shape[<span class="number">0</span>])</span><br><span class="line">    f.flush()</span><br><span class="line">    time.sleep(<span class="number">30</span>)</span><br><span class="line">    dset[...] = new_data </span><br></pre></td></tr></table></figure>
+<p>这个案例中我们sleep了30秒的时间，在这个期间内我们会在系统中<code>kill -9</code>把这个Python进程杀死。如果没有加上<code>f.flush()</code>这一行，就会出现上面那张图中的报错，意味着这个hdf5文件是损坏的。如果加上了这一行代码，那效果如下：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202407/2277440-20240729102714909-1893723267.png">
+</div>
+
+<p>这里需要说明的是，hdf5文件损坏只会出现在第一次写入hdf5文件的时候。如果使用第一个章节中的<code>r+</code>模式进行二次写入，不会有文件损坏的问题。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>hdf5是一个在量子化学和分子动力学模拟中经常有可能被用到的一种数据存储格式，得益于其良好的压缩率和完整性校验，一定程度上保障了其数据&#x2F;轨迹存储的可靠性。本文介绍了关于hdf5文件的两个操作：更新已有的hdf5文件中的数据内容，以及flush同步更新的方法。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/h5py-update.html">https://www.cnblogs.com/dechinphy/p/h5py-update.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1308.6382">https://arxiv.org/abs/1308.6382</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2024/08/02/%E4%BD%BF%E7%94%A8Cython%E8%B0%83%E7%94%A8CUDA-Kernel%E5%87%BD%E6%95%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          使用Cython调用CUDA Kernel函数
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/07/25/Cython%E4%B8%8EC%E5%87%BD%E6%95%B0%E7%9A%84%E7%BB%93%E5%90%88/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">Cython与C函数的结合</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=h5py文件写入之——flush和update - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F07%2F29%2Fh5py%25E6%2596%2587%25E4%25BB%25B6%25E5%2586%2599%25E5%2585%25A5%25E4%25B9%258B%25E2%2580%2594%25E2%2580%2594flush%25E5%2592%258Cupdate%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=h5py文件写入之——flush和update - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2024%2F07%2F29%2Fh5py%25E6%2596%2587%25E4%25BB%25B6%25E5%2586%2599%25E5%2585%25A5%25E4%25B9%258B%25E2%2580%2594%25E2%2580%2594flush%25E5%2592%258Cupdate%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=h5py文件写入之——flush和update - Hexo&url=http://dechinphy.github.io/2024/07/29/h5py%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E4%B9%8B%E2%80%94%E2%80%94flush%E5%92%8Cupdate/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

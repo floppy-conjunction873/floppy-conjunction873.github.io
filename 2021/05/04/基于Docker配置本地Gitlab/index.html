@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>基于Docker配置本地Gitlab | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文按照操作流程的时间顺序，分别介绍了Gitlab的Docker容器部署、Gitlab平台的基本配置以及基于Git的代码仓基本管理与同步方法。通过掌握这一套的流程，就可以实现在本地构建一个类似于Github的代码托管系统，在企业内网更好的管理私有代码仓库，避免因为在Github上进行代码开发而被其他企业窃取核心技术。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "基于Docker配置本地Gitlab | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文按照操作流程的时间顺序，分别介绍了Gitlab的Docker容器部署、Gitlab平台的基本配置以及基于Git的代码仓基本管理与同步方法。通过掌握这一套的流程，就可以实现在本地构建一个类似于Github的代码托管系统，在企业内网更好的管理私有代码仓库，避免因为在Github上进行代码开发而被其他企业窃取核心技术。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2021/05/04/%E5%9F%BA%E4%BA%8EDocker%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0Gitlab/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文按照操作流程的时间顺序，分别介绍了Gitlab的Docker容器部署、Gitlab平台的基本配置以及基于Git的代码仓基本管理与同步方法。通过掌握这一套的流程，就可以实现在本地构建一个类似于Github的代码托管系统，在企业内网更好的管理私有代码仓库，避免因为在Github上进行代码开发而被其他企业窃取核心技术。&lt;/p&gt;" />
+    <meta name="twitter:title" content="基于Docker配置本地Gitlab | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文按照操作流程的时间顺序，分别介绍了Gitlab的Docker容器部署、Gitlab平台的基本配置以及基于Git的代码仓基本管理与同步方法。通过掌握这一套的流程，就可以实现在本地构建一个类似于Github的代码托管系统，在企业内网更好的管理私有代码仓库，避免因为在Github上进行代码开发而被其他企业窃取核心技术。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文按照操作流程的时间顺序，分别介绍了Gitlab的Docker容器部署、Gitlab平台的基本配置以及基于Git的代码仓基本管理与同步方法。通过掌握这一套的流程，就可以实现在本地构建一个类似于Github的代码托管系统，在企业内网更好的管理私有代码仓库，避免因为在Github上进行代码开发而被其他企业窃取核心技术。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2021/05/04/%E5%9F%BA%E4%BA%8EDocker%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0Gitlab/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "基于Docker配置本地Gitlab | Hexo",
+            "datePublished": "2021-05-04T08:07:19.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2021/05/04/%E5%9F%BA%E4%BA%8EDocker%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0Gitlab/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidZmci_9a7r3BIJD79o-HY6" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      基于Docker配置本地Gitlab
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2021-05-04T08:07:19.000Z" itemprop="datePublished">2021-05-04</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文按照操作流程的时间顺序，分别介绍了Gitlab的Docker容器部署、Gitlab平台的基本配置以及基于Git的代码仓基本管理与同步方法。通过掌握这一套的流程，就可以实现在本地构建一个类似于Github的代码托管系统，在企业内网更好的管理私有代码仓库，避免因为在Github上进行代码开发而被其他企业窃取核心技术。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p><a target="_blank" rel="noopener" href="https://github.com/">Github</a>和<a target="_blank" rel="noopener" href="https://gitee.com/">Gitee</a>（码云）是最常见的基于git的代码托管平台，现在基于svn的代码管理仓库已经相对比较少见了，大部分还都是企业内部的代码仓。但是基于开源的Gitlab，我们在企业内网也可以立马搭建一个代码托管平台，并且自带集成有各种代码自动化测试工具，实现持续集成和持续测试。</p>
+<p>关于Docker容器的使用，这里我们主要是为了规避不同的OS发行版所带来的安装困扰，而Gitlab官方也提供了Docker的支持。也就是说，只要本地环境中有Docker，就可以很方便的去构造一个本地的Gitlab环境。本文也是基于Docker，讲解和展示本地Gitlab的配置和使用方法。</p>
+<h1 id="基于Docker的Gitlab环境部署"><a href="#基于Docker的Gitlab环境部署" class="headerlink" title="基于Docker的Gitlab环境部署"></a>基于Docker的Gitlab环境部署</h1><p>关于更多的docker的使用和操作方法和使用案例，读者可以参考这些博客（<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/ortools.html">博客1</a>，<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cplex.html">博客2</a>，<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/pdflatex.html">博客3</a>，<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/mindspore.html">博客4</a>），这里我们就直接使用docker的一些功能。比如首先我们要做的是从dockerhub中拉取Gitlab官方提供的镜像：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[dechin-manjaro gitlab]# docker pull gitlab/gitlab-ce</span><br></pre></td></tr></table></figure>
+<p>这个下载的速度还是不错的，下载完成后可以在使用<code>docker images</code>查看相关镜像是否在本地仓库列表中。需要注意的是，这些基本的docker操作都需要root权限来执行。下载完镜像后，在本地找一个空的目录，创建几个文件夹用于绑定容器内的相关目录，使得容器中所生成的配置文件和日志文件数据文件等可以同步到本地的目录（而不仅仅是保存在容器内部的目录）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin-manjaro gitlab]# ll</span><br><span class="line">总用量 0</span><br><span class="line">[dechin-manjaro gitlab]# <span class="built_in">mkdir</span> -p config</span><br><span class="line">[dechin-manjaro gitlab]# <span class="built_in">mkdir</span> -p logs</span><br><span class="line">[dechin-manjaro gitlab]# <span class="built_in">mkdir</span> -p data</span><br></pre></td></tr></table></figure>
+<p>这里创建了<code>config</code>、<code>logs</code>和<code>data</code>目录，分别用<code>-v</code>指令绑定到容器内的<code>/etc/gitlab</code>、<code>/var/log/gitlab</code>和<code>/var/opt/gitlab</code>目录，具体的运行指令如下所示（参考了参考链接1）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin-manjaro gitlab]# docker run -d -p 5443:443 -p 82:82 -p 2222:22 --name gitlab -v /home/dechin/projects/2021-softwares/gitlab/config:/etc/gitlab -v /home/dechin/projects/2021-softwares/gitlab/logs:/var/log/gitlab -v /home/dechin/projects/2021-softwares/gitlab/data:/var/opt/gitlab gitlab/gitlab-ce</span><br><span class="line">c12732a4acfb4835b8d1353b62cf85868edc2466eb0669bbabc2059f7932c309</span><br></pre></td></tr></table></figure>
+<p>执行之后容器开始进入后台运行，我们可以看到当前的运行状态是<code>health: starting</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin-manjaro gitlab]# docker ps -n 3</span><br><span class="line">CONTAINER ID   IMAGE              COMMAND             CREATED          STATUS                            PORTS                                                                                                                       NAMES</span><br><span class="line">c12732a4acfb   gitlab/gitlab-ce   <span class="string">&quot;/assets/wrapper&quot;</span>   6 seconds ago    Up 5 seconds (health: starting)   80/tcp, 0.0.0.0:82-&gt;82/tcp, :::82-&gt;82/tcp, 0.0.0.0:2222-&gt;22/tcp, :::2222-&gt;22/tcp, 0.0.0.0:5443-&gt;443/tcp, :::5443-&gt;443/tcp   gitlab</span><br><span class="line">36fc44248800   gitlab/gitlab-ce   <span class="string">&quot;/assets/wrapper&quot;</span>   45 minutes ago   Exited (137) 5 minutes ago                                                                                                                                    hardcore_poitras</span><br><span class="line">d9e431790dfa   gitlab/gitlab-ce   <span class="string">&quot;--help&quot;</span>            45 minutes ago   Created                           22/tcp, 80/tcp, 443/tcp                                                                                                     intelligent_hopper</span><br></pre></td></tr></table></figure>
+<p>接下来我们要做的事情就是等待，一段时间（大约2～3分钟）之后，可以重新查看刚才的容器镜像的运行状态，此时我们可以发现状态变成了<code>healthy</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin-manjaro gitlab]# docker ps -n 3</span><br><span class="line">CONTAINER ID   IMAGE              COMMAND             CREATED          STATUS                        PORTS                                                                                                                       NAMES</span><br><span class="line">c12732a4acfb   gitlab/gitlab-ce   <span class="string">&quot;/assets/wrapper&quot;</span>   4 minutes ago    Up 4 minutes (healthy)</span><br><span class="line">36fc44248800   gitlab/gitlab-ce   <span class="string">&quot;/assets/wrapper&quot;</span>   49 minutes ago   Exited (137) 10 minuteitras</span><br><span class="line">d9e431790dfa   gitlab/gitlab-ce   <span class="string">&quot;--help&quot;</span>            49 minutes ago   Created               _hopper</span><br></pre></td></tr></table></figure>
+<p>这表示Gitlab容器的初始化已经完成了，接下来我们可以在本地的目录下（而不是容器内部的目录）找到名为<code>gitlab.rb</code>的配置文件，需要对其进行修改：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[dechin-manjaro gitlab]# vi config/gitlab.rb </span><br></pre></td></tr></table></figure>
+<p>要修改的地方主要有以下几点：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">external_url &#x27;http://192.168.0.105:82&#x27; # 大约在32行，注意替换本地ip地址</span><br><span class="line">gitlab_rails[&#x27;gitlab_shell_ssh_port&#x27;] = 2222 # 大约在631行</span><br><span class="line"># nginx[&#x27;redirect_http_to_https_port&#x27;] = 82 # 大约在1312行</span><br><span class="line">nginx[&#x27;listen_port&#x27;] = 82 # 大约在1354行</span><br></pre></td></tr></table></figure>
+<p>修改完成后，重启gitlab的容器镜像（在上一次的run中，我们将其命名为<code>gitlab</code>）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin-manjaro gitlab]# docker restart gitlab</span><br><span class="line">gitlab</span><br></pre></td></tr></table></figure>
+<p>跟刚才一样的，需要看容器状态以确定是否启动成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin-manjaro gitlab]# docker ps -n 3</span><br><span class="line">CONTAINER ID   IMAGE              COMMAND             CREATED          STATUS                </span><br><span class="line">c12732a4acfb   gitlab/gitlab-ce   <span class="string">&quot;/assets/wrapper&quot;</span>   13 minutes ago   Up 12 seconds (health:</span><br><span class="line">36fc44248800   gitlab/gitlab-ce   <span class="string">&quot;/assets/wrapper&quot;</span>   57 minutes ago   Exited (137) 18 minutere_poitras</span><br><span class="line">d9e431790dfa   gitlab/gitlab-ce   <span class="string">&quot;--help&quot;</span>            58 minutes ago   Created               igent_hopper</span><br></pre></td></tr></table></figure>
+<p>当状态变成了<code>healthy</code>之后，就可以进入下一步的工作：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin-manjaro gitlab]# docker ps -n 3</span><br><span class="line">CONTAINER ID   IMAGE              COMMAND             CREATED             STATUS             </span><br><span class="line">c12732a4acfb   gitlab/gitlab-ce   <span class="string">&quot;/assets/wrapper&quot;</span>   15 minutes ago      Up 2 minutes (healt</span><br><span class="line">36fc44248800   gitlab/gitlab-ce   <span class="string">&quot;/assets/wrapper&quot;</span>   About an hour ago   Exited (137) 20 min_poitras</span><br><span class="line">d9e431790dfa   gitlab/gitlab-ce   <span class="string">&quot;--help&quot;</span>            About an hour ago   Created            ent_hopper</span><br></pre></td></tr></table></figure>
+
+<h1 id="Gitlab配置"><a href="#Gitlab配置" class="headerlink" title="Gitlab配置"></a>Gitlab配置</h1><p>在前面的步骤都执行成功后，我们应该可以在浏览器中输入<code>http://192.168.0.105:82/</code>（这里注意替换本地ip地址，Linux系统可以通过ifconfig获取）打开Gitlab的管理界面如下：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210505185537251-1728703866.png"><br>首次登录会被要求重设密码，帐号是root。重设完密码之后，就可以进入Gitlab的登录页面：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210505185641523-953350743.png"><br>输入root帐号和刚才设定的密码之后，就可以登录进入Gitlab主页：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210505185722008-240154489.png"><br>在主页上点击创建项目，可以新建一个本地的项目：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210505185827137-1163497133.png"><br>创建好项目后的项目主页如下：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210505190041985-1130836784.png"><br>这里因为我们略过了一个步骤，在第一次使用Gitlab平台的时候，需要使用RSA加密生成密钥对，点击刚才界面上的添加ssh key进入添加密钥对的界面：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210505190148610-126806051.png"><br>此时我们需要在本地终端窗口中执行如下的指令来产生密钥对：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro projects]$ ssh-keygen -t rsa -b 2048</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/home/dechin/.ssh/id_rsa): private_gitlab.pub <span class="comment"># 文件名，可以不加pub</span></span><br><span class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase):  <span class="comment"># 输入自定义密码</span></span><br><span class="line">Enter same passphrase again:  <span class="comment"># 再次输入自定义密码</span></span><br><span class="line">Your identification has been saved <span class="keyword">in</span> private_gitlab.pub</span><br><span class="line">Your public key has been saved <span class="keyword">in</span> private_gitlab.pub.pub</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:Xr3DhNi+8ZMJ×××××××××××××××××××0w dechin@dechin-manjaro</span><br><span class="line">The key<span class="string">&#x27;s randomart image is:</span></span><br><span class="line"><span class="string">+---[RSA 2048]----+</span></span><br><span class="line"><span class="string">|o..              |</span></span><br><span class="line"><span class="string">|.. o. . .        |</span></span><br><span class="line"><span class="string">|..+o + *         |</span></span><br><span class="line"><span class="string">|   . E o.oo++o   |</span></span><br><span class="line"><span class="string">|    o   . .++.   |</span></span><br><span class="line"><span class="string">|     o..  . ..   |</span></span><br><span class="line"><span class="string">+----[SHA256]-----+</span></span><br></pre></td></tr></table></figure>
+<p>执行完该指令会在当前目录下产生两个密钥文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro projects]$ ll</span><br><span class="line">总用量 8</span><br><span class="line">-rw------- 1 dechin dechin 1876  5月  5 16:43 private_gitlab.pub</span><br><span class="line">-rw-r--r-- 1 dechin dechin  403  5月  5 16:43 private_gitlab.pub.pub</span><br></pre></td></tr></table></figure>
+<p>其中少一个pub的文件是私钥，不应该暴露出来，而多一个pub的文件是公钥，需要复制这个文件中的字符串，输入到刚才Gitlab的配置中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro projects]$ <span class="built_in">cat</span> private_gitlab.pub.pub </span><br><span class="line">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDt6VXrvTPhWr5iUy3KpIzRryX3SGBUAYietTMSqEOuZjRXr1u14lFk1cT5jwAHw7BtnfBOrwptTIYaWztoWR94gG1W1KFc6HRY0SWrUHtwXwOypWcqMv7Z2AT6TFIgNf/2ZZAlYisC0G9xTO5qTcYDyJe/88zcIm/5B6NQ7safAkGkGYY+WrFxBpnNU2bEdSbx4Sem2v2TD9GRxSg9RpLSXQaULi1bpDgGfxLJZBxj2Eeo11j9ayjipWFqJ43pJ dechin@dechin-manjaro</span><br></pre></td></tr></table></figure>
+<p>一般是以<code>ssh-rsa</code>开头的字符串，输入完成后点击<code>Add Key</code>，即可完成密钥对的配置：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210505190812008-1103656163.png"></p>
+<h1 id="代码仓基本操作"><a href="#代码仓基本操作" class="headerlink" title="代码仓基本操作"></a>代码仓基本操作</h1><p>在完成前面章节的基本配置之后，就可以使用https的方式将需要托管的代码仓库clone下来同步操作，首先复制仓库链接：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210505190743379-1755905579.png"><br>到本地终端窗口执行<code>git clone</code>指令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro projects]$ git <span class="built_in">clone</span> http://192.168.0.105:82/root/myfirstproject.git</span><br><span class="line">正克隆到 <span class="string">&#x27;myfirstproject&#x27;</span>...</span><br><span class="line">Username <span class="keyword">for</span> <span class="string">&#x27;http://192.168.0.105:82&#x27;</span>: root</span><br><span class="line">Password <span class="keyword">for</span> <span class="string">&#x27;http://root@192.168.0.105:82&#x27;</span>: </span><br><span class="line">remote: Enumerating objects: 3, <span class="keyword">done</span>.</span><br><span class="line">remote: Counting objects: 100% (3/3), <span class="keyword">done</span>.</span><br><span class="line">remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0</span><br><span class="line">接收对象中: 100% (3/3), 完成.</span><br></pre></td></tr></table></figure>
+<p>完成克隆操作后，可以在当前目录下看到一个新生成的与仓库同名的文件夹，里面仅有一个项目初始化的readme文件，这也是创建项目时候所选择的配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro projects]$ ll</span><br><span class="line">总用量 12</span><br><span class="line">drwxr-xr-x 3 dechin dechin 4096  5月  5 16:50 myfirstproject</span><br><span class="line">-rw------- 1 dechin dechin 1876  5月  5 16:43 private_gitlab.pub</span><br><span class="line">-rw-r--r-- 1 dechin dechin  403  5月  5 16:43 private_gitlab.pub.pub</span><br><span class="line">[dechin@dechin-manjaro projects]$ <span class="built_in">cd</span> myfirstproject/</span><br><span class="line">[dechin@dechin-manjaro myfirstproject]$ ll</span><br><span class="line">总用量 4</span><br><span class="line">-rw-r--r-- 1 dechin dechin 44  5月  5 16:50 README.md</span><br></pre></td></tr></table></figure>
+<p>关于更多的git相关操作，读者可以参考这一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/git.html">博客</a>，这里我们仅为了展示本地部署的gitlab的使用场景演示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro myfirstproject]$ <span class="built_in">mkdir</span> src <span class="comment"># 创建一个src目录</span></span><br><span class="line">[dechin@dechin-manjaro myfirstproject]$ <span class="built_in">cd</span> src/</span><br><span class="line">[dechin@dechin-manjaro src]$ <span class="built_in">touch</span> .gitkeep <span class="comment"># 创建一个gitkeep文件，可以使得目录不被简化，空目录无法被git识别</span></span><br><span class="line">[dechin@dechin-manjaro src]$ git status <span class="comment"># 查看修改状态</span></span><br><span class="line">位于分支 master</span><br><span class="line">您的分支与上游分支 <span class="string">&#x27;origin/master&#x27;</span> 一致。</span><br><span class="line"></span><br><span class="line">未跟踪的文件:</span><br><span class="line">  （使用 <span class="string">&quot;git add &lt;文件&gt;...&quot;</span> 以包含要提交的内容）</span><br><span class="line">        ./</span><br><span class="line"></span><br><span class="line">提交为空，但是存在尚未跟踪的文件（使用 <span class="string">&quot;git add&quot;</span> 建立跟踪）</span><br><span class="line">[dechin@dechin-manjaro src]$ git add ./ <span class="comment"># 添加当前目录下的所有修改</span></span><br><span class="line">[dechin@dechin-manjaro src]$ git commit -m <span class="string">&#x27;Create a folder from localhost&#x27;</span> 提交修改说明</span><br><span class="line">[master 211278b] Create a folder from localhost</span><br><span class="line"> 1 file changed, 0 insertions(+), 0 deletions(-)</span><br><span class="line"> create mode 100644 src/.gitkeep</span><br><span class="line">[dechin@dechin-manjaro src]$ git push <span class="comment"># 推送修改</span></span><br><span class="line">Username <span class="keyword">for</span> <span class="string">&#x27;http://192.168.0.105:82&#x27;</span>: root <span class="comment"># 输入gitlab的用户名</span></span><br><span class="line">Password <span class="keyword">for</span> <span class="string">&#x27;http://root@192.168.0.105:82&#x27;</span>: <span class="comment"># 输入gitlab的密码</span></span><br><span class="line">枚举对象中: 5, 完成.</span><br><span class="line">对象计数中: 100% (5/5), 完成.</span><br><span class="line">使用 8 个线程进行压缩</span><br><span class="line">压缩对象中: 100% (2/2), 完成.</span><br><span class="line">写入对象中: 100% (4/4), 327 字节 | 327.00 KiB/s, 完成.</span><br><span class="line">总共 4（差异 0），复用 0（差异 0），包复用 0</span><br><span class="line">To http://192.168.0.105:82/root/myfirstproject.git</span><br><span class="line">   5ee2b12..211278b  master -&gt; master</span><br></pre></td></tr></table></figure>
+<p>提交修改前后对比：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210505192925548-1710852064.png"><br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210505193019498-352593708.png"><br>我们可以看到push完成后，Gitlab项目界面上多了一个src目录出来，这就说明变更提交成功了，而且每一次变更的说明信息都会被保存，最近一次的变更说明会在主页上显示出来。接下来再试试Gitlab的分支管理，新建一个分支，然后直接提交：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro myfirstproject]$ git checkout -b dev</span><br><span class="line">切换到一个新分支 <span class="string">&#x27;dev&#x27;</span></span><br><span class="line">[dechin@dechin-manjaro myfirstproject]$ git push</span><br><span class="line">fatal: 当前分支 dev 没有对应的上游分支。</span><br><span class="line">为推送当前分支并建立与远程上游的跟踪，使用</span><br><span class="line"></span><br><span class="line">    git push --set-upstream origin dev</span><br><span class="line"></span><br><span class="line">[dechin@dechin-manjaro myfirstproject]$ git push --set-upstream origin dev</span><br><span class="line">Username <span class="keyword">for</span> <span class="string">&#x27;http://192.168.0.105:82&#x27;</span>: root</span><br><span class="line">Password <span class="keyword">for</span> <span class="string">&#x27;http://root@192.168.0.105:82&#x27;</span>: </span><br><span class="line">总共 0（差异 0），复用 0（差异 0），包复用 0</span><br><span class="line">remote: </span><br><span class="line">remote: To create a merge request <span class="keyword">for</span> dev, visit:</span><br><span class="line">remote:   http://192.168.0.105:82/root/myfirstproject/-/merge_requests/new?merge_request%5Bsource_branch%5D=dev</span><br><span class="line">remote: </span><br><span class="line">To http://192.168.0.105:82/root/myfirstproject.git</span><br><span class="line"> * [new branch]      dev -&gt; dev</span><br><span class="line">分支 <span class="string">&#x27;dev&#x27;</span> 设置为跟踪来自 <span class="string">&#x27;origin&#x27;</span> 的远程分支 <span class="string">&#x27;dev&#x27;</span>。</span><br></pre></td></tr></table></figure>
+<p><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210505194139264-1248917186.png"><br>上传新的分支之后，就会在分支列表中看到不同的分支。那么除了这些提交修改同步的功能之外，Gitlab也有类似于Github的工作管理界面，比如个人活跃度：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210505194101814-1402520860.png"><br>比如基于Merge Request和Issue的任务提交与下发系统：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210505194317366-1710303281.png"><br>在同一个无线网络的局域网下，使用手机等终端设备也可以访问该私有的Gitlab仓库：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210505195528396-638682891.jpg"><br>基本上功能还是比较完善的。而关于自动化集成的方案，会在后续介绍Jenkins的博客中再展开说明。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文按照操作流程的时间顺序，分别介绍了Gitlab的Docker容器部署、Gitlab平台的基本配置以及基于Git的代码仓基本管理与同步方法。通过掌握这一套的流程，就可以实现在本地构建一个类似于Github的代码托管系统，在企业内网更好的管理私有代码仓库，避免因为在Github上进行代码开发而被其他企业窃取核心技术。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/gitlab.html">https://www.cnblogs.com/dechinphy/p/gitlab.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/shan165310175/article/details/92797199#commentBox">https://blog.csdn.net/shan165310175/article/details/92797199#commentBox</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2021/05/04/python3%E4%BD%BF%E7%94%A8%E8%BF%AD%E4%BB%A3%E7%94%9F%E6%88%90%E5%99%A8yield%E5%87%8F%E5%B0%91%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          python3使用迭代生成器yield减少内存占用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/05/03/python3%E5%87%BD%E6%95%B0%E5%8F%AF%E5%8F%98%E8%BE%93%E5%85%A5%E5%8F%82%E9%87%8F/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">python3函数可变输入参量</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=基于Docker配置本地Gitlab - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F05%2F04%2F%25E5%259F%25BA%25E4%25BA%258EDocker%25E9%2585%258D%25E7%25BD%25AE%25E6%259C%25AC%25E5%259C%25B0Gitlab%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=基于Docker配置本地Gitlab - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2021%2F05%2F04%2F%25E5%259F%25BA%25E4%25BA%258EDocker%25E9%2585%258D%25E7%25BD%25AE%25E6%259C%25AC%25E5%259C%25B0Gitlab%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=基于Docker配置本地Gitlab - Hexo&url=http://dechinphy.github.io/2021/05/04/%E5%9F%BA%E4%BA%8EDocker%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0Gitlab/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>乒乓球之弧圈理论 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文通过对马格努斯力的模拟，来理解乒乓球的弧圈原理。并且在这个理论基础之上对比了几种场景下的乒乓球轨迹，比如乒乓球的运动速度，或者日常所说的撞击对乒乓球轨迹的影响。还有乒乓球的角速度，也就是日常我们所说的摩擦对乒乓球轨迹的影响。还有一个在乒乓球界堪称变革的小球改大球对乒乓球这项运动可能带来的影响。由于这方面读过的理论文章较少，本文仅仅作为一个娱乐参考即可。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "乒乓球之弧圈理论 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文通过对马格努斯力的模拟，来理解乒乓球的弧圈原理。并且在这个理论基础之上对比了几种场景下的乒乓球轨迹，比如乒乓球的运动速度，或者日常所说的撞击对乒乓球轨迹的影响。还有乒乓球的角速度，也就是日常我们所说的摩擦对乒乓球轨迹的影响。还有一个在乒乓球界堪称变革的小球改大球对乒乓球这项运动可能带来的影响。由于这方面读过的理论文章较少，本文仅仅作为一个娱乐参考即可。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2022/02/12/%E4%B9%92%E4%B9%93%E7%90%83%E4%B9%8B%E5%BC%A7%E5%9C%88%E7%90%86%E8%AE%BA/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文通过对马格努斯力的模拟，来理解乒乓球的弧圈原理。并且在这个理论基础之上对比了几种场景下的乒乓球轨迹，比如乒乓球的运动速度，或者日常所说的撞击对乒乓球轨迹的影响。还有乒乓球的角速度，也就是日常我们所说的摩擦对乒乓球轨迹的影响。还有一个在乒乓球界堪称变革的小球改大球对乒乓球这项运动可能带来的影响。由于这方面读过的理论文章较少，本文仅仅作为一个娱乐参考即可。&lt;/p&gt;" />
+    <meta name="twitter:title" content="乒乓球之弧圈理论 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文通过对马格努斯力的模拟，来理解乒乓球的弧圈原理。并且在这个理论基础之上对比了几种场景下的乒乓球轨迹，比如乒乓球的运动速度，或者日常所说的撞击对乒乓球轨迹的影响。还有乒乓球的角速度，也就是日常我们所说的摩擦对乒乓球轨迹的影响。还有一个在乒乓球界堪称变革的小球改大球对乒乓球这项运动可能带来的影响。由于这方面读过的理论文章较少，本文仅仅作为一个娱乐参考即可。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文通过对马格努斯力的模拟，来理解乒乓球的弧圈原理。并且在这个理论基础之上对比了几种场景下的乒乓球轨迹，比如乒乓球的运动速度，或者日常所说的撞击对乒乓球轨迹的影响。还有乒乓球的角速度，也就是日常我们所说的摩擦对乒乓球轨迹的影响。还有一个在乒乓球界堪称变革的小球改大球对乒乓球这项运动可能带来的影响。由于这方面读过的理论文章较少，本文仅仅作为一个娱乐参考即可。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2022/02/12/%E4%B9%92%E4%B9%93%E7%90%83%E4%B9%8B%E5%BC%A7%E5%9C%88%E7%90%86%E8%AE%BA/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "乒乓球之弧圈理论 | Hexo",
+            "datePublished": "2022-02-12T02:57:42.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2022/02/12/%E4%B9%92%E4%B9%93%E7%90%83%E4%B9%8B%E5%BC%A7%E5%9C%88%E7%90%86%E8%AE%BA/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidi6hQFEEpz9IO_oC-RNtHW" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      乒乓球之弧圈理论
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2022-02-12T02:57:42.000Z" itemprop="datePublished">2022-02-12</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文通过对马格努斯力的模拟，来理解乒乓球的弧圈原理。并且在这个理论基础之上对比了几种场景下的乒乓球轨迹，比如乒乓球的运动速度，或者日常所说的撞击对乒乓球轨迹的影响。还有乒乓球的角速度，也就是日常我们所说的摩擦对乒乓球轨迹的影响。还有一个在乒乓球界堪称变革的小球改大球对乒乓球这项运动可能带来的影响。由于这方面读过的理论文章较少，本文仅仅作为一个娱乐参考即可。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>首先我们来看一下一个比赛画面，这是人民艺术家、弧圈大师许昕的一场比赛：<br><img src="https://img2022.cnblogs.com/blog/2277440/202202/2277440-20220212105935717-1909498503.gif"><br>在这个视角下，我们可以很明显的看到乒乓球在空中划出来一道优美的弧线，这就是许昕拉出来的正手弧圈球。在其他的球类运动中，比如足球运动，也存在类似的现象，叫香蕉球或者弧旋球。关于这一现象的原理，我们一般解释为马格努斯效应。就是在球体的运动过程中，如果球体不仅仅是带有前进的速度，如果再加上一个球体自身的旋转，就会在流体中产生一个与角动量和速度平面相互垂直的作用力。具体公式可以参考如下由NASA提供的Kutta-Joukowski理论：<br><img src="https://img2022.cnblogs.com/blog/2277440/202202/2277440-20220212105325787-731959018.jpg"><br>虽然Kutta-Joukowski理论一般是用来计算圆柱体的上升力的，但是相应的参数在计算球体的马格努斯力时也有非常好的效果。由于作者对流体力学领域知之甚少，如有错误欢迎流体力学领域大佬指正。</p>
+<h1 id="模拟马格努斯力"><a href="#模拟马格努斯力" class="headerlink" title="模拟马格努斯力"></a>模拟马格努斯力</h1><p>根据Kutta-Joukowski理论，我们可以写一个Python程序用来迭代乒乓球运动的过程，给乒乓球一个向前运动的初始速度，再给其一个适当的旋转角速度。这里我们先不考虑空气阻尼等问题，并且为了明显的看到弧圈效果，这里我们是采用了一个俯视图的二维视角。关于乒乓球的一些参数，比如半径是用的20mm，对应于当下的40+大球。重量的话不同的厂家和有缝球无缝球、训练球和比赛球等都有些许重量差异，一般在2.53g~2.70g之间，在模拟的时候我们使用了最轻的重量来模拟。由于马格努斯力会随着乒乓球运动轨迹的改变而改变，因此这里采用了一个迭代计算的过程，具体代码如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> trange</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">r = <span class="number">0.02</span></span><br><span class="line">rho = <span class="number">1.29</span></span><br><span class="line">mass_min = <span class="number">2.53e-03</span></span><br><span class="line">mass_max = <span class="number">2.70e-03</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Equation for force of lift</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">F</span>(<span class="params">vel, omega</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">4</span>*(<span class="number">4</span>*np.pi**<span class="number">2</span>*r**<span class="number">3</span>*omega*vel*rho)/<span class="number">3</span></span><br><span class="line"></span><br><span class="line">vel0 = np.array([-<span class="number">3.</span>,<span class="number">10.</span>])</span><br><span class="line">omega0 = <span class="number">10</span></span><br><span class="line">s0 = np.array([<span class="number">0.</span>,<span class="number">0.</span>])</span><br><span class="line">f0 = <span class="number">0.</span></span><br><span class="line">steps = <span class="number">100</span></span><br><span class="line">dt = <span class="number">0.01</span></span><br><span class="line"></span><br><span class="line">s = [s0.copy()]</span><br><span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> trange(steps):</span><br><span class="line">    s0 += vel0*dt+<span class="number">0.5</span>*f0*dt**<span class="number">2</span>/mass_min</span><br><span class="line">    s.append(s0.copy())</span><br><span class="line">    vel0 += np.array([np.sqrt(vel0[<span class="number">1</span>]**<span class="number">2</span>*(f0*dt/mass_min)**<span class="number">2</span>/(vel0[<span class="number">0</span>]**<span class="number">2</span>+vel0[<span class="number">1</span>]**<span class="number">2</span>)),</span><br><span class="line">                      -np.sqrt(vel0[<span class="number">0</span>]**<span class="number">2</span>*(f0*dt/mass_min)**<span class="number">2</span>/(vel0[<span class="number">0</span>]**<span class="number">2</span>+vel0[<span class="number">1</span>]**<span class="number">2</span>))])</span><br><span class="line">    f0 = F(np.linalg.norm(vel0), np.<span class="built_in">abs</span>(omega0))</span><br><span class="line"></span><br><span class="line">s = np.array(s)</span><br><span class="line">plt.figure()</span><br><span class="line">plt.plot(s[:,<span class="number">0</span>], s[:,<span class="number">1</span>], <span class="string">&#x27;o&#x27;</span>, color=<span class="string">&#x27;orange&#x27;</span>)</span><br><span class="line">plt.savefig(<span class="string">&#x27;pingpong.png&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>运行完成后我们可以看到这样的一个效果：<br><img src="https://img2022.cnblogs.com/blog/2277440/202202/2277440-20220212112430417-129479214.png"><br>需要提醒和注意的是，在这个模拟过程中我们给定的初速度是向左前方的，并不是向正前方。可以看到，在马格努斯力的作用下，乒乓球的弧圈效果是非常明显的。</p>
+<h1 id="初始速度的大小对弧圈有什么影响？"><a href="#初始速度的大小对弧圈有什么影响？" class="headerlink" title="初始速度的大小对弧圈有什么影响？"></a>初始速度的大小对弧圈有什么影响？</h1><p>为了方便测试，我们将上一个章节中用到的代码进行了模块化：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> trange</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">r = <span class="number">0.02</span></span><br><span class="line">rho = <span class="number">1.29</span></span><br><span class="line">mass_min = <span class="number">2.53e-03</span></span><br><span class="line">mass_max = <span class="number">2.70e-03</span></span><br><span class="line">vel0 = np.array([-<span class="number">3.</span>, <span class="number">10.</span>])</span><br><span class="line">omega0 = <span class="number">10</span></span><br><span class="line">s0 = np.array([<span class="number">0.</span>,<span class="number">0.</span>])</span><br><span class="line">f0 = <span class="number">0.</span></span><br><span class="line">steps = <span class="number">100</span></span><br><span class="line">dt = <span class="number">0.01</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">F</span>(<span class="params">vel, omega, r, rho</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">4</span>*(<span class="number">4</span>*np.pi**<span class="number">2</span>*r**<span class="number">3</span>*omega*vel*rho)/<span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Trace</span>(<span class="params">steps, s0, vel0, f0, dt, mass, omega0, r, rho</span>):</span><br><span class="line">    s = [s0.copy()]</span><br><span class="line">    tmps = s0.copy()</span><br><span class="line">    <span class="keyword">for</span> step <span class="keyword">in</span> trange(steps):</span><br><span class="line">        tmps += vel0*dt+<span class="number">0.5</span>*f0*dt**<span class="number">2</span>/mass</span><br><span class="line">        s.append(tmps.copy())</span><br><span class="line">        vel0 += np.array([np.sqrt(vel0[<span class="number">1</span>]**<span class="number">2</span>*(f0*dt/mass)**<span class="number">2</span>/(vel0[<span class="number">0</span>]**<span class="number">2</span>+vel0[<span class="number">1</span>]**<span class="number">2</span>)),</span><br><span class="line">                          -np.sqrt(vel0[<span class="number">0</span>]**<span class="number">2</span>*(f0*dt/mass)**<span class="number">2</span>/(vel0[<span class="number">0</span>]**<span class="number">2</span>+vel0[<span class="number">1</span>]**<span class="number">2</span>))])</span><br><span class="line">        f0 = F(np.linalg.norm(vel0), np.<span class="built_in">abs</span>(omega0), r, rho)</span><br><span class="line">    <span class="keyword">return</span> np.array(s)</span><br><span class="line"></span><br><span class="line">s = Trace(steps, s0, vel0, f0, dt, mass_min, omega0, r, rho)</span><br><span class="line">vel1 = np.array([-<span class="number">4.5</span>, <span class="number">15.</span>])</span><br><span class="line">s1 = Trace(steps, s0, vel1, f0, dt, mass_min, omega0, r, rho)</span><br><span class="line">vel2 = np.array([-<span class="number">1.5</span>, <span class="number">5.</span>])</span><br><span class="line">s2 = Trace(steps, s0, vel2, f0, dt, mass_min, omega0, r, rho)</span><br><span class="line">plt.figure()</span><br><span class="line">plt.plot(s[:,<span class="number">0</span>], s[:,<span class="number">1</span>], <span class="string">&#x27;o&#x27;</span>, color=<span class="string">&#x27;orange&#x27;</span>)</span><br><span class="line">plt.plot(s1[:,<span class="number">0</span>], s1[:,<span class="number">1</span>], <span class="string">&#x27;o&#x27;</span>, color=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">plt.plot(s2[:,<span class="number">0</span>], s2[:,<span class="number">1</span>], <span class="string">&#x27;o&#x27;</span>, color=<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line">plt.savefig(<span class="string">&#x27;pingpong.png&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>在这段代码中我们测试了两个新的变量：将速度放大1.5倍（用蓝色表示）和将速度缩小到原来的0.5倍（用黑色表示），在不改变其角速度的情况下，得到的结果如下：<br><img src="https://img2022.cnblogs.com/blog/2277440/202202/2277440-20220212113744139-1519147627.png"><br>从这个结果来看，弧圈的弧度大小主要还是取决于角速度，跟乒乓球向前运动的速度本身没有太大的联系，但是如果只看局部的话，速度越快偏移越不明显。</p>
+<h1 id="角速度对弧圈有多大影响？"><a href="#角速度对弧圈有多大影响？" class="headerlink" title="角速度对弧圈有多大影响？"></a>角速度对弧圈有多大影响？</h1><p>这次我们不改变速度和其他的变量，只调整角速度，来看看会有什么样的变化：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> trange</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">r = <span class="number">0.02</span></span><br><span class="line">rho = <span class="number">1.29</span></span><br><span class="line">mass_min = <span class="number">2.53e-03</span></span><br><span class="line">mass_max = <span class="number">2.70e-03</span></span><br><span class="line">vel0 = np.array([-<span class="number">3.</span>, <span class="number">10.</span>])</span><br><span class="line">omega0 = <span class="number">10</span></span><br><span class="line">s0 = np.array([<span class="number">0.</span>,<span class="number">0.</span>])</span><br><span class="line">f0 = <span class="number">0.</span></span><br><span class="line">steps = <span class="number">100</span></span><br><span class="line">dt = <span class="number">0.01</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">F</span>(<span class="params">vel, omega, r, rho</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">4</span>*(<span class="number">4</span>*np.pi**<span class="number">2</span>*r**<span class="number">3</span>*omega*vel*rho)/<span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Trace</span>(<span class="params">steps, s0, vel0, f0, dt, mass, omega0, r, rho</span>):</span><br><span class="line">    s = [s0.copy()]</span><br><span class="line">    tmps = s0.copy()</span><br><span class="line">    <span class="keyword">for</span> step <span class="keyword">in</span> trange(steps):</span><br><span class="line">        tmps += vel0*dt+<span class="number">0.5</span>*f0*dt**<span class="number">2</span>/mass</span><br><span class="line">        s.append(tmps.copy())</span><br><span class="line">        vel0 += np.array([np.sqrt(vel0[<span class="number">1</span>]**<span class="number">2</span>*(f0*dt/mass)**<span class="number">2</span>/(vel0[<span class="number">0</span>]**<span class="number">2</span>+vel0[<span class="number">1</span>]**<span class="number">2</span>)),</span><br><span class="line">                          -np.sqrt(vel0[<span class="number">0</span>]**<span class="number">2</span>*(f0*dt/mass)**<span class="number">2</span>/(vel0[<span class="number">0</span>]**<span class="number">2</span>+vel0[<span class="number">1</span>]**<span class="number">2</span>))])</span><br><span class="line">        f0 = F(np.linalg.norm(vel0), np.<span class="built_in">abs</span>(omega0), r, rho)</span><br><span class="line">    <span class="keyword">return</span> np.array(s)</span><br><span class="line"></span><br><span class="line">s = Trace(steps, s0, vel0.copy(), f0, dt, mass_min, omega0, r, rho)</span><br><span class="line">omega1 = <span class="number">12.</span></span><br><span class="line">s1 = Trace(steps, s0, vel0.copy(), f0, dt, mass_min, omega1, r, rho)</span><br><span class="line">omega2 = <span class="number">8.</span></span><br><span class="line">s2 = Trace(steps, s0, vel0.copy(), f0, dt, mass_min, omega2, r, rho)</span><br><span class="line">plt.figure()</span><br><span class="line">plt.plot(s[:,<span class="number">0</span>], s[:,<span class="number">1</span>], <span class="string">&#x27;o&#x27;</span>, color=<span class="string">&#x27;orange&#x27;</span>)</span><br><span class="line">plt.plot(s1[:,<span class="number">0</span>], s1[:,<span class="number">1</span>], <span class="string">&#x27;o&#x27;</span>, color=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">plt.plot(s2[:,<span class="number">0</span>], s2[:,<span class="number">1</span>], <span class="string">&#x27;o&#x27;</span>, color=<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line">plt.savefig(<span class="string">&#x27;pingpong.png&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>这里我们将角速度也分别放大（蓝色轨迹）和缩小（黑色轨迹）来查看其中的差异，得到的结果如下：<br><img src="https://img2022.cnblogs.com/blog/2277440/202202/2277440-20220212114522233-1549601009.png"><br>这个图中所得到的结论也是比较符合我们的预期结果的，也就是说，角速度越大，球就越拐。</p>
+<h1 id="小球改大球的影响"><a href="#小球改大球的影响" class="headerlink" title="小球改大球的影响"></a>小球改大球的影响</h1><p>我们网上一直有很多人在说大球改小球是对中国队的极大打击，这里面的影响其实可以分为两个部分来考虑：一是大球本身的旋球能力是否变弱了，二是制造大球的旋转是否比制造小球的旋转困难。其实第二问的回答几乎是肯定的，因为半径和重量发生了变化，在大球上要制造出跟小球相同的角速度和初始速度必然是更加困难的。而对于打法和姿势相对固定的运动员来说，绝对是一个巨大的打击。接下来我们通过程序来看看结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> trange</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">r = <span class="number">0.02</span></span><br><span class="line">rho = <span class="number">1.29</span></span><br><span class="line">mass_min = <span class="number">2.53e-03</span></span><br><span class="line">mass_max = <span class="number">2.70e-03</span></span><br><span class="line">vel0 = np.array([-<span class="number">3.</span>, <span class="number">10.</span>])</span><br><span class="line">omega0 = <span class="number">10</span></span><br><span class="line">s0 = np.array([<span class="number">0.</span>,<span class="number">0.</span>])</span><br><span class="line">f0 = <span class="number">0.</span></span><br><span class="line">steps = <span class="number">100</span></span><br><span class="line">dt = <span class="number">0.01</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">F</span>(<span class="params">vel, omega, r, rho</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">4</span>*(<span class="number">4</span>*np.pi**<span class="number">2</span>*r**<span class="number">3</span>*omega*vel*rho)/<span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Trace</span>(<span class="params">steps, s0, vel0, f0, dt, mass, omega0, r, rho</span>):</span><br><span class="line">    s = [s0.copy()]</span><br><span class="line">    tmps = s0.copy()</span><br><span class="line">    <span class="keyword">for</span> step <span class="keyword">in</span> trange(steps):</span><br><span class="line">        tmps += vel0*dt+<span class="number">0.5</span>*f0*dt**<span class="number">2</span>/mass</span><br><span class="line">        s.append(tmps.copy())</span><br><span class="line">        vel0 += np.array([np.sqrt(vel0[<span class="number">1</span>]**<span class="number">2</span>*(f0*dt/mass)**<span class="number">2</span>/(vel0[<span class="number">0</span>]**<span class="number">2</span>+vel0[<span class="number">1</span>]**<span class="number">2</span>)),</span><br><span class="line">                          -np.sqrt(vel0[<span class="number">0</span>]**<span class="number">2</span>*(f0*dt/mass)**<span class="number">2</span>/(vel0[<span class="number">0</span>]**<span class="number">2</span>+vel0[<span class="number">1</span>]**<span class="number">2</span>))])</span><br><span class="line">        f0 = F(np.linalg.norm(vel0), np.<span class="built_in">abs</span>(omega0), r, rho)</span><br><span class="line">    <span class="keyword">return</span> np.array(s)</span><br><span class="line"></span><br><span class="line">s = Trace(steps, s0, vel0.copy(), f0, dt, mass_min, omega0, r, rho)</span><br><span class="line">r = <span class="number">0.019</span></span><br><span class="line">mass = <span class="number">2.5e-03</span></span><br><span class="line">s1 = Trace(steps, s0, vel0.copy(), f0, dt, mass, omega0, r, rho)</span><br><span class="line">r = <span class="number">0.019</span></span><br><span class="line">mass = <span class="number">2.5e-03</span></span><br><span class="line">omega0 = <span class="number">12</span></span><br><span class="line">s2 = Trace(steps, s0, vel0.copy(), f0, dt, mass_min, omega0, r, rho)</span><br><span class="line">plt.figure()</span><br><span class="line">plt.plot(s[:,<span class="number">0</span>], s[:,<span class="number">1</span>], <span class="string">&#x27;o&#x27;</span>, color=<span class="string">&#x27;orange&#x27;</span>)</span><br><span class="line">plt.plot(s1[:,<span class="number">0</span>], s1[:,<span class="number">1</span>], <span class="string">&#x27;o&#x27;</span>, color=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">plt.plot(s2[:,<span class="number">0</span>], s2[:,<span class="number">1</span>], <span class="string">&#x27;o&#x27;</span>, color=<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line">plt.savefig(<span class="string">&#x27;pingpong.png&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>在这次的测试中，我们采用了这样的两种对比方案：一是直接调整乒乓球的参数，而不改变速度与角速度的参数（蓝色轨迹），另一方面是调整乒乓球到小球，同时增大角速度（黑色轨迹），对比结果如下：<br><img src="https://img2022.cnblogs.com/blog/2277440/202202/2277440-20220212120742937-1045574171.png"><br>这个结果给我们传递的信息是，如果只是改了大球，但是能通过训练保持跟原本小球同等的初始速度和角速度的话，其实大球的轨迹曲率会更高，或者说轨迹更加的诡异。而就算是现在从大球换回小球，也需要在大球的角速度基础上增加20%的角速度，才有可能在小球上达到比大球下更拐的旋转。当然这些对比可能相对比较片面，仅仅可以作为一个效果参考。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文通过对马格努斯力的模拟，来理解乒乓球的弧圈原理。并且在这个理论基础之上对比了几种场景下的乒乓球轨迹，比如乒乓球的运动速度，或者日常所说的撞击对乒乓球轨迹的影响。还有乒乓球的角速度，也就是日常我们所说的摩擦对乒乓球轨迹的影响。还有一个在乒乓球界堪称变革的小球改大球对乒乓球这项运动可能带来的影响。由于这方面读过的理论文章较少，本文仅仅作为一个娱乐参考即可。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/pingpong.html">https://www.cnblogs.com/dechinphy/p/pingpong.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>打赏专用链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<p>腾讯云专栏同步：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/91958">https://cloud.tencent.com/developer/column/91958</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li>www1.grc.nasa.gov&#x2F;beginners-guide-to-aeronautics&#x2F;ideal-lift-of-a-spinning-ball&#x2F;</li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2022/02/15/%E7%A9%BA%E6%B0%94%E9%98%BB%E5%8A%9B%E5%AF%B9%E4%B9%92%E4%B9%93%E7%90%83%E8%BF%90%E5%8A%A8%E8%BD%A8%E8%BF%B9%E7%9A%84%E5%BD%B1%E5%93%8D/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          空气阻力对乒乓球运动轨迹的影响
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/02/09/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6%E6%A8%A1%E6%8B%9F%E4%B9%8B%E5%9F%BA%E4%BA%8E%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86%E7%9A%84LINCS%E7%BA%A6%E6%9D%9F/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">分子动力学模拟之基于自动微分的LINCS约束</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=乒乓球之弧圈理论 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F02%2F12%2F%25E4%25B9%2592%25E4%25B9%2593%25E7%2590%2583%25E4%25B9%258B%25E5%25BC%25A7%25E5%259C%2588%25E7%2590%2586%25E8%25AE%25BA%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=乒乓球之弧圈理论 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2022%2F02%2F12%2F%25E4%25B9%2592%25E4%25B9%2593%25E7%2590%2583%25E4%25B9%258B%25E5%25BC%25A7%25E5%259C%2588%25E7%2590%2586%25E8%25AE%25BA%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=乒乓球之弧圈理论 - Hexo&url=http://dechinphy.github.io/2022/02/12/%E4%B9%92%E4%B9%93%E7%90%83%E4%B9%8B%E5%BC%A7%E5%9C%88%E7%90%86%E8%AE%BA/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

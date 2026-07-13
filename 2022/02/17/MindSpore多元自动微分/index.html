@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>MindSpore多元自动微分 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;在本文中通过一个实际函数案例的多次尝试，给出了得到预期结果的一种解决方案。虽然MindSpore框架本身提供了Jvp和Vjp等功能，但是实际上和Grad没有太大的区别，只是用Tuple的形式增加了输入的一个维度。如果可以使用纯Tensor的输入，用这种Mask加上Grad或者GradOperation的方案会更加简单一些。同时我也尝试过使用HyperMap（类似于Jax中的vmap）来解决这个问题，只需要写好一条对z求导的函数形式，就可以自动对这个求导过程进行扩维，两者的结果是一致的。但是MindSpore的HyperMap在Graph模式下兼容效果不是很好，建议非必要不尝试。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "MindSpore多元自动微分 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;在本文中通过一个实际函数案例的多次尝试，给出了得到预期结果的一种解决方案。虽然MindSpore框架本身提供了Jvp和Vjp等功能，但是实际上和Grad没有太大的区别，只是用Tuple的形式增加了输入的一个维度。如果可以使用纯Tensor的输入，用这种Mask加上Grad或者GradOperation的方案会更加简单一些。同时我也尝试过使用HyperMap（类似于Jax中的vmap）来解决这个问题，只需要写好一条对z求导的函数形式，就可以自动对这个求导过程进行扩维，两者的结果是一致的。但是MindSpore的HyperMap在Graph模式下兼容效果不是很好，建议非必要不尝试。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2022/02/17/MindSpore%E5%A4%9A%E5%85%83%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;在本文中通过一个实际函数案例的多次尝试，给出了得到预期结果的一种解决方案。虽然MindSpore框架本身提供了Jvp和Vjp等功能，但是实际上和Grad没有太大的区别，只是用Tuple的形式增加了输入的一个维度。如果可以使用纯Tensor的输入，用这种Mask加上Grad或者GradOperation的方案会更加简单一些。同时我也尝试过使用HyperMap（类似于Jax中的vmap）来解决这个问题，只需要写好一条对z求导的函数形式，就可以自动对这个求导过程进行扩维，两者的结果是一致的。但是MindSpore的HyperMap在Graph模式下兼容效果不是很好，建议非必要不尝试。&lt;/p&gt;" />
+    <meta name="twitter:title" content="MindSpore多元自动微分 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;在本文中通过一个实际函数案例的多次尝试，给出了得到预期结果的一种解决方案。虽然MindSpore框架本身提供了Jvp和Vjp等功能，但是实际上和Grad没有太大的区别，只是用Tuple的形式增加了输入的一个维度。如果可以使用纯Tensor的输入，用这种Mask加上Grad或者GradOperation的方案会更加简单一些。同时我也尝试过使用HyperMap（类似于Jax中的vmap）来解决这个问题，只需要写好一条对z求导的函数形式，就可以自动对这个求导过程进行扩维，两者的结果是一致的。但是MindSpore的HyperMap在Graph模式下兼容效果不是很好，建议非必要不尝试。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;在本文中通过一个实际函数案例的多次尝试，给出了得到预期结果的一种解决方案。虽然MindSpore框架本身提供了Jvp和Vjp等功能，但是实际上和Grad没有太大的区别，只是用Tuple的形式增加了输入的一个维度。如果可以使用纯Tensor的输入，用这种Mask加上Grad或者GradOperation的方案会更加简单一些。同时我也尝试过使用HyperMap（类似于Jax中的vmap）来解决这个问题，只需要写好一条对z求导的函数形式，就可以自动对这个求导过程进行扩维，两者的结果是一致的。但是MindSpore的HyperMap在Graph模式下兼容效果不是很好，建议非必要不尝试。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2022/02/17/MindSpore%E5%A4%9A%E5%85%83%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "MindSpore多元自动微分 | Hexo",
+            "datePublished": "2022-02-17T08:49:07.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2022/02/17/MindSpore%E5%A4%9A%E5%85%83%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidC7ykyZXZPTot4Jo8vY34d" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      MindSpore多元自动微分
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2022-02-17T08:49:07.000Z" itemprop="datePublished">2022-02-17</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>在本文中通过一个实际函数案例的多次尝试，给出了得到预期结果的一种解决方案。虽然MindSpore框架本身提供了Jvp和Vjp等功能，但是实际上和Grad没有太大的区别，只是用Tuple的形式增加了输入的一个维度。如果可以使用纯Tensor的输入，用这种Mask加上Grad或者GradOperation的方案会更加简单一些。同时我也尝试过使用HyperMap（类似于Jax中的vmap）来解决这个问题，只需要写好一条对z求导的函数形式，就可以自动对这个求导过程进行扩维，两者的结果是一致的。但是MindSpore的HyperMap在Graph模式下兼容效果不是很好，建议非必要不尝试。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>当前主流的深度学习框架，除了能够便捷高效的搭建机器学习的模型之外，其自动并行和自动微分等功能还为其他领域的科学计算带来了模式的变革。本文我们将探索如何用MindSpore去实现一个多维的自动微分，并且得到该多元函数的雅可比矩阵。</p>
+<h1 id="函数形式与雅可比矩阵形式"><a href="#函数形式与雅可比矩阵形式" class="headerlink" title="函数形式与雅可比矩阵形式"></a>函数形式与雅可比矩阵形式</h1><p>首先我们给定一个比较简单的z关于自变量x的函数形式（其中y和I是一些参数）：<br>$$<br>z_{i,j}(x)&#x3D;y_ix_j<br>$$<br>比如我们考虑一个3*3的z，我们最终需要计算的是这样一个雅可比矩阵：<br>$$<br>J_z(x)&#x3D;<br>\left[<br>\begin{array}{l}<br>\frac{\partial z_0}{\partial x_0} &amp; \frac{\partial z_0}{\partial x_1} &amp; \frac{\partial z_0}{\partial x_2}\<br>\frac{\partial z_1}{\partial x_0} &amp; \frac{\partial z_1}{\partial x_1} &amp; \frac{\partial z_1}{\partial x_2}\<br>\frac{\partial z_2}{\partial x_0} &amp; \frac{\partial z_2}{\partial x_1} &amp; \frac{\partial z_2}{\partial x_2}<br>\end{array}<br>\right]<br>$$<br>假如我们给定一些简单的初始值：<br>$$<br>x&#x3D;[1,2,3]\<br>y&#x3D;[1,3,2]<br>$$<br>那么理论上我们应该得到的结果是：<br>$$<br>J_z(x)&#x3D;\left[<br>\begin{array}{l}<br>1 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 3\<br>0 &amp; 2 &amp; 0\<br>\end{array}<br>\right]<br>$$<br>接下来我们看看如何在MindSpore的自动微分框架下实现这一功能。</p>
+<h1 id="初步尝试Grad自动微分"><a href="#初步尝试Grad自动微分" class="headerlink" title="初步尝试Grad自动微分"></a>初步尝试Grad自动微分</h1><p>我们先按照上一章节中的公式的基本内容，直接写一个Net函数用于表示z，然后再用<code>grad</code>函数对其进行微分，代码内容如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> nn, Tensor, ops</span><br><span class="line"><span class="keyword">from</span> mindspore.ops.functional <span class="keyword">import</span> grad</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> numpy <span class="keyword">as</span> msnp</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Net</span>(nn.Cell):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, y, index</span>):</span><br><span class="line">        <span class="built_in">super</span>(Net, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.y = y</span><br><span class="line">        <span class="variable language_">self</span>.index = index</span><br><span class="line">        <span class="variable language_">self</span>.norm = nn.Norm(-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">construct</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.y[<span class="variable language_">self</span>.index]*x</span><br><span class="line"></span><br><span class="line">x = Tensor(np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).astype(np.float32))</span><br><span class="line">y = Tensor(np.array([[<span class="number">1</span>],[<span class="number">2</span>],[<span class="number">3</span>]]).astype(np.float32))</span><br><span class="line">index = Tensor(np.array([<span class="number">0</span>,<span class="number">2</span>,<span class="number">1</span>]).astype(np.int32))</span><br><span class="line">shape = (y.shape[<span class="number">0</span>], x.shape[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">output = grad(Net(y,index))(x)</span><br><span class="line"><span class="built_in">print</span>(output)</span><br><span class="line"><span class="comment"># [6. 6. 6.]</span></span><br></pre></td></tr></table></figure>
+<p>在这个案例中，我们得到的结果，首先维度就不对，我们理想中的雅可比矩阵应该是3*3大小的，可见MindSpore中自动微分的逻辑是把其中的一个维度进行了加和，类似于这样的形式：<br>$$<br>\left[<br>\frac{\partial z_0}{\partial x_0}+\frac{\partial z_1}{\partial x_0}+\frac{\partial z_2}{\partial x_0}, \frac{\partial z_0}{\partial x_1}+\frac{\partial z_1}{\partial x_1}+\frac{\partial z_2}{\partial x_1}, \frac{\partial z_0}{\partial x_2}+\frac{\partial z_1}{\partial x_2}+\frac{\partial z_2}{\partial x_2}<br>\right]<br>$$<br>所以为了得到我们的结果，需要对输入的x进行扩维。</p>
+<h1 id="尝试扩维输入的自动微分"><a href="#尝试扩维输入的自动微分" class="headerlink" title="尝试扩维输入的自动微分"></a>尝试扩维输入的自动微分</h1><p>在MindSpore中提供了<code>BroadcastTo</code>这样的接口，可以自动的在扩展维度填充待扩展张量的元素，我们需要把x的最外层维度扩展到与参数y一致，在这个案例中就是3*3的维度，具体代码实现如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> nn, Tensor, ops</span><br><span class="line"><span class="keyword">from</span> mindspore.ops.functional <span class="keyword">import</span> grad</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> numpy <span class="keyword">as</span> msnp</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Net</span>(nn.Cell):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, y, index</span>):</span><br><span class="line">        <span class="built_in">super</span>(Net, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.y = y</span><br><span class="line">        <span class="variable language_">self</span>.index = index</span><br><span class="line">        <span class="variable language_">self</span>.norm = nn.Norm(-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">construct</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.y[<span class="variable language_">self</span>.index]*x</span><br><span class="line"></span><br><span class="line">x = Tensor(np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).astype(np.float32))</span><br><span class="line">y = Tensor(np.array([[<span class="number">1</span>],[<span class="number">2</span>],[<span class="number">3</span>]]).astype(np.float32))</span><br><span class="line">index = Tensor(np.array([<span class="number">0</span>,<span class="number">2</span>,<span class="number">1</span>]).astype(np.int32))</span><br><span class="line">shape = (y.shape[<span class="number">0</span>], x.shape[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">output = grad(Net(y,index))(ops.BroadcastTo(shape)(x))</span><br><span class="line"><span class="built_in">print</span>(output)</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">[[1. 1. 1.]</span></span><br><span class="line"><span class="string"> [3. 3. 3.]</span></span><br><span class="line"><span class="string"> [2. 2. 2.]]</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>从这个输出结果中我们发现，虽然维度上是被扩展成功了，但是那些本该为0的位置却出现了非0元素，这说明在自动微分计算的过程中，我们输入的参数y也被自动的Broadcast了，而实际上正确的计算过程中是不能使用Broadcast的。</p>
+<h1 id="为参数添加Mask"><a href="#为参数添加Mask" class="headerlink" title="为参数添加Mask"></a>为参数添加Mask</h1><p>上一个章节中说道，如果利用Tensor本身的自动Broadcast会导致输入参数被扩维，会得到一个错误的微分结果。因此这里我们手动对输入参数进行正确的扩维，这个过程是添加一个Mask矩阵，用于标记每一个参数所对应的位置。这里我们假设输入一个这样的Mask矩阵：<br>$$<br>I&#x3D;\left[<br>\begin{array}{l}<br>1 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 1\<br>0 &amp; 1 &amp; 0<br>\end{array}<br>\right]<br>$$<br>这样理论上最终微分结果的非0元素应该跟这个矩阵是一致的，相关代码如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> nn, Tensor, ops</span><br><span class="line"><span class="keyword">from</span> mindspore.ops.functional <span class="keyword">import</span> grad</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> numpy <span class="keyword">as</span> msnp</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Net</span>(nn.Cell):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, y, index, size</span>):</span><br><span class="line">        <span class="built_in">super</span>(Net, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.y = y</span><br><span class="line">        <span class="variable language_">self</span>.index = index</span><br><span class="line">        <span class="variable language_">self</span>.norm = nn.Norm(-<span class="number">1</span>)</span><br><span class="line">        <span class="variable language_">self</span>.mask = msnp.zeros((y.shape[<span class="number">0</span>],size))</span><br><span class="line">        <span class="variable language_">self</span>.mask[msnp.arange(<span class="variable language_">self</span>.index.shape[<span class="number">0</span>]),<span class="variable language_">self</span>.index] = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">construct</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.mask*<span class="variable language_">self</span>.y[<span class="variable language_">self</span>.index]*x</span><br><span class="line"></span><br><span class="line">x = Tensor(np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).astype(np.float32))</span><br><span class="line">y = Tensor(np.array([[<span class="number">1</span>],[<span class="number">2</span>],[<span class="number">3</span>]]).astype(np.float32))</span><br><span class="line">index = Tensor(np.array([<span class="number">0</span>,<span class="number">2</span>,<span class="number">1</span>]).astype(np.int32))</span><br><span class="line">shape = (y.shape[<span class="number">0</span>], x.shape[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">output = grad(Net(y,index,x.shape[<span class="number">0</span>]))(ops.BroadcastTo(shape)(x))</span><br><span class="line"><span class="built_in">print</span>(output)</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">[[1. 0. 0.]</span></span><br><span class="line"><span class="string"> [0. 0. 3.]</span></span><br><span class="line"><span class="string"> [0. 2. 0.]]</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>这里我们看到得到的结果就是正确的了。当然，需要说明的是，虽然这个案例只是非常简单的内容，但是这里给出的如何去计算多维函数的自动微分的方法，同样也适用于一些更加复杂的网络和函数。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>在本文中通过一个实际函数案例的多次尝试，给出了得到预期结果的一种解决方案。虽然MindSpore框架本身提供了Jvp和Vjp等功能，但是实际上和Grad没有太大的区别，只是用Tuple的形式增加了输入的一个维度。如果可以使用纯Tensor的输入，用这种Mask加上Grad或者GradOperation的方案会更加简单一些。同时我也尝试过使用HyperMap（类似于Jax中的vmap）来解决这个问题，只需要写好一条对z求导的函数形式，就可以自动对这个求导过程进行扩维，两者的结果是一致的。但是MindSpore的HyperMap在Graph模式下兼容效果不是很好，建议非必要不尝试。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/jvp.html">https://www.cnblogs.com/dechinphy/p/jvp.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>打赏专用链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<p>腾讯云专栏同步：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/91958">https://cloud.tencent.com/developer/column/91958</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2022/02/23/Numpy%E7%9A%84%E5%90%84%E7%A7%8D%E4%B8%8B%E6%A0%87%E6%93%8D%E4%BD%9C/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          Numpy的各种下标操作
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/02/15/%E7%A9%BA%E6%B0%94%E9%98%BB%E5%8A%9B%E5%AF%B9%E4%B9%92%E4%B9%93%E7%90%83%E8%BF%90%E5%8A%A8%E8%BD%A8%E8%BF%B9%E7%9A%84%E5%BD%B1%E5%93%8D/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">空气阻力对乒乓球运动轨迹的影响</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=MindSpore多元自动微分 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F02%2F17%2FMindSpore%25E5%25A4%259A%25E5%2585%2583%25E8%2587%25AA%25E5%258A%25A8%25E5%25BE%25AE%25E5%2588%2586%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=MindSpore多元自动微分 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2022%2F02%2F17%2FMindSpore%25E5%25A4%259A%25E5%2585%2583%25E8%2587%25AA%25E5%258A%25A8%25E5%25BE%25AE%25E5%2588%2586%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=MindSpore多元自动微分 - Hexo&url=http://dechinphy.github.io/2022/02/17/MindSpore%E5%A4%9A%E5%85%83%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

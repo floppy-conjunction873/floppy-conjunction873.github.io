@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>Ollama模型迁移 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;为了方便本地大模型部署和迁移，本文提供了一个关于Ollama的模型本地迁移的方法。由于直接从Ollama Hub下载下来的模型，或者是比较大的GGUF模型文件，往往会被切分成多个，而文件名在Ollama的路径中又被执行了sha256散列变换。因此我们需要从索引文件中获取相应的文件名，再进行模型本地迁移。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "Ollama模型迁移 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;为了方便本地大模型部署和迁移，本文提供了一个关于Ollama的模型本地迁移的方法。由于直接从Ollama Hub下载下来的模型，或者是比较大的GGUF模型文件，往往会被切分成多个，而文件名在Ollama的路径中又被执行了sha256散列变换。因此我们需要从索引文件中获取相应的文件名，再进行模型本地迁移。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2025/02/20/Ollama%E6%A8%A1%E5%9E%8B%E8%BF%81%E7%A7%BB/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;为了方便本地大模型部署和迁移，本文提供了一个关于Ollama的模型本地迁移的方法。由于直接从Ollama Hub下载下来的模型，或者是比较大的GGUF模型文件，往往会被切分成多个，而文件名在Ollama的路径中又被执行了sha256散列变换。因此我们需要从索引文件中获取相应的文件名，再进行模型本地迁移。&lt;/p&gt;" />
+    <meta name="twitter:title" content="Ollama模型迁移 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;为了方便本地大模型部署和迁移，本文提供了一个关于Ollama的模型本地迁移的方法。由于直接从Ollama Hub下载下来的模型，或者是比较大的GGUF模型文件，往往会被切分成多个，而文件名在Ollama的路径中又被执行了sha256散列变换。因此我们需要从索引文件中获取相应的文件名，再进行模型本地迁移。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;为了方便本地大模型部署和迁移，本文提供了一个关于Ollama的模型本地迁移的方法。由于直接从Ollama Hub下载下来的模型，或者是比较大的GGUF模型文件，往往会被切分成多个，而文件名在Ollama的路径中又被执行了sha256散列变换。因此我们需要从索引文件中获取相应的文件名，再进行模型本地迁移。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2025/02/20/Ollama%E6%A8%A1%E5%9E%8B%E8%BF%81%E7%A7%BB/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "Ollama模型迁移 | Hexo",
+            "datePublished": "2025-02-20T07:31:42.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2025/02/20/Ollama%E6%A8%A1%E5%9E%8B%E8%BF%81%E7%A7%BB/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidnSShFcTjht4dq1-RffYAE" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      Ollama模型迁移
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2025-02-20T07:31:42.000Z" itemprop="datePublished">2025-02-20</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>为了方便本地大模型部署和迁移，本文提供了一个关于Ollama的模型本地迁移的方法。由于直接从Ollama Hub下载下来的模型，或者是比较大的GGUF模型文件，往往会被切分成多个，而文件名在Ollama的路径中又被执行了sha256散列变换。因此我们需要从索引文件中获取相应的文件名，再进行模型本地迁移。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面的一些文章中，我们介绍过<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18699554/deepseek">使用Ollama在Linux平台加载DeepSeek蒸馏模型</a>，<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18702523/deepseek2">使用Ollama在Windows平台部署DeepSeek本地模型</a>。除了使用Ollama与模型文件交互，还可以使用<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18711084/quantize">llama.cpp</a>和<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18719866/ktransformer">KTransformer</a>这样的。也有一些ChatBox、AnythingLLM和PageAssist这样的客户端工具推荐。</p>
+<p>这里我们考虑到这样的一个使用场景，在我们使用<code>ollama pull</code>或者是从ModelScope、Hugging Face等平台下载好了一个本地模型之后，例如已经加载到Ollama里面，那么如何把这个模型导出到其他硬件里面去呢？</p>
+<h1 id="Ollama模型路径"><a href="#Ollama模型路径" class="headerlink" title="Ollama模型路径"></a>Ollama模型路径</h1><p>如果没有去手动配置Ollama的Model路径，在Linux上默认的Ollama模型路径为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/share/ollama/.ollama/models/</span><br></pre></td></tr></table></figure>
+<p>是一个需要root权限的文件夹。在Windows平台上这个路径一般是：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\user_name\.ollama\models</span><br></pre></td></tr></table></figure>
+
+<h1 id="Ollama路径含义"><a href="#Ollama路径含义" class="headerlink" title="Ollama路径含义"></a>Ollama路径含义</h1><p>在models这个路径下有两个子目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">drwxr-xr-x 2 ollama ollama 4096 2月  20 14:47 blobs/</span><br><span class="line">drwxr-xr-x 3 ollama ollama 4096 2月  20 14:53 manifests/</span><br></pre></td></tr></table></figure>
+<p>其中<code>blobs</code>里面存放的是一系列的模型文件，以<code>sha256</code>开头，后面跟一长串的哈希值：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ ll blobs/</span><br><span class="line">总用量 106751780</span><br><span class="line">drwxr-xr-x 2 ollama ollama        4096 2月  20 14:47 ./</span><br><span class="line">drwxr-xr-x 4 ollama ollama        4096 2月   5 12:24 ../</span><br><span class="line">-rw-r--r-- 1 ollama ollama         412 2月  14 15:43 sha256-066df13e4debff21aeb0bb1ce8db63b9f19498d06b477ba3a4fa066adafd2949</span><br><span class="line">-rwxr-xr-x 1 root   root          7712 2月  20 14:46 sha256-0b4284c1f87029e67654c7953afa16279961632cf73dcfe33374c4c2f298fa35</span><br><span class="line">-rwxr-xr-x 1 root   root    5963057248 2月  20 14:46 sha256-11f274007f093fefeec994a5dbbb33d0733a4feb87f7ab66dcd7c1069fef0068</span><br></pre></td></tr></table></figure>
+<p>这些文件其实就是模型的GGUF文件，可以直接cp为gguf的后缀来使用。但关键的是有时候一个模型可能对应多个GGUF文件，所以需要一个索引文件。<code>manifests</code>目录存放的是每个模型的索引：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ tree manifests/</span><br><span class="line">manifests/</span><br><span class="line">└── registry.ollama.ai</span><br><span class="line">    └── library</span><br><span class="line">        ├── deepseek-r1</span><br><span class="line">        │   ├── 14b</span><br><span class="line">        │   ├── 32b</span><br><span class="line">        │   ├── 32b-q2k</span><br><span class="line">        │   ├── 32b-q40</span><br><span class="line">        │   └── 70b-q2k</span><br><span class="line">        ├── llama3-vision</span><br><span class="line">        │   └── 11b</span><br><span class="line">        └── nomic-embed-text-v1.5</span><br><span class="line">            └── latest</span><br><span class="line"></span><br><span class="line">5 directories, 7 files</span><br></pre></td></tr></table></figure>
+<p>这就是Ollama模型存储的一个基本结构。</p>
+<h1 id="查找对应模型文件"><a href="#查找对应模型文件" class="headerlink" title="查找对应模型文件"></a>查找对应模型文件</h1><p>其实在上一个章节的这个索引文件里面就明文包含了模型文件的对照路径，例如打开一个llama3的索引文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">&quot;schemaVersion&quot;</span>:2,<span class="string">&quot;mediaType&quot;</span>:<span class="string">&quot;application/vnd.docker.distribution.manifest.v2+json&quot;</span>,<span class="string">&quot;config&quot;</span>:&#123;<span class="string">&quot;mediaType&quot;</span>:<span class="string">&quot;application/vnd.docker.container.image.v1+json&quot;</span>,<span class="string">&quot;digest&quot;</span>:<span class="string">&quot;sha256:fbd313562bb706ac00f1a18c0aad8398b3c22d5cd78c47ff6f7246c4c3438576&quot;</span>,<span class="string">&quot;size&quot;</span>:572&#125;,<span class="string">&quot;layers&quot;</span>:[&#123;<span class="string">&quot;mediaType&quot;</span>:<span class="string">&quot;application/vnd.ollama.image.model&quot;</span>,<span class="string">&quot;digest&quot;</span>:<span class="string">&quot;sha256:11f274007f093fefeec994a5dbbb33d0733a4feb87f7ab66dcd7c1069fef0068&quot;</span>,<span class="string">&quot;size&quot;</span>:5963057248&#125;,&#123;<span class="string">&quot;mediaType&quot;</span>:<span class="string">&quot;application/vnd.ollama.image.projector&quot;</span>,<span class="string">&quot;digest&quot;</span>:<span class="string">&quot;sha256:ece5e659647a20a5c28ab9eea1c12a1ad430bc0f2a27021d00ad103b3bf5206f&quot;</span>,<span class="string">&quot;size&quot;</span>:1938763584,<span class="string">&quot;from&quot;</span>:<span class="string">&quot;/Users/ollama/.ollama/models/blobs/sha256-ece5e659647a20a5c28ab9eea1c12a1ad430bc0f2a27021d00ad103b3bf5206f&quot;</span>&#125;,&#123;<span class="string">&quot;mediaType&quot;</span>:<span class="string">&quot;application/vnd.ollama.image.template&quot;</span>,<span class="string">&quot;digest&quot;</span>:<span class="string">&quot;sha256:715415638c9c4c0cb2b78783da041b97bd1205f8b9f9494bd7e5a850cb443602&quot;</span>,<span class="string">&quot;size&quot;</span>:269&#125;,&#123;<span class="string">&quot;mediaType&quot;</span>:<span class="string">&quot;application/vnd.ollama.image.license&quot;</span>,<span class="string">&quot;digest&quot;</span>:<span class="string">&quot;sha256:0b4284c1f87029e67654c7953afa16279961632cf73dcfe33374c4c2f298fa35&quot;</span>,<span class="string">&quot;size&quot;</span>:7712&#125;,&#123;<span class="string">&quot;mediaType&quot;</span>:<span class="string">&quot;application/vnd.ollama.image.params&quot;</span>,<span class="string">&quot;digest&quot;</span>:<span class="string">&quot;sha256:fefc914e46e6024467471837a48a24251db2c6f3f58395943da7bf9dc6f70fb6&quot;</span>,<span class="string">&quot;size&quot;</span>:32&#125;]&#125;</span><br></pre></td></tr></table></figure>
+<p>这里面带sha256的，都是模型所需要用到的gguf文件。相比于这种直接打开索引文件来检索的方法，Ollama其实还有一种更加优雅的查看模型存储地址的方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line">$ ollama show --modelfile llama3-vision:11b</span><br><span class="line"><span class="comment"># Modelfile generated by &quot;ollama show&quot;</span></span><br><span class="line"><span class="comment"># To build a new Modelfile based on this, replace FROM with:</span></span><br><span class="line"><span class="comment"># FROM llama3-vision:11b</span></span><br><span class="line"></span><br><span class="line">FROM /usr/share/ollama/.ollama/models/blobs/sha256-11f274007f093fefeec994a5dbbb33d0733a4feb87f7ab66dcd7c1069fef0068</span><br><span class="line">FROM /usr/share/ollama/.ollama/models/blobs/sha256-ece5e659647a20a5c28ab9eea1c12a1ad430bc0f2a27021d00ad103b3bf5206f</span><br><span class="line">TEMPLATE <span class="string">&quot;&quot;</span><span class="string">&quot;&#123;&#123;- range <span class="variable">$index</span>, <span class="variable">$_</span> := .Messages &#125;&#125;&lt;|start_header_id|&gt;&#123;&#123; .Role &#125;&#125;&lt;|end_header_id|&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;&#123; .Content &#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123;- if gt (len (slice $.Messages <span class="variable">$index</span>)) 1 &#125;&#125;&lt;|eot_id|&gt;</span></span><br><span class="line"><span class="string">&#123;&#123;- else if ne .Role &quot;</span>assistant<span class="string">&quot; &#125;&#125;&lt;|eot_id|&gt;&lt;|start_header_id|&gt;assistant&lt;|end_header_id|&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;&#123; end &#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123;- end &#125;&#125;&quot;</span><span class="string">&quot;&quot;</span></span><br><span class="line">PARAMETER temperature 0.6</span><br><span class="line">PARAMETER top_p 0.9</span><br><span class="line">LICENSE <span class="string">&quot;LLAMA 3.2 COMMUNITY LICENSE AGREEMENT</span></span><br><span class="line"><span class="string">Llama 3.2 Version Release Date: September 25, 2024</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">“Agreement” means the terms and conditions for use, reproduction, distribution </span></span><br><span class="line"><span class="string">and modification of the Llama Materials set forth herein.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">“Documentation” means the specifications, manuals and documentation accompanying Llama 3.2</span></span><br><span class="line"><span class="string">distributed by Meta at https://llama.meta.com/doc/overview.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">“Licensee” or “you” means you, or your employer or any other person or entity (if you are </span></span><br><span class="line"><span class="string">entering into this Agreement on such person or entity’s behalf), of the age required under</span></span><br><span class="line"><span class="string">applicable laws, rules or regulations to provide legal consent and that has legal authority</span></span><br><span class="line"><span class="string">to bind your employer or such other person or entity if you are entering in this Agreement</span></span><br><span class="line"><span class="string">on their behalf.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">“Llama 3.2” means the foundational large language models and software and algorithms, including</span></span><br><span class="line"><span class="string">machine-learning model code, trained model weights, inference-enabling code, training-enabling code,</span></span><br><span class="line"><span class="string">fine-tuning enabling code and other elements of the foregoing distributed by Meta at </span></span><br><span class="line"><span class="string">https://www.llama.com/llama-downloads.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">“Llama Materials” means, collectively, Meta’s proprietary Llama 3.2 and Documentation (and </span></span><br><span class="line"><span class="string">any portion thereof) made available under this Agreement.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">“Meta” or “we” means Meta Platforms Ireland Limited (if you are located in or, </span></span><br><span class="line"><span class="string">if you are an entity, your principal place of business is in the EEA or Switzerland) </span></span><br><span class="line"><span class="string">and Meta Platforms, Inc. (if you are located outside of the EEA or Switzerland). </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">By clicking “I Accept” below or by using or distributing any portion or element of the Llama Materials,</span></span><br><span class="line"><span class="string">you agree to be bound by this Agreement.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">1. License Rights and Redistribution.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    a. Grant of Rights. You are granted a non-exclusive, worldwide, </span></span><br><span class="line"><span class="string">non-transferable and royalty-free limited license under Meta’s intellectual property or other rights </span></span><br><span class="line"><span class="string">owned by Meta embodied in the Llama Materials to use, reproduce, distribute, copy, create derivative works </span></span><br><span class="line"><span class="string">of, and make modifications to the Llama Materials.  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    b. Redistribution and Use.  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        i. If you distribute or make available the Llama Materials (or any derivative works thereof), </span></span><br><span class="line"><span class="string">or a product or service (including another AI model) that contains any of them, you shall (A) provide</span></span><br><span class="line"><span class="string">a copy of this Agreement with any such Llama Materials; and (B) prominently display “Built with Llama”</span></span><br><span class="line"><span class="string">on a related website, user interface, blogpost, about page, or product documentation. If you use the</span></span><br><span class="line"><span class="string">Llama Materials or any outputs or results of the Llama Materials to create, train, fine tune, or</span></span><br><span class="line"><span class="string">otherwise improve an AI model, which is distributed or made available, you shall also include “Llama”</span></span><br><span class="line"><span class="string">at the beginning of any such AI model name.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        ii. If you receive Llama Materials, or any derivative works thereof, from a Licensee as part</span></span><br><span class="line"><span class="string">of an integrated end user product, then Section 2 of this Agreement will not apply to you. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        iii. You must retain in all copies of the Llama Materials that you distribute the </span></span><br><span class="line"><span class="string">following attribution notice within a “Notice” text file distributed as a part of such copies: </span></span><br><span class="line"><span class="string">“Llama 3.2 is licensed under the Llama 3.2 Community License, Copyright © Meta Platforms,</span></span><br><span class="line"><span class="string">Inc. All Rights Reserved.”</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        iv. Your use of the Llama Materials must comply with applicable laws and regulations</span></span><br><span class="line"><span class="string">(including trade compliance laws and regulations) and adhere to the Acceptable Use Policy for</span></span><br><span class="line"><span class="string">the Llama Materials (available at https://www.llama.com/llama3_2/use-policy), which is hereby </span></span><br><span class="line"><span class="string">incorporated by reference into this Agreement.</span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string">2. Additional Commercial Terms. If, on the Llama 3.2 version release date, the monthly active users</span></span><br><span class="line"><span class="string">of the products or services made available by or for Licensee, or Licensee’s affiliates, </span></span><br><span class="line"><span class="string">is greater than 700 million monthly active users in the preceding calendar month, you must request </span></span><br><span class="line"><span class="string">a license from Meta, which Meta may grant to you in its sole discretion, and you are not authorized to</span></span><br><span class="line"><span class="string">exercise any of the rights under this Agreement unless or until Meta otherwise expressly grants you such rights.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">3. Disclaimer of Warranty. UNLESS REQUIRED BY APPLICABLE LAW, THE LLAMA MATERIALS AND ANY OUTPUT AND </span></span><br><span class="line"><span class="string">RESULTS THEREFROM ARE PROVIDED ON AN “AS IS” BASIS, WITHOUT WARRANTIES OF ANY KIND, AND META DISCLAIMS</span></span><br><span class="line"><span class="string">ALL WARRANTIES OF ANY KIND, BOTH EXPRESS AND IMPLIED, INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES</span></span><br><span class="line"><span class="string">OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE. YOU ARE SOLELY RESPONSIBLE</span></span><br><span class="line"><span class="string">FOR DETERMINING THE APPROPRIATENESS OF USING OR REDISTRIBUTING THE LLAMA MATERIALS AND ASSUME ANY RISKS ASSOCIATED</span></span><br><span class="line"><span class="string">WITH YOUR USE OF THE LLAMA MATERIALS AND ANY OUTPUT AND RESULTS.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">4. Limitation of Liability. IN NO EVENT WILL META OR ITS AFFILIATES BE LIABLE UNDER ANY THEORY OF LIABILITY, </span></span><br><span class="line"><span class="string">WHETHER IN CONTRACT, TORT, NEGLIGENCE, PRODUCTS LIABILITY, OR OTHERWISE, ARISING OUT OF THIS AGREEMENT, </span></span><br><span class="line"><span class="string">FOR ANY LOST PROFITS OR ANY INDIRECT, SPECIAL, CONSEQUENTIAL, INCIDENTAL, EXEMPLARY OR PUNITIVE DAMAGES, EVEN </span></span><br><span class="line"><span class="string">IF META OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF ANY OF THE FOREGOING.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">5. Intellectual Property.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    a. No trademark licenses are granted under this Agreement, and in connection with the Llama Materials, </span></span><br><span class="line"><span class="string">neither Meta nor Licensee may use any name or mark owned by or associated with the other or any of its affiliates, </span></span><br><span class="line"><span class="string">except as required for reasonable and customary use in describing and redistributing the Llama Materials or as </span></span><br><span class="line"><span class="string">set forth in this Section 5(a). Meta hereby grants you a license to use “Llama” (the “Mark”) solely as required </span></span><br><span class="line"><span class="string">to comply with the last sentence of Section 1.b.i. You will comply with Meta’s brand guidelines (currently accessible </span></span><br><span class="line"><span class="string">at https://about.meta.com/brand/resources/meta/company-brand/). All goodwill arising out of your use of the Mark </span></span><br><span class="line"><span class="string">will inure to the benefit of Meta.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    b. Subject to Meta’s ownership of Llama Materials and derivatives made by or for Meta, with respect to any</span></span><br><span class="line"><span class="string">    derivative works and modifications of the Llama Materials that are made by you, as between you and Meta,</span></span><br><span class="line"><span class="string">    you are and will be the owner of such derivative works and modifications.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    c. If you institute litigation or other proceedings against Meta or any entity (including a cross-claim or</span></span><br><span class="line"><span class="string">    counterclaim in a lawsuit) alleging that the Llama Materials or Llama 3.2 outputs or results, or any portion</span></span><br><span class="line"><span class="string">    of any of the foregoing, constitutes infringement of intellectual property or other rights owned or licensable</span></span><br><span class="line"><span class="string">    by you, then any licenses granted to you under this Agreement shall terminate as of the date such litigation or</span></span><br><span class="line"><span class="string">    claim is filed or instituted. You will indemnify and hold harmless Meta from and against any claim by any third</span></span><br><span class="line"><span class="string">    party arising out of or related to your use or distribution of the Llama Materials.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">6. Term and Termination. The term of this Agreement will commence upon your acceptance of this Agreement or access</span></span><br><span class="line"><span class="string">to the Llama Materials and will continue in full force and effect until terminated in accordance with the terms</span></span><br><span class="line"><span class="string">and conditions herein. Meta may terminate this Agreement if you are in breach of any term or condition of this</span></span><br><span class="line"><span class="string">Agreement. Upon termination of this Agreement, you shall delete and cease use of the Llama Materials. Sections 3,</span></span><br><span class="line"><span class="string">4 and 7 shall survive the termination of this Agreement. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">7. Governing Law and Jurisdiction. This Agreement will be governed and construed under the laws of the State of </span></span><br><span class="line"><span class="string">California without regard to choice of law principles, and the UN Convention on Contracts for the International</span></span><br><span class="line"><span class="string">Sale of Goods does not apply to this Agreement. The courts of California shall have exclusive jurisdiction of</span></span><br><span class="line"><span class="string">any dispute arising out of this Agreement. &quot;</span></span><br></pre></td></tr></table></figure>
+<p>使用这个show指令也能够查看到模型存储地址，除了模型地址之外，还有整个的LICENSE。但是这里我们也发现了一个非常重要的问题：<code>通过ollama show列举出来的GGUF模型文件不全！！！</code>。因此，还是建议直接打开manifests中的配置文件进行查看，再迁移相关的模型文件。</p>
+<h1 id="模型迁移和加载"><a href="#模型迁移和加载" class="headerlink" title="模型迁移和加载"></a>模型迁移和加载</h1><p>在前面了解清楚Ollama的模型文件的存储结构之后，我们要迁移模型，思路就很清晰了：直接把模型文件和索引文件拷贝到相应的路径下就可以了。例如，把sha256的gguf文件拷贝目标设备的blobs路径下，再按照manifests的目录结构，把索引文件拷贝到manifests的路径下。其中如果是Linux操作系统，如下结构是固定的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">manifests/</span><br><span class="line">└── registry.ollama.ai</span><br><span class="line">    └── library</span><br></pre></td></tr></table></figure>
+<p>然后在library下创建一个模型名称命名的目录，例如<code>model-name/</code>，然后把配置文件<code>config</code>拷贝到这个路径下，那么加载模型的时候需要使用的指令就是：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ollama run model-name:config</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，刚把模型迁移过来的时候，直接使用PageAssist等工具可能找不到本地刚迁移过来的模型，需要先<code>ollama run</code>一次，才能够在模型列表里面找到：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ollama list</span><br><span class="line">NAME                            ID              SIZE      MODIFIED          </span><br><span class="line">llama3-vision:11b               085a1fdae525    7.9 GB    About an hour ago</span><br></pre></td></tr></table></figure>
+<p>到这里，Ollama的模型迁移就完成了。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>为了方便本地大模型部署和迁移，本文提供了一个关于Ollama的模型本地迁移的方法。由于直接从Ollama Hub下载下来的模型，或者是比较大的GGUF模型文件，往往会被切分成多个，而文件名在Ollama的路径中又被执行了sha256散列变换。因此我们需要从索引文件中获取相应的文件名，再进行模型本地迁移。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/ollama.html">https://www.cnblogs.com/dechinphy/p/ollama.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2025/02/21/DeepSeek%E6%9C%AC%E5%9C%B0%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          DeepSeek本地性能调优
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/02/18/DeepSeek%E6%99%BA%E8%83%BD%E7%BC%96%E7%A8%8B/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">DeepSeek智能编程</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=Ollama模型迁移 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2025%2F02%2F20%2FOllama%25E6%25A8%25A1%25E5%259E%258B%25E8%25BF%2581%25E7%25A7%25BB%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=Ollama模型迁移 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2025%2F02%2F20%2FOllama%25E6%25A8%25A1%25E5%259E%258B%25E8%25BF%2581%25E7%25A7%25BB%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=Ollama模型迁移 - Hexo&url=http://dechinphy.github.io/2025/02/20/Ollama%E6%A8%A1%E5%9E%8B%E8%BF%81%E7%A7%BB/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

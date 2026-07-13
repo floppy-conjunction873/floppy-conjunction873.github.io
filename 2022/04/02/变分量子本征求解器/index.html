@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>变分量子本征求解器 | Hexo</title>
+
+    <meta name="description" content="Hexo">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "变分量子本征求解器 | Hexo"  />
+    <meta property="og:description" content= "Hexo" />
+    <meta property="og:url" content="http://dechinphy.github.io/2022/04/02/%E5%8F%98%E5%88%86%E9%87%8F%E5%AD%90%E6%9C%AC%E5%BE%81%E6%B1%82%E8%A7%A3%E5%99%A8/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="Hexo" />
+    <meta name="twitter:title" content="变分量子本征求解器 | Hexo"/>
+    <meta name="twitter:description" content="Hexo"/>
+    <script type="application/ld+json">
+        {
+            "description": "Hexo",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2022/04/02/%E5%8F%98%E5%88%86%E9%87%8F%E5%AD%90%E6%9C%AC%E5%BE%81%E6%B1%82%E8%A7%A3%E5%99%A8/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "变分量子本征求解器 | Hexo",
+            "datePublished": "2022-04-02T12:28:43.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2022/04/02/%E5%8F%98%E5%88%86%E9%87%8F%E5%AD%90%E6%9C%AC%E5%BE%81%E6%B1%82%E8%A7%A3%E5%99%A8/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuid7NnOw_mXwMJDPXOW2rW-K" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      变分量子本征求解器
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2022-04-02T12:28:43.000Z" itemprop="datePublished">2022-04-02</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p><img src="https://img2022.cnblogs.com/blog/2277440/202204/2277440-20220402202819448-1551702393.png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> openfermionpyscf <span class="keyword">import</span> run_pyscf</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">from</span> openfermion.chem <span class="keyword">import</span> MolecularData, geometry_from_pubchem</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: <span class="keyword">from</span> openfermion.transforms <span class="keyword">import</span> get_fermion_operator, jordan_wigner</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: multiplicity=<span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: basis=<span class="string">&quot;sto-3g&quot;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: geometry=geometry_from_pubchem(<span class="string">&#x27;h2o&#x27;</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: geometry</span><br><span class="line">Out[<span class="number">7</span>]:</span><br><span class="line">[(<span class="string">&#x27;O&#x27;</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)),</span><br><span class="line"> (<span class="string">&#x27;H&#x27;</span>, (<span class="number">0.2774</span>, <span class="number">0.8929</span>, <span class="number">0.2544</span>)),</span><br><span class="line"> (<span class="string">&#x27;H&#x27;</span>, (<span class="number">0.6068</span>, -<span class="number">0.2383</span>, -<span class="number">0.7169</span>))]</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: molecule = MolecularData(geometry, basis, multiplicity)</span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: molecule = run_pyscf(molecule ,run_mp2=<span class="literal">True</span>, run_cisd=<span class="literal">True</span> ,run_ccsd=<span class="literal">True</span>, run_fci=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">10</span>]: <span class="built_in">print</span>(molecule.fci_energy, molecule.ccsd_energy, molecule.hf_energy)</span><br><span class="line">-<span class="number">75.01553018949156</span> -<span class="number">75.01540899923555</span> -<span class="number">74.96444758276995</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: mh = molecule.get_molecular_hamiltonian()</span><br><span class="line"></span><br><span class="line">In [<span class="number">12</span>]: fh = get_fermion_operator(mh)</span><br><span class="line"><span class="number">9.08436451197603</span> [] +</span><br><span class="line">-<span class="number">32.68991541360028</span> [<span class="number">0</span>^ <span class="number">0</span>] +</span><br><span class="line"><span class="number">2.3723529797919625</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">0</span>] +</span><br><span class="line">-<span class="number">0.20870450678118344</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">2</span>] +</span><br><span class="line">-<span class="number">1.3696880086319053e-07</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">4</span>] +</span><br><span class="line"><span class="number">0.09152338506995344</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">6</span>] +</span><br><span class="line">-<span class="number">0.11727907659025232</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">10</span>] +</span><br><span class="line"><span class="number">4.994906556311282e-07</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">12</span>] +</span><br><span class="line">-<span class="number">0.2087045067811834</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">2</span> <span class="number">0</span>] +</span><br><span class="line"><span class="number">0.02917682895944584</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">2</span> <span class="number">2</span>] + ...</span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: jw = jordan_wigner(fh)</span><br><span class="line">(-<span class="number">46.46560078195154</span>+<span class="number">0j</span>) [] +</span><br><span class="line">(-<span class="number">0.01458841447972292</span>+<span class="number">0j</span>) [X0 X1 Y2 Y3] +</span><br><span class="line">(<span class="number">0.005639816627633215</span>+<span class="number">0j</span>) [X0 X1 Y2 Z3 Z4 Z5 Z6 Y7] +</span><br><span class="line">(-<span class="number">0.008830198814313132</span>+<span class="number">0j</span>) [X0 X1 Y2 Z3 Z4 Z5 Z6 Z7 Z8 Z9 Z10 Y11] +</span><br><span class="line">(<span class="number">0.005639816627633215</span>+<span class="number">0j</span>) [X0 X1 X3 Z4 Z5 X6] +</span><br><span class="line">(-<span class="number">0.008830198814313132</span>+<span class="number">0j</span>) [X0 X1 X3 Z4 Z5 Z6 Z7 Z8 Z9 X10] +</span><br><span class="line">(-<span class="number">0.002741354103185628</span>+<span class="number">0j</span>) [X0 X1 Y4 Y5] + ...</span><br></pre></td></tr></table></figure>
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2022/04/05/%E4%BA%8C%E6%AC%A1%E9%87%8F%E5%AD%90%E5%8C%96%E4%B8%8E%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97%E5%8C%96%E5%AD%A6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          二次量子化与量子计算化学
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/04/02/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E9%87%8F%E5%AD%90%E6%B5%8B%E9%87%8F/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">量子计算基础——量子测量</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=变分量子本征求解器 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F04%2F02%2F%25E5%258F%2598%25E5%2588%2586%25E9%2587%258F%25E5%25AD%2590%25E6%259C%25AC%25E5%25BE%2581%25E6%25B1%2582%25E8%25A7%25A3%25E5%2599%25A8%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=变分量子本征求解器 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2022%2F04%2F02%2F%25E5%258F%2598%25E5%2588%2586%25E9%2587%258F%25E5%25AD%2590%25E6%259C%25AC%25E5%25BE%2581%25E6%25B1%2582%25E8%25A7%25A3%25E5%2599%25A8%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=变分量子本征求解器 - Hexo&url=http://dechinphy.github.io/2022/04/02/%E5%8F%98%E5%88%86%E9%87%8F%E5%AD%90%E6%9C%AC%E5%BE%81%E6%B1%82%E8%A7%A3%E5%99%A8/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

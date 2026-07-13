@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>Ubuntu解决Github无法访问的问题 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;在国内一些局域网下访问github.com可能会存在一些问题，甚至可能直接就无法访问。但是我们可以通过对指定的域名配置一个ip地址，这样在解析的时候就会自动跳转到我们手动选取的那个可访问的节点上。虽然该方法下还是偶尔有可能出现无法访问的情况，但是总体来说还是很大程度上的改善了github.com的访问体验。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "Ubuntu解决Github无法访问的问题 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;在国内一些局域网下访问github.com可能会存在一些问题，甚至可能直接就无法访问。但是我们可以通过对指定的域名配置一个ip地址，这样在解析的时候就会自动跳转到我们手动选取的那个可访问的节点上。虽然该方法下还是偶尔有可能出现无法访问的情况，但是总体来说还是很大程度上的改善了github.com的访问体验。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2022/10/20/Ubuntu%E8%A7%A3%E5%86%B3Github%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E7%9A%84%E9%97%AE%E9%A2%98/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;在国内一些局域网下访问github.com可能会存在一些问题，甚至可能直接就无法访问。但是我们可以通过对指定的域名配置一个ip地址，这样在解析的时候就会自动跳转到我们手动选取的那个可访问的节点上。虽然该方法下还是偶尔有可能出现无法访问的情况，但是总体来说还是很大程度上的改善了github.com的访问体验。&lt;/p&gt;" />
+    <meta name="twitter:title" content="Ubuntu解决Github无法访问的问题 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;在国内一些局域网下访问github.com可能会存在一些问题，甚至可能直接就无法访问。但是我们可以通过对指定的域名配置一个ip地址，这样在解析的时候就会自动跳转到我们手动选取的那个可访问的节点上。虽然该方法下还是偶尔有可能出现无法访问的情况，但是总体来说还是很大程度上的改善了github.com的访问体验。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;在国内一些局域网下访问github.com可能会存在一些问题，甚至可能直接就无法访问。但是我们可以通过对指定的域名配置一个ip地址，这样在解析的时候就会自动跳转到我们手动选取的那个可访问的节点上。虽然该方法下还是偶尔有可能出现无法访问的情况，但是总体来说还是很大程度上的改善了github.com的访问体验。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2022/10/20/Ubuntu%E8%A7%A3%E5%86%B3Github%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E7%9A%84%E9%97%AE%E9%A2%98/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "Ubuntu解决Github无法访问的问题 | Hexo",
+            "datePublished": "2022-10-20T03:19:56.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2022/10/20/Ubuntu%E8%A7%A3%E5%86%B3Github%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E7%9A%84%E9%97%AE%E9%A2%98/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidu8ZB84Pf_RiUBXz--H2Eq" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      Ubuntu解决Github无法访问的问题
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2022-10-20T03:19:56.000Z" itemprop="datePublished">2022-10-20</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>在国内一些局域网下访问github.com可能会存在一些问题，甚至可能直接就无法访问。但是我们可以通过对指定的域名配置一个ip地址，这样在解析的时候就会自动跳转到我们手动选取的那个可访问的节点上。虽然该方法下还是偶尔有可能出现无法访问的情况，但是总体来说还是很大程度上的改善了github.com的访问体验。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>由于IP设置的问题，有时候会出现Github无法访问的问题，经过一番的资料检索之后，发现如下的方案可以成功解决在Ubuntu下无法正常访问Github的问题（有时候可以打开，有时候又不行）。</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202210/2277440-20221020114048686-1489370705.png">
+</div>
+
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>首先我们编辑<code>/etc/hosts</code>文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vi /etc/hosts</span><br></pre></td></tr></table></figure>
+<p>然后把原始文件中的与<code>github.com</code>相关的内容先删除，再将如下内容放到文件的末尾：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">140.82.114.25                 alive.github.com</span><br><span class="line">140.82.112.25                 live.github.com</span><br><span class="line">185.199.108.154               github.githubassets.com</span><br><span class="line">140.82.112.22                 central.github.com</span><br><span class="line">185.199.108.133               desktop.githubusercontent.com</span><br><span class="line">185.199.108.153               assets-cdn.github.com</span><br><span class="line">185.199.108.133               camo.githubusercontent.com</span><br><span class="line">185.199.108.133               github.map.fastly.net</span><br><span class="line">199.232.69.194                github.global.ssl.fastly.net</span><br><span class="line">140.82.112.4                  gist.github.com</span><br><span class="line">185.199.108.153               github.io</span><br><span class="line">140.82.114.4                  github.com</span><br><span class="line">192.0.66.2                    github.blog</span><br><span class="line">140.82.112.6                  api.github.com</span><br><span class="line">185.199.108.133               raw.githubusercontent.com</span><br><span class="line">185.199.108.133               user-images.githubusercontent.com</span><br><span class="line">185.199.108.133               favicons.githubusercontent.com</span><br><span class="line">185.199.108.133               avatars5.githubusercontent.com</span><br><span class="line">185.199.108.133               avatars4.githubusercontent.com</span><br><span class="line">185.199.108.133               avatars3.githubusercontent.com</span><br><span class="line">185.199.108.133               avatars2.githubusercontent.com</span><br><span class="line">185.199.108.133               avatars1.githubusercontent.com</span><br><span class="line">185.199.108.133               avatars0.githubusercontent.com</span><br><span class="line">185.199.108.133               avatars.githubusercontent.com</span><br><span class="line">140.82.112.10                 codeload.github.com</span><br><span class="line">52.217.223.17                 github-cloud.s3.amazonaws.com</span><br><span class="line">52.217.199.41                 github-com.s3.amazonaws.com</span><br><span class="line">52.217.93.164                 github-production-release-asset-2e65be.s3.amazonaws.com</span><br><span class="line">52.217.174.129                github-production-user-asset-6210df.s3.amazonaws.com</span><br><span class="line">52.217.129.153                github-production-repository-file-5c1aeb.s3.amazonaws.com</span><br><span class="line">185.199.108.153               githubstatus.com</span><br><span class="line">64.71.144.202                 github.community</span><br><span class="line">23.100.27.125                 github.dev</span><br><span class="line">185.199.108.133               media.githubusercontent.com</span><br></pre></td></tr></table></figure>
+<p>修改完成后<code>esc+:wq</code>退出，然后安装一个nscd：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">sudo</span> apt install nscd</span><br><span class="line">正在读取软件包列表... 完成</span><br><span class="line">正在分析软件包的依赖关系树       </span><br><span class="line">正在读取状态信息... 完成       </span><br><span class="line">下列软件包是自动安装的并且现在不需要了：</span><br><span class="line">  libfwupdplugin1 libice6:i386 libsm6:i386 libxt6:i386 linux-headers-5.14.0-1048-oem</span><br><span class="line">  linux-image-5.14.0-1048-oem linux-modules-5.14.0-1048-oem</span><br><span class="line">  linux-oem-5.14-headers-5.14.0-1048</span><br><span class="line">使用<span class="string">&#x27;sudo apt autoremove&#x27;</span>来卸载它(它们)。</span><br><span class="line">下列【新】软件包将被安装：</span><br><span class="line">  nscd</span><br><span class="line">升级了 0 个软件包，新安装了 1 个软件包，要卸载 0 个软件包，有 151 个软件包未被升级。</span><br><span class="line">需要下载 74.5 kB 的归档。</span><br><span class="line">解压缩后会消耗 463 kB 的额外空间。</span><br><span class="line">获取:1 https://mirrors.tuna.tsinghua.edu.cn/ubuntu focal-updates/universe amd64 nscd amd64 2.31-0ubuntu9.9 [74.5 kB]</span><br><span class="line">已下载 74.5 kB，耗时 1秒 (83.4 kB/s)</span><br><span class="line">正在选中未选择的软件包 nscd。</span><br><span class="line">(正在读取数据库 ... 系统当前共安装有 480631 个文件和目录。)</span><br><span class="line">准备解压 .../nscd_2.31-0ubuntu9.9_amd64.deb  ...</span><br><span class="line">正在解压 nscd (2.31-0ubuntu9.9) ...</span><br><span class="line">正在设置 nscd (2.31-0ubuntu9.9) ...</span><br><span class="line">Created symlink /etc/systemd/system/multi-user.target.wants/nscd.service → /lib/systemd/system</span><br><span class="line">/nscd.service.</span><br><span class="line">正在处理用于 man-db (2.9.1-1) 的触发器 ...</span><br><span class="line">正在处理用于 systemd (245.4-4ubuntu3.17) 的触发器 ...</span><br></pre></td></tr></table></figure>
+<p>最后再重启一下nscd服务即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">sudo</span> /etc/init.d/nscd restart</span><br><span class="line">Restarting nscd (via systemctl): nscd.service.</span><br></pre></td></tr></table></figure>
+<p>这样一波操作之后，Github就可以快速访问了：</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202210/2277440-20221020112456186-698798322.png">
+</div>
+
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>在国内一些局域网下访问github.com可能会存在一些问题，甚至可能直接就无法访问。但是我们可以通过对指定的域名配置一个ip地址，这样在解析的时候就会自动跳转到我们手动选取的那个可访问的节点上。虽然该方法下还是偶尔有可能出现无法访问的情况，但是总体来说还是很大程度上的改善了github.com的访问体验。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/git-access.html">https://www.cnblogs.com/dechinphy/p/git-access.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>打赏专用链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<p>腾讯云专栏同步：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/91958">https://cloud.tencent.com/developer/column/91958</a></p>
+<p>CSDN同步链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/baidu_37157624?spm=1008.2028.3001.5343">https://blog.csdn.net/baidu_37157624?spm=1008.2028.3001.5343</a></p>
+<p>51CTO同步链接：<a target="_blank" rel="noopener" href="https://blog.51cto.com/u_15561675">https://blog.51cto.com/u_15561675</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1904883">https://cloud.tencent.com/developer/article/1904883</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2022/11/01/%E8%A7%A3%E5%86%B3Ubuntu-20.04%E4%B8%8BVS-code%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8%E4%B8%AD%E6%96%87%E8%BE%93%E5%85%A5%E6%B3%95%E7%9A%84%E9%97%AE%E9%A2%98/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          解决Ubuntu 20.04下VS code无法使用中文输入法的问题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/10/17/RMarkdown%E8%BF%9B%E9%98%B6%E6%93%8D%E4%BD%9C/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">RMarkdown进阶操作</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=Ubuntu解决Github无法访问的问题 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F10%2F20%2FUbuntu%25E8%25A7%25A3%25E5%2586%25B3Github%25E6%2597%25A0%25E6%25B3%2595%25E8%25AE%25BF%25E9%2597%25AE%25E7%259A%2584%25E9%2597%25AE%25E9%25A2%2598%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=Ubuntu解决Github无法访问的问题 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2022%2F10%2F20%2FUbuntu%25E8%25A7%25A3%25E5%2586%25B3Github%25E6%2597%25A0%25E6%25B3%2595%25E8%25AE%25BF%25E9%2597%25AE%25E7%259A%2584%25E9%2597%25AE%25E9%25A2%2598%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=Ubuntu解决Github无法访问的问题 - Hexo&url=http://dechinphy.github.io/2022/10/20/Ubuntu%E8%A7%A3%E5%86%B3Github%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE%E7%9A%84%E9%97%AE%E9%A2%98/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

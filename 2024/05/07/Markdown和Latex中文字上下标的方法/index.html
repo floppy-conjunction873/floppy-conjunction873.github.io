@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>Markdown和Latex中文字上下标的方法 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文介绍了4种方法，可以在Markdown或者是LaTex的语法中实现文字、符号的上下标。公式的上下标大家都很清楚了，这里主要介绍的是文字的上下标，而且要保持使用归正的字体。在这些方法中，既可以使用公式+取消斜体的操作，也可以使用前端的一些上下标标签，还可以直接调用LaTex中的上下标“函数”。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "Markdown和Latex中文字上下标的方法 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文介绍了4种方法，可以在Markdown或者是LaTex的语法中实现文字、符号的上下标。公式的上下标大家都很清楚了，这里主要介绍的是文字的上下标，而且要保持使用归正的字体。在这些方法中，既可以使用公式+取消斜体的操作，也可以使用前端的一些上下标标签，还可以直接调用LaTex中的上下标“函数”。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2024/05/07/Markdown%E5%92%8CLatex%E4%B8%AD%E6%96%87%E5%AD%97%E4%B8%8A%E4%B8%8B%E6%A0%87%E7%9A%84%E6%96%B9%E6%B3%95/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文介绍了4种方法，可以在Markdown或者是LaTex的语法中实现文字、符号的上下标。公式的上下标大家都很清楚了，这里主要介绍的是文字的上下标，而且要保持使用归正的字体。在这些方法中，既可以使用公式+取消斜体的操作，也可以使用前端的一些上下标标签，还可以直接调用LaTex中的上下标“函数”。&lt;/p&gt;" />
+    <meta name="twitter:title" content="Markdown和Latex中文字上下标的方法 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文介绍了4种方法，可以在Markdown或者是LaTex的语法中实现文字、符号的上下标。公式的上下标大家都很清楚了，这里主要介绍的是文字的上下标，而且要保持使用归正的字体。在这些方法中，既可以使用公式+取消斜体的操作，也可以使用前端的一些上下标标签，还可以直接调用LaTex中的上下标“函数”。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文介绍了4种方法，可以在Markdown或者是LaTex的语法中实现文字、符号的上下标。公式的上下标大家都很清楚了，这里主要介绍的是文字的上下标，而且要保持使用归正的字体。在这些方法中，既可以使用公式+取消斜体的操作，也可以使用前端的一些上下标标签，还可以直接调用LaTex中的上下标“函数”。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2024/05/07/Markdown%E5%92%8CLatex%E4%B8%AD%E6%96%87%E5%AD%97%E4%B8%8A%E4%B8%8B%E6%A0%87%E7%9A%84%E6%96%B9%E6%B3%95/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "Markdown和Latex中文字上下标的方法 | Hexo",
+            "datePublished": "2024-05-07T02:13:37.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2024/05/07/Markdown%E5%92%8CLatex%E4%B8%AD%E6%96%87%E5%AD%97%E4%B8%8A%E4%B8%8B%E6%A0%87%E7%9A%84%E6%96%B9%E6%B3%95/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuiddgtvL__0AS3qFaAwwlO9r" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      Markdown和Latex中文字上下标的方法
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2024-05-07T02:13:37.000Z" itemprop="datePublished">2024-05-07</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文介绍了4种方法，可以在Markdown或者是LaTex的语法中实现文字、符号的上下标。公式的上下标大家都很清楚了，这里主要介绍的是文字的上下标，而且要保持使用归正的字体。在这些方法中，既可以使用公式+取消斜体的操作，也可以使用前端的一些上下标标签，还可以直接调用LaTex中的上下标“函数”。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在Markdown和Latex中，如果只是写公式，不论是行内公式还是行间公式，都可以直接使用<code>^</code>和<code>_</code>这两个符号实现上下标。但有个问题是，如果只是使用公式来做上下标，出来的字体是斜着的。例如这样的语法：</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">P<span class="emphasis">_&#123;OK&#125;</span></span><br><span class="line"><span class="emphasis">$$</span></span><br></pre></td></tr></table></figure>
+<p>输出结果是这样的：<br>$$<br>P_{OK}<br>$$<br>但是有些时候想要的字符不能使用斜体，这时候就有几种解决办法。</p>
+<h1 id="归正字体"><a href="#归正字体" class="headerlink" title="归正字体"></a>归正字体</h1><p>第一种方法，我们可以在对应的字符前加一个<code>\rm</code>，使得公式内字体归正：</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">\rm P<span class="emphasis">_&#123;OK&#125;</span></span><br><span class="line"><span class="emphasis">$$</span></span><br></pre></td></tr></table></figure>
+<p>输出效果为：<br>$$<br>\rm P_{OK}<br>$$</p>
+<p>第二种方法，我们可以使用<code>\mathrm</code>，使得部分字符归正：</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">\mathrm&#123;P&#125;<span class="emphasis">_&#123;OK&#125;</span></span><br><span class="line"><span class="emphasis">$$</span></span><br></pre></td></tr></table></figure>
+<p>这里只归正一个$P$字符，其效果如下：<br>$$<br>\mathrm{P}_{OK}<br>$$</p>
+<p>第三种方法，如果是在行内插入文字形式的上下标（非公式），在markdown里面可以使用html的一些标签，例如<code>&lt;sub&gt;</code>和<code>&lt;sup&gt;</code>：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">sub</span>&gt;</span>[P]<span class="tag">&lt;/<span class="name">sub</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">sup</span>&gt;</span>[OK]<span class="tag">&lt;/<span class="name">sup</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>使用的效果是这样的：<sub>[P]</sub>这是一个下标，<sup>[OK]</sup>这是一个上标。</p>
+<p>第四种方法，如果是在LaTex中，可能不能像markdown这样简单的使用html标签，但是可以使用如下两个操作。</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\textsuperscript</span>&#123;P&#125;</span><br><span class="line"><span class="keyword">\textsubscript</span>&#123;OK&#125;</span><br></pre></td></tr></table></figure>
+<p>LaTex的结果就不在这里演示了，这就是相关的使用上下标的方法。如果把前面这几种可以在Markdown中实现的上下标方法放到一起就是：$Met^{hod}\ 1$、$Met^\mathrm{hod}\ 2$、Met<sup>hod</sup> 3. 需要注意的是，第三种使用前端<strong>网页标签的这种方法</strong>，在Markdown里面是可以正常work的，但是放到网页里面展示的时候，<strong>不一定生效</strong>，有可能被其他的一些修饰覆盖了，所以还是推荐使用其他三种方法。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了4种方法，可以在Markdown或者是LaTex的语法中实现文字、符号的上下标。公式的上下标大家都很清楚了，这里主要介绍的是文字的上下标，而且要保持使用归正的字体。在这些方法中，既可以使用公式+取消斜体的操作，也可以使用前端的一些上下标标签，还可以直接调用LaTex中的上下标“函数”。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/superscript-subscript.html">https://www.cnblogs.com/dechinphy/p/superscript-subscript.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2024/05/08/PyTorch%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          PyTorch的安装与使用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/05/06/Plumed%E5%88%86%E5%AD%90%E6%A8%A1%E6%8B%9F%E5%90%8E%E5%88%86%E6%9E%90/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">Plumed分子模拟后分析</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=Markdown和Latex中文字上下标的方法 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F05%2F07%2FMarkdown%25E5%2592%258CLatex%25E4%25B8%25AD%25E6%2596%2587%25E5%25AD%2597%25E4%25B8%258A%25E4%25B8%258B%25E6%25A0%2587%25E7%259A%2584%25E6%2596%25B9%25E6%25B3%2595%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=Markdown和Latex中文字上下标的方法 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2024%2F05%2F07%2FMarkdown%25E5%2592%258CLatex%25E4%25B8%25AD%25E6%2596%2587%25E5%25AD%2597%25E4%25B8%258A%25E4%25B8%258B%25E6%25A0%2587%25E7%259A%2584%25E6%2596%25B9%25E6%25B3%2595%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=Markdown和Latex中文字上下标的方法 - Hexo&url=http://dechinphy.github.io/2024/05/07/Markdown%E5%92%8CLatex%E4%B8%AD%E6%96%87%E5%AD%97%E4%B8%8A%E4%B8%8B%E6%A0%87%E7%9A%84%E6%96%B9%E6%B3%95/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

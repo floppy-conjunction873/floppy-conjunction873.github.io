@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>MindSpore尝鲜之Vmap功能 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文介绍了华为推出的深度学习框架MindSpore中最新支持的vmap功能函数，可以用于向量化的计算，本质上的主要作用是替代并加速python中的for循环的操作。最早是在numba和pytroch、jax中对vmap功能进行了支持，其实numpy中的底层计算也用到了向量化的运算，因此速度才如此之快。vmap在python中更多的是与即时编译功能jit一同使用，能够起到简化编程的同时对性能进行极大程度的优化，尤其是python中的for循环的优化。但是对于一些numpy、jax或者MindSpore中已有的算子而言，还是建议直接使用其已经实现的算子，而不是vmap再手写一个。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "MindSpore尝鲜之Vmap功能 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文介绍了华为推出的深度学习框架MindSpore中最新支持的vmap功能函数，可以用于向量化的计算，本质上的主要作用是替代并加速python中的for循环的操作。最早是在numba和pytroch、jax中对vmap功能进行了支持，其实numpy中的底层计算也用到了向量化的运算，因此速度才如此之快。vmap在python中更多的是与即时编译功能jit一同使用，能够起到简化编程的同时对性能进行极大程度的优化，尤其是python中的for循环的优化。但是对于一些numpy、jax或者MindSpore中已有的算子而言，还是建议直接使用其已经实现的算子，而不是vmap再手写一个。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2022/03/24/MindSpore%E5%B0%9D%E9%B2%9C%E4%B9%8BVmap%E5%8A%9F%E8%83%BD/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文介绍了华为推出的深度学习框架MindSpore中最新支持的vmap功能函数，可以用于向量化的计算，本质上的主要作用是替代并加速python中的for循环的操作。最早是在numba和pytroch、jax中对vmap功能进行了支持，其实numpy中的底层计算也用到了向量化的运算，因此速度才如此之快。vmap在python中更多的是与即时编译功能jit一同使用，能够起到简化编程的同时对性能进行极大程度的优化，尤其是python中的for循环的优化。但是对于一些numpy、jax或者MindSpore中已有的算子而言，还是建议直接使用其已经实现的算子，而不是vmap再手写一个。&lt;/p&gt;" />
+    <meta name="twitter:title" content="MindSpore尝鲜之Vmap功能 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文介绍了华为推出的深度学习框架MindSpore中最新支持的vmap功能函数，可以用于向量化的计算，本质上的主要作用是替代并加速python中的for循环的操作。最早是在numba和pytroch、jax中对vmap功能进行了支持，其实numpy中的底层计算也用到了向量化的运算，因此速度才如此之快。vmap在python中更多的是与即时编译功能jit一同使用，能够起到简化编程的同时对性能进行极大程度的优化，尤其是python中的for循环的优化。但是对于一些numpy、jax或者MindSpore中已有的算子而言，还是建议直接使用其已经实现的算子，而不是vmap再手写一个。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文介绍了华为推出的深度学习框架MindSpore中最新支持的vmap功能函数，可以用于向量化的计算，本质上的主要作用是替代并加速python中的for循环的操作。最早是在numba和pytroch、jax中对vmap功能进行了支持，其实numpy中的底层计算也用到了向量化的运算，因此速度才如此之快。vmap在python中更多的是与即时编译功能jit一同使用，能够起到简化编程的同时对性能进行极大程度的优化，尤其是python中的for循环的优化。但是对于一些numpy、jax或者MindSpore中已有的算子而言，还是建议直接使用其已经实现的算子，而不是vmap再手写一个。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2022/03/24/MindSpore%E5%B0%9D%E9%B2%9C%E4%B9%8BVmap%E5%8A%9F%E8%83%BD/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "MindSpore尝鲜之Vmap功能 | Hexo",
+            "datePublished": "2022-03-24T08:18:34.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2022/03/24/MindSpore%E5%B0%9D%E9%B2%9C%E4%B9%8BVmap%E5%8A%9F%E8%83%BD/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidE4Kib-2pfg2GHXZqZbMWW" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      MindSpore尝鲜之Vmap功能
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2022-03-24T08:18:34.000Z" itemprop="datePublished">2022-03-24</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文介绍了华为推出的深度学习框架MindSpore中最新支持的vmap功能函数，可以用于向量化的计算，本质上的主要作用是替代并加速python中的for循环的操作。最早是在numba和pytroch、jax中对vmap功能进行了支持，其实numpy中的底层计算也用到了向量化的运算，因此速度才如此之快。vmap在python中更多的是与即时编译功能jit一同使用，能够起到简化编程的同时对性能进行极大程度的优化，尤其是python中的for循环的优化。但是对于一些numpy、jax或者MindSpore中已有的算子而言，还是建议直接使用其已经实现的算子，而不是vmap再手写一个。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>Vmap是一种在python里面经常提到的向量化运算的功能，比如之前大家常用的就是numba和jax中的向量化运算的接口。虽然numpy中也使用到了向量化的运算，比如计算两个numpy数组的加和，就是一种向量化的运算。但是在numpy中模块封装的较好，定制化程度低，但是使用便捷，只需要调用最上层的接口即可。现在最新版本的mindspore也已经推出了vmap的功能，像mindspore、numba还有jax，与numpy的最大区别就是，需要在使用过程中对需要向量化运算的函数额外嵌套一层vmap的函数，这样就可以实现只对需要向量化运算的模块进行扩展。用一个公式来理解向量化运算的话就是：<br>$$<br>a_1+b_1&#x3D;c_1\<br>a_2+b_2&#x3D;c_2\<br>.\<br>.\<br>.\<br>a_n+b_n&#x3D;c_n\<br>\Downarrow\<br>\vec{a}+\vec{b}&#x3D;\vec{c}<br>$$</p>
+<h1 id="安装最新版MindSpore"><a href="#安装最新版MindSpore" class="headerlink" title="安装最新版MindSpore"></a>安装最新版MindSpore</h1><p>关于jax中的vmap使用案例，可以参考前面介绍的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/lincs.html">LINCS约束算法实现</a>和<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/batch-settle.html">SETTLE约束算法批量化实现</a>这两篇文章，都有使用到jax的vmap功能，这里我们着重介绍的是MindSpore中最新实现的vmap功能。首先我们需要安装mindspore最新的Nightly版本，其对应的是MindSpore的Gitee仓库中的master分支，具体安装指令可以参考其<a target="_blank" rel="noopener" href="https://www.mindspore.cn/install">官方链接</a>：</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220328101903594-893605013.png">
+</div>
+
+<p>因为我们本地已经安装过Mindspore的旧版本，因此还需要在安装指令之后加上<code>--upgrade</code>操作，否则会导致系统误以为本地已经安装成功，不会执行安装的操作：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install mindspore-cuda11-dev -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade</span><br></pre></td></tr></table></figure>
+
+<h1 id="Vmap功能测试"><a href="#Vmap功能测试" class="headerlink" title="Vmap功能测试"></a>Vmap功能测试</h1><p>这里我们先来看一个比较简单的示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> mindspore <span class="keyword">import</span> Tensor</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">from</span> mindspore.ops.functional <span class="keyword">import</span> vmap</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: y = <span class="keyword">lambda</span> a,b: a+b</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: A = Tensor([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: B = Tensor([<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: vmap_y = vmap(y,in_axes=(<span class="number">0</span>,<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: y(A[<span class="number">0</span>],B[<span class="number">0</span>]) <span class="comment"># 元素加和</span></span><br><span class="line">Out[<span class="number">7</span>]: Tensor(shape=[], dtype=Int64, value= <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: vmap_y(A,B) <span class="comment"># 矢量加和</span></span><br><span class="line">Out[<span class="number">8</span>]: Tensor(shape=[<span class="number">3</span>], dtype=Int64, value= [<span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>])</span><br></pre></td></tr></table></figure>
+<p>在上面的这个示例中，我们定义了一个加法函数<code>y</code>，作用就是把输入的两个对象相加。这里需要注意的是，如果输入给y的是两个Mindspore的Tensor对象，那么会直接返回两个Tensor对应位置相加的结果。但是如果输入给y的是两个普通python的list，则输出的结果会是两个list的拼接，这跟不同类型的加法的实现方式有关，在文末总结中会进行解释。这里我们只是想说明：<code>y本身是一个元素加和的函数，可以通过vmap使其称为矢量加和的函数</code>。关于输入的<code>in_axes</code>参数，指的是扩展的维度。比如我们写了一个支持$(A,A)\times(A,1)$维度的函数，如果把<code>in_axes</code>参数设置为<code>0</code>，那么就可以得到一个支持计算$(B,A,A)\times(B,A,1)$维度的函数。其中in_axes参数，决定的是被扩展的维度<code>B</code>所在的位置。这一点我们可以看一下vmap的官方示例：</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220328102306328-1819120809.png">
+</div>
+
+<p>在这个案例中，也是定义了一个普通的加和函数，通过vmap去扩展不同的维度，大致的计算逻辑为：<br>$$<br>(A,)+(A,)+(A,)\<br>\Downarrow^{in_axes&#x3D;(0,1,None)}\<br>(B,A)+(A,B)+(A,)&#x3D;(B,A)+(B,A)+(1,A)&#x3D;(B,A)\<br>\Downarrow^{out_axes&#x3D;1}\<br>(A,B)<br>$$<br>其实这个过程中关于<code>in_axes</code>是比较容易可以理解的，但是这个<code>out_axes</code>有时候会让人难以捉摸，在github上专门有人提出了这个<a target="_blank" rel="noopener" href="https://github.com/google/jax/issues/1368">issue</a>并有人做出了解释：</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220328105118530-663573120.png">
+</div>
+
+<p>结合上面的案例，其实<code>out_axes</code>就是决定了扩展的维度B在结果中的位置，比如out_axes&#x3D;1，所对应的结果中就是$(x,B,x,…x)$。也就是说，其不影响计算的结果，但是有可能会对计算结果进行转置操作，在MindSpore和Numpy中称为<code>swap_axes</code>。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了华为推出的深度学习框架MindSpore中最新支持的vmap功能函数，可以用于向量化的计算，本质上的主要作用是替代并加速python中的for循环的操作。最早是在numba和pytroch、jax中对vmap功能进行了支持，其实numpy中的底层计算也用到了向量化的运算，因此速度才如此之快。vmap在python中更多的是与即时编译功能jit一同使用，能够起到简化编程的同时对性能进行极大程度的优化，尤其是python中的for循环的优化。但是对于一些numpy、jax或者MindSpore中已有的算子而言，还是建议直接使用其已经实现的算子，而不是vmap再手写一个。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/ms-vmap.html">https://www.cnblogs.com/dechinphy/p/ms-vmap.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>打赏专用链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<p>腾讯云专栏同步：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/91958">https://cloud.tencent.com/developer/column/91958</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://gitee.com/mindspore/mindspore/blob/master/mindspore/python/mindspore/ops/functional.py#L845">https://gitee.com/mindspore/mindspore/blob/master/mindspore/python/mindspore/ops/functional.py#L845</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2022/03/28/Python%E4%B8%AD%E5%B0%86%E5%AD%97%E5%85%B8%E8%BD%AC%E4%B8%BA%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          Python中将字典转为成员变量
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/03/22/python%E4%B8%AD%E7%9A%84super%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">python中的super是什么？</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=MindSpore尝鲜之Vmap功能 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F03%2F24%2FMindSpore%25E5%25B0%259D%25E9%25B2%259C%25E4%25B9%258BVmap%25E5%258A%259F%25E8%2583%25BD%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=MindSpore尝鲜之Vmap功能 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2022%2F03%2F24%2FMindSpore%25E5%25B0%259D%25E9%25B2%259C%25E4%25B9%258BVmap%25E5%258A%259F%25E8%2583%25BD%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=MindSpore尝鲜之Vmap功能 - Hexo&url=http://dechinphy.github.io/2022/03/24/MindSpore%E5%B0%9D%E9%B2%9C%E4%B9%8BVmap%E5%8A%9F%E8%83%BD/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

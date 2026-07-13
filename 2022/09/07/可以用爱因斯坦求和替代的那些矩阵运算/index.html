@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>可以用爱因斯坦求和替代的那些矩阵运算 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文主要基于Python的Numpy库，介绍一些爱因斯坦求和算子Einsum的应用场景，包括求和、求内外积、求转置等等。我们需要明确的是，爱因斯坦求和算子的意义主要在于矩阵的多重运算时，可以通过爱因斯坦求和约定将这种复杂问题定义成一个张量网络，通过图模型去找到一个更好的缩并路径，以得到更好的算法复杂度。而如果只是普通的点乘求和之类的运算，其实并不是Einsum的主要功能。但是这些功能也可以用爱因斯坦求和的形式来实现，也说明了这个约定的先进性。当然，也有众多的矩阵运算功能是无法直接通过爱因斯坦求和算子来实现的，比如矩阵求逆、求本征值、矩阵扩维、矩阵重构还有向量叉乘等等。只有在合适的地方使用Einsum，才能体现它的真正价值。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "可以用爱因斯坦求和替代的那些矩阵运算 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文主要基于Python的Numpy库，介绍一些爱因斯坦求和算子Einsum的应用场景，包括求和、求内外积、求转置等等。我们需要明确的是，爱因斯坦求和算子的意义主要在于矩阵的多重运算时，可以通过爱因斯坦求和约定将这种复杂问题定义成一个张量网络，通过图模型去找到一个更好的缩并路径，以得到更好的算法复杂度。而如果只是普通的点乘求和之类的运算，其实并不是Einsum的主要功能。但是这些功能也可以用爱因斯坦求和的形式来实现，也说明了这个约定的先进性。当然，也有众多的矩阵运算功能是无法直接通过爱因斯坦求和算子来实现的，比如矩阵求逆、求本征值、矩阵扩维、矩阵重构还有向量叉乘等等。只有在合适的地方使用Einsum，才能体现它的真正价值。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2022/09/07/%E5%8F%AF%E4%BB%A5%E7%94%A8%E7%88%B1%E5%9B%A0%E6%96%AF%E5%9D%A6%E6%B1%82%E5%92%8C%E6%9B%BF%E4%BB%A3%E7%9A%84%E9%82%A3%E4%BA%9B%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文主要基于Python的Numpy库，介绍一些爱因斯坦求和算子Einsum的应用场景，包括求和、求内外积、求转置等等。我们需要明确的是，爱因斯坦求和算子的意义主要在于矩阵的多重运算时，可以通过爱因斯坦求和约定将这种复杂问题定义成一个张量网络，通过图模型去找到一个更好的缩并路径，以得到更好的算法复杂度。而如果只是普通的点乘求和之类的运算，其实并不是Einsum的主要功能。但是这些功能也可以用爱因斯坦求和的形式来实现，也说明了这个约定的先进性。当然，也有众多的矩阵运算功能是无法直接通过爱因斯坦求和算子来实现的，比如矩阵求逆、求本征值、矩阵扩维、矩阵重构还有向量叉乘等等。只有在合适的地方使用Einsum，才能体现它的真正价值。&lt;/p&gt;" />
+    <meta name="twitter:title" content="可以用爱因斯坦求和替代的那些矩阵运算 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文主要基于Python的Numpy库，介绍一些爱因斯坦求和算子Einsum的应用场景，包括求和、求内外积、求转置等等。我们需要明确的是，爱因斯坦求和算子的意义主要在于矩阵的多重运算时，可以通过爱因斯坦求和约定将这种复杂问题定义成一个张量网络，通过图模型去找到一个更好的缩并路径，以得到更好的算法复杂度。而如果只是普通的点乘求和之类的运算，其实并不是Einsum的主要功能。但是这些功能也可以用爱因斯坦求和的形式来实现，也说明了这个约定的先进性。当然，也有众多的矩阵运算功能是无法直接通过爱因斯坦求和算子来实现的，比如矩阵求逆、求本征值、矩阵扩维、矩阵重构还有向量叉乘等等。只有在合适的地方使用Einsum，才能体现它的真正价值。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文主要基于Python的Numpy库，介绍一些爱因斯坦求和算子Einsum的应用场景，包括求和、求内外积、求转置等等。我们需要明确的是，爱因斯坦求和算子的意义主要在于矩阵的多重运算时，可以通过爱因斯坦求和约定将这种复杂问题定义成一个张量网络，通过图模型去找到一个更好的缩并路径，以得到更好的算法复杂度。而如果只是普通的点乘求和之类的运算，其实并不是Einsum的主要功能。但是这些功能也可以用爱因斯坦求和的形式来实现，也说明了这个约定的先进性。当然，也有众多的矩阵运算功能是无法直接通过爱因斯坦求和算子来实现的，比如矩阵求逆、求本征值、矩阵扩维、矩阵重构还有向量叉乘等等。只有在合适的地方使用Einsum，才能体现它的真正价值。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2022/09/07/%E5%8F%AF%E4%BB%A5%E7%94%A8%E7%88%B1%E5%9B%A0%E6%96%AF%E5%9D%A6%E6%B1%82%E5%92%8C%E6%9B%BF%E4%BB%A3%E7%9A%84%E9%82%A3%E4%BA%9B%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "可以用爱因斯坦求和替代的那些矩阵运算 | Hexo",
+            "datePublished": "2022-09-07T06:05:49.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2022/09/07/%E5%8F%AF%E4%BB%A5%E7%94%A8%E7%88%B1%E5%9B%A0%E6%96%AF%E5%9D%A6%E6%B1%82%E5%92%8C%E6%9B%BF%E4%BB%A3%E7%9A%84%E9%82%A3%E4%BA%9B%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidNnW3TtQ187XMPOCLf_k4C" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      可以用爱因斯坦求和替代的那些矩阵运算
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2022-09-07T06:05:49.000Z" itemprop="datePublished">2022-09-07</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文主要基于Python的Numpy库，介绍一些爱因斯坦求和算子Einsum的应用场景，包括求和、求内外积、求转置等等。我们需要明确的是，爱因斯坦求和算子的意义主要在于矩阵的多重运算时，可以通过爱因斯坦求和约定将这种复杂问题定义成一个张量网络，通过图模型去找到一个更好的缩并路径，以得到更好的算法复杂度。而如果只是普通的点乘求和之类的运算，其实并不是Einsum的主要功能。但是这些功能也可以用爱因斯坦求和的形式来实现，也说明了这个约定的先进性。当然，也有众多的矩阵运算功能是无法直接通过爱因斯坦求和算子来实现的，比如矩阵求逆、求本征值、矩阵扩维、矩阵重构还有向量叉乘等等。只有在合适的地方使用Einsum，才能体现它的真正价值。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面的几篇文章中我们分别介绍过numpy中的爱因斯坦求和函数<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/tensor.html">Einsum</a>和MindSpore框架中的爱因斯坦求和算子<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/mseinsum.html">Einsum</a>的基本用法。而我们需要知道，爱因斯坦求和其实还可以实现非常多的功能，甚至可以替代大部分的矩阵运算，比如常见的点乘、元素乘、求和等等这些都是可以的。那我们就逐一看一下可以用爱因斯坦求和来替代的那些函数和方法。</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220505101906303-43026949.png" style="zoom:70%">
+</div>
+
+<h1 id="案例演示"><a href="#案例演示" class="headerlink" title="案例演示"></a>案例演示</h1><p>在numpy、Jax框架和MindSpore框架中都是支持爱因斯坦求和算符的，那么这里为了方便演示，我们采用的是numpy来做一些参考案例:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: x = np.arange(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: x</span><br><span class="line">Out[<span class="number">3</span>]: array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: y = np.arange(<span class="number">3</span>, <span class="number">6</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: y</span><br><span class="line">Out[<span class="number">5</span>]: array([<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: P = np.arange(<span class="number">1</span>, <span class="number">10</span>).reshape(<span class="number">3</span>,<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: P</span><br><span class="line">Out[<span class="number">7</span>]: </span><br><span class="line">array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">       [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>],</span><br><span class="line">       [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]])</span><br></pre></td></tr></table></figure>
+
+<h2 id="矩阵转置"><a href="#矩阵转置" class="headerlink" title="矩阵转置"></a>矩阵转置</h2><p>矩阵转置，或者是调换矩阵的某两个维度，这个功能用爱因斯坦求和来做是非常清晰的，我们先看一下相应的公式：<br>$$<br>P^T&#x3D;\left[<br>\begin{matrix}<br>P_{00}&amp;P_{01}&amp;P_{02}\<br>P_{10}&amp;P_{11}&amp;P_{12}\<br>P_{20}&amp;P_{21}&amp;P_{22}<br>\end{matrix}<br>\right]^T&#x3D;<br>\left[<br>\begin{matrix}<br>P_{00}&amp;P_{10}&amp;P_{20}\<br>P_{01}&amp;P_{11}&amp;P_{21}\<br>P_{02}&amp;P_{12}&amp;P_{22}<br>\end{matrix}<br>\right]<br>$$<br>一般矩阵转置我们如果用numpy来操作的话，只需要使用<code>P=P.T</code>就可以了，而这个功能用爱因斯坦求和算子也是可以实现的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">40</span>]: np.allclose(P.T, np.einsum(<span class="string">&#x27;kl-&gt;lk&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">40</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<p>这里有一个比较有意思的事情是，如果不指定生成的序号，但是给定的爱因斯坦算符顺序如果前面的大于后面的，也可以实现矩阵转置的功能，比如下面的一个案例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">41</span>]: np.allclose(P.T, np.einsum(<span class="string">&#x27;ji&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">41</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="元素乘"><a href="#元素乘" class="headerlink" title="元素乘"></a>元素乘</h2><p>对应于两个矩阵（矢量、张量）之间的元素乘法，普通操作我们可以直接用$x<em>y$来实现（假定维度大小为3）：<br>$$<br>x</em>y &#x3D;<br>\left[<br>\begin{matrix}<br>x_0\x_1\x_2<br>\end{matrix}<br>\right]*<br>\left[<br>\begin{matrix}<br>y_0\y_1\y_2<br>\end{matrix}<br>\right]&#x3D;\left[<br>\begin{matrix}<br>x_0y_0\x_1y_1\x_2y_2<br>\end{matrix}<br>\right]<br>$$<br>对应于代码实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">8</span>]: np.allclose(x*y, np.einsum(<span class="string">&#x27;k,k-&gt;k&#x27;</span>, x, y))</span><br><span class="line">Out[<span class="number">8</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="矩阵内求和"><a href="#矩阵内求和" class="headerlink" title="矩阵内求和"></a>矩阵内求和</h2><p>把矩阵中的所有元素相加：</p>
+<p>$$<br>SUM(x)&#x3D;SUM(\left[<br>\begin{matrix}<br>x_0\x_1\x_2<br>\end{matrix}<br>\right])&#x3D;x_0+x_1+x_2<br>$$</p>
+<p>对应于Python代码实现为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">9</span>]: np.allclose(np.<span class="built_in">sum</span>(x), np.einsum(<span class="string">&#x27;k-&gt;&#x27;</span>, x))</span><br><span class="line">Out[<span class="number">9</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">12</span>]: np.allclose(np.<span class="built_in">sum</span>(P), np.einsum(<span class="string">&#x27;kl-&gt;&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">12</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: np.allclose(np.<span class="built_in">sum</span>(P, axis=-<span class="number">1</span>), np.einsum(<span class="string">&#x27;kl-&gt;k&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">13</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: np.allclose(np.<span class="built_in">sum</span>(P, axis=<span class="number">0</span>), np.einsum(<span class="string">&#x27;kl-&gt;l&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">14</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p>那么，既然求和能算，同样的<code>平均值</code>也是可以计算的，这里就不展开介绍了。</p>
+<h2 id="矩阵点乘"><a href="#矩阵点乘" class="headerlink" title="矩阵点乘"></a>矩阵点乘</h2><p>这个应用场景很多，比如当我们需要计算两个向量之间的夹角的时候，就会用到矩阵点乘。矩阵点乘的定义如下：<br>$$<br>x\cdot y &#x3D;<br>\left[<br>\begin{matrix}<br>x_0\x_1\x_2<br>\end{matrix}<br>\right]\cdot<br>\left[<br>\begin{matrix}<br>y_0\y_1\y_2<br>\end{matrix}<br>\right]&#x3D;x_0y_0+x_1y_1+x_2y_2<br>$$<br>对应的Python代码实现如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">15</span>]: np.allclose(np.dot(x, y), np.einsum(<span class="string">&#x27;k,k-&gt;&#x27;</span>, x, y))</span><br><span class="line">Out[<span class="number">15</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="矩阵向量乘"><a href="#矩阵向量乘" class="headerlink" title="矩阵向量乘"></a>矩阵向量乘</h2><p>这个应用场景也非常多，比如我们经常所用到的向量的伸缩、旋转等，都可以用一系列的矩阵作用在一个向量上来表示，相关的计算公式为：<br>$$<br>P\cdot x&#x3D;\left[<br>\begin{matrix}<br>P_{00}&amp;P_{01}&amp;P_{02}\<br>P_{10}&amp;P_{11}&amp;P_{12}\<br>P_{20}&amp;P_{21}&amp;P_{22}<br>\end{matrix}<br>\right]\cdot \left[<br>\begin{matrix}<br>x_0\x_1\x_2<br>\end{matrix}<br>\right]&#x3D;<br>\left[<br>\begin{matrix}<br>P_{00}x_0+P_{01}x_1+P_{02}x_2\P_{10}x_0+P_{11}x_1+P_{12}x_2\P_{20}x_0+P_{21}x_1+P_{22}x_2<br>\end{matrix}<br>\right]<br>$$<br>对应的Python代码如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">16</span>]: np.allclose(np.dot(P, x), np.einsum(<span class="string">&#x27;kl,l-&gt;k&#x27;</span>, P, x))</span><br><span class="line">Out[<span class="number">16</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">25</span>]: np.allclose(np.dot(P, x[:, <span class="literal">None</span>]), np.einsum(<span class="string">&#x27;kl,lm-&gt;km&#x27;</span>, P, x[:, <span class="literal">None</span>]))</span><br><span class="line">Out[<span class="number">25</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">31</span>]: np.allclose(np.dot(P, P.T), np.einsum(<span class="string">&#x27;kl,lm-&gt;km&#x27;</span>, P, P.T))</span><br><span class="line">Out[<span class="number">31</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p>在上述案例中我们还包含了矩阵跟矩阵之间的乘法，这些基本运算都是可以通用的。</p>
+<h2 id="克罗内克积"><a href="#克罗内克积" class="headerlink" title="克罗内克积"></a>克罗内克积</h2><p>克罗内克积，又叫张量积，比如两个矢量或者矩阵之间没有耦合关系，那么可以用一个克罗内克积来总体表示这两个矢量或者矩阵组成的矢量或者矩阵，该运算被定义为：<br>$$<br>x\otimes y^{T}&#x3D;\left[<br>\begin{matrix}<br>x_0\x_1\x_2<br>\end{matrix}<br>\right]\otimes \left[y_0, y_1, y_2\right]&#x3D;\left[<br>\begin{matrix}<br>x_0y_0&amp;x_0y_1&amp;x_0y_2\<br>x_1y_0&amp;x_1y_1&amp;x_1y_2\<br>x_2y_0&amp;x_2y_1&amp;x_2y_2<br>\end{matrix}<br>\right]<br>$$<br>对应Python代码实现如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">36</span>]: np.allclose(np.kron(x[:, <span class="literal">None</span>], y), np.einsum(<span class="string">&#x27;kl,l-&gt;kl&#x27;</span>, x[:, <span class="literal">None</span>], y))</span><br><span class="line">Out[<span class="number">36</span>]: <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">37</span>]: np.allclose(np.kron(x, y), np.einsum(<span class="string">&#x27;kl,l-&gt;kl&#x27;</span>, x[:, <span class="literal">None</span>], y).reshape(<span class="number">9</span>))</span><br><span class="line">Out[<span class="number">37</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p>需要注意的是，爱因斯坦求和运算只能减少总的维度数量，但是不可改变维度大小，因此有时候会需要用到reshape的功能配合使用。</p>
+<h2 id="取对角元"><a href="#取对角元" class="headerlink" title="取对角元"></a>取对角元</h2><p>这个应用也好理解，就是把矩阵的每一个对角元素取出来，用公式描述就是：<br>$$<br>diag(P)&#x3D;diag(\left[<br>\begin{matrix}<br>P_{00}&amp;P_{01}&amp;P_{02}\<br>P_{10}&amp;P_{11}&amp;P_{12}\<br>P_{20}&amp;P_{21}&amp;P_{22}<br>\end{matrix}<br>\right])&#x3D;\left[P_{00}, P_{11}, P_{22}\right]<br>$$<br>相关的Python代码实现如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">46</span>]: np.allclose(np.diag(P), np.einsum(<span class="string">&#x27;ii-&gt;i&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">46</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="求矩阵迹"><a href="#求矩阵迹" class="headerlink" title="求矩阵迹"></a>求矩阵迹</h2><p>矩阵的迹（Trace），就是对所有的对角元进行求和，那么有了上一步使用爱因斯坦求和函数提取所有的对角元之后，其实我们可以稍微调整一下，就能得到求矩阵迹的方法。首先看下矩阵迹的公式定义：<br>$$<br>Tr(P) &#x3D; Tr(\left[<br>\begin{matrix}<br>P_{00}&amp;P_{01}&amp;P_{02}\<br>P_{10}&amp;P_{11}&amp;P_{12}\<br>P_{20}&amp;P_{21}&amp;P_{22}<br>\end{matrix}<br>\right])&#x3D;P_{00}+P_{11}+P_{22}<br>$$</p>
+<p>相关的Python代码实现如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">47</span>]: np.allclose(np.trace(P), np.einsum(<span class="string">&#x27;ii-&gt;&#x27;</span>, P))</span><br><span class="line">Out[<span class="number">47</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="多重运算"><a href="#多重运算" class="headerlink" title="多重运算"></a>多重运算</h2><p>有时候会涉及到一系列的矩阵按照顺序作用在一个向量上，如果从张量的角度来考虑的话，其中的维度还可以非常灵活的变化，不一定全都是方阵。应该说，这也是爱因斯坦求和算子的重大意义所在。如果不使用爱因斯坦求和算子，那么要计算$A\cdot B\cdot C\cdot x$这样的一个过程，可以多次嵌套使用numpy的dot点乘函数。但是这样比较麻烦，一般推荐可以使用numpy中的另外一个函数：<code>multi_dot</code>，相关的Python代码实现如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">39</span>]: np.allclose(np.linalg.multi_dot((P, P, P, x)), np.einsum(<span class="string">&#x27;ij,jk,kl,l-&gt;i&#x27;</span>, P, P, P, x))</span><br><span class="line">Out[<span class="number">39</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p>在这种多重运算的过程中，可以使用einsum_path去找到一条更好的归并路径，以达到提升算法性能的效果。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文主要基于Python的Numpy库，介绍一些爱因斯坦求和算子Einsum的应用场景，包括求和、求内外积、求转置等等。我们需要明确的是，爱因斯坦求和算子的意义主要在于矩阵的多重运算时，可以通过爱因斯坦求和约定将这种复杂问题定义成一个张量网络，通过图模型去找到一个更好的缩并路径，以得到更好的算法复杂度。而如果只是普通的点乘求和之类的运算，其实并不是Einsum的主要功能。但是这些功能也可以用爱因斯坦求和的形式来实现，也说明了这个约定的先进性。当然，也有众多的矩阵运算功能是无法直接通过爱因斯坦求和算子来实现的，比如矩阵求逆、求本征值、矩阵扩维、矩阵重构还有向量叉乘等等。只有在合适的地方使用Einsum，才能体现它的真正价值。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>版权声明<br>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/einsum-examples.html">https://www.cnblogs.com/dechinphy/p/einsum-examples.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>打赏专用链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<p>腾讯云专栏同步：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/91958">https://cloud.tencent.com/developer/column/91958</a></p>
+<p>CSDN同步链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/baidu_37157624?spm=1008.2028.3001.5343">https://blog.csdn.net/baidu_37157624?spm=1008.2028.3001.5343</a></p>
+<p>51CTO同步链接：<a target="_blank" rel="noopener" href="https://blog.51cto.com/u_15561675">https://blog.51cto.com/u_15561675</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2022/09/19/%E5%9B%9B%E5%85%83%E6%95%B0Quaternion%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          四元数Quaternion的基本运算
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/09/05/Gimbal-Lock%E6%AC%A7%E6%8B%89%E8%A7%92%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">Gimbal Lock欧拉角死锁问题</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=可以用爱因斯坦求和替代的那些矩阵运算 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F09%2F07%2F%25E5%258F%25AF%25E4%25BB%25A5%25E7%2594%25A8%25E7%2588%25B1%25E5%259B%25A0%25E6%2596%25AF%25E5%259D%25A6%25E6%25B1%2582%25E5%2592%258C%25E6%259B%25BF%25E4%25BB%25A3%25E7%259A%2584%25E9%2582%25A3%25E4%25BA%259B%25E7%259F%25A9%25E9%2598%25B5%25E8%25BF%2590%25E7%25AE%2597%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=可以用爱因斯坦求和替代的那些矩阵运算 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2022%2F09%2F07%2F%25E5%258F%25AF%25E4%25BB%25A5%25E7%2594%25A8%25E7%2588%25B1%25E5%259B%25A0%25E6%2596%25AF%25E5%259D%25A6%25E6%25B1%2582%25E5%2592%258C%25E6%259B%25BF%25E4%25BB%25A3%25E7%259A%2584%25E9%2582%25A3%25E4%25BA%259B%25E7%259F%25A9%25E9%2598%25B5%25E8%25BF%2590%25E7%25AE%2597%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=可以用爱因斯坦求和替代的那些矩阵运算 - Hexo&url=http://dechinphy.github.io/2022/09/07/%E5%8F%AF%E4%BB%A5%E7%94%A8%E7%88%B1%E5%9B%A0%E6%96%AF%E5%9D%A6%E6%B1%82%E5%92%8C%E6%9B%BF%E4%BB%A3%E7%9A%84%E9%82%A3%E4%BA%9B%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

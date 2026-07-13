@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>以脚本形式运行python库 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文主要通过一个实际的案例，介绍了如何可以在命令行中调用和运行我们的python模块。“python -m”这个方案为我们提供了一个新的选项，这个运行方法以“&lt;strong&gt;main&lt;/strong&gt;.py”文件为入口文件运行，结合python中常用的命令行工具argparse，我们就可以很容易的创建一个可以通过命令行运行和获取参数的python模块。并且可以使用twine上传到pypi网站上，用pip进行安装和管理，会更加的便捷。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "以脚本形式运行python库 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文主要通过一个实际的案例，介绍了如何可以在命令行中调用和运行我们的python模块。“python -m”这个方案为我们提供了一个新的选项，这个运行方法以“&lt;strong&gt;main&lt;/strong&gt;.py”文件为入口文件运行，结合python中常用的命令行工具argparse，我们就可以很容易的创建一个可以通过命令行运行和获取参数的python模块。并且可以使用twine上传到pypi网站上，用pip进行安装和管理，会更加的便捷。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2022/07/05/%E4%BB%A5%E8%84%9A%E6%9C%AC%E5%BD%A2%E5%BC%8F%E8%BF%90%E8%A1%8Cpython%E5%BA%93/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文主要通过一个实际的案例，介绍了如何可以在命令行中调用和运行我们的python模块。“python -m”这个方案为我们提供了一个新的选项，这个运行方法以“&lt;strong&gt;main&lt;/strong&gt;.py”文件为入口文件运行，结合python中常用的命令行工具argparse，我们就可以很容易的创建一个可以通过命令行运行和获取参数的python模块。并且可以使用twine上传到pypi网站上，用pip进行安装和管理，会更加的便捷。&lt;/p&gt;" />
+    <meta name="twitter:title" content="以脚本形式运行python库 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文主要通过一个实际的案例，介绍了如何可以在命令行中调用和运行我们的python模块。“python -m”这个方案为我们提供了一个新的选项，这个运行方法以“&lt;strong&gt;main&lt;/strong&gt;.py”文件为入口文件运行，结合python中常用的命令行工具argparse，我们就可以很容易的创建一个可以通过命令行运行和获取参数的python模块。并且可以使用twine上传到pypi网站上，用pip进行安装和管理，会更加的便捷。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文主要通过一个实际的案例，介绍了如何可以在命令行中调用和运行我们的python模块。“python -m”这个方案为我们提供了一个新的选项，这个运行方法以“&lt;strong&gt;main&lt;/strong&gt;.py”文件为入口文件运行，结合python中常用的命令行工具argparse，我们就可以很容易的创建一个可以通过命令行运行和获取参数的python模块。并且可以使用twine上传到pypi网站上，用pip进行安装和管理，会更加的便捷。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2022/07/05/%E4%BB%A5%E8%84%9A%E6%9C%AC%E5%BD%A2%E5%BC%8F%E8%BF%90%E8%A1%8Cpython%E5%BA%93/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "以脚本形式运行python库 | Hexo",
+            "datePublished": "2022-07-05T02:38:42.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2022/07/05/%E4%BB%A5%E8%84%9A%E6%9C%AC%E5%BD%A2%E5%BC%8F%E8%BF%90%E8%A1%8Cpython%E5%BA%93/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidhuWy0aYqgAzOBSqWWaMty" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      以脚本形式运行python库
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2022-07-05T02:38:42.000Z" itemprop="datePublished">2022-07-05</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文主要通过一个实际的案例，介绍了如何可以在命令行中调用和运行我们的python模块。“python -m”这个方案为我们提供了一个新的选项，这个运行方法以“<strong>main</strong>.py”文件为入口文件运行，结合python中常用的命令行工具argparse，我们就可以很容易的创建一个可以通过命令行运行和获取参数的python模块。并且可以使用twine上传到pypi网站上，用pip进行安装和管理，会更加的便捷。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>当我们尝试运行python的帮助文档时，会看到如下这样的一个说明：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -h</span><br><span class="line">usage: python3 [option] ... [-c cmd | -m mod | file | -] [arg] ...</span><br><span class="line">Options and arguments (and corresponding environment variables):</span><br><span class="line">...</span><br><span class="line">-m mod : run library module as a script (terminates option list)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>这一个条目的意思是，我们可以使用<code>python3 -m</code>这样的指令，在终端的命令行内运行python的一些仓库。比如我们常用的pip，就可以通过<code>python3 -m pip install numpy</code>这样的操作指令来运行。还有一个比较常见的上传python编译安装包到pypi网站上面的工具twine，可以通过<code>python3 -m twine</code>的方法来使用。本文我们主要探讨一下如何在代码中，实现<code>python3 -m </code>这种命令行运行的模式。</p>
+<h1 id="基础功能代码实现"><a href="#基础功能代码实现" class="headerlink" title="基础功能代码实现"></a>基础功能代码实现</h1><p>通过<code>python3 -m </code>这样的方法来运行，本质上只是一个实现方式的改变，而不影响到具体算法的实现，这个形式跟我们直接通过python的API接口去调用是一样的。所以我们需要先按照正常的API接口调用的方法，先把基础代码模块写好。这里我们使用一个开源代码仓库<a target="_blank" rel="noopener" href="https://gitee.com/dechin/hadder">hadder</a>为例，来介绍一下具体的操作方法。我们先看一下Hadder的具体代码架构与相关模块内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$ tree hadder/</span><br><span class="line">hadder/</span><br><span class="line">├── examples <span class="comment"># 示例</span></span><br><span class="line">│   ├── case1-complete.pdb</span><br><span class="line">│   ├── case1.pdb</span><br><span class="line">│   ├── case2-complete.pdb</span><br><span class="line">│   ├── case2-complete.png</span><br><span class="line">│   ├── case2.pdb</span><br><span class="line">│   └── case2.png</span><br><span class="line">├── hadder <span class="comment"># 根目录</span></span><br><span class="line">│   ├── constants.py <span class="comment"># 存放一些常数</span></span><br><span class="line">│   ├── __init__.py <span class="comment"># 核心算法</span></span><br><span class="line">│   └── parsers.py <span class="comment"># 读取PDB文件</span></span><br><span class="line">├── LICENSE</span><br><span class="line">├── README.md</span><br><span class="line">├── requirements.txt</span><br><span class="line">└── setup.py</span><br><span class="line"></span><br><span class="line">2 directories, 13 files</span><br></pre></td></tr></table></figure>
+<p>这里先简单说明一下背景，关于Hadder的具体内容和算法，可以参考这篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/hadder.html">博客</a>。Hadder是一个用于给PDB文件补氢原子的小工具，因为在蛋白质折叠的预测过程中，主要以骨架为主，因此氢原子大部分情况下是被忽略的。而在后期建立蛋白质力场的时候，氢原子又是必须使用到的，因此我们可以用<a target="_blank" rel="noopener" href="https://gitee.com/dechin/hadder">hadder</a>这样一个工具来实现补氢的功能。关于hadder我们就不进行更多的介绍了，主要看下其API接口的调用方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> hadder <span class="keyword">import</span> AddHydrogen</span><br><span class="line">AddHydrogen(<span class="string">&#x27;input.pdb&#x27;</span>, <span class="string">&#x27;output.pdb&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>对外开放的API接口就这么一个，较为简单。接下来我们就可以基于这个功能模块，去创建一个可以通过命令行来运行的方法。</p>
+<h1 id="创建-main-py文件"><a href="#创建-main-py文件" class="headerlink" title="创建__main__.py文件"></a>创建__main__.py文件</h1><p>当我们使用<code>python3 -m</code>模式来运行的时候，python会去自动索引到<code>__main__.py</code>这个文件作为入口文件，因此首先我们在根目录下创建一个<code>__main__.py</code>文件，如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">$ tree hadder/</span><br><span class="line">hadder/</span><br><span class="line">├── examples <span class="comment"># 示例</span></span><br><span class="line">│   ├── case1-complete.pdb</span><br><span class="line">│   ├── case1.pdb</span><br><span class="line">│   ├── case2-complete.pdb</span><br><span class="line">│   ├── case2-complete.png</span><br><span class="line">│   ├── case2.pdb</span><br><span class="line">│   └── case2.png</span><br><span class="line">├── hadder <span class="comment"># 根目录</span></span><br><span class="line">│   ├── constants.py <span class="comment"># 存放一些常数</span></span><br><span class="line">│   ├── __init__.py <span class="comment"># 核心算法</span></span><br><span class="line">│   ├── __main__.py <span class="comment"># python -m 模式运行接口文件</span></span><br><span class="line">│   └── parsers.py <span class="comment"># 读取PDB文件</span></span><br><span class="line">├── LICENSE</span><br><span class="line">├── README.md</span><br><span class="line">├── requirements.txt</span><br><span class="line">└── setup.py</span><br><span class="line"></span><br><span class="line">2 directories, 14 files</span><br></pre></td></tr></table></figure>
+<p>然后我们就可以在<code>__main__.py</code>文件中结合argparse来使用，实现一个命令行模式运行的功能，如下是<code>__main__.py</code>文件中的代码内容：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># __main__.py</span></span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">from</span> hadder <span class="keyword">import</span> AddHydrogen</span><br><span class="line"></span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line"></span><br><span class="line">parser.add_argument(<span class="string">&quot;-i&quot;</span>, <span class="built_in">help</span>=<span class="string">&quot;Set the input pdb file path.&quot;</span>)</span><br><span class="line">parser.add_argument(<span class="string">&quot;-o&quot;</span>, <span class="built_in">help</span>=<span class="string">&quot;Set the output pdb file path.&quot;</span>)</span><br><span class="line"></span><br><span class="line">args = parser.parse_args()</span><br><span class="line">pdb_name = args.i</span><br><span class="line">save_pdb_name = args.o</span><br><span class="line"></span><br><span class="line">AddHydrogen(pdb_name, save_pdb_name)</span><br></pre></td></tr></table></figure>
+<p>我们还是同样的调用<code>AddHydrogen</code>这个API接口，但是由于使用了argparse，使得我们可以在命令行里面输入相关的输入文件路径和输出文件路径。最终运行效果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m hadder -h</span><br><span class="line">usage: __main__.py [-h] [-i I] [-o O]</span><br><span class="line"></span><br><span class="line">optional arguments:</span><br><span class="line">  -h, --<span class="built_in">help</span>  show this <span class="built_in">help</span> message and <span class="built_in">exit</span></span><br><span class="line">  -i I        Set the input pdb file path.</span><br><span class="line">  -o O        Set the output pdb file path.</span><br><span class="line">  </span><br><span class="line">$ python3 -m hadder -i input.pdb -o ouput.pdb </span><br><span class="line">1 H-Adding task with 3032 atoms complete <span class="keyword">in</span> 0.116 seconds.</span><br></pre></td></tr></table></figure>
+<p>感兴趣的也可以看看使用这个算法加氢前后的构象区别：</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202207/2277440-20220705102105047-1912534067.png" style="zoom:70%">
+</div>
+
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202207/2277440-20220705102113797-2099634292.png" style="zoom:70%">
+</div>
+
+<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><p>一般我们完成了一个算法实现，需要开放给别人使用的时候。以python为例，最方便的做法是将python仓库编译后上传到pypi网站上面，这样大家可以使用pip来进行安装和管理。这里我们补充一个编译上传python仓库的“三步走”方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ python3 setup.py check</span><br><span class="line">$ python3 setup.py sdist bdist_wheel</span><br><span class="line">$ twine upload --repository-url https://upload.pypi.org/legacy/ dist/*</span><br></pre></td></tr></table></figure>
+<p>这样一来，我们就可以通过pip来对我们的仓库进行安装和管理，比如可以使用如下的指令安装hadder：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install hadder --upgrade</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文主要通过一个实际的案例，介绍了如何可以在命令行中调用和运行我们的python模块。“python -m”这个方案为我们提供了一个新的选项，这个运行方法以“<strong>main</strong>.py”文件为入口文件运行，结合python中常用的命令行工具argparse，我们就可以很容易的创建一个可以通过命令行运行和获取参数的python模块。并且可以使用twine上传到pypi网站上，用pip进行安装和管理，会更加的便捷。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/pym.html">https://www.cnblogs.com/dechinphy/p/pym.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>打赏专用链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<p>腾讯云专栏同步：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/91958">https://cloud.tencent.com/developer/column/91958</a></p>
+<p>CSDN同步链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/baidu_37157624?spm=1008.2028.3001.5343">https://blog.csdn.net/baidu_37157624?spm=1008.2028.3001.5343</a></p>
+<p>51CTO同步链接：<a target="_blank" rel="noopener" href="https://blog.51cto.com/u_15561675">https://blog.51cto.com/u_15561675</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2022/08/04/%E5%9C%A8VMD%E4%B8%8A%E5%8F%AF%E8%A7%86%E5%8C%96hdf5%E6%A0%BC%E5%BC%8F%E7%9A%84%E5%88%86%E5%AD%90%E8%BD%A8%E8%BF%B9%E6%96%87%E4%BB%B6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          在VMD上可视化hdf5格式的分子轨迹文件
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/06/27/%E4%BB%8EHadder%E7%9C%8B%E8%9B%8B%E7%99%BD%E8%B4%A8%E5%88%86%E5%AD%90%E4%B8%AD%E7%9A%84%E5%8A%A0%E6%B0%A2%E7%AE%97%E6%B3%95/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">从Hadder看蛋白质分子中的加氢算法</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=以脚本形式运行python库 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F07%2F05%2F%25E4%25BB%25A5%25E8%2584%259A%25E6%259C%25AC%25E5%25BD%25A2%25E5%25BC%258F%25E8%25BF%2590%25E8%25A1%258Cpython%25E5%25BA%2593%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=以脚本形式运行python库 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2022%2F07%2F05%2F%25E4%25BB%25A5%25E8%2584%259A%25E6%259C%25AC%25E5%25BD%25A2%25E5%25BC%258F%25E8%25BF%2590%25E8%25A1%258Cpython%25E5%25BA%2593%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=以脚本形式运行python库 - Hexo&url=http://dechinphy.github.io/2022/07/05/%E4%BB%A5%E8%84%9A%E6%9C%AC%E5%BD%A2%E5%BC%8F%E8%BF%90%E8%A1%8Cpython%E5%BA%93/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

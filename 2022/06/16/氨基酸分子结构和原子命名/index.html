@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>氨基酸分子结构和原子命名 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;PDB格式的文件是最常用于存储蛋白质构象的一种，其中也是以各个氨基酸(残基)为基本单位，在氨基酸内部对原子进行唯一性的命名。本文先通过展示各种氨基酸在蛋白质链的不同位置的结构，介绍各类氨基酸的基础构象。再通过丙氨酸和色氨酸两个案例，详细介绍了在蛋白质链的中的各种氨基酸内部的原子命名法则。需要注意的是，atom_name和atom_type是不一样的，atom_name是一个唯一的标识符，atom_type则是用于导出力场参数的重要标记。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "氨基酸分子结构和原子命名 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;PDB格式的文件是最常用于存储蛋白质构象的一种，其中也是以各个氨基酸(残基)为基本单位，在氨基酸内部对原子进行唯一性的命名。本文先通过展示各种氨基酸在蛋白质链的不同位置的结构，介绍各类氨基酸的基础构象。再通过丙氨酸和色氨酸两个案例，详细介绍了在蛋白质链的中的各种氨基酸内部的原子命名法则。需要注意的是，atom_name和atom_type是不一样的，atom_name是一个唯一的标识符，atom_type则是用于导出力场参数的重要标记。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2022/06/16/%E6%B0%A8%E5%9F%BA%E9%85%B8%E5%88%86%E5%AD%90%E7%BB%93%E6%9E%84%E5%92%8C%E5%8E%9F%E5%AD%90%E5%91%BD%E5%90%8D/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;PDB格式的文件是最常用于存储蛋白质构象的一种，其中也是以各个氨基酸(残基)为基本单位，在氨基酸内部对原子进行唯一性的命名。本文先通过展示各种氨基酸在蛋白质链的不同位置的结构，介绍各类氨基酸的基础构象。再通过丙氨酸和色氨酸两个案例，详细介绍了在蛋白质链的中的各种氨基酸内部的原子命名法则。需要注意的是，atom_name和atom_type是不一样的，atom_name是一个唯一的标识符，atom_type则是用于导出力场参数的重要标记。&lt;/p&gt;" />
+    <meta name="twitter:title" content="氨基酸分子结构和原子命名 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;PDB格式的文件是最常用于存储蛋白质构象的一种，其中也是以各个氨基酸(残基)为基本单位，在氨基酸内部对原子进行唯一性的命名。本文先通过展示各种氨基酸在蛋白质链的不同位置的结构，介绍各类氨基酸的基础构象。再通过丙氨酸和色氨酸两个案例，详细介绍了在蛋白质链的中的各种氨基酸内部的原子命名法则。需要注意的是，atom_name和atom_type是不一样的，atom_name是一个唯一的标识符，atom_type则是用于导出力场参数的重要标记。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;PDB格式的文件是最常用于存储蛋白质构象的一种，其中也是以各个氨基酸(残基)为基本单位，在氨基酸内部对原子进行唯一性的命名。本文先通过展示各种氨基酸在蛋白质链的不同位置的结构，介绍各类氨基酸的基础构象。再通过丙氨酸和色氨酸两个案例，详细介绍了在蛋白质链的中的各种氨基酸内部的原子命名法则。需要注意的是，atom_name和atom_type是不一样的，atom_name是一个唯一的标识符，atom_type则是用于导出力场参数的重要标记。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2022/06/16/%E6%B0%A8%E5%9F%BA%E9%85%B8%E5%88%86%E5%AD%90%E7%BB%93%E6%9E%84%E5%92%8C%E5%8E%9F%E5%AD%90%E5%91%BD%E5%90%8D/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "氨基酸分子结构和原子命名 | Hexo",
+            "datePublished": "2022-06-16T08:40:40.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2022/06/16/%E6%B0%A8%E5%9F%BA%E9%85%B8%E5%88%86%E5%AD%90%E7%BB%93%E6%9E%84%E5%92%8C%E5%8E%9F%E5%AD%90%E5%91%BD%E5%90%8D/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidqiy1QYJ71IpHyqg90n3Mq" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      氨基酸分子结构和原子命名
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2022-06-16T08:40:40.000Z" itemprop="datePublished">2022-06-16</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>PDB格式的文件是最常用于存储蛋白质构象的一种，其中也是以各个氨基酸(残基)为基本单位，在氨基酸内部对原子进行唯一性的命名。本文先通过展示各种氨基酸在蛋白质链的不同位置的结构，介绍各类氨基酸的基础构象。再通过丙氨酸和色氨酸两个案例，详细介绍了在蛋白质链的中的各种氨基酸内部的原子命名法则。需要注意的是，atom_name和atom_type是不一样的，atom_name是一个唯一的标识符，atom_type则是用于导出力场参数的重要标记。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面的一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/pdb.html">文章</a>中，我们讲述了蛋白质的组成结构，一共是20种氨基酸。由这20种氨基酸的排列组合，可以得到一条相应的蛋白质链，而这条蛋白质链经过各种螺旋和折叠，会得到一个最终稳定的蛋白质构象，也是我们日常生活中所能够接触到的蛋白质的存在形态。那么在上一篇文章中的表格里面，我们可以看到众多的氨基酸在蛋白质链的中间时候的构象，本文将要讲述一些其他位置所对应的构象，以及其中原子的命名法则。</p>
+<h1 id="同残基不同位置的构象"><a href="#同残基不同位置的构象" class="headerlink" title="同残基不同位置的构象"></a>同残基不同位置的构象</h1><p>即使是同一个残基，在位于蛋白质链的不同位置时，也有可能表现出不同的构象。比如在蛋白质的头部时，有可能会出现一些氢离子跟氮原子的成键。而残基位于蛋白质链的中部时，我们往往会略去其中的一个$H_2O$，跟两侧的其他残基形成2个肽键。具体结构如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th align="center">英文名</th>
+<th align="center">中文名</th>
+<th align="center">三字母缩写</th>
+<th align="center">单字母缩写</th>
+<th align="center">三维结构图</th>
+<th align="center">N起始点结构图</th>
+<th align="center">C终点结构图</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Alanine</td>
+<td align="center">丙氨酸</td>
+<td align="center">Ala</td>
+<td align="center">A</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104356551-163091046.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616163551814-1469818965.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164018868-1173426007.png"></td>
+</tr>
+<tr>
+<td align="center">Arginine</td>
+<td align="center">精氨酸</td>
+<td align="center">Arg</td>
+<td align="center">R</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104617173-1258258958.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164208849-109126603.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172815508-1258247765.png"></td>
+</tr>
+<tr>
+<td align="center">Asparagine</td>
+<td align="center">天冬酰胺</td>
+<td align="center">Asn</td>
+<td align="center">N</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104930400-829906203.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164346947-1201493218.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172931543-911542365.png"></td>
+</tr>
+<tr>
+<td align="center">Asparticacid</td>
+<td align="center">天冬氨酸</td>
+<td align="center">Asp</td>
+<td align="center">D</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105029669-1063806573.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164457959-1352955320.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173031609-1536549685.png"></td>
+</tr>
+<tr>
+<td align="center">Cysteine</td>
+<td align="center">半胱氨酸</td>
+<td align="center">Cys</td>
+<td align="center">C</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105354587-147198142.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164622907-365857586.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173150829-2129306079.png"></td>
+</tr>
+<tr>
+<td align="center">Glutamine</td>
+<td align="center">谷氨酰胺</td>
+<td align="center">Gln</td>
+<td align="center">Q</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105528619-1856489452.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164728552-1754699486.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173320155-430569307.png"></td>
+</tr>
+<tr>
+<td align="center">Glutamicacid</td>
+<td align="center">谷氨酸</td>
+<td align="center">Glu</td>
+<td align="center">E</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105627423-681216789.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164830808-1321873423.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173427313-89331128.png"></td>
+</tr>
+<tr>
+<td align="center">Glycine</td>
+<td align="center">甘氨酸</td>
+<td align="center">Gly</td>
+<td align="center">G</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105711942-1717438535.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616164950287-969817560.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173540620-1354528631.png"></td>
+</tr>
+<tr>
+<td align="center">Histidine</td>
+<td align="center">组氨酸</td>
+<td align="center">His</td>
+<td align="center">H</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105816547-2046245703.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165105606-973348457.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173647695-312812108.png"></td>
+</tr>
+<tr>
+<td align="center">Isoleucine</td>
+<td align="center">异亮氨酸</td>
+<td align="center">Ile</td>
+<td align="center">I</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105857553-539582156.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165221911-1830019574.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173757321-1973450981.png"></td>
+</tr>
+<tr>
+<td align="center">Leucine</td>
+<td align="center">亮氨酸</td>
+<td align="center">Leu</td>
+<td align="center">L</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507105949218-1194449475.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165339382-1655388808.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616173903651-505874335.png"></td>
+</tr>
+<tr>
+<td align="center">Lysine</td>
+<td align="center">赖氨酸</td>
+<td align="center">Lys</td>
+<td align="center">K</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110033488-1761911638.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165447939-1138263581.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174007708-736798707.png"></td>
+</tr>
+<tr>
+<td align="center">Methionine</td>
+<td align="center">甲硫氨酸（蛋氨酸）</td>
+<td align="center">Met</td>
+<td align="center">M</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110115808-434808146.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165600604-1628359784.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174110932-848498549.png"></td>
+</tr>
+<tr>
+<td align="center">Phenylalanine</td>
+<td align="center">苯丙氨酸</td>
+<td align="center">Phe</td>
+<td align="center">F</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110155932-940361433.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165721294-1709809473.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174225471-1269675263.png"></td>
+</tr>
+<tr>
+<td align="center">Proline</td>
+<td align="center">脯氨酸</td>
+<td align="center">Pro</td>
+<td align="center">P</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110248741-2145369047.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616165853843-1729100986.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174424041-99262541.png"></td>
+</tr>
+<tr>
+<td align="center">Serine</td>
+<td align="center">丝氨酸</td>
+<td align="center">Ser</td>
+<td align="center">S</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110322349-52703156.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616170004842-1782575657.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174550969-855251961.png"></td>
+</tr>
+<tr>
+<td align="center">Threonine</td>
+<td align="center">苏氨酸</td>
+<td align="center">Thr</td>
+<td align="center">T</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110400266-17020800.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172117782-752423784.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174657698-1270462707.png"></td>
+</tr>
+<tr>
+<td align="center">Tryptophan</td>
+<td align="center">色氨酸</td>
+<td align="center">Trp</td>
+<td align="center">W</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110437821-709539527.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172233405-2010768135.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174840641-76219393.png"></td>
+</tr>
+<tr>
+<td align="center">Tyrosine</td>
+<td align="center">酪氨酸</td>
+<td align="center">Tyr</td>
+<td align="center">Y</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110512569-739475348.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172346330-214328045.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616174948632-321620394.png"></td>
+</tr>
+<tr>
+<td align="center">Valine</td>
+<td align="center">缬氨酸</td>
+<td align="center">Val</td>
+<td align="center">V</td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110556757-964057686.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616172507095-1160898201.png"></td>
+<td align="center"><img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220616175046778-943893825.png"></td>
+</tr>
+</tbody></table>
+<h1 id="原子命名法则"><a href="#原子命名法则" class="headerlink" title="原子命名法则"></a>原子命名法则</h1><p>当我们把这些生成的构象存储成PDB文件时，我们会发现其中每一个原子在所处的残基内的命名都是唯一的。我们以丙氨酸为例，来解读一下其中的命名法则。</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507104356551-163091046.png" style="zoom:50%">
+</div>
+
+<p>在上面这个结构图中，绿色的代表碳原子，灰色代表氢原子，红色代表氧原子，蓝色代表氮原子。一般我们先找到当前氨基酸的氮基碳原子，由于丙氨酸中只有一个氮原子，因此与氮原子成键的这个碳原子就是我们要找的氮基碳原子，我们将其命名为”CA”，对应的氮原子命名为”N”。一般我们会发现，这个氮基碳原子并不是位于主链的顶点，也就是在氨基酸内部还会连接至少2个其他的重原子。我们找到其连接的带氧原子的那个碳原子，将其命名为”C”，对应的氧原子命名为”O”，”CA”表示的是这个碳原子处于$\alpha$位。另外一个被氮基碳原子所连接的碳原子，被命名为”CB”，也就是$\beta$位的碳。按照与氮基碳原子的远近关系，分别用”A,B,G,D,E,Z,H”来标记这些重原子，对应的希腊字母是”$\alpha,\beta,\gamma,\delta,\epsilon,\zeta,\eta$”。那么这就是丙氨酸的所有重原子在PDB文件中的命名，如下图是一个含有丙氨酸的蛋白质的PDB文件。</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220617095520644-1497558836.png" style="zoom:70%">
+</div>
+
+<p>对于氢原子来说，命名是取决于其所连接的碳原子的位置，比如连接氮的氢原子，可以直接命名为”H”，连接$\alpha$碳的氢原子，可以命名为”HA”。而$\beta$位的碳连接了3个氢原子，因此需要加上额外的数字标记，那么对应的命名就是”HB1,HB2,HB3”。并且，这种加数字编号的方法对于重原子也是同样适用的，比如下图所示的色氨酸：</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202205/2277440-20220507110437821-709539527.png" style="zoom:50%">
+</div>
+
+<p>同样的方法我们可以找到氮基碳原子和$\alpha$位的氧基碳原子，这样我们就可以按照连接的远近关系对其中的重原子进行命名。比如我们可以$\beta$位有1个碳，$\gamma$位也是1个碳，$\delta$位是2个碳，$\epsilon$位有1个氮原子和2个碳原子，$\zeta$位有2个碳原子，$\eta$位有1个碳原子。那么综合下来，我们将会得到的重原子的命名就是：”C,N,O,CA,CB,CG,CD1,CD2,NE1,CE2,CE3,CZ2,CZ3,CH2”，下图是一个真实蛋白质PDB文件中的色氨酸的命名：</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202206/2277440-20220617101334360-1865873969.png" style="zoom:70%">
+</div>
+
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>PDB格式的文件是最常用于存储蛋白质构象的一种，其中也是以各个氨基酸(残基)为基本单位，在氨基酸内部对原子进行唯一性的命名。本文先通过展示各种氨基酸在蛋白质链的不同位置的结构，介绍各类氨基酸的基础构象。再通过丙氨酸和色氨酸两个案例，详细介绍了在蛋白质链的中的各种氨基酸内部的原子命名法则。需要注意的是，atom_name和atom_type是不一样的，atom_name是一个唯一的标识符，atom_type则是用于导出力场参数的重要标记。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cnaminos.html">https://www.cnblogs.com/dechinphy/p/cnaminos.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>打赏专用链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<p>腾讯云专栏同步：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/91958">https://cloud.tencent.com/developer/column/91958</a></p>
+<p>CSDN同步链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/baidu_37157624?spm=1008.2028.3001.5343">https://blog.csdn.net/baidu_37157624?spm=1008.2028.3001.5343</a></p>
+<p>51CTO同步链接：<a target="_blank" rel="noopener" href="https://blog.51cto.com/u_15561675">https://blog.51cto.com/u_15561675</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2022/06/27/%E4%BB%8EHadder%E7%9C%8B%E8%9B%8B%E7%99%BD%E8%B4%A8%E5%88%86%E5%AD%90%E4%B8%AD%E7%9A%84%E5%8A%A0%E6%B0%A2%E7%AE%97%E6%B3%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          从Hadder看蛋白质分子中的加氢算法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/06/16/git%E6%B7%BB%E5%8A%A0%E8%A2%AB.gitignore%E5%BF%BD%E7%95%A5%E7%9A%84%E6%96%87%E4%BB%B6/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">git添加被.gitignore忽略的文件</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=氨基酸分子结构和原子命名 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F06%2F16%2F%25E6%25B0%25A8%25E5%259F%25BA%25E9%2585%25B8%25E5%2588%2586%25E5%25AD%2590%25E7%25BB%2593%25E6%259E%2584%25E5%2592%258C%25E5%258E%259F%25E5%25AD%2590%25E5%2591%25BD%25E5%2590%258D%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=氨基酸分子结构和原子命名 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2022%2F06%2F16%2F%25E6%25B0%25A8%25E5%259F%25BA%25E9%2585%25B8%25E5%2588%2586%25E5%25AD%2590%25E7%25BB%2593%25E6%259E%2584%25E5%2592%258C%25E5%258E%259F%25E5%25AD%2590%25E5%2591%25BD%25E5%2590%258D%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=氨基酸分子结构和原子命名 - Hexo&url=http://dechinphy.github.io/2022/06/16/%E6%B0%A8%E5%9F%BA%E9%85%B8%E5%88%86%E5%AD%90%E7%BB%93%E6%9E%84%E5%92%8C%E5%8E%9F%E5%AD%90%E5%91%BD%E5%90%8D/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

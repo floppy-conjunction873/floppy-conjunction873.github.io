@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>Hexo</title>
+
+    <meta name="description" content="Hexo">
+    <meta name="keywords" content="">
+
+    
+
+
+
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content=""/>
+    <meta property="og:description" content=""/>
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="http://dechinphy.github.io/page/26/index.html" />
+    <meta property="og:site_name" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "",
+            "description": "",
+            "publisher": {
+                "@type": "Organization",
+                "name": "John Doe"
+            },
+        }
+    </script>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = false
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="index">
+  
+    
+      <article
+id="post-基于Docker配置本地Gitlab"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/05/04/%E5%9F%BA%E4%BA%8EDocker%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0Gitlab/">基于Docker配置本地Gitlab</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文按照操作流程的时间顺序，分别介绍了Gitlab的Docker容器部署、Gitlab平台的基本配置以及基于Git的代码仓基本管理与同步方法。通过掌握这一套的流程，就可以实现在本地构建一个类似于Github的代码托管系统，在企业内网更好的管理私有代码仓库，避免因为在Github上进行代码开发而被其他企业窃取核心技术。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-05-04T08:07:19.000Z" itemprop="datePublished">2021-05-04</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-python3函数可变输入参量"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/05/03/python3%E5%87%BD%E6%95%B0%E5%8F%AF%E5%8F%98%E8%BE%93%E5%85%A5%E5%8F%82%E9%87%8F/">python3函数可变输入参量</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>为了使得输入参数的可扩展性更好，python中自带了args和kwargs两种方法，可以用于表示一个tuple类型的可变长度入参。其中args是一系列的一元变量的输入，kwargs是一系列键值对的输入，可以认为是一个二元变量的输入。虽然这两种方案也都可以用自行实现的tuple来替代，但是直接使用这两种定义会节省很多自定义可变入参的繁琐。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-05-03T10:48:34.000Z" itemprop="datePublished">2021-05-03</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-python3存储numpy格式的矩阵"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/05/02/python3%E5%AD%98%E5%82%A8numpy%E6%A0%BC%E5%BC%8F%E7%9A%84%E7%9F%A9%E9%98%B5/">python3存储numpy格式的矩阵</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>在科学计算中对于恒定不变的数据，不一定需要实时保存在内存中，或者是需要跨平台运算的数据，我们可以将其保存为numpy格式的列表文件npy或者npz。而如果存储的文件过大，本文也额外介绍了简单的tar压缩与解压缩的使用方法。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-05-02T11:21:21.000Z" itemprop="datePublished">2021-05-02</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-使用autopep8自动规范化python3代码"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/04/21/%E4%BD%BF%E7%94%A8autopep8%E8%87%AA%E5%8A%A8%E8%A7%84%E8%8C%83%E5%8C%96python3%E4%BB%A3%E7%A0%81/">使用autopep8自动规范化python3代码</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文主要通过介绍两个python中常用的编码规范格式化工具：autopep8和black来讲解python编程中一些快速处理编程规范问题的方法，同时也说明了这些软件的局限性。编程规范也是人为制定的，事实上在实际项目中，也不是所有的编程规范都需要满足，这就需要项目的组织者或者领导者有自己的基本判断。结合代码规范检查工具flake8以及文章中介绍的这些代码规范格式化工具，最重要的还是要配合以人的判断和调整，才能使得项目具有更好的可读性、可维护性以及更友善的生态。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-04-21T03:28:57.000Z" itemprop="datePublished">2021-04-21</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-Manjaro-Linux永久修改主机名"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/04/19/Manjaro-Linux%E6%B0%B8%E4%B9%85%E4%BF%AE%E6%94%B9%E4%B8%BB%E6%9C%BA%E5%90%8D/">Manjaro Linux永久修改主机名</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文通过简单演示，介绍了在Manjaro Linux系统下设置变更主机名的方法，包含有临时方法和永久生效的方法。这些方法在Linux系统中应该是可以通用的，不仅仅局限在Manjaro Linux中。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-04-19T07:00:01.000Z" itemprop="datePublished">2021-04-19</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-使用numba加速python科学计算"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/04/16/%E4%BD%BF%E7%94%A8numba%E5%8A%A0%E9%80%9Fpython%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/">使用numba加速python科学计算</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了numba的两个装饰器的原理与测试案例，以及python中两坐标轴绘图的案例。其中基于即时编译技术jit的装饰器，能够对代码中的for循环产生较大的编译优化，可以配合并行技术使用。而基于SIMD的向量化计算技术，也能够在向量的计算中，如向量间的乘加运算等场景中，实现巨大的加速效果。这都是非常底层的优化技术，但是要分场景使用，numba这个强力的工具并不能保证在所有的计算场景下都能够产生如此的加速效果。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-04-16T07:29:31.000Z" itemprop="datePublished">2021-04-16</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-python3使用myqr生成链接二维码"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/04/16/python3%E4%BD%BF%E7%94%A8myqr%E7%94%9F%E6%88%90%E9%93%BE%E6%8E%A5%E4%BA%8C%E7%BB%B4%E7%A0%81/">python3使用myqr生成链接二维码</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>二维码技术在日常生活和工业应用中都担任着非常重要的角色，这里我们可以使用python的myqr来生成个性化的二维码，比如带图片背景的二维码，或者是动态背景的二维码。经过测试，用微信扫码都成功的识别了出来，也就是说这些二维码都是可以直接拿来使用的。当然，现在技术都已经非常成熟，所以有很多线上的免费的二维码生成器可以使用，配套的也有二维码解码器，可以将生成的二维码翻译成文字。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-04-16T02:52:22.000Z" itemprop="datePublished">2021-04-16</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-MindSpore函数拟合"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/04/14/MindSpore%E5%87%BD%E6%95%B0%E6%8B%9F%E5%90%88/">MindSpore函数拟合</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>很多机器学习的算法的基础就是函数的拟合，这里我们考虑的是其中一种最简单也最常见的场景：线性函数的拟合，并且我们要通过mindspore来实现这个数据的训练。通过构造均方误差函数，配合前向传播网络与反向传播网络的使用，最终大体成功的拟合了给定的一个线性函数。文末我们还顺带介绍了使用matplotlib的animation来生成动态图的功能，可视化的展现了整个训练的过程。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-04-14T08:42:36.000Z" itemprop="datePublished">2021-04-14</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-python3美化表格数据输出结果"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/04/14/python3%E7%BE%8E%E5%8C%96%E8%A1%A8%E6%A0%BC%E6%95%B0%E6%8D%AE%E8%BE%93%E5%87%BA%E7%BB%93%E6%9E%9C/">python3美化表格数据输出结果</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了两种表格数据的打印工具：tabulate和prettytable的安装与基本使用方法。由于表格数据本身是没有对输出格式进行规范化的，因此打印出来的数据会显得比较杂乱，不利于直观的阅读。因此引入这两种工具，加强了输出结果的可读性。这两者在使用上各有优劣，tabulate支持更多形式的表格样式，而prettytable则使用了更加接近于数据库的操作形式，对于部分用户而言有天然的生态优势。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-04-14T02:49:31.000Z" itemprop="datePublished">2021-04-14</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-python3使用tracemalloc追踪mmap内存变化"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/04/09/python3%E4%BD%BF%E7%94%A8tracemalloc%E8%BF%BD%E8%B8%AAmmap%E5%86%85%E5%AD%98%E5%8F%98%E5%8C%96/">python3使用tracemalloc追踪mmap内存变化</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了用tracemalloc来进行python程序的内存追踪的技术，以及简单的文件映射技术mmap的使用方法介绍和演示。通过这些案例，我们了解到，对于小规模的计算场景，可以将整个的需要计算的元素包含在内存中，这比较方便也比较快速。而对于大规模的文件场景，还是使用内存映射技术更加的快速，这个速度在本文中介绍的几个案例的运行中也能够体会到。内存映射技术已经有很多应用场景，比如前面介绍过的vaex就是得益于内存映射技术。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-04-09T08:20:12.000Z" itemprop="datePublished">2021-04-09</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+
+  
+    <nav class="pagination">
+        <a class="extend prev" rel="prev" href="/page/25/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><a class="page-number" href="/page/28/">28</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><a class="extend next" rel="next" href="/page/27/">Next</a>
+    </nav>
+  
+</div>
+
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

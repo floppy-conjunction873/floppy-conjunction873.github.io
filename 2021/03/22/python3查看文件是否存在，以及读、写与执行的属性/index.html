@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>python3查看文件是否存在，以及读、写与执行的属性 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文介绍了如何使用os.access的方法来判断系统文件的存在性与读、写和可执行权限等。这在日常文件操作中有着比较重要的意义，意味着我们可以先判断文件是否存在再决定是否删除系统文件，而不是直接用os.remove进行删除操作，如果有异常再进行捕获，这种的操作非常的不符合操作逻辑，而且不优雅。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "python3查看文件是否存在，以及读、写与执行的属性 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文介绍了如何使用os.access的方法来判断系统文件的存在性与读、写和可执行权限等。这在日常文件操作中有着比较重要的意义，意味着我们可以先判断文件是否存在再决定是否删除系统文件，而不是直接用os.remove进行删除操作，如果有异常再进行捕获，这种的操作非常的不符合操作逻辑，而且不优雅。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2021/03/22/python3%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%EF%BC%8C%E4%BB%A5%E5%8F%8A%E8%AF%BB%E3%80%81%E5%86%99%E4%B8%8E%E6%89%A7%E8%A1%8C%E7%9A%84%E5%B1%9E%E6%80%A7/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文介绍了如何使用os.access的方法来判断系统文件的存在性与读、写和可执行权限等。这在日常文件操作中有着比较重要的意义，意味着我们可以先判断文件是否存在再决定是否删除系统文件，而不是直接用os.remove进行删除操作，如果有异常再进行捕获，这种的操作非常的不符合操作逻辑，而且不优雅。&lt;/p&gt;" />
+    <meta name="twitter:title" content="python3查看文件是否存在，以及读、写与执行的属性 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文介绍了如何使用os.access的方法来判断系统文件的存在性与读、写和可执行权限等。这在日常文件操作中有着比较重要的意义，意味着我们可以先判断文件是否存在再决定是否删除系统文件，而不是直接用os.remove进行删除操作，如果有异常再进行捕获，这种的操作非常的不符合操作逻辑，而且不优雅。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文介绍了如何使用os.access的方法来判断系统文件的存在性与读、写和可执行权限等。这在日常文件操作中有着比较重要的意义，意味着我们可以先判断文件是否存在再决定是否删除系统文件，而不是直接用os.remove进行删除操作，如果有异常再进行捕获，这种的操作非常的不符合操作逻辑，而且不优雅。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2021/03/22/python3%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%EF%BC%8C%E4%BB%A5%E5%8F%8A%E8%AF%BB%E3%80%81%E5%86%99%E4%B8%8E%E6%89%A7%E8%A1%8C%E7%9A%84%E5%B1%9E%E6%80%A7/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "python3查看文件是否存在，以及读、写与执行的属性 | Hexo",
+            "datePublished": "2021-03-22T02:55:35.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2021/03/22/python3%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%EF%BC%8C%E4%BB%A5%E5%8F%8A%E8%AF%BB%E3%80%81%E5%86%99%E4%B8%8E%E6%89%A7%E8%A1%8C%E7%9A%84%E5%B1%9E%E6%80%A7/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuid8noO5FkTbJHfBdinYsfVR" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      python3查看文件是否存在，以及读、写与执行的属性
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2021-03-22T02:55:35.000Z" itemprop="datePublished">2021-03-22</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文介绍了如何使用os.access的方法来判断系统文件的存在性与读、写和可执行权限等。这在日常文件操作中有着比较重要的意义，意味着我们可以先判断文件是否存在再决定是否删除系统文件，而不是直接用os.remove进行删除操作，如果有异常再进行捕获，这种的操作非常的不符合操作逻辑，而且不优雅。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在使用python对系统文件进行操作的项目中，经常需要用到对本地文件的存在和读写进行判断的操作。最常用的比如<code>os.exists</code>函数，可以很方便的判断给定的文件名是否存在于系统中。但是这里我们介绍的是一个更加专业的判断方案：<code>os.access</code>。使用这个方法，不仅可以判断文件是否存在，还可以判断当前用户对这个文件的读、写和执行的属性。</p>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>这里我们构造一个名为<code>osaccess_test.py</code>的测试项目，这个项目采取了读取命令行的方式来获取需要校验的文件名。对于文件名的校验有4个参数配置：<code>F_OK</code>校验文件是否存在，<code>R,W,X</code>分别校验文件是否具备读、写和执行的权限。如果符合相关的条件选项，则返回值为<code>True</code>。关于返回值的判断，可以用<code>is True</code>或者<code>==1</code>或者直接<code>if condition</code>都是可以的。关于测试的结果，可以参考下一个章节。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># osaccess_test.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> sys.argv[<span class="number">1</span>] == <span class="string">&#x27;-n&#x27;</span>:</span><br><span class="line">    file_name = sys.argv[<span class="number">2</span>] <span class="comment"># 从命令行获取文件名参数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> os.access(file_name, os.F_OK) <span class="keyword">is</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;File &#123;&#125; exists!&#x27;</span>.<span class="built_in">format</span>(file_name))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;File &#123;&#125; not exists!&#x27;</span>.<span class="built_in">format</span>(file_name))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> os.access(file_name, os.R_OK):</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;File &#123;&#125; can be read!&#x27;</span>.<span class="built_in">format</span>(file_name))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;File &#123;&#125; can not be read!&#x27;</span>.<span class="built_in">format</span>(file_name))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> os.access(file_name, os.W_OK):</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;File &#123;&#125; can be write!&#x27;</span>.<span class="built_in">format</span>(file_name))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;File &#123;&#125; can not be write!&#x27;</span>.<span class="built_in">format</span>(file_name))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> os.access(file_name, os.X_OK):</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;File &#123;&#125; can be executed!&#x27;</span>.<span class="built_in">format</span>(file_name))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&#x27;File &#123;&#125; can not be executed!&#x27;</span>.<span class="built_in">format</span>(file_name))</span><br></pre></td></tr></table></figure>
+
+<h1 id="测试分析"><a href="#测试分析" class="headerlink" title="测试分析"></a>测试分析</h1><p>首先我们测试一个不存在的文件，可以看到当前目录下仅有一个py测试文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro access]$ ll</span><br><span class="line">总用量 4</span><br><span class="line">-rw-r--r-- 1 dechin dechin 706  3月 22 10:47 osaccess_test.py</span><br></pre></td></tr></table></figure>
+<p>从命令行输入一个文件名为<code>1.txt</code>的参数，并以如下的方式来执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro access]$ python3 osaccess_test.py -n 1.txt</span><br><span class="line">File 1.txt not exists!</span><br><span class="line">File 1.txt can not be <span class="built_in">read</span>!</span><br><span class="line">File 1.txt can not be write!</span><br><span class="line">File 1.txt can not be executed!</span><br></pre></td></tr></table></figure>
+<p>我们发现所有的判断结果都是<code>False</code>，这也是正确的。接下来测试一个<code>644</code>权限的文件，首先用touch在当前帐号下产生一个<code>1.txt</code>的文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro access]$ <span class="built_in">touch</span> 1.txt</span><br><span class="line">[dechin@dechin-manjaro access]$ ll</span><br><span class="line">总用量 4</span><br><span class="line">-rw-r--r-- 1 dechin dechin   0  3月 22 10:47 1.txt</span><br><span class="line">-rw-r--r-- 1 dechin dechin 706  3月 22 10:47 osaccess_test.py</span><br></pre></td></tr></table></figure>
+<p>然后执行同样的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro access]$ python3 osaccess_test.py -n 1.txt</span><br><span class="line">File 1.txt exists!</span><br><span class="line">File 1.txt can be <span class="built_in">read</span>!</span><br><span class="line">File 1.txt can be write!</span><br><span class="line">File 1.txt can not be executed!</span><br></pre></td></tr></table></figure>
+<p>这次结果就不一样了，除了可执行权限外，其他条件都是满足要求的。为了测试可执行权限，我们将该文件的权限配置改为<code>700</code>测试一下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro access]$ <span class="built_in">chmod</span> 700 1.txt</span><br><span class="line">[dechin@dechin-manjaro access]$ ll</span><br><span class="line">总用量 4</span><br><span class="line">-rwx------ 1 dechin dechin   0  3月 22 10:47 1.txt</span><br><span class="line">-rw-r--r-- 1 dechin dechin 706  3月 22 10:47 osaccess_test.py</span><br></pre></td></tr></table></figure>
+<p>再执行同样的指令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro access]$ python3 osaccess_test.py -n 1.txt</span><br><span class="line">File 1.txt exists!</span><br><span class="line">File 1.txt can be <span class="built_in">read</span>!</span><br><span class="line">File 1.txt can be write!</span><br><span class="line">File 1.txt can be executed!</span><br></pre></td></tr></table></figure>
+<p>到这里我们就发现，所有的检查条件都满足要求了。最后我们还需要测试一个场景，如果是在其他账户下，比如root账户下，创建了一个文件，那么得到的结论是存在文件还是不存在文件呢？首先用<code>su root</code>跳转到root账户下，然后再用touch生成一个空文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root access]# <span class="built_in">touch</span> 2.txt</span><br><span class="line">[dechin-root access]# ll</span><br><span class="line">总用量 4</span><br><span class="line">-rwx------ 1 dechin dechin   0  3月 22 10:47 1.txt</span><br><span class="line">-rw-r--r-- 1 root   root     0  3月 22 10:59 2.txt</span><br><span class="line">-rw-r--r-- 1 dechin dechin 706  3月 22 10:47 osaccess_test.py</span><br></pre></td></tr></table></figure>
+<p>接着回到创建py文件的帐号下，用同样的指令，但是换一个文件名输入进行测试：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro access]$ python3 osaccess_test.py -n 2.txt</span><br><span class="line">File 2.txt exists!</span><br><span class="line">File 2.txt can be <span class="built_in">read</span>!</span><br><span class="line">File 2.txt can not be write!</span><br><span class="line">File 2.txt can not be executed!</span><br></pre></td></tr></table></figure>
+<p>这里我们发现<code>2.txt</code>这个文件还是存在的并且可读的，这跟other组可读是直接相关的，让我们把other组可读的权限去掉再进行测试：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root access]# <span class="built_in">chmod</span> 640 2.txt </span><br><span class="line">[dechin-root access]# ll</span><br><span class="line">总用量 4</span><br><span class="line">-rwx------ 1 dechin dechin   0  3月 22 10:47 1.txt</span><br><span class="line">-rw-r----- 1 root   root     0  3月 22 10:59 2.txt</span><br><span class="line">-rw-r--r-- 1 dechin dechin 706  3月 22 10:47 osaccess_test.py</span><br></pre></td></tr></table></figure>
+<p>还是执行同样的指令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin@dechin-manjaro access]$ python3 osaccess_test.py -n 2.txt</span><br><span class="line">File 2.txt exists!</span><br><span class="line">File 2.txt can not be <span class="built_in">read</span>!</span><br><span class="line">File 2.txt can not be write!</span><br><span class="line">File 2.txt can not be executed!</span><br></pre></td></tr></table></figure>
+<p>结果我们发现，虽然所有的权限都不具备，但是还是可以看到这个文件存在的。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了如何使用os.access的方法来判断系统文件的存在性与读、写和可执行权限等。这在日常文件操作中有着比较重要的意义，意味着我们可以先判断文件是否存在再决定是否删除系统文件，而不是直接用os.remove进行删除操作，如果有异常再进行捕获，这种的操作非常的不符合操作逻辑，而且不优雅。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/osaccess.html">https://www.cnblogs.com/dechinphy/p/osaccess.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2021/03/26/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          Git基本操作流程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/03/21/python3%E4%BD%BF%E7%94%A8pycuda%E6%89%A7%E8%A1%8C%E7%AE%80%E5%8D%95GPU%E8%AE%A1%E7%AE%97%E4%BB%BB%E5%8A%A1/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">python3使用pycuda执行简单GPU计算任务</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=python3查看文件是否存在，以及读、写与执行的属性 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F03%2F22%2Fpython3%25E6%259F%25A5%25E7%259C%258B%25E6%2596%2587%25E4%25BB%25B6%25E6%2598%25AF%25E5%2590%25A6%25E5%25AD%2598%25E5%259C%25A8%25EF%25BC%258C%25E4%25BB%25A5%25E5%258F%258A%25E8%25AF%25BB%25E3%2580%2581%25E5%2586%2599%25E4%25B8%258E%25E6%2589%25A7%25E8%25A1%258C%25E7%259A%2584%25E5%25B1%259E%25E6%2580%25A7%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=python3查看文件是否存在，以及读、写与执行的属性 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2021%2F03%2F22%2Fpython3%25E6%259F%25A5%25E7%259C%258B%25E6%2596%2587%25E4%25BB%25B6%25E6%2598%25AF%25E5%2590%25A6%25E5%25AD%2598%25E5%259C%25A8%25EF%25BC%258C%25E4%25BB%25A5%25E5%258F%258A%25E8%25AF%25BB%25E3%2580%2581%25E5%2586%2599%25E4%25B8%258E%25E6%2589%25A7%25E8%25A1%258C%25E7%259A%2584%25E5%25B1%259E%25E6%2580%25A7%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=python3查看文件是否存在，以及读、写与执行的属性 - Hexo&url=http://dechinphy.github.io/2021/03/22/python3%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%EF%BC%8C%E4%BB%A5%E5%8F%8A%E8%AF%BB%E3%80%81%E5%86%99%E4%B8%8E%E6%89%A7%E8%A1%8C%E7%9A%84%E5%B1%9E%E6%80%A7/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>手搓自动微分 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;不同于符号微分、手动微分和差分法，自动微分方法有着使用简单、计算精度较高、性能较好等优势，因此在各大深度学习框架中得到了广泛的应用。虽然每个框架所使用的自动微分的原理不尽相同，但大致都是基于链式法则计算结合图计算的一些优化。如果是自己动手来手搓一个自动微分框架的话，大致就只能实现一下一阶的链式法则的自动微分。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "手搓自动微分 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;不同于符号微分、手动微分和差分法，自动微分方法有着使用简单、计算精度较高、性能较好等优势，因此在各大深度学习框架中得到了广泛的应用。虽然每个框架所使用的自动微分的原理不尽相同，但大致都是基于链式法则计算结合图计算的一些优化。如果是自己动手来手搓一个自动微分框架的话，大致就只能实现一下一阶的链式法则的自动微分。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2024/04/18/%E6%89%8B%E6%90%93%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;不同于符号微分、手动微分和差分法，自动微分方法有着使用简单、计算精度较高、性能较好等优势，因此在各大深度学习框架中得到了广泛的应用。虽然每个框架所使用的自动微分的原理不尽相同，但大致都是基于链式法则计算结合图计算的一些优化。如果是自己动手来手搓一个自动微分框架的话，大致就只能实现一下一阶的链式法则的自动微分。&lt;/p&gt;" />
+    <meta name="twitter:title" content="手搓自动微分 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;不同于符号微分、手动微分和差分法，自动微分方法有着使用简单、计算精度较高、性能较好等优势，因此在各大深度学习框架中得到了广泛的应用。虽然每个框架所使用的自动微分的原理不尽相同，但大致都是基于链式法则计算结合图计算的一些优化。如果是自己动手来手搓一个自动微分框架的话，大致就只能实现一下一阶的链式法则的自动微分。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;不同于符号微分、手动微分和差分法，自动微分方法有着使用简单、计算精度较高、性能较好等优势，因此在各大深度学习框架中得到了广泛的应用。虽然每个框架所使用的自动微分的原理不尽相同，但大致都是基于链式法则计算结合图计算的一些优化。如果是自己动手来手搓一个自动微分框架的话，大致就只能实现一下一阶的链式法则的自动微分。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2024/04/18/%E6%89%8B%E6%90%93%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "手搓自动微分 | Hexo",
+            "datePublished": "2024-04-18T07:21:39.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2024/04/18/%E6%89%8B%E6%90%93%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidCeBM3wyITzHHoYRP6eDgr" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      手搓自动微分
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2024-04-18T07:21:39.000Z" itemprop="datePublished">2024-04-18</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>不同于符号微分、手动微分和差分法，自动微分方法有着使用简单、计算精度较高、性能较好等优势，因此在各大深度学习框架中得到了广泛的应用。虽然每个框架所使用的自动微分的原理不尽相同，但大致都是基于链式法则计算结合图计算的一些优化。如果是自己动手来手搓一个自动微分框架的话，大致就只能实现一下一阶的链式法则的自动微分。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>自动微分技术，在各大深度学习框架里面得到了广泛的应用。但是其实究其原理，就是一个简单的链式法则。要实现一个自动微分框架是非常容易的事情，难的是高阶的自动微分和端到端的自动微分。这篇文章主要介绍一阶自动微分的基础Python实现，以及一些简单的测试案例。</p>
+<h1 id="链式法则"><a href="#链式法则" class="headerlink" title="链式法则"></a>链式法则</h1><p>求导的链式法则，这个在高数里面大家就都学过了，形式比较简单：<br>$$<br>f(g(x))’&#x3D;f’[g(x)]\cdot g’(x)<br>$$<br>或者可以写成这种形式：<br>$$<br>\frac{df}{dx}&#x3D;\frac{df}{dg}\cdot\frac{dg}{dx}<br>$$</p>
+<h1 id="自动微分框架的使用"><a href="#自动微分框架的使用" class="headerlink" title="自动微分框架的使用"></a>自动微分框架的使用</h1><p>我们先用一些现成的自动微分框架，如MindSpore，来演示一下自动微分的基本用法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> grad, Tensor</span><br><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> numpy <span class="keyword">as</span> msnp</span><br><span class="line"><span class="comment"># 定义一个自变量x</span></span><br><span class="line">x = Tensor(np.array([<span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>], np.float32))</span><br><span class="line"><span class="comment"># 定义一个复合函数</span></span><br><span class="line">f = <span class="keyword">lambda</span> x: msnp.sin(msnp.cos(x))</span><br><span class="line"><span class="comment"># 函数求导</span></span><br><span class="line">gf = grad(f)</span><br><span class="line"><span class="comment"># 计算自动微分结果</span></span><br><span class="line"><span class="built_in">print</span> (gf(x))</span><br><span class="line"><span class="comment"># [-0.7216062  -0.831692   -0.07743199]</span></span><br></pre></td></tr></table></figure>
+<p>这里面的函数定义为：<br>$$<br>f(x) &#x3D; \sin(\cos(x))<br>$$<br>其导数解析形式为：<br>$$<br>f’(x)&#x3D;-\cos(\cos(x))\sin(x)<br>$$<br>也可以用MindSpore做一个简单的验证：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> (-msnp.cos(msnp.cos(x))*msnp.sin(x))</span><br><span class="line"><span class="comment"># [-0.7216062  -0.831692   -0.07743199]</span></span><br></pre></td></tr></table></figure>
+<p>可以看到结果是一致的。</p>
+<h1 id="手搓自动微分"><a href="#手搓自动微分" class="headerlink" title="手搓自动微分"></a>手搓自动微分</h1><p>自己实现自动微分，其实就是把每一个操作函数的导数函数定义好，例如我们可以定义某一个操作的求导函数为<code>__grad__()</code>，而求值函数在python中有一个内置的<code>__call__()</code>函数。例如我们可以基于<code>numpy</code>的函数自定义一个正弦函数的类：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SIN</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;计算正弦值&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> np.sin(x)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__grad__</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;计算正弦函数的导数值&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> np.cos(x)</span><br></pre></td></tr></table></figure>
+<p>然后配套一个grad自动微分函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">grad</span>(<span class="params">obj</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;直接调用输入操作的自动微分函数&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> obj.__grad__</span><br></pre></td></tr></table></figure>
+<p>甚至可以实现一个<code>value_and_grad</code>函数，同时计算值和导数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ValueAndGrad</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, obj</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;初始化输入对象的求值函数和求导函数&quot;&quot;&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>.obj1 = obj</span><br><span class="line">        <span class="variable language_">self</span>.obj2 = obj.__grad__</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;用元组的形式将值和导数的计算结果返回&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> (<span class="variable language_">self</span>.obj1(x), <span class="variable language_">self</span>.obj2(x))</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">value_and_grad</span>(<span class="params">obj</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;初始化求值求导对象&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> ValueAndGrad(obj)</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，因为大多数的场景下都会涉及到复合函数的计算，这也是自动微分技术的核心之一，因此我们自己实现的自动微分框架要能够接收一些外来的操作，然后在内部递归的计算。对应的带有自动微分的类格式变为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SIN</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, obj=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;给定一个其他的函数&quot;&quot;&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>.obj = obj</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;没有复合函数时直接返回结果，有复合函数就递归计算&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> np.sin(x) <span class="keyword">if</span> <span class="variable language_">self</span>.obj <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> np.sin(<span class="variable language_">self</span>.obj(x))</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__grad__</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;没有复合函数时直接返回导数结果，有复合函数就按照链式法则递归计算&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> COS()(x) <span class="keyword">if</span> <span class="variable language_">self</span>.obj <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> COS()(<span class="variable language_">self</span>.obj(x))*<span class="variable language_">self</span>.obj.__grad__(x)</span><br></pre></td></tr></table></figure>
+<p>最终形成的自动微分实现案例为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> mindspore <span class="keyword">as</span> ms</span><br><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> Tensor</span><br><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> grad <span class="keyword">as</span> msgrad</span><br><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> numpy <span class="keyword">as</span> msnp</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SIN</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;自定义正弦类&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, obj=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.obj = obj</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">return</span> np.sin(x) <span class="keyword">if</span> <span class="variable language_">self</span>.obj <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> np.sin(<span class="variable language_">self</span>.obj(x))</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__grad__</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">return</span> COS()(x) <span class="keyword">if</span> <span class="variable language_">self</span>.obj <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> COS()(<span class="variable language_">self</span>.obj(x))*<span class="variable language_">self</span>.obj.__grad__(x)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">COS</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;自定义余弦类&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, obj=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.obj = obj</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">return</span> np.cos(x) <span class="keyword">if</span> <span class="variable language_">self</span>.obj <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> np.cos(<span class="variable language_">self</span>.obj(x))</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__grad__</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">return</span> -SIN()(x) <span class="keyword">if</span> <span class="variable language_">self</span>.obj <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> -SIN()(<span class="variable language_">self</span>.obj(x))*<span class="variable language_">self</span>.obj.__grad__(x)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ValueAndGrad</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;自定义求值求导类&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, obj</span>):</span><br><span class="line">        <span class="variable language_">self</span>.obj1 = obj</span><br><span class="line">        <span class="variable language_">self</span>.obj2 = obj.__grad__</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">return</span> (<span class="variable language_">self</span>.obj1(x), <span class="variable language_">self</span>.obj2(x))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">grad</span>(<span class="params">obj</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;自定义求导函数&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> obj.__grad__</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">value_and_grad</span>(<span class="params">obj</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;自定义求值求导函数&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> ValueAndGrad(obj)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义自变量</span></span><br><span class="line">x = np.array([<span class="number">0.</span>, <span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>,], np.float32)</span><br><span class="line"><span class="comment"># 单体函数验证</span></span><br><span class="line"><span class="keyword">assert</span> np.allclose(SIN()(x), np.sin(x))</span><br><span class="line"><span class="comment"># 单体函数求导验证</span></span><br><span class="line"><span class="keyword">assert</span> np.allclose(grad(SIN())(x), np.cos(x))</span><br><span class="line">v, g = value_and_grad(SIN())(x)</span><br><span class="line"><span class="comment"># 单体函数求值求导验证</span></span><br><span class="line"><span class="keyword">assert</span> np.allclose(v, np.sin(x))</span><br><span class="line"><span class="keyword">assert</span> np.allclose(g, np.cos(x))</span><br><span class="line"><span class="comment"># 双复合函数验证</span></span><br><span class="line"><span class="keyword">assert</span> np.allclose(SIN(SIN())(x), np.sin(np.sin(x)))</span><br><span class="line"><span class="keyword">assert</span> np.allclose(SIN(COS())(x), np.sin(np.cos(x)))</span><br><span class="line"><span class="keyword">assert</span> np.allclose(COS(SIN())(x), np.cos(np.sin(x)))</span><br><span class="line"><span class="keyword">assert</span> np.allclose(COS(COS())(x), np.cos(np.cos(x)))</span><br><span class="line"><span class="comment"># 三复合函数验证</span></span><br><span class="line"><span class="keyword">assert</span> np.allclose(SIN(COS(SIN()))(x), np.sin(np.cos(np.sin(x))))</span><br><span class="line"><span class="comment"># 双复合函数求导验证</span></span><br><span class="line"><span class="keyword">assert</span> np.allclose(grad(SIN(SIN()))(x), np.cos(x)*np.cos(np.sin(x)))</span><br><span class="line">tensor_x = Tensor(x, ms.float32)</span><br><span class="line">ms_func1 = <span class="keyword">lambda</span> x: msnp.sin(msnp.cos(x))</span><br><span class="line"><span class="keyword">assert</span> np.allclose(grad(SIN(COS()))(x), msgrad(ms_func1)(tensor_x).asnumpy())</span><br><span class="line">ms_func2 = <span class="keyword">lambda</span> x: msnp.cos(msnp.sin(x))</span><br><span class="line"><span class="keyword">assert</span> np.allclose(grad(COS(SIN()))(x), msgrad(ms_func2)(tensor_x).asnumpy())</span><br><span class="line">ms_func3 = <span class="keyword">lambda</span> x: msnp.cos(msnp.sin(msnp.cos(x)))</span><br><span class="line"><span class="comment"># 三复合函数求导验证</span></span><br><span class="line"><span class="keyword">assert</span> np.allclose(grad(COS(SIN(COS())))(x), msgrad(ms_func3)(tensor_x).asnumpy())</span><br></pre></td></tr></table></figure>
+<p>这里面除了可以跟手推的微分解析形式的计算结果进行比对之外，还可以跟MindSpore等自动微分框架计算出来的结果进行比对，可以看到结果都是一致的。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>不同于符号微分、手动微分和差分法，自动微分方法有着使用简单、计算精度较高、性能较好等优势，因此在各大深度学习框架中得到了广泛的应用。虽然每个框架所使用的自动微分的原理不尽相同，但大致都是基于链式法则计算结合图计算的一些优化。如果是自己动手来手搓一个自动微分框架的话，大致就只能实现一下一阶的链式法则的自动微分。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/auto-grad.html">https://www.cnblogs.com/dechinphy/p/auto-grad.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2024/05/06/Plumed%E5%88%86%E5%AD%90%E6%A8%A1%E6%8B%9F%E5%90%8E%E5%88%86%E6%9E%90/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          Plumed分子模拟后分析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/04/17/%E7%9B%B4%E6%96%B9%E5%9B%BE%E4%B8%8E%E6%A0%B8%E5%AF%86%E5%BA%A6%E4%BC%B0%E8%AE%A1/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">直方图与核密度估计</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=手搓自动微分 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F04%2F18%2F%25E6%2589%258B%25E6%2590%2593%25E8%2587%25AA%25E5%258A%25A8%25E5%25BE%25AE%25E5%2588%2586%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=手搓自动微分 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2024%2F04%2F18%2F%25E6%2589%258B%25E6%2590%2593%25E8%2587%25AA%25E5%258A%25A8%25E5%25BE%25AE%25E5%2588%2586%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=手搓自动微分 - Hexo&url=http://dechinphy.github.io/2024/04/18/%E6%89%8B%E6%90%93%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>PySAGES实记 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文主要介绍了增强采样外接软件PySAGES的基本安装和使用方法，重点是安装过程中没有写清楚的一些环境依赖和可能出现的问题介绍，以及相应的解决方案。并简单的梳理了一下PySAGES软件的工作流机制，其能够做到Zero Copy，并使得Enhanced Sampling不再成为很多模拟的Bottleneck，这是一个相当出色的结果。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "PySAGES实记 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文主要介绍了增强采样外接软件PySAGES的基本安装和使用方法，重点是安装过程中没有写清楚的一些环境依赖和可能出现的问题介绍，以及相应的解决方案。并简单的梳理了一下PySAGES软件的工作流机制，其能够做到Zero Copy，并使得Enhanced Sampling不再成为很多模拟的Bottleneck，这是一个相当出色的结果。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2024/11/26/PySAGES%E5%AE%9E%E8%AE%B0/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文主要介绍了增强采样外接软件PySAGES的基本安装和使用方法，重点是安装过程中没有写清楚的一些环境依赖和可能出现的问题介绍，以及相应的解决方案。并简单的梳理了一下PySAGES软件的工作流机制，其能够做到Zero Copy，并使得Enhanced Sampling不再成为很多模拟的Bottleneck，这是一个相当出色的结果。&lt;/p&gt;" />
+    <meta name="twitter:title" content="PySAGES实记 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文主要介绍了增强采样外接软件PySAGES的基本安装和使用方法，重点是安装过程中没有写清楚的一些环境依赖和可能出现的问题介绍，以及相应的解决方案。并简单的梳理了一下PySAGES软件的工作流机制，其能够做到Zero Copy，并使得Enhanced Sampling不再成为很多模拟的Bottleneck，这是一个相当出色的结果。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文主要介绍了增强采样外接软件PySAGES的基本安装和使用方法，重点是安装过程中没有写清楚的一些环境依赖和可能出现的问题介绍，以及相应的解决方案。并简单的梳理了一下PySAGES软件的工作流机制，其能够做到Zero Copy，并使得Enhanced Sampling不再成为很多模拟的Bottleneck，这是一个相当出色的结果。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2024/11/26/PySAGES%E5%AE%9E%E8%AE%B0/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "PySAGES实记 | Hexo",
+            "datePublished": "2024-11-26T02:52:57.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2024/11/26/PySAGES%E5%AE%9E%E8%AE%B0/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidsyjtK27DvTzrbEgbQhCbM" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      PySAGES实记
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2024-11-26T02:52:57.000Z" itemprop="datePublished">2024-11-26</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文主要介绍了增强采样外接软件PySAGES的基本安装和使用方法，重点是安装过程中没有写清楚的一些环境依赖和可能出现的问题介绍，以及相应的解决方案。并简单的梳理了一下PySAGES软件的工作流机制，其能够做到Zero Copy，并使得Enhanced Sampling不再成为很多模拟的Bottleneck，这是一个相当出色的结果。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>PySAGES是一款可以使用GPU加速的增强采样插件，它可以直接对接到<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18545566/openmm">OpenMM</a>上进行增强采样分子动力学模拟，这里我们测试一下相关的安装，并尝试跑一个简单的增强采样示例。</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202411/2277440-20241126112510850-23739988.png">
+</div>
+
+<h1 id="安装PySAGES"><a href="#安装PySAGES" class="headerlink" title="安装PySAGES"></a>安装PySAGES</h1><p>PySAGES本身可以使用pip进行安装：</p>
+ <details>
+
+<summary> python3 -m pip install git+https://github.com/SSAGESLabs/PySAGES.git</summary>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install git+https://github.com/SSAGESLabs/PySAGES.git</span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">Collecting git+https://github.com/SSAGESLabs/PySAGES.git</span><br><span class="line">  Cloning https://github.com/SSAGESLabs/PySAGES.git to /tmp/pip-req-build-1fcvtmpb</span><br><span class="line">  Running <span class="built_in">command</span> git <span class="built_in">clone</span> --filter=blob:none --quiet https://github.com/SSAGESLabs/PySAGES.git /tmp/pip-req-build-1fcvtmpb</span><br><span class="line">  Resolved https://github.com/SSAGESLabs/PySAGES.git to commit 5f5bfc7ab97c8027bb60eedd65cdcd66b5556b57</span><br><span class="line">  Installing build dependencies ... <span class="keyword">done</span></span><br><span class="line">  Getting requirements to build wheel ... <span class="keyword">done</span></span><br><span class="line">  Preparing metadata (pyproject.toml) ... <span class="keyword">done</span></span><br><span class="line">Requirement already satisfied: cython <span class="keyword">in</span> /home/dechin/.local/lib/python3.10/site-packages (from pysages==0.5.0) (3.0.11)</span><br><span class="line">Collecting dill (from pysages==0.5.0)</span><br><span class="line">  Downloading https://pypi.tuna.tsinghua.edu.cn/packages/46/d1/e73b6ad76f0b1fb7f23c35c6d95dbc506a9c8804f43dda8cb5b0fa6331fd/dill-0.3.9-py3-none-any.whl (119 kB)</span><br><span class="line">Requirement already satisfied: jax&gt;=0.3.5 <span class="keyword">in</span> /home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages (from pysages==0.5.0) (0.3.25)</span><br><span class="line">Collecting plum-dispatch!=2.0.0,!=2.0.1,&gt;=1.5.4 (from pysages==0.5.0)</span><br><span class="line">  Downloading https://pypi.tuna.tsinghua.edu.cn/packages/56/48/253352df240f5f1d4226f757e4107344bc7f49a4f84ba7d1affb5916d622/plum_dispatch-2.5.3-py3-none-any.whl (42 kB)</span><br><span class="line">Collecting numba (from pysages==0.5.0)</span><br><span class="line">  Downloading https://pypi.tuna.tsinghua.edu.cn/packages/79/58/cb4ac5b8f7ec64200460aef1fed88258fb872ceef504ab1f989d2ff0f684/numba-0.60.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (3.7 MB)</span><br><span class="line">     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.7/3.7 MB 1.3 MB/s eta 0:00:00</span><br><span class="line">Requirement already satisfied: numpy&gt;=1.20 <span class="keyword">in</span> /home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages (from jax&gt;=0.3.5-&gt;pysages==0.5.0) (1.24.3)</span><br><span class="line">Requirement already satisfied: opt-einsum <span class="keyword">in</span> /home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages (from jax&gt;=0.3.5-&gt;pysages==0.5.0) (3.3.0)</span><br><span class="line">Requirement already satisfied: scipy&gt;=1.5 <span class="keyword">in</span> /home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages (from jax&gt;=0.3.5-&gt;pysages==0.5.0) (1.10.0)</span><br><span class="line">Requirement already satisfied: typing-extensions <span class="keyword">in</span> /home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages (from jax&gt;=0.3.5-&gt;pysages==0.5.0) (4.11.0)</span><br><span class="line">Collecting beartype&gt;=0.16.2 (from plum-dispatch!=2.0.0,!=2.0.1,&gt;=1.5.4-&gt;pysages==0.5.0)</span><br><span class="line">  Downloading https://pypi.tuna.tsinghua.edu.cn/packages/64/69/f6db6e4cb2fe2f887dead40b76caa91af4844cb647dd2c7223bb010aa416/beartype-0.19.0-py3-none-any.whl (1.0 MB)</span><br><span class="line">     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.0/1.0 MB 1.4 MB/s eta 0:00:00</span><br><span class="line">Collecting rich&gt;=10.0 (from plum-dispatch!=2.0.0,!=2.0.1,&gt;=1.5.4-&gt;pysages==0.5.0)</span><br><span class="line">  Downloading https://pypi.tuna.tsinghua.edu.cn/packages/19/71/39c7c0d87f8d4e6c020a393182060eaefeeae6c01dab6a84ec346f2567df/rich-13.9.4-py3-none-any.whl (242 kB)</span><br><span class="line">Collecting llvmlite&lt;0.44,&gt;=0.43.0dev0 (from numba-&gt;pysages==0.5.0)</span><br><span class="line">  Downloading https://pypi.tuna.tsinghua.edu.cn/packages/c6/21/2ffbab5714e72f2483207b4a1de79b2eecd9debbf666ff4e7067bcc5c134/llvmlite-0.43.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (43.9 MB)</span><br><span class="line">     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 43.9/43.9 MB 1.6 MB/s eta 0:00:00</span><br><span class="line">Collecting markdown-it-py&gt;=2.2.0 (from rich&gt;=10.0-&gt;plum-dispatch!=2.0.0,!=2.0.1,&gt;=1.5.4-&gt;pysages==0.5.0)</span><br><span class="line">  Downloading https://pypi.tuna.tsinghua.edu.cn/packages/42/d7/1ec15b46af6af88f19b8e5ffea08fa375d433c998b8a7639e76935c14f1f/markdown_it_py-3.0.0-py3-none-any.whl (87 kB)</span><br><span class="line">Requirement already satisfied: pygments&lt;3.0.0,&gt;=2.13.0 <span class="keyword">in</span> /home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages (from rich&gt;=10.0-&gt;plum-dispatch!=2.0.0,!=2.0.1,&gt;=1.5.4-&gt;pysages==0.5.0) (2.15.1)</span><br><span class="line">Collecting mdurl~=0.1 (from markdown-it-py&gt;=2.2.0-&gt;rich&gt;=10.0-&gt;plum-dispatch!=2.0.0,!=2.0.1,&gt;=1.5.4-&gt;pysages==0.5.0)</span><br><span class="line">  Downloading https://pypi.tuna.tsinghua.edu.cn/packages/b3/38/89ba8ad64ae25be8de66a6d463314cf1eb366222074cfda9ee839c56a4b4/mdurl-0.1.2-py3-none-any.whl (10.0 kB)</span><br><span class="line">Building wheels <span class="keyword">for</span> collected packages: pysages</span><br><span class="line">  Building wheel <span class="keyword">for</span> pysages (pyproject.toml) ... <span class="keyword">done</span></span><br><span class="line">  Created wheel <span class="keyword">for</span> pysages: filename=pysages-0.5.0-py3-none-any.whl size=117796 sha256=d9d97db55522297ba4ec17a6680790e0c13e87d92ea35e92a00b4055b7bc47b7</span><br><span class="line">  Stored <span class="keyword">in</span> directory: /tmp/pip-ephem-wheel-cache-zec6nip9/wheels/85/08/28/c73436bba0d28b37f2bbcf4081cdaa187aa06eef51e869c8a1</span><br><span class="line">Successfully built pysages</span><br><span class="line">Installing collected packages: mdurl, llvmlite, dill, beartype, numba, markdown-it-py, rich, plum-dispatch, pysages</span><br><span class="line">Successfully installed beartype-0.19.0 dill-0.3.9 llvmlite-0.43.0 markdown-it-py-3.0.0 mdurl-0.1.2 numba-0.60.0 plum-dispatch-2.5.3 pysages-0.5.0 rich-13.9.4</span><br></pre></td></tr></table></figure>
+
+</details>
+
+<h1 id="安装测试"><a href="#安装测试" class="headerlink" title="安装测试"></a>安装测试</h1><p>看起来是安装成功了，跑一个简单的用例试一试。先准备一个简单的pdb文件：</p>
+ <details>
+
+<summary> input.pdb</summary>
+
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">CRYST1    0.000    0.000    0.000  90.00  90.00  90.00 P 1           1</span><br><span class="line">ATOM      1  H1  ACE A   1      -1.838  -6.570  -0.492  0.00  0.00</span><br><span class="line">ATOM      2  CH3 ACE A   1      -0.764  -6.587  -0.283  0.00  0.00</span><br><span class="line">ATOM      3  H2  ACE A   1      -0.392  -7.533  -0.746  0.00  0.00</span><br><span class="line">ATOM      4  H3  ACE A   1      -0.592  -6.446   0.740  0.00  0.00</span><br><span class="line">ATOM      5  C   ACE A   1      -0.006  -5.404  -0.828  0.00  0.00</span><br><span class="line">ATOM      6  O   ACE A   1      -0.544  -4.619  -1.673  0.00  0.00</span><br><span class="line">ATOM      7  N   ALA A   2       1.278  -5.323  -0.423  0.00  0.00</span><br><span class="line">ATOM      8  H   ALA A   2       1.622  -5.845   0.368  0.00  0.00</span><br><span class="line">ATOM      9  CA  ALA A   2       2.284  -4.164  -0.399  0.00  0.00</span><br><span class="line">ATOM     10  HA  ALA A   2       2.098  -3.653   0.505  0.00  0.00</span><br><span class="line">ATOM     11  CB  ALA A   2       3.651  -4.787  -0.566  0.00  0.00</span><br><span class="line">ATOM     12  HB1 ALA A   2       4.274  -4.031  -0.972  0.00  0.00</span><br><span class="line">ATOM     13  HB2 ALA A   2       3.977  -5.106   0.419  0.00  0.00</span><br><span class="line">ATOM     14  HB3 ALA A   2       3.697  -5.612  -1.274  0.00  0.00</span><br><span class="line">ATOM     15  C   ALA A   2       1.995  -3.152  -1.576  0.00  0.00</span><br><span class="line">ATOM     16  O   ALA A   2       1.544  -2.065  -1.221  0.00  0.00</span><br><span class="line">ATOM     17  N   NME A   3       2.255  -3.614  -2.845  0.00  0.00</span><br><span class="line">ATOM     18  H   NME A   3       2.788  -4.485  -2.929  0.00  0.00</span><br><span class="line">ATOM     19  CH3 NME A   3       1.991  -2.802  -4.055  0.00  0.00</span><br><span class="line">ATOM     20 HH31 NME A   3       2.561  -1.891  -3.988  0.00  0.00</span><br><span class="line">ATOM     21 HH32 NME A   3       1.897  -3.419  -4.937  0.00  0.00</span><br><span class="line">ATOM     22 HH33 NME A   3       0.985  -2.388  -3.930  0.00  0.00</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+
+</details>
+
+<p>然后在上一篇文章中介绍的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18545566/openmm">OpenMM基础案例</a>的基础上增加一个PySAGES的MetaDynamics案例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> openmm.app <span class="keyword">import</span> PDBFile, ForceField, Simulation, PDBReporter, StateDataReporter, HBonds</span><br><span class="line"><span class="keyword">from</span> openmm <span class="keyword">import</span> LangevinMiddleIntegrator</span><br><span class="line"><span class="keyword">from</span> openmm.unit <span class="keyword">import</span> nanometer, kelvin, picoseconds, picosecond, BOLTZMANN_CONSTANT_kB, AVOGADRO_CONSTANT_NA, kilojoules_per_mole</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pysages</span><br><span class="line"><span class="keyword">from</span> pysages.colvars <span class="keyword">import</span> DihedralAngle</span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> pi</span><br><span class="line"><span class="keyword">from</span> pysages.methods <span class="keyword">import</span> Metadynamics, MetaDLogger</span><br><span class="line"></span><br><span class="line">kB = BOLTZMANN_CONSTANT_kB * AVOGADRO_CONSTANT_NA</span><br><span class="line">kB = kB.value_in_unit(kilojoules_per_mole / kelvin)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">NVT</span>(<span class="params">pdb_name=<span class="string">&#x27;input.pdb&#x27;</span>, pdb_out=<span class="string">&#x27;output.pdb&#x27;</span>, ff=<span class="string">&#x27;amber14-all.xml&#x27;</span>, log_file=<span class="string">&#x27;log.dat&#x27;</span></span>):</span><br><span class="line">    pdb = PDBFile(pdb_name)</span><br><span class="line">    forcefield = ForceField(ff)</span><br><span class="line">    system = forcefield.createSystem(pdb.topology, nonbondedCutoff=<span class="number">1</span>*nanometer, constraints=HBonds)</span><br><span class="line"></span><br><span class="line">    integrator = LangevinMiddleIntegrator(<span class="number">300</span>*kelvin, <span class="number">1</span>/picosecond, <span class="number">0.004</span>*picoseconds)</span><br><span class="line">    simulation = Simulation(pdb.topology, system, integrator)</span><br><span class="line">    simulation.context.setPositions(pdb.positions)</span><br><span class="line"></span><br><span class="line">    simulation.minimizeEnergy()</span><br><span class="line">    simulation.reporters.append(PDBReporter(pdb_out, <span class="number">1000</span>))</span><br><span class="line">    simulation.reporters.append(StateDataReporter(log_file, <span class="number">1000</span>, step=<span class="literal">True</span>, potentialEnergy=<span class="literal">True</span>, temperature=<span class="literal">True</span>, volume=<span class="literal">True</span>))</span><br><span class="line">    <span class="keyword">return</span> simulation</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">MetaD</span>(<span class="params">hills_file=<span class="string">&quot;hills.dat&quot;</span>, time_steps=<span class="number">10000</span></span>):</span><br><span class="line">    cvs = [DihedralAngle([<span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">14</span>]), DihedralAngle([<span class="number">6</span>, <span class="number">8</span>, <span class="number">14</span>, <span class="number">16</span>])]</span><br><span class="line">    height = <span class="number">1.2</span>  <span class="comment"># kJ/mol</span></span><br><span class="line">    sigma = [<span class="number">0.35</span>, <span class="number">0.35</span>]  <span class="comment"># radians</span></span><br><span class="line">    deltaT = <span class="number">5000</span></span><br><span class="line">    stride = <span class="number">500</span></span><br><span class="line">    ngauss = time_steps // stride + <span class="number">1</span></span><br><span class="line">    grid = pysages.Grid(lower=(-pi, -pi), upper=(pi, pi), shape=(<span class="number">50</span>, <span class="number">50</span>), periodic=<span class="literal">True</span>)</span><br><span class="line">    method = Metadynamics(cvs, height, sigma, stride, ngauss, deltaT=deltaT, kB=kB, grid=grid)</span><br><span class="line">    callback = MetaDLogger(hills_file, stride)</span><br><span class="line">    run_result = pysages.run(method, NVT, time_steps, callback)</span><br><span class="line">    result = pysages.analyze(run_result)</span><br><span class="line">    metapotential = result[<span class="string">&quot;metapotential&quot;</span>]</span><br><span class="line">    <span class="keyword">return</span> metapotential</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    potential = MetaD()</span><br><span class="line">    <span class="built_in">print</span> (potential)</span><br></pre></td></tr></table></figure>
+<p>发生了一个报错：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;/home/dechin/projects/gitee/dechin/tests/test_openmm.py&quot;</span>, line 43, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    potential = MetaD()</span><br><span class="line">  File <span class="string">&quot;/home/dechin/projects/gitee/dechin/tests/test_openmm.py&quot;</span>, line 37, <span class="keyword">in</span> MetaD</span><br><span class="line">    run_result = pysages.run(method, NVT, time_steps, callback)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/plum/function.py&quot;</span>, line 383, <span class="keyword">in</span> __call__</span><br><span class="line">    <span class="built_in">return</span> _convert(method(*args, **kw_args), return_type)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 230, <span class="keyword">in</span> run</span><br><span class="line">    futures = [submit_work(ex, method, callback) <span class="keyword">for</span> _ <span class="keyword">in</span> range(config.copies)]</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 230, <span class="keyword">in</span> &lt;listcomp&gt;</span><br><span class="line">    futures = [submit_work(ex, method, callback) <span class="keyword">for</span> _ <span class="keyword">in</span> range(config.copies)]</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 218, <span class="keyword">in</span> submit_work</span><br><span class="line">    <span class="built_in">return</span> executor.submit(</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/utils.py&quot;</span>, line 33, <span class="keyword">in</span> submit</span><br><span class="line">    future.set_result(fn(*args, **kwargs))</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 324, <span class="keyword">in</span> _run_replica</span><br><span class="line">    <span class="built_in">return</span> run(method, *args, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/plum/function.py&quot;</span>, line 383, <span class="keyword">in</span> __call__</span><br><span class="line">    <span class="built_in">return</span> _convert(method(*args, **kw_args), return_type)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 371, <span class="keyword">in</span> _run</span><br><span class="line">    sampling_context = SamplingContext(method, context_generator, callback, context_args)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/backends/core.py&quot;</span>, line 101, <span class="keyword">in</span> __init__</span><br><span class="line">    backend = import_module(<span class="string">&quot;.&quot;</span> + self._backend_name, package=<span class="string">&quot;pysages.backends&quot;</span>)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/importlib/__init__.py&quot;</span>, line 126, <span class="keyword">in</span> import_module</span><br><span class="line">    <span class="built_in">return</span> _bootstrap._gcd_import(name[level:], package, level)</span><br><span class="line">  File <span class="string">&quot;&lt;frozen importlib._bootstrap&gt;&quot;</span>, line 1050, <span class="keyword">in</span> _gcd_import</span><br><span class="line">  File <span class="string">&quot;&lt;frozen importlib._bootstrap&gt;&quot;</span>, line 1027, <span class="keyword">in</span> _find_and_load</span><br><span class="line">  File <span class="string">&quot;&lt;frozen importlib._bootstrap&gt;&quot;</span>, line 1006, <span class="keyword">in</span> _find_and_load_unlocked</span><br><span class="line">  File <span class="string">&quot;&lt;frozen importlib._bootstrap&gt;&quot;</span>, line 688, <span class="keyword">in</span> _load_unlocked</span><br><span class="line">  File <span class="string">&quot;&lt;frozen importlib._bootstrap_external&gt;&quot;</span>, line 883, <span class="keyword">in</span> exec_module</span><br><span class="line">  File <span class="string">&quot;&lt;frozen importlib._bootstrap&gt;&quot;</span>, line 241, <span class="keyword">in</span> _call_with_frames_removed</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/backends/openmm.py&quot;</span>, line 8, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    import openmm_dlext as dlext</span><br><span class="line">ModuleNotFoundError: No module named <span class="string">&#x27;openmm_dlext&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>提示是需要安装一个<code>openmm_dlext</code>的插件。因为这个插件只有一个Github仓库，没有太多的文档，也没有介绍怎么安装的。我测试过下载源码下来，<code>cmake&amp;&amp;make install</code>去编译构建，但是又会有很多其他的报错提示要处理，最终我采取的方案是使用conda安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ conda install conda-forge::openmm-dlext</span><br></pre></td></tr></table></figure>
+<p>安装完成后再次运行上面的案例，又有一个新的报错：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">$ python3 test_openmm.py </span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;/home/dechin/projects/gitee/dechin/tests/test_openmm.py&quot;</span>, line 43, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    potential = MetaD()</span><br><span class="line">  File <span class="string">&quot;/home/dechin/projects/gitee/dechin/tests/test_openmm.py&quot;</span>, line 37, <span class="keyword">in</span> MetaD</span><br><span class="line">    run_result = pysages.run(method, NVT, time_steps, callback)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/plum/function.py&quot;</span>, line 383, <span class="keyword">in</span> __call__</span><br><span class="line">    <span class="built_in">return</span> _convert(method(*args, **kw_args), return_type)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 230, <span class="keyword">in</span> run</span><br><span class="line">    futures = [submit_work(ex, method, callback) <span class="keyword">for</span> _ <span class="keyword">in</span> range(config.copies)]</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 230, <span class="keyword">in</span> &lt;listcomp&gt;</span><br><span class="line">    futures = [submit_work(ex, method, callback) <span class="keyword">for</span> _ <span class="keyword">in</span> range(config.copies)]</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 218, <span class="keyword">in</span> submit_work</span><br><span class="line">    <span class="built_in">return</span> executor.submit(</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/utils.py&quot;</span>, line 33, <span class="keyword">in</span> submit</span><br><span class="line">    future.set_result(fn(*args, **kwargs))</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 324, <span class="keyword">in</span> _run_replica</span><br><span class="line">    <span class="built_in">return</span> run(method, *args, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/plum/function.py&quot;</span>, line 383, <span class="keyword">in</span> __call__</span><br><span class="line">    <span class="built_in">return</span> _convert(method(*args, **kw_args), return_type)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 371, <span class="keyword">in</span> _run</span><br><span class="line">    sampling_context = SamplingContext(method, context_generator, callback, context_args)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/backends/core.py&quot;</span>, line 102, <span class="keyword">in</span> __init__</span><br><span class="line">    self.sampler = backend.bind(self, callback, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/backends/openmm.py&quot;</span>, line 194, <span class="keyword">in</span> <span class="built_in">bind</span></span><br><span class="line">    force.add_to(context)  <span class="comment"># OpenMM will handle the lifetime of the force</span></span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/openmm_dlext/__init__.py&quot;</span>, line 29, <span class="keyword">in</span> add_to</span><br><span class="line">    self.__alt__.add_to(_to_capsule(context), _to_capsule(system))</span><br><span class="line">RuntimeError: Unsupported platform</span><br></pre></td></tr></table></figure>
+<p>关于这个报错，我在<a target="_blank" rel="noopener" href="https://github.com/SSAGESLabs/openmm-dlext/issues/27">openmm_dlext的Issue</a>里面找到了相应的解决方案，说是要手动配置一下CUDA Platform，于是修改一下代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> openmm.app <span class="keyword">import</span> PDBFile, ForceField, Simulation, PDBReporter, StateDataReporter, HBonds</span><br><span class="line"><span class="keyword">from</span> openmm <span class="keyword">import</span> LangevinMiddleIntegrator, Platform</span><br><span class="line"><span class="keyword">from</span> openmm.unit <span class="keyword">import</span> nanometer, kelvin, picoseconds, picosecond, BOLTZMANN_CONSTANT_kB, AVOGADRO_CONSTANT_NA, kilojoules_per_mole</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pysages</span><br><span class="line"><span class="keyword">from</span> pysages.colvars <span class="keyword">import</span> DihedralAngle</span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> pi</span><br><span class="line"><span class="keyword">from</span> pysages.methods <span class="keyword">import</span> Metadynamics, MetaDLogger</span><br><span class="line"></span><br><span class="line">openmm_platform = Platform.getPlatformByName(<span class="string">&#x27;CUDA&#x27;</span>)</span><br><span class="line">kB = BOLTZMANN_CONSTANT_kB * AVOGADRO_CONSTANT_NA</span><br><span class="line">kB = kB.value_in_unit(kilojoules_per_mole / kelvin)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">NVT</span>(<span class="params">pdb_name=<span class="string">&#x27;input.pdb&#x27;</span>, pdb_out=<span class="string">&#x27;output.pdb&#x27;</span>, ff=<span class="string">&#x27;amber14-all.xml&#x27;</span>, log_file=<span class="string">&#x27;log.dat&#x27;</span>, platform=openmm_platform</span>):</span><br><span class="line">    pdb = PDBFile(pdb_name)</span><br><span class="line">    forcefield = ForceField(ff)</span><br><span class="line">    system = forcefield.createSystem(pdb.topology, nonbondedCutoff=<span class="number">1</span>*nanometer, constraints=HBonds)</span><br><span class="line"></span><br><span class="line">    integrator = LangevinMiddleIntegrator(<span class="number">300</span>*kelvin, <span class="number">1</span>/picosecond, <span class="number">0.004</span>*picoseconds)</span><br><span class="line">    simulation = Simulation(pdb.topology, system, integrator, platform=platform)</span><br><span class="line">    simulation.context.setPositions(pdb.positions)</span><br><span class="line"></span><br><span class="line">    simulation.minimizeEnergy()</span><br><span class="line">    simulation.reporters.append(PDBReporter(pdb_out, <span class="number">1000</span>))</span><br><span class="line">    simulation.reporters.append(StateDataReporter(log_file, <span class="number">1000</span>, step=<span class="literal">True</span>, potentialEnergy=<span class="literal">True</span>, temperature=<span class="literal">True</span>, volume=<span class="literal">True</span>))</span><br><span class="line">    <span class="keyword">return</span> simulation</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">MetaD</span>(<span class="params">hills_file=<span class="string">&quot;hills.dat&quot;</span>, time_steps=<span class="number">10000</span></span>):</span><br><span class="line">    cvs = [DihedralAngle([<span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">14</span>]), DihedralAngle([<span class="number">6</span>, <span class="number">8</span>, <span class="number">14</span>, <span class="number">16</span>])]</span><br><span class="line">    height = <span class="number">1.2</span>  <span class="comment"># kJ/mol</span></span><br><span class="line">    sigma = [<span class="number">0.35</span>, <span class="number">0.35</span>]  <span class="comment"># radians</span></span><br><span class="line">    deltaT = <span class="number">5000</span></span><br><span class="line">    stride = <span class="number">500</span></span><br><span class="line">    ngauss = time_steps // stride + <span class="number">1</span></span><br><span class="line">    grid = pysages.Grid(lower=(-pi, -pi), upper=(pi, pi), shape=(<span class="number">50</span>, <span class="number">50</span>), periodic=<span class="literal">True</span>)</span><br><span class="line">    method = Metadynamics(cvs, height, sigma, stride, ngauss, deltaT=deltaT, kB=kB, grid=grid)</span><br><span class="line">    callback = MetaDLogger(hills_file, stride)</span><br><span class="line">    run_result = pysages.run(method, NVT, time_steps, callback)</span><br><span class="line">    result = pysages.analyze(run_result)</span><br><span class="line">    metapotential = result[<span class="string">&quot;metapotential&quot;</span>]</span><br><span class="line">    <span class="keyword">return</span> metapotential</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    potential = MetaD()</span><br><span class="line">    <span class="built_in">print</span> (potential)</span><br></pre></td></tr></table></figure>
+<p>再次运行，又出现一个新的报错：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;/home/dechin/projects/gitee/dechin/tests/test_openmm.py&quot;</span>, line 44, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    potential = MetaD()</span><br><span class="line">  File <span class="string">&quot;/home/dechin/projects/gitee/dechin/tests/test_openmm.py&quot;</span>, line 38, <span class="keyword">in</span> MetaD</span><br><span class="line">    run_result = pysages.run(method, NVT, time_steps, callback)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/plum/function.py&quot;</span>, line 383, <span class="keyword">in</span> __call__</span><br><span class="line">    <span class="built_in">return</span> _convert(method(*args, **kw_args), return_type)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 230, <span class="keyword">in</span> run</span><br><span class="line">    futures = [submit_work(ex, method, callback) <span class="keyword">for</span> _ <span class="keyword">in</span> range(config.copies)]</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 230, <span class="keyword">in</span> &lt;listcomp&gt;</span><br><span class="line">    futures = [submit_work(ex, method, callback) <span class="keyword">for</span> _ <span class="keyword">in</span> range(config.copies)]</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 218, <span class="keyword">in</span> submit_work</span><br><span class="line">    <span class="built_in">return</span> executor.submit(</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/utils.py&quot;</span>, line 33, <span class="keyword">in</span> submit</span><br><span class="line">    future.set_result(fn(*args, **kwargs))</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 324, <span class="keyword">in</span> _run_replica</span><br><span class="line">    <span class="built_in">return</span> run(method, *args, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/plum/function.py&quot;</span>, line 383, <span class="keyword">in</span> __call__</span><br><span class="line">    <span class="built_in">return</span> _convert(method(*args, **kw_args), return_type)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 371, <span class="keyword">in</span> _run</span><br><span class="line">    sampling_context = SamplingContext(method, context_generator, callback, context_args)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/backends/core.py&quot;</span>, line 78, <span class="keyword">in</span> __init__</span><br><span class="line">    context = context_generator(**context_args)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/projects/gitee/dechin/tests/test_openmm.py&quot;</span>, line 20, <span class="keyword">in</span> NVT</span><br><span class="line">    simulation = Simulation(pdb.topology, system, integrator, platform=platform)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/openmm/app/simulation.py&quot;</span>, line 104, <span class="keyword">in</span> __init__</span><br><span class="line">    self.context = mm.Context(self.system, self.integrator, platform)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/openmm/openmm.py&quot;</span>, line 19511, <span class="keyword">in</span> __init__</span><br><span class="line">    _openmm.Context_swiginit(self, _openmm.new_Context(*args))</span><br><span class="line">openmm.OpenMMException: Error loading CUDA module: CUDA_ERROR_UNSUPPORTED_PTX_VERSION (222)</span><br></pre></td></tr></table></figure>
+<p>好，这次是CUDA版本号不支持，类似的问题在一条<a target="_blank" rel="noopener" href="https://github.com/openmm/openmm/issues/3585">openmm的issue</a>中有讨论过，需要检查一下自己本地cudatoolkit的配置信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ conda list | grep cudatoolkit</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+<p>这里发现在这个虚拟环境里面没有配置cudatoolkit，需要再装一个：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">$ conda install -c conda-forge cudatoolkit=11.6</span><br><span class="line">Collecting package metadata (current_repodata.json): <span class="keyword">done</span></span><br><span class="line">Solving environment: failed with initial frozen solve. Retrying with flexible solve.</span><br><span class="line">Collecting package metadata (repodata.json): <span class="keyword">done</span></span><br><span class="line">Solving environment: <span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">==&gt; WARNING: A newer version of conda exists. &lt;==</span><br><span class="line">  current version: 23.1.0</span><br><span class="line">  latest version: 24.11.0</span><br><span class="line"></span><br><span class="line">Please update conda by running</span><br><span class="line"></span><br><span class="line">    $ conda update -n base -c defaults conda</span><br><span class="line"></span><br><span class="line">Or to minimize the number of packages updated during conda update use</span><br><span class="line"></span><br><span class="line">     conda install conda=24.11.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## Package Plan ##</span></span><br><span class="line"></span><br><span class="line">  environment location: /home/dechin/anaconda3/envs/jax</span><br><span class="line"></span><br><span class="line">  added / updated specs:</span><br><span class="line">    - cudatoolkit=11.6</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The following packages will be downloaded:</span><br><span class="line"></span><br><span class="line">    package                    |            build</span><br><span class="line">    ---------------------------|-----------------</span><br><span class="line">    cudatoolkit-11.6.2         |      hfc3e2af_13       598.8 MB  conda-forge</span><br><span class="line">    openmm-8.1.1               |  py310h358ce72_1        10.8 MB  conda-forge</span><br><span class="line">    openmm-dlext-0.2.1         |  py310h552f1b7_8         115 KB  conda-forge</span><br><span class="line">    ------------------------------------------------------------</span><br><span class="line">                                           Total:       609.8 MB</span><br><span class="line"></span><br><span class="line">The following NEW packages will be INSTALLED:</span><br><span class="line"></span><br><span class="line">  cudatoolkit        conda-forge/linux-64::cudatoolkit-11.6.2-hfc3e2af_13 </span><br><span class="line"></span><br><span class="line">The following packages will be REMOVED:</span><br><span class="line"></span><br><span class="line">  cuda-nvrtc-12.4.127-h99ab3db_1</span><br><span class="line">  cuda-version-12.4-hbda6634_3</span><br><span class="line">  libcufft-11.2.1.3-h99ab3db_1</span><br><span class="line"></span><br><span class="line">The following packages will be UPDATED:</span><br><span class="line"></span><br><span class="line">  openssl            anaconda/pkgs/main::openssl-3.0.15-h5~ --&gt; conda-forge::openssl-3.4.0-hb9d3cd8_0 </span><br><span class="line"></span><br><span class="line">The following packages will be SUPERSEDED by a higher-priority channel:</span><br><span class="line"></span><br><span class="line">  ca-certificates    anaconda/pkgs/main::ca-certificates-2~ --&gt; conda-forge::ca-certificates-2024.8.30-hbcca054_0 </span><br><span class="line">  openmm             anaconda/cloud/conda-forge::openmm-8.~ --&gt; conda-forge::openmm-8.1.1-py310h358ce72_1 </span><br><span class="line"></span><br><span class="line">The following packages will be DOWNGRADED:</span><br><span class="line"></span><br><span class="line">  openmm-dlext                        0.2.1-py310hcb41016_8 --&gt; 0.2.1-py310h552f1b7_8 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Proceed ([y]/n)? y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Downloading and Extracting Packages</span><br><span class="line">                                                                                                                                                                        </span><br><span class="line">Preparing transaction: <span class="keyword">done</span>                                                                                                                                             </span><br><span class="line">Verifying transaction: <span class="keyword">done</span>                                                                                                                                             </span><br><span class="line">Executing transaction: | By downloading and using the CUDA Toolkit conda packages, you accept the terms and conditions of the CUDA End User License Agreement (EULA): https://docs.nvidia.com/cuda/eula/index.html</span><br><span class="line"></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>再次执行上面的程序，报错+1：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">$ python3 test_openmm.py </span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;/home/dechin/projects/gitee/dechin/tests/test_openmm.py&quot;</span>, line 44, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    potential = MetaD()</span><br><span class="line">  File <span class="string">&quot;/home/dechin/projects/gitee/dechin/tests/test_openmm.py&quot;</span>, line 38, <span class="keyword">in</span> MetaD</span><br><span class="line">    run_result = pysages.run(method, NVT, time_steps, callback)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/plum/function.py&quot;</span>, line 383, <span class="keyword">in</span> __call__</span><br><span class="line">    <span class="built_in">return</span> _convert(method(*args, **kw_args), return_type)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 230, <span class="keyword">in</span> run</span><br><span class="line">    futures = [submit_work(ex, method, callback) <span class="keyword">for</span> _ <span class="keyword">in</span> range(config.copies)]</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 230, <span class="keyword">in</span> &lt;listcomp&gt;</span><br><span class="line">    futures = [submit_work(ex, method, callback) <span class="keyword">for</span> _ <span class="keyword">in</span> range(config.copies)]</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 218, <span class="keyword">in</span> submit_work</span><br><span class="line">    <span class="built_in">return</span> executor.submit(</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/utils.py&quot;</span>, line 33, <span class="keyword">in</span> submit</span><br><span class="line">    future.set_result(fn(*args, **kwargs))</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 324, <span class="keyword">in</span> _run_replica</span><br><span class="line">    <span class="built_in">return</span> run(method, *args, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/plum/function.py&quot;</span>, line 383, <span class="keyword">in</span> __call__</span><br><span class="line">    <span class="built_in">return</span> _convert(method(*args, **kw_args), return_type)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/methods/core.py&quot;</span>, line 371, <span class="keyword">in</span> _run</span><br><span class="line">    sampling_context = SamplingContext(method, context_generator, callback, context_args)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/backends/core.py&quot;</span>, line 102, <span class="keyword">in</span> __init__</span><br><span class="line">    self.sampler = backend.bind(self, callback, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/backends/openmm.py&quot;</span>, line 197, <span class="keyword">in</span> <span class="built_in">bind</span></span><br><span class="line">    helpers, restore, bias = build_helpers(sampling_context.view, sampling_method)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/backends/openmm.py&quot;</span>, line 135, <span class="keyword">in</span> build_helpers</span><br><span class="line">    sync_forces, view = utils.cupy_helpers()</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/pysages/backends/utils.py&quot;</span>, line 21, <span class="keyword">in</span> cupy_helpers</span><br><span class="line">    cupy = importlib.import_module(<span class="string">&quot;cupy&quot;</span>)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/importlib/__init__.py&quot;</span>, line 126, <span class="keyword">in</span> import_module</span><br><span class="line">    <span class="built_in">return</span> _bootstrap._gcd_import(name[level:], package, level)</span><br><span class="line">  File <span class="string">&quot;&lt;frozen importlib._bootstrap&gt;&quot;</span>, line 1050, <span class="keyword">in</span> _gcd_import</span><br><span class="line">  File <span class="string">&quot;&lt;frozen importlib._bootstrap&gt;&quot;</span>, line 1027, <span class="keyword">in</span> _find_and_load</span><br><span class="line">  File <span class="string">&quot;&lt;frozen importlib._bootstrap&gt;&quot;</span>, line 1004, <span class="keyword">in</span> _find_and_load_unlocked</span><br><span class="line">ModuleNotFoundError: No module named <span class="string">&#x27;cupy&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>不过这个看起来好处理，就是少装了一个cupy的依赖，稳妥起见，我们还是选择使用conda来安装cupy：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">$ conda install -c conda-forge cupy -y</span><br><span class="line">Collecting package metadata (current_repodata.json): <span class="keyword">done</span></span><br><span class="line">Solving environment: failed with initial frozen solve. Retrying with flexible solve.</span><br><span class="line">Solving environment: - </span><br><span class="line">failed with repodata from current_repodata.json, will retry with next repodata <span class="built_in">source</span>.</span><br><span class="line">Collecting package metadata (repodata.json): <span class="keyword">done</span></span><br><span class="line">Solving environment: <span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">==&gt; WARNING: A newer version of conda exists. &lt;==</span><br><span class="line">  current version: 23.1.0</span><br><span class="line">  latest version: 24.11.0</span><br><span class="line"></span><br><span class="line">Please update conda by running</span><br><span class="line"></span><br><span class="line">    $ conda update -n base -c defaults conda</span><br><span class="line"></span><br><span class="line">Or to minimize the number of packages updated during conda update use</span><br><span class="line"></span><br><span class="line">     conda install conda=24.11.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## Package Plan ##</span></span><br><span class="line"></span><br><span class="line">  environment location: /home/dechin/anaconda3/envs/jax</span><br><span class="line"></span><br><span class="line">  added / updated specs:</span><br><span class="line">    - cupy</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The following packages will be downloaded:</span><br><span class="line"></span><br><span class="line">    package                    |            build</span><br><span class="line">    ---------------------------|-----------------</span><br><span class="line">    cuda-version-11.6          |       hca96458_3          21 KB  conda-forge</span><br><span class="line">    cupy-13.3.0                |  py310h189a05f_2         347 KB  conda-forge</span><br><span class="line">    cupy-core-13.3.0           |  py310h5da974a_2        42.9 MB  conda-forge</span><br><span class="line">    fastrlock-0.8.2            |  py310hc6cd4ac_2          37 KB  conda-forge</span><br><span class="line">    ------------------------------------------------------------</span><br><span class="line">                                           Total:        43.3 MB</span><br><span class="line"></span><br><span class="line">The following NEW packages will be INSTALLED:</span><br><span class="line"></span><br><span class="line">  cuda-version       conda-forge/noarch::cuda-version-11.6-hca96458_3 </span><br><span class="line">  cupy               conda-forge/linux-64::cupy-13.3.0-py310h189a05f_2 </span><br><span class="line">  cupy-core          conda-forge/linux-64::cupy-core-13.3.0-py310h5da974a_2 </span><br><span class="line">  fastrlock          conda-forge/linux-64::fastrlock-0.8.2-py310hc6cd4ac_2 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Downloading and Extracting Packages</span><br><span class="line">                                                                                                                                                                        </span><br><span class="line">Preparing transaction: <span class="keyword">done</span>                                                                                                                                             </span><br><span class="line">Verifying transaction: <span class="keyword">done</span>                                                                                                                                             </span><br><span class="line">Executing transaction: <span class="keyword">done</span>                 </span><br></pre></td></tr></table></figure>
+<p>然后再执行测试程序：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ python3 test_openmm.py </span><br><span class="line">&lt;CompiledFunction of &lt;<span class="keyword">function</span> analyze.&lt;locals&gt;.&lt;lambda&gt; at 0x7fc1a04aba30&gt;&gt;</span><br></pre></td></tr></table></figure>
+<p>同时会在执行路径下生成<code>log.dat</code>文件和<code>hills.dat</code>文件如下：</p>
+ <details>
+
+<summary> log.dat</summary>
+
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#&quot;Step&quot;,&quot;Potential Energy (kJ/mole)&quot;,&quot;Temperature (K)&quot;,&quot;Box Volume (nm^3)&quot;</span><br><span class="line">1000,-39.254608154296875,284.2437497410935,8.0</span><br><span class="line">2000,-18.68511962890625,318.9596355900776,8.0</span><br><span class="line">3000,-30.86761474609375,289.998240351891,8.0</span><br><span class="line">4000,-21.921295166015625,338.6328004320157,8.0</span><br><span class="line">5000,-31.451812744140625,245.66209355694957,8.0</span><br><span class="line">6000,-32.077880859375,182.1505555238515,8.0</span><br><span class="line">7000,-56.050750732421875,252.68200201473644,8.0</span><br><span class="line">8000,-27.819427490234375,289.4957194622587,8.0</span><br><span class="line">9000,-36.86553955078125,271.0313362334861,8.0</span><br><span class="line">10000,-12.531005859375,254.41902934626566,8.0</span><br></pre></td></tr></table></figure>
+
+</details>
+
+ <details>
+
+<summary> hills.dat</summary>
+
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">500	-1.3592318296432495	1.5952203273773193	0.35	0.35	1.2</span><br><span class="line">1000	-1.1732323169708252	0.8145138621330261	0.35	0.35	1.1973907824735082</span><br><span class="line">1500	-1.433311104774475	1.7097197771072388	0.35	0.35	1.1671557288100634</span><br><span class="line">2000	-1.114228367805481	2.042632579803467	0.35	0.35	1.179103510697602</span><br><span class="line">2500	-1.1403875350952148	0.9936402440071106	0.35	0.35	1.1603072043059584</span><br><span class="line">3000	-1.2672390937805176	0.40286365151405334	0.35	0.35	1.173835519022326</span><br><span class="line">3500	-1.302258014678955	1.4455255270004272	0.35	0.35	1.1211946752964734</span><br><span class="line">4000	-1.4070658683776855	1.013744592666626	0.35	0.35	1.121531633082655</span><br><span class="line">4500	-2.6735711097717285	2.6055266857147217	0.35	0.35	1.1999969285502206</span><br><span class="line">5000	-2.8140780925750732	2.9895386695861816	0.35	0.35	1.1809462925907876</span><br><span class="line">5500	-2.6453146934509277	2.5226593017578125	0.35	0.35	1.1505253387717271</span><br><span class="line">6000	-2.476658344268799	2.7877397537231445	0.35	0.35	1.1410532890823843</span><br><span class="line">6500	-2.7321791648864746	-2.84220814704895	0.35	0.35	1.1797609616409976</span><br><span class="line">7000	-1.596192479133606	1.0611979961395264	0.35	0.35	1.1126547940366505</span><br><span class="line">7500	-1.3219820261001587	0.2645364999771118	0.35	0.35	1.1460450294138773</span><br><span class="line">8000	-1.5232703685760498	1.4845924377441406	0.35	0.35	1.0865578670844307</span><br><span class="line">8500	-1.3037762641906738	0.6937571167945862	0.35	0.35	1.076390175717164</span><br><span class="line">9000	-1.3598891496658325	2.0672760009765625	0.35	0.35	1.1276490649082718</span><br><span class="line">9500	-2.420367479324341	2.7348878383636475	0.35	0.35	1.1032026693365438</span><br></pre></td></tr></table></figure>
+
+</details>
+
+<p>喜大普奔，PySAGES环境部署完毕！</p>
+<h1 id="案例测试"><a href="#案例测试" class="headerlink" title="案例测试"></a>案例测试</h1><p>还是沿用上面的<code>input.pdb</code>案例，这里我们测试一个MetaDynamics的FES，增加了一个analyse的plot模块：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> openmm.app <span class="keyword">import</span> PDBFile, ForceField, Simulation, PDBReporter, StateDataReporter, HBonds</span><br><span class="line"><span class="keyword">from</span> openmm <span class="keyword">import</span> LangevinMiddleIntegrator, Platform</span><br><span class="line"><span class="keyword">from</span> openmm.unit <span class="keyword">import</span> nanometer, kelvin, picoseconds, picosecond, BOLTZMANN_CONSTANT_kB, AVOGADRO_CONSTANT_NA, kilojoules_per_mole</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> stdout</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pysages</span><br><span class="line"><span class="keyword">from</span> pysages.colvars <span class="keyword">import</span> DihedralAngle</span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> pi</span><br><span class="line"><span class="keyword">from</span> pysages.methods <span class="keyword">import</span> Metadynamics, MetaDLogger</span><br><span class="line"><span class="keyword">from</span> pysages.approxfun <span class="keyword">import</span> compute_mesh</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">openmm_platform = Platform.getPlatformByName(<span class="string">&#x27;CUDA&#x27;</span>)</span><br><span class="line">kB = BOLTZMANN_CONSTANT_kB * AVOGADRO_CONSTANT_NA</span><br><span class="line">kB = kB.value_in_unit(kilojoules_per_mole / kelvin)</span><br><span class="line">T = <span class="number">300</span>*kelvin</span><br><span class="line">dt = <span class="number">0.004</span>*picoseconds</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">NVT</span>(<span class="params">pdb_name=<span class="string">&#x27;input.pdb&#x27;</span>, pdb_out=<span class="string">&#x27;output.pdb&#x27;</span>, ff=<span class="string">&#x27;amber14-all.xml&#x27;</span>, log_file=<span class="string">&#x27;log.dat&#x27;</span>, platform=openmm_platform</span>):</span><br><span class="line">    pdb = PDBFile(pdb_name)</span><br><span class="line">    forcefield = ForceField(ff)</span><br><span class="line">    system = forcefield.createSystem(pdb.topology, nonbondedCutoff=<span class="number">1</span>*nanometer, constraints=HBonds)</span><br><span class="line"></span><br><span class="line">    integrator = LangevinMiddleIntegrator(T, <span class="number">1</span>/picosecond, dt)</span><br><span class="line">    simulation = Simulation(pdb.topology, system, integrator, platform=platform)</span><br><span class="line">    simulation.context.setPositions(pdb.positions)</span><br><span class="line"></span><br><span class="line">    simulation.minimizeEnergy()</span><br><span class="line">    simulation.reporters.append(PDBReporter(pdb_out, <span class="number">1000</span>))</span><br><span class="line">    simulation.reporters.append(StateDataReporter(stdout, <span class="number">1000</span>, step=<span class="literal">True</span>, potentialEnergy=<span class="literal">True</span>, temperature=<span class="literal">True</span>, volume=<span class="literal">True</span>))</span><br><span class="line">    simulation.reporters.append(StateDataReporter(log_file, <span class="number">1000</span>, step=<span class="literal">True</span>, potentialEnergy=<span class="literal">True</span>, temperature=<span class="literal">True</span>, volume=<span class="literal">True</span>))</span><br><span class="line">    <span class="keyword">return</span> simulation</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plot_grid</span>(<span class="params">metapotential, method</span>):</span><br><span class="line">    plot_grid = pysages.Grid(lower=(-pi, -pi), upper=(pi, pi), shape=(<span class="number">64</span>, <span class="number">64</span>), periodic=<span class="literal">True</span>)</span><br><span class="line">    xi = (compute_mesh(plot_grid) + <span class="number">1</span>) / <span class="number">2</span> * plot_grid.size + plot_grid.lower</span><br><span class="line">    alpha = (</span><br><span class="line">        <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> method.deltaT <span class="keyword">is</span> <span class="literal">None</span></span><br><span class="line">        <span class="keyword">else</span> (T.value_in_unit(kelvin) + method.deltaT) / method.deltaT</span><br><span class="line">    )</span><br><span class="line">    kT = kB * T.value_in_unit(kelvin)</span><br><span class="line">    A = metapotential(xi) * -alpha / kT</span><br><span class="line">    A = A - A.<span class="built_in">min</span>()</span><br><span class="line">    A = A.reshape(plot_grid.shape)</span><br><span class="line">    <span class="comment"># plot and save free energy to a PNG file</span></span><br><span class="line">    fig, ax = plt.subplots(dpi=<span class="number">120</span>)</span><br><span class="line"></span><br><span class="line">    im = ax.imshow(A, interpolation=<span class="string">&quot;bicubic&quot;</span>, origin=<span class="string">&quot;lower&quot;</span>, extent=[-pi, pi, -pi, pi])</span><br><span class="line">    ax.contour(A, levels=<span class="number">12</span>, linewidths=<span class="number">0.75</span>, colors=<span class="string">&quot;k&quot;</span>, extent=[-pi, pi, -pi, pi])</span><br><span class="line">    ax.set_xlabel(<span class="string">r&quot;$\phi$&quot;</span>)</span><br><span class="line">    ax.set_ylabel(<span class="string">r&quot;$\psi$&quot;</span>)</span><br><span class="line"></span><br><span class="line">    cbar = plt.colorbar(im)</span><br><span class="line">    cbar.ax.set_ylabel(<span class="string">r&quot;$A~[k_&#123;B&#125;T]$&quot;</span>, rotation=<span class="number">270</span>, labelpad=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">    fig.savefig(<span class="string">&quot;Figure.png&quot;</span>, dpi=fig.dpi)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">MetaD</span>(<span class="params">hills_file=<span class="string">&quot;hills.dat&quot;</span>, time_steps=<span class="number">50000</span></span>):</span><br><span class="line">    cvs = [DihedralAngle([<span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">14</span>]), DihedralAngle([<span class="number">6</span>, <span class="number">8</span>, <span class="number">14</span>, <span class="number">16</span>])]</span><br><span class="line">    height = <span class="number">2.0</span>  <span class="comment"># kJ/mol</span></span><br><span class="line">    sigma = [<span class="number">0.2</span>, <span class="number">0.2</span>]  <span class="comment"># radians</span></span><br><span class="line">    deltaT = <span class="number">5000</span></span><br><span class="line">    stride = <span class="number">50</span></span><br><span class="line">    ngauss = time_steps // stride + <span class="number">1</span></span><br><span class="line">    grid = pysages.Grid(lower=(-pi, -pi), upper=(pi, pi), shape=(<span class="number">50</span>, <span class="number">50</span>), periodic=<span class="literal">True</span>)</span><br><span class="line">    method = Metadynamics(cvs, height, sigma, stride, ngauss, deltaT=deltaT, kB=kB, grid=grid)</span><br><span class="line">    callback = MetaDLogger(hills_file, stride)</span><br><span class="line">    run_result = pysages.run(method, NVT, time_steps, callback)</span><br><span class="line">    result = pysages.analyze(run_result)</span><br><span class="line">    metapotential = result[<span class="string">&quot;metapotential&quot;</span>]</span><br><span class="line">    plot_grid(metapotential, method)</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    res = MetaD()</span><br></pre></td></tr></table></figure>
+
+<p>因为在OpenMM的Simulation的Report中我们增加了一个<code>stdout</code>，因此会同时在屏幕上输出结果，也会在相应的<code>log.dat</code>文件中保存结果，运行输出如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#&quot;Step&quot;,&quot;Potential Energy (kJ/mole)&quot;,&quot;Temperature (K)&quot;,&quot;Box Volume (nm^3)&quot;</span></span><br><span class="line">1000,9.73681640625,377.6993364201515,8.0</span><br><span class="line">2000,-23.971282958984375,298.44721588786604,8.0</span><br><span class="line">3000,-15.113677978515625,213.76058649837066,8.0</span><br><span class="line">4000,-9.906219482421875,444.7447921758242,8.0</span><br><span class="line">5000,-35.83831787109375,299.89809403902336,8.0</span><br><span class="line">6000,-33.826202392578125,313.4731859605099,8.0</span><br><span class="line">7000,-19.394073486328125,337.10699269365875,8.0</span><br><span class="line">8000,-45.882415771484375,250.66251735991736,8.0</span><br><span class="line">9000,-14.17413330078125,358.22016011687015,8.0</span><br><span class="line">10000,-29.421051025390625,246.90072858113598,8.0</span><br><span class="line">11000,-19.7567138671875,301.9975514069083,8.0</span><br><span class="line">12000,-32.948822021484375,367.195135668361,8.0</span><br><span class="line">13000,-9.27825927734375,289.7929305791173,8.0</span><br><span class="line">14000,-30.180389404296875,309.66557282887885,8.0</span><br><span class="line">15000,-2.736083984375,302.5309003205113,8.0</span><br><span class="line">16000,-32.576629638671875,291.86829747083937,8.0</span><br><span class="line">17000,-14.334503173828125,231.850481046364,8.0</span><br><span class="line">18000,-20.755645751953125,298.57497669296873,8.0</span><br><span class="line">19000,-43.75299072265625,306.65343794873587,8.0</span><br><span class="line">20000,33.35467529296875,258.82936068957366,8.0</span><br><span class="line">21000,-1.04156494140625,339.65646518408494,8.0</span><br><span class="line">22000,0.01190185546875,197.8572390770094,8.0</span><br><span class="line">23000,5.273040771484375,289.2310517046787,8.0</span><br><span class="line">24000,-14.901947021484375,383.9835521646287,8.0</span><br><span class="line">25000,-0.839019775390625,268.7104144595147,8.0</span><br><span class="line">26000,-23.747772216796875,222.84395037451839,8.0</span><br><span class="line">27000,-27.284759521484375,285.9093985100245,8.0</span><br><span class="line">28000,-23.12164306640625,248.21416090812198,8.0</span><br><span class="line">29000,10.6822509765625,319.4106894537426,8.0</span><br><span class="line">30000,-16.64678955078125,304.24748131130184,8.0</span><br><span class="line">31000,-6.5423583984375,329.8362141299685,8.0</span><br><span class="line">32000,-3.944793701171875,333.3584976075751,8.0</span><br><span class="line">33000,-29.894744873046875,355.53462625307105,8.0</span><br><span class="line">34000,-22.54876708984375,366.93298893561547,8.0</span><br><span class="line">35000,-14.81097412109375,330.12835522481674,8.0</span><br><span class="line">36000,-45.39825439453125,363.9047710837139,8.0</span><br><span class="line">37000,-5.33160400390625,355.4129749973852,8.0</span><br><span class="line">38000,-19.806365966796875,361.73243838698073,8.0</span><br><span class="line">39000,-13.85650634765625,411.9526625662002,8.0</span><br><span class="line">40000,1.711639404296875,225.61063301965956,8.0</span><br><span class="line">41000,-34.70196533203125,389.73863301467037,8.0</span><br><span class="line">42000,-33.63153076171875,307.1604571229406,8.0</span><br><span class="line">43000,-37.86602783203125,277.5274210978626,8.0</span><br><span class="line">44000,-3.5263671875,248.0723224072663,8.0</span><br><span class="line">45000,21.574676513671875,294.5427172838524,8.0</span><br><span class="line">46000,-31.097808837890625,302.0992611330069,8.0</span><br><span class="line">47000,-23.125152587890625,307.7661366778404,8.0</span><br><span class="line">48000,8.406402587890625,174.53798831979185,8.0</span><br><span class="line">49000,-19.694549560546875,380.88297517197196,8.0</span><br><span class="line">50000,12.754608154296875,380.40854584876394,8.0</span><br></pre></td></tr></table></figure>
+
+<p>这里输出的FES被保存成了一个图片，内容为：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202411/2277440-20241126105458588-570859847.png">
+</div>
+
+<p>这就是PySAGES的Well-Tempered MetaDynamics输出的FES结果。</p>
+<h1 id="工作流"><a href="#工作流" class="headerlink" title="工作流"></a>工作流</h1><p>PySAGES的工作流是这样的：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202411/2277440-20241126143848810-1461777648.png">
+</div>
+
+<p>这里我们的backend使用的就是OpenMM了，大致的流程是，通过PySAGES来构建对应backend的Simulation对象，然后启动Simulation。每一次需要<code>update bias force</code>的时候，从backend传回来一个force，在PySAGES层面加入bias force然后传回backend。循环迭代，直至time step截止。</p>
+<p>PySAGES自带了一些增强采样的方法和一些定义好的CV，当然，因为其基于Jax-Python开发，因此自定义一个新的CV在形式上也非常的简洁：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202411/2277440-20241126144529097-1004416694.png">
+</div>
+
+<p>最关键的，一般这种外接的增强采样软件会很大程度上影响到整体分子模拟的性能，甚至很可能成为Bottleneck。而根据PySAGES官方给出的profile结果来看：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202411/2277440-20241126145006649-2128505507.png">
+</div>
+
+<p>MetaDynamics部分的时间占比并没有成为Bottleneck，从时长比例上来说，这个性能表现是非常突出的。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文主要介绍了增强采样外接软件PySAGES的基本安装和使用方法，重点是安装过程中没有写清楚的一些环境依赖和可能出现的问题介绍，以及相应的解决方案。并简单的梳理了一下PySAGES软件的工作流机制，其能够做到Zero Copy，并使得Enhanced Sampling不再成为很多模拟的Bottleneck，这是一个相当出色的结果。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/pysages.html">https://www.cnblogs.com/dechinphy/p/pysages.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://pysages.readthedocs.io/en/latest/installation.html">https://pysages.readthedocs.io/en/latest/installation.html</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2024/11/26/Jax-Jit%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84Array%E8%BE%93%E5%87%BA/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          Jax Jit模式下的Array输出
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/11/21/Jax%E4%B8%AD%E5%85%B3%E4%BA%8ENonZero%E7%9A%84%E4%BD%BF%E7%94%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">Jax中关于NonZero的使用</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=PySAGES实记 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F11%2F26%2FPySAGES%25E5%25AE%259E%25E8%25AE%25B0%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=PySAGES实记 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2024%2F11%2F26%2FPySAGES%25E5%25AE%259E%25E8%25AE%25B0%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=PySAGES实记 - Hexo&url=http://dechinphy.github.io/2024/11/26/PySAGES%E5%AE%9E%E8%AE%B0/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

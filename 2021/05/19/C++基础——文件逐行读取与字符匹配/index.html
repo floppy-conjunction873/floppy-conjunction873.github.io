@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>C++基础——文件逐行读取与字符匹配 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文简单的介绍了C++中的三种基础操作：逐行读取文件内容、字符串匹配以及运行时间的统计，并且通过一个简单的范例来实现了这三种基本的功能。相比于python而言，C++的代码编写量肯定要多一些，但是考虑到C++可能带来的效率增益，我们也应当了解其基本的用法以及功能实现。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "C++基础——文件逐行读取与字符匹配 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文简单的介绍了C++中的三种基础操作：逐行读取文件内容、字符串匹配以及运行时间的统计，并且通过一个简单的范例来实现了这三种基本的功能。相比于python而言，C++的代码编写量肯定要多一些，但是考虑到C++可能带来的效率增益，我们也应当了解其基本的用法以及功能实现。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2021/05/19/C++%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E9%80%90%E8%A1%8C%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%AD%97%E7%AC%A6%E5%8C%B9%E9%85%8D/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文简单的介绍了C++中的三种基础操作：逐行读取文件内容、字符串匹配以及运行时间的统计，并且通过一个简单的范例来实现了这三种基本的功能。相比于python而言，C++的代码编写量肯定要多一些，但是考虑到C++可能带来的效率增益，我们也应当了解其基本的用法以及功能实现。&lt;/p&gt;" />
+    <meta name="twitter:title" content="C++基础——文件逐行读取与字符匹配 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文简单的介绍了C++中的三种基础操作：逐行读取文件内容、字符串匹配以及运行时间的统计，并且通过一个简单的范例来实现了这三种基本的功能。相比于python而言，C++的代码编写量肯定要多一些，但是考虑到C++可能带来的效率增益，我们也应当了解其基本的用法以及功能实现。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文简单的介绍了C++中的三种基础操作：逐行读取文件内容、字符串匹配以及运行时间的统计，并且通过一个简单的范例来实现了这三种基本的功能。相比于python而言，C++的代码编写量肯定要多一些，但是考虑到C++可能带来的效率增益，我们也应当了解其基本的用法以及功能实现。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2021/05/19/C++%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E9%80%90%E8%A1%8C%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%AD%97%E7%AC%A6%E5%8C%B9%E9%85%8D/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "C++基础——文件逐行读取与字符匹配 | Hexo",
+            "datePublished": "2021-05-19T09:46:53.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2021/05/19/C++%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E9%80%90%E8%A1%8C%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%AD%97%E7%AC%A6%E5%8C%B9%E9%85%8D/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuid6n1lKnEpo2HnQbbyVBzLg" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      C++基础——文件逐行读取与字符匹配
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2021-05-19T09:46:53.000Z" itemprop="datePublished">2021-05-19</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文简单的介绍了C++中的三种基础操作：逐行读取文件内容、字符串匹配以及运行时间的统计，并且通过一个简单的范例来实现了这三种基本的功能。相比于python而言，C++的代码编写量肯定要多一些，但是考虑到C++可能带来的效率增益，我们也应当了解其基本的用法以及功能实现。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>用惯了python，对其他语言就比较的生疏。但是python很多时候在性能上比较受局限，这里尝试通过C++来实现一个文件IO的功能，看看是否能够比python的表现更好一些。关于python的类似功能的实现，可以参考这一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/fdopen.html">博客</a>。</p>
+<h1 id="C-读取文件"><a href="#C-读取文件" class="headerlink" title="C++读取文件"></a>C++读取文件</h1><p>首先我们构造一个txt文件用于测试，比如以下这个名为<code>mindspore.txt</code>的文件（之所以取这个名字，是因为最近在研究mindspore，因此最方便拿到的数据就是mindspore的借口api文档）：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">MindSpore Python API</span><br><span class="line">MindSpore Python API</span><br><span class="line">mindspore</span><br><span class="line">mindspore.common.initializer</span><br><span class="line">mindspore.communication</span><br><span class="line">mindspore.compression</span><br><span class="line">mindspore.context</span><br><span class="line">mindspore.dataset</span><br><span class="line">mindspore.dataset.config</span><br><span class="line">mindspore.dataset.text</span><br><span class="line">mindspore.dataset.transforms</span><br><span class="line">mindspore.dataset.vision</span><br><span class="line">mindspore.explainer</span><br><span class="line">mindspore.mindrecord</span><br><span class="line">mindspore.nn</span><br><span class="line">mindspore.numpy</span><br><span class="line">mindspore.nn.probability</span><br><span class="line">mindspore.ops</span><br><span class="line">mindspore.profiler</span><br><span class="line">mindspore.train</span><br><span class="line">MindArmour Python API</span><br><span class="line">mindarmour</span><br><span class="line">mindarmour.adv_robustness.attacks</span><br><span class="line">mindarmour.adv_robustness.defenses</span><br><span class="line">mindarmour.adv_robustness.detectors</span><br><span class="line">mindarmour.adv_robustness.evaluations</span><br><span class="line">mindarmour.fuzz_testing</span><br><span class="line">mindarmour.privacy.diff_privacy</span><br><span class="line">mindarmour.privacy.evaluation</span><br><span class="line">mindarmour.privacy.sup_privacy</span><br><span class="line">mindarmour.utils</span><br><span class="line">MindSpore Hub Python API</span><br><span class="line">mindspore_hub</span><br><span class="line">MindSpore Serving Python API</span><br><span class="line">mindspore_serving</span><br><span class="line">MindQuantum Python API</span><br><span class="line">mindquantum</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>然后构造一个C++代码用于逐行读取这个文件，通过<code>getline</code>函数，将获取到的行字符串保存到<code>strline</code>中，并且每次读取一行都在屏幕上输出出来。由于这里使用的是<code>while</code>循环，因此采用index的方案设置了一个跳出循环的条件，只读取特定的行范围：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// iofile.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">    string filename=<span class="string">&quot;mindspore.txt&quot;</span>;</span><br><span class="line">    <span class="function">ifstream <span class="title">fin</span><span class="params">(filename.c_str())</span></span>;</span><br><span class="line">    <span class="type">int</span> index = <span class="number">0</span>;</span><br><span class="line">    string strline;</span><br><span class="line">    <span class="keyword">while</span> (<span class="built_in">getline</span>(fin, strline) &amp;&amp; index &lt; <span class="number">20</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; strline &lt;&lt; endl;</span><br><span class="line">        index ++;</span><br><span class="line">    &#125;</span><br><span class="line">    fin.<span class="built_in">close</span>();</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Done!\n&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在读取完毕后，记得使用<code>close()</code>将文件关闭。上述代码的执行结果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ g++ iofile.cpp </span><br><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ ./a.out</span><br><span class="line">MindSpore Python API</span><br><span class="line">MindSpore Python API</span><br><span class="line">mindspore</span><br><span class="line">mindspore.common.initializer</span><br><span class="line">mindspore.communication</span><br><span class="line">mindspore.compression</span><br><span class="line">mindspore.context</span><br><span class="line">mindspore.dataset</span><br><span class="line">mindspore.dataset.config</span><br><span class="line">mindspore.dataset.text</span><br><span class="line">mindspore.dataset.transforms</span><br><span class="line">mindspore.dataset.vision</span><br><span class="line">mindspore.explainer</span><br><span class="line">mindspore.mindrecord</span><br><span class="line">mindspore.nn</span><br><span class="line">mindspore.numpy</span><br><span class="line">mindspore.nn.probability</span><br><span class="line">mindspore.ops</span><br><span class="line">mindspore.profiler</span><br><span class="line">mindspore.train</span><br><span class="line">Done!</span><br></pre></td></tr></table></figure>
+<p>这里我们使用的<code>g++</code>版本为9.3.0：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ g++ --version</span><br><span class="line">g++ (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0</span><br><span class="line">Copyright (C) 2019 Free Software Foundation, Inc.</span><br><span class="line">This is free software; see the <span class="built_in">source</span> <span class="keyword">for</span> copying conditions.  There is NO</span><br><span class="line">warranty; not even <span class="keyword">for</span> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</span><br></pre></td></tr></table></figure>
+<p>因为上述案例读取的是前20行的内容，那么在Linux下我们还可以通过<code>head</code>来查看前20行的文件内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ <span class="built_in">head</span> -n 20 mindspore.txt </span><br><span class="line">MindSpore Python API</span><br><span class="line">MindSpore Python API</span><br><span class="line">mindspore</span><br><span class="line">mindspore.common.initializer</span><br><span class="line">mindspore.communication</span><br><span class="line">mindspore.compression</span><br><span class="line">mindspore.context</span><br><span class="line">mindspore.dataset</span><br><span class="line">mindspore.dataset.config</span><br><span class="line">mindspore.dataset.text</span><br><span class="line">mindspore.dataset.transforms</span><br><span class="line">mindspore.dataset.vision</span><br><span class="line">mindspore.explainer</span><br><span class="line">mindspore.mindrecord</span><br><span class="line">mindspore.nn</span><br><span class="line">mindspore.numpy</span><br><span class="line">mindspore.nn.probability</span><br><span class="line">mindspore.ops</span><br><span class="line">mindspore.profiler</span><br><span class="line">mindspore.train</span><br></pre></td></tr></table></figure>
+<p>经过对比发现两个结果是一致的。</p>
+<h1 id="C-字符串匹配"><a href="#C-字符串匹配" class="headerlink" title="C++字符串匹配"></a>C++字符串匹配</h1><p>我们假象一个这样的测试案例，在上述的txt文本中，我们想把带有字符<code>context</code>的那一行标记出来，使其跟其他的行不一样。这时候就需要使用到C++的字符串匹配功能，其格式为<code>string.find(&quot;context&quot;)</code>，返回的是一个识别码，用于标记是否存在或者是存在的位置，如果字符不存在，则返回结果等价于<code>string::npos</code>。按照这个思路，我们定义一个布尔值，在检索过程中如果遇到<code>context</code>字符就输出1，否则输出0，具体的代码实现如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// iofile.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">    string filename=<span class="string">&quot;mindspore.txt&quot;</span>;</span><br><span class="line">    <span class="function">ifstream <span class="title">fin</span><span class="params">(filename.c_str())</span></span>;</span><br><span class="line">    <span class="type">int</span> index = <span class="number">0</span>;</span><br><span class="line">    string strline;</span><br><span class="line">    <span class="keyword">while</span> (<span class="built_in">getline</span>(fin, strline) &amp;&amp; index &lt; <span class="number">20</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">bool</span> exists = strline.<span class="built_in">find</span>(<span class="string">&quot;context&quot;</span>) == string::npos;</span><br><span class="line">        cout &lt;&lt; strline &lt;&lt; <span class="string">&#x27;\t&#x27;</span> &lt;&lt; !exists &lt;&lt; endl;</span><br><span class="line">        index ++;</span><br><span class="line">    &#125;</span><br><span class="line">    fin.<span class="built_in">close</span>();</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Done!\n&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码的执行结果如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ g++ iofile.cpp &amp;&amp; ./a.out</span><br><span class="line">MindSpore Python API    0</span><br><span class="line">MindSpore Python API    0</span><br><span class="line">mindspore       0</span><br><span class="line">mindspore.common.initializer    0</span><br><span class="line">mindspore.communication 0</span><br><span class="line">mindspore.compression   0</span><br><span class="line">mindspore.context       1</span><br><span class="line">mindspore.dataset       0</span><br><span class="line">mindspore.dataset.config        0</span><br><span class="line">mindspore.dataset.text  0</span><br><span class="line">mindspore.dataset.transforms    0</span><br><span class="line">mindspore.dataset.vision        0</span><br><span class="line">mindspore.explainer     0</span><br><span class="line">mindspore.mindrecord    0</span><br><span class="line">mindspore.nn    0</span><br><span class="line">mindspore.numpy 0</span><br><span class="line">mindspore.nn.probability        0</span><br><span class="line">mindspore.ops   0</span><br><span class="line">mindspore.profiler      0</span><br><span class="line">mindspore.train 0</span><br><span class="line">Done!</span><br></pre></td></tr></table></figure>
+<p>我们可以注意到，在含有<code>context</code>的那一行的行末输出了一个1，其他行的行末输出的都是0.</p>
+<h1 id="C-运行时间统计"><a href="#C-运行时间统计" class="headerlink" title="C++运行时间统计"></a>C++运行时间统计</h1><p>在python中我们常用的一个功能是导入<code>time.time()</code>来记录时间，然后计算两次时间之间的差值，就可以得到一个程序的精确运行时间。C++中有一个比较类似的用法是<code>clock_t</code>，这里为了方便测试，我们把上述用到的代码封装到一个<code>reader</code>函数内，然后在<code>main</code>函数中调用以及统计运行时间：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// iofile.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">reader</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    string filename=<span class="string">&quot;mindspore.txt&quot;</span>;</span><br><span class="line">    <span class="function">ifstream <span class="title">fin</span><span class="params">(filename.c_str())</span></span>;</span><br><span class="line">    <span class="type">int</span> index = <span class="number">0</span>;</span><br><span class="line">    string strline;</span><br><span class="line">    <span class="keyword">while</span> (<span class="built_in">getline</span>(fin, strline) &amp;&amp; index &lt; <span class="number">20</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">bool</span> exists = strline.<span class="built_in">find</span>(<span class="string">&quot;context&quot;</span>) == string::npos;</span><br><span class="line">        cout &lt;&lt; strline &lt;&lt; <span class="string">&#x27;\t&#x27;</span> &lt;&lt; !exists &lt;&lt; endl;</span><br><span class="line">        index ++;</span><br><span class="line">    &#125;</span><br><span class="line">    fin.<span class="built_in">close</span>();</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Done!\n&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">clock_t</span> start, end;</span><br><span class="line">    start = <span class="built_in">clock</span>();</span><br><span class="line">    <span class="built_in">reader</span>();</span><br><span class="line">    end = <span class="built_in">clock</span>();</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;The time cost is: &quot;</span> &lt;&lt; <span class="built_in">double</span>(end-start)/CLOCKS_PER_SEC &lt;&lt; <span class="string">&quot;s&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码的执行结果如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ g++ iofile.cpp &amp;&amp; ./a.out</span><br><span class="line">MindSpore Python API    0</span><br><span class="line">MindSpore Python API    0</span><br><span class="line">mindspore       0</span><br><span class="line">mindspore.common.initializer    0</span><br><span class="line">mindspore.communication 0</span><br><span class="line">mindspore.compression   0</span><br><span class="line">mindspore.context       1</span><br><span class="line">mindspore.dataset       0</span><br><span class="line">mindspore.dataset.config        0</span><br><span class="line">mindspore.dataset.text  0</span><br><span class="line">mindspore.dataset.transforms    0</span><br><span class="line">mindspore.dataset.vision        0</span><br><span class="line">mindspore.explainer     0</span><br><span class="line">mindspore.mindrecord    0</span><br><span class="line">mindspore.nn    0</span><br><span class="line">mindspore.numpy 0</span><br><span class="line">mindspore.nn.probability        0</span><br><span class="line">mindspore.ops   0</span><br><span class="line">mindspore.profiler      0</span><br><span class="line">mindspore.train 0</span><br><span class="line">Done!</span><br><span class="line">The <span class="keyword">time</span> cost is: 0.000245s</span><br></pre></td></tr></table></figure>
+<p>输出的时间表示这个函数运行时间共计0.2ms。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文简单的介绍了C++中的三种基础操作：逐行读取文件内容、字符串匹配以及运行时间的统计，并且通过一个简单的范例来实现了这三种基本的功能。相比于python而言，C++的代码编写量肯定要多一些，但是考虑到C++可能带来的效率增益，我们也应当了解其基本的用法以及功能实现。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cppio.html">https://www.cnblogs.com/dechinphy/p/cppio.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a><br>打赏专用链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2021/05/20/%E5%9C%A8C++%E4%B8%AD%E8%B0%83%E7%94%A8Python/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          在C++中调用Python
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/05/18/MindSpore%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">MindSpore模型验证</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=C++基础——文件逐行读取与字符匹配 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F05%2F19%2FC%2B%2B%25E5%259F%25BA%25E7%25A1%2580%25E2%2580%2594%25E2%2580%2594%25E6%2596%2587%25E4%25BB%25B6%25E9%2580%2590%25E8%25A1%258C%25E8%25AF%25BB%25E5%258F%2596%25E4%25B8%258E%25E5%25AD%2597%25E7%25AC%25A6%25E5%258C%25B9%25E9%2585%258D%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=C++基础——文件逐行读取与字符匹配 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2021%2F05%2F19%2FC%2B%2B%25E5%259F%25BA%25E7%25A1%2580%25E2%2580%2594%25E2%2580%2594%25E6%2596%2587%25E4%25BB%25B6%25E9%2580%2590%25E8%25A1%258C%25E8%25AF%25BB%25E5%258F%2596%25E4%25B8%258E%25E5%25AD%2597%25E7%25AC%25A6%25E5%258C%25B9%25E9%2585%258D%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=C++基础——文件逐行读取与字符匹配 - Hexo&url=http://dechinphy.github.io/2021/05/19/C++%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E9%80%90%E8%A1%8C%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%AD%97%E7%AC%A6%E5%8C%B9%E9%85%8D/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>单精度浮点数计算误差与消减方法 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;在使用浮点数计算时，尤其是在使用AI框架的过程中，我们往往使用的是float32单精度浮点数，这也跟GPU的硬件架构有关系。但是使用单精度浮点数的过程中，务必要考虑到累加误差和大数吃小数的问题，这两个问题在长时间的迭代过程中，有可能会直接导致计算结果就是错误的。而如果在计算的过程中使用Kahan求和公式，则可以避免这种大数吃小数的问题。Kahan求和公式的本质，就是把大数和小数分开进行计算，这样可以一定程度上达到接近于float64双精度浮点数的运算精度。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "单精度浮点数计算误差与消减方法 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;在使用浮点数计算时，尤其是在使用AI框架的过程中，我们往往使用的是float32单精度浮点数，这也跟GPU的硬件架构有关系。但是使用单精度浮点数的过程中，务必要考虑到累加误差和大数吃小数的问题，这两个问题在长时间的迭代过程中，有可能会直接导致计算结果就是错误的。而如果在计算的过程中使用Kahan求和公式，则可以避免这种大数吃小数的问题。Kahan求和公式的本质，就是把大数和小数分开进行计算，这样可以一定程度上达到接近于float64双精度浮点数的运算精度。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2024/04/10/%E5%8D%95%E7%B2%BE%E5%BA%A6%E6%B5%AE%E7%82%B9%E6%95%B0%E8%AE%A1%E7%AE%97%E8%AF%AF%E5%B7%AE%E4%B8%8E%E6%B6%88%E5%87%8F%E6%96%B9%E6%B3%95/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;在使用浮点数计算时，尤其是在使用AI框架的过程中，我们往往使用的是float32单精度浮点数，这也跟GPU的硬件架构有关系。但是使用单精度浮点数的过程中，务必要考虑到累加误差和大数吃小数的问题，这两个问题在长时间的迭代过程中，有可能会直接导致计算结果就是错误的。而如果在计算的过程中使用Kahan求和公式，则可以避免这种大数吃小数的问题。Kahan求和公式的本质，就是把大数和小数分开进行计算，这样可以一定程度上达到接近于float64双精度浮点数的运算精度。&lt;/p&gt;" />
+    <meta name="twitter:title" content="单精度浮点数计算误差与消减方法 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;在使用浮点数计算时，尤其是在使用AI框架的过程中，我们往往使用的是float32单精度浮点数，这也跟GPU的硬件架构有关系。但是使用单精度浮点数的过程中，务必要考虑到累加误差和大数吃小数的问题，这两个问题在长时间的迭代过程中，有可能会直接导致计算结果就是错误的。而如果在计算的过程中使用Kahan求和公式，则可以避免这种大数吃小数的问题。Kahan求和公式的本质，就是把大数和小数分开进行计算，这样可以一定程度上达到接近于float64双精度浮点数的运算精度。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;在使用浮点数计算时，尤其是在使用AI框架的过程中，我们往往使用的是float32单精度浮点数，这也跟GPU的硬件架构有关系。但是使用单精度浮点数的过程中，务必要考虑到累加误差和大数吃小数的问题，这两个问题在长时间的迭代过程中，有可能会直接导致计算结果就是错误的。而如果在计算的过程中使用Kahan求和公式，则可以避免这种大数吃小数的问题。Kahan求和公式的本质，就是把大数和小数分开进行计算，这样可以一定程度上达到接近于float64双精度浮点数的运算精度。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2024/04/10/%E5%8D%95%E7%B2%BE%E5%BA%A6%E6%B5%AE%E7%82%B9%E6%95%B0%E8%AE%A1%E7%AE%97%E8%AF%AF%E5%B7%AE%E4%B8%8E%E6%B6%88%E5%87%8F%E6%96%B9%E6%B3%95/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "单精度浮点数计算误差与消减方法 | Hexo",
+            "datePublished": "2024-04-10T08:04:50.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2024/04/10/%E5%8D%95%E7%B2%BE%E5%BA%A6%E6%B5%AE%E7%82%B9%E6%95%B0%E8%AE%A1%E7%AE%97%E8%AF%AF%E5%B7%AE%E4%B8%8E%E6%B6%88%E5%87%8F%E6%96%B9%E6%B3%95/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidjkr8GP0RrTxs13gI-o0Im" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      单精度浮点数计算误差与消减方法
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2024-04-10T08:04:50.000Z" itemprop="datePublished">2024-04-10</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>在使用浮点数计算时，尤其是在使用AI框架的过程中，我们往往使用的是float32单精度浮点数，这也跟GPU的硬件架构有关系。但是使用单精度浮点数的过程中，务必要考虑到累加误差和大数吃小数的问题，这两个问题在长时间的迭代过程中，有可能会直接导致计算结果就是错误的。而如果在计算的过程中使用Kahan求和公式，则可以避免这种大数吃小数的问题。Kahan求和公式的本质，就是把大数和小数分开进行计算，这样可以一定程度上达到接近于float64双精度浮点数的运算精度。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>一个比较容易理解的概念，我们在做计算的过程中，很多时候都要做截断。不同精度的混合计算之间也会有截断，就比如一个float32单精度浮点数，符号占1位，指数占8位，尾数占23位。而一个float64双精度浮点数，符号占1位，指数占11位，尾数占52位。通常情况下，float32的有效数字约7位（按照$2^{23+1}$大小的范围计算），float64的有效数字为16位（按照$2^{52+1}$大小的范围计算）。那么问题就出现了，如果把一个双精度的浮点数转换成一个单精度的浮点数，就相当于舍弃了9位的有效数字，这就是做了一个截断。在一些特定的计算场景中，这种截断误差有可能会被累积，最终导致结果的错误。</p>
+<h1 id="累积误差"><a href="#累积误差" class="headerlink" title="累积误差"></a>累积误差</h1><p>我们尝试用Python+Numpy来实现一个这样的示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">np.random.seed(<span class="number">1</span>)</span><br><span class="line">sum_1 = np.array([<span class="number">0.</span>], np.float64)</span><br><span class="line">sum_2 = np.array([<span class="number">0.</span>], np.float32)</span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100000</span>):</span><br><span class="line">    x = np.random.random(<span class="number">1000</span>)</span><br><span class="line">    sum_1 += x.<span class="built_in">sum</span>()</span><br><span class="line">    sum_2 += x.astype(np.float32).<span class="built_in">sum</span>()</span><br><span class="line"><span class="built_in">print</span> (sum_1)</span><br><span class="line"><span class="built_in">print</span> (sum_2)</span><br></pre></td></tr></table></figure>
+<p>输出结果为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">50003352.04503618</span>]</span><br><span class="line">[<span class="number">50003708.</span>]</span><br></pre></td></tr></table></figure>
+<p>虽然同样的都是做一个简单的累加操作，但是最终得到的结果是不同的。至于这个误差能否被接受，其实更多的取决于应用场景，有很多对精度要求比较敏感的计算场景会直接导致结果错误。</p>
+<h1 id="大数吃小数"><a href="#大数吃小数" class="headerlink" title="大数吃小数"></a>大数吃小数</h1><p>大数吃小数说的是，在两个数字之间运算的时候，如果是两个数字差异比较大，那么其中的小数的有效数字有可能在运算中被截断。同样的我们用Python+Numpy演示一下这个场景：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">x = np.array([<span class="number">1000000.</span>], np.float32)</span><br><span class="line">y = np.array([<span class="number">0.01</span>], np.float32)</span><br><span class="line"><span class="built_in">print</span> (x+y)</span><br></pre></td></tr></table></figure>
+<p>这个程序的执行输出为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1000000.</span>]</span><br></pre></td></tr></table></figure>
+<p>我们发现y的贡献在这里就完全不体现，但其实如果是使用双精度浮点数进行计算的话：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">x = np.array([<span class="number">1000000.</span>], np.float64)</span><br><span class="line">y = np.array([<span class="number">0.01</span>], np.float64)</span><br><span class="line"><span class="built_in">print</span> (x+y)</span><br></pre></td></tr></table></figure>
+<p>得到的结果为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1000000.01</span>]</span><br></pre></td></tr></table></figure>
+<p>可以想到，如果在一个大数的基础上不断的去迭代一些小的数字，那么最终的结果也会有较大的误差，甚至有可能结果就是错的。</p>
+<h1 id="Kahan求和公式"><a href="#Kahan求和公式" class="headerlink" title="Kahan求和公式"></a>Kahan求和公式</h1><p>最简单的来说，要解决这个问题，只要把计算精度改用双精度浮点数就可以了。但是使用双精度浮点数就意味着内存占用的翻倍，计算也会更加的耗时，而且有一些硬件可能根本就不支持使用双精度浮点数。这里还有一个方法，那就是Kahan求和公式。简单来说就是，每一步计算的误差可以归结为：(a+b)-a-b，那么就保存这个误差的计算结果，然后到下一步计算的时候再加回来就可以了。接下来把前面的两个案例都分别实现一下，首先是累加误差问题：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">np.random.seed(<span class="number">1</span>)</span><br><span class="line">sum_1 = np.array([<span class="number">0.</span>], np.float64)</span><br><span class="line">sum_2 = np.array([<span class="number">0.</span>], np.float32)</span><br><span class="line">sum_3 = np.array([<span class="number">0.</span>], np.float32)</span><br><span class="line">tmp_1 = np.array([<span class="number">0.</span>], np.float32)</span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100000</span>):</span><br><span class="line">    x = np.random.random(<span class="number">1000</span>)</span><br><span class="line">    sum_1 += x.<span class="built_in">sum</span>()</span><br><span class="line">    sum_2 += x.astype(np.float32).<span class="built_in">sum</span>()</span><br><span class="line">    tmp_2 = x.astype(np.float32).<span class="built_in">sum</span>() - tmp_1</span><br><span class="line">    tmp_3 = sum_3 + tmp_2</span><br><span class="line">    tmp_1 = (tmp_3 - sum_3) - tmp_2</span><br><span class="line">    sum_3 = tmp_3</span><br><span class="line"><span class="built_in">print</span> (sum_1)</span><br><span class="line"><span class="built_in">print</span> (sum_2)</span><br><span class="line"><span class="built_in">print</span> (sum_3)</span><br></pre></td></tr></table></figure>
+<p>该程序输出结果为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">50003352.04503618</span>]</span><br><span class="line">[<span class="number">50003708.</span>]</span><br><span class="line">[<span class="number">50003352.</span>]</span><br></pre></td></tr></table></figure>
+<p>可以看到，在使用了Kahan求和公式之后，虽然还是使用的float32单精度浮点数，但其实结果精度已经比普通的单精度计算高了两个量级。另外再测试一下大数加小数的问题，这里我们也使用累加的形式测试，结果展示会更加明显一些：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">np.random.seed(<span class="number">1</span>)</span><br><span class="line">sum_1 = np.array([<span class="number">1000000.</span>], np.float64)</span><br><span class="line">sum_2 = np.array([<span class="number">1000000.</span>], np.float32)</span><br><span class="line">sum_3 = np.array([<span class="number">1000000.</span>], np.float32)</span><br><span class="line">tmp_1 = np.array([<span class="number">0.</span>], np.float32)</span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100000</span>):</span><br><span class="line">    x = np.random.random(<span class="number">1000</span>) * <span class="number">1e-05</span></span><br><span class="line">    sum_1 += x.<span class="built_in">sum</span>()</span><br><span class="line">    sum_2 += x.astype(np.float32).<span class="built_in">sum</span>()</span><br><span class="line">    tmp_2 = x.astype(np.float32).<span class="built_in">sum</span>() - tmp_1</span><br><span class="line">    tmp_3 = sum_3 + tmp_2</span><br><span class="line">    tmp_1 = (tmp_3 - sum_3) - tmp_2</span><br><span class="line">    sum_3 = tmp_3</span><br><span class="line"><span class="built_in">print</span> (sum_1)</span><br><span class="line"><span class="built_in">print</span> (sum_2)</span><br><span class="line"><span class="built_in">print</span> (sum_3)</span><br></pre></td></tr></table></figure>
+<p>输出结果为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1000500.03352045</span>]</span><br><span class="line">[<span class="number">1000000.</span>]</span><br><span class="line">[<span class="number">1000500.06</span>]</span><br></pre></td></tr></table></figure>
+<p>这里我们看到一点是，如果不使用Kahan求和公式，这个小数即使被迭代100000次，也还是被忽略。而使用了Kahan求和公式之后，虽然还是略有误差，但是误差位已经超过了float32单精度浮点数第7位有效数字的范围，因此Kahan求和公式的精度还是非常高的。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>在使用浮点数计算时，尤其是在使用AI框架的过程中，我们往往使用的是float32单精度浮点数，这也跟GPU的硬件架构有关系。但是使用单精度浮点数的过程中，务必要考虑到累加误差和大数吃小数的问题，这两个问题在长时间的迭代过程中，有可能会直接导致计算结果就是错误的。而如果在计算的过程中使用Kahan求和公式，则可以避免这种大数吃小数的问题。Kahan求和公式的本质，就是把大数和小数分开进行计算，这样可以一定程度上达到接近于float64双精度浮点数的运算精度。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/float32_error.html">https://www.cnblogs.com/dechinphy/p/float32_error.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2024/04/11/MindSpore%E7%BC%96%E8%AF%91%E6%9E%84%E5%BB%BA%E5%90%8EVmap%E6%A8%A1%E5%9D%97%E7%9A%84RuntimeError%E9%97%AE%E9%A2%98/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          MindSpore编译构建后Vmap模块的RuntimeError问题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/04/09/MindSpore%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86%E5%B0%8F%E6%8A%80%E5%B7%A7/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">MindSpore自动微分小技巧</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=单精度浮点数计算误差与消减方法 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F04%2F10%2F%25E5%258D%2595%25E7%25B2%25BE%25E5%25BA%25A6%25E6%25B5%25AE%25E7%2582%25B9%25E6%2595%25B0%25E8%25AE%25A1%25E7%25AE%2597%25E8%25AF%25AF%25E5%25B7%25AE%25E4%25B8%258E%25E6%25B6%2588%25E5%2587%258F%25E6%2596%25B9%25E6%25B3%2595%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=单精度浮点数计算误差与消减方法 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2024%2F04%2F10%2F%25E5%258D%2595%25E7%25B2%25BE%25E5%25BA%25A6%25E6%25B5%25AE%25E7%2582%25B9%25E6%2595%25B0%25E8%25AE%25A1%25E7%25AE%2597%25E8%25AF%25AF%25E5%25B7%25AE%25E4%25B8%258E%25E6%25B6%2588%25E5%2587%258F%25E6%2596%25B9%25E6%25B3%2595%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=单精度浮点数计算误差与消减方法 - Hexo&url=http://dechinphy.github.io/2024/04/10/%E5%8D%95%E7%B2%BE%E5%BA%A6%E6%B5%AE%E7%82%B9%E6%95%B0%E8%AE%A1%E7%AE%97%E8%AF%AF%E5%B7%AE%E4%B8%8E%E6%B6%88%E5%87%8F%E6%96%B9%E6%B3%95/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

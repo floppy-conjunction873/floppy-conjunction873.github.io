@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>Markdown转Beamer进阶 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;接上一篇介绍的基本Markdown通过pandoc编译转为Beamer风格文档的文章，本文主要介绍一些Markdown转Beamer其中的进阶用法。如Mermaid流程图，和Algorithms算法伪代码的使用等。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "Markdown转Beamer进阶 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;接上一篇介绍的基本Markdown通过pandoc编译转为Beamer风格文档的文章，本文主要介绍一些Markdown转Beamer其中的进阶用法。如Mermaid流程图，和Algorithms算法伪代码的使用等。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2025/01/20/Markdown%E8%BD%ACBeamer%E8%BF%9B%E9%98%B6/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;接上一篇介绍的基本Markdown通过pandoc编译转为Beamer风格文档的文章，本文主要介绍一些Markdown转Beamer其中的进阶用法。如Mermaid流程图，和Algorithms算法伪代码的使用等。&lt;/p&gt;" />
+    <meta name="twitter:title" content="Markdown转Beamer进阶 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;接上一篇介绍的基本Markdown通过pandoc编译转为Beamer风格文档的文章，本文主要介绍一些Markdown转Beamer其中的进阶用法。如Mermaid流程图，和Algorithms算法伪代码的使用等。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;接上一篇介绍的基本Markdown通过pandoc编译转为Beamer风格文档的文章，本文主要介绍一些Markdown转Beamer其中的进阶用法。如Mermaid流程图，和Algorithms算法伪代码的使用等。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2025/01/20/Markdown%E8%BD%ACBeamer%E8%BF%9B%E9%98%B6/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "Markdown转Beamer进阶 | Hexo",
+            "datePublished": "2025-01-20T08:18:28.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2025/01/20/Markdown%E8%BD%ACBeamer%E8%BF%9B%E9%98%B6/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuid2WHZzwYwVFv5txEwzwFxE" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      Markdown转Beamer进阶
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2025-01-20T08:18:28.000Z" itemprop="datePublished">2025-01-20</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>接上一篇介绍的基本Markdown通过pandoc编译转为Beamer风格文档的文章，本文主要介绍一些Markdown转Beamer其中的进阶用法。如Mermaid流程图，和Algorithms算法伪代码的使用等。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面的一篇文章中，我们介绍过<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18630783/pandoc">Markdown转Beamer的基本方法</a>。通过这个方案，我们可以只写普通的Markdown文档，甚至可以用Github或者Gitee进行保存和协同编辑。然后在本地环境中通过pandoc进行编译构建，最终可以生成一个Beamer风格的pdf文件。这里我们不讨论到底是用PPT写比较好，还是Beamer比较好，抑或者是Markdown，我们只探讨Markdown转Beamer风格pdf文件这一操作可能面临的一些问题。</p>
+<h1 id="添加目录页"><a href="#添加目录页" class="headerlink" title="添加目录页"></a>添加目录页</h1><p>可以通过修改pandoc编译指令完成，在编译命令中添加：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-s --toc --toc-depth=1</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pandoc --latex-engine=xelatex -t beamer -o md1.pdf -s --toc --toc-depth=1 -V theme=Dresden -V colortheme=seagull -V mainfont=<span class="string">&#x27;AR PL KaitiM GB&#x27;</span> md1.md</span><br></pre></td></tr></table></figure>
+<p>这样就会把几个一级标题自动汇聚成一个目录页。</p>
+<h1 id="添加组织信息"><a href="#添加组织信息" class="headerlink" title="添加组织信息"></a>添加组织信息</h1><p>在Markdown文件的开头写一个json格式的配置：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title<span class="punctuation">:</span> <span class="string">&quot;My Beamer&quot;</span></span><br><span class="line">author<span class="punctuation">:</span> <span class="string">&quot;Dechin&quot;</span></span><br><span class="line">institute<span class="punctuation">:</span> My Institute</span><br><span class="line">date<span class="punctuation">:</span> <span class="number">2025.01</span><span class="number">.20</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p>这样依赖，这几个关键信息在编译后就会显示在首页和每一页的页脚上。</p>
+<h1 id="使用mermaid流程图"><a href="#使用mermaid流程图" class="headerlink" title="使用mermaid流程图"></a>使用mermaid流程图</h1><p>mermaid是Markdown中常用的一种流程图，可以直接通过文字，来自动生成一个流程图图片。在整个Markdown编译成Beamer的过程中，这一步有可能是最难的环境配置之一（后面还会提到一个算法伪代码的配置）。正常的mermaid安装和配置流程是这样的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ apt install nodejs</span><br><span class="line">$ npm install --global mermaid-filter</span><br></pre></td></tr></table></figure>
+<p>然后在pandoc编译时加上：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-F /path_to_nodejs/Nodejs/node_global/bin/mermaid-filter</span><br></pre></td></tr></table></figure>
+<p>如果出现一个跟<code>sandbox</code>有关的报错，就打开<code>/path_to_nodejs/Nodejs/node_global/bin/mermaid-filter</code>这个文件，找到大约82行左右，有一个<code>fullCmd</code>的定义，在这个定义最后加上一个json配置文件，修改完的<code>fullCmd</code>大概长这样：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var fullCmd = `$&#123;cmd&#125;  $&#123;confFileOpts&#125; $&#123;puppeteerOpts&#125; -w $&#123;options.width&#125; -s $&#123;options.scale&#125; -f -i &quot;$&#123;tmpfileObj.name&#125;&quot; -t $&#123;options.theme&#125; -b $&#123;options.background&#125; -o &quot;$&#123;savePath&#125;&quot; -p /home/tmp/docs/puppeteer-config.json`</span><br></pre></td></tr></table></figure>
+<p>这个json配置文件的内容很简单，就写上这么一句：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;--no-sandbox&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>就可以了。然后执行完成的pandoc编译指令进行编译，大概是长这样：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pandoc --latex-engine=xelatex -t beamer -o md1.pdf -s --toc --toc-depth=1 -F /path_to_nodejs/Nodejs/node_global/bin/mermaid-filter -V theme=Dresden -V colortheme=seagull -V mainfont=<span class="string">&#x27;AR PL KaitiM GB&#x27;</span> md1.md</span><br></pre></td></tr></table></figure>
+<p>这样就可以正确的生成mermaid内容。如果在上述过程中，遇到其他类型的报错信息，大概率是nodejs版本的问题，这个有需要的话再另作介绍。有个问题是上述生成的图片，有可能因为尺寸问题，会导致生成的图片有些模糊。默认的应该是输出png格式的图片，其实这些也是可以修改的。还是在<code>/path_to_nodejs/Nodejs/node_global/bin/mermaid-filter</code>配置文件里面，大约29~30行的位置，有一个图片width和图片format的配置，直接修改这里的format配置就可以输出矢量图了，我建议使用pdf格式的矢量图，因为svg格式的矢量图会有其他问题。修改完内容大概是这样的：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">width: process.env.MERMAID_FILTER_WIDTH || 800,</span><br><span class="line">format: process.env.MERMAID_FILTER_FORMAT || &#x27;pdf&#x27;,</span><br></pre></td></tr></table></figure>
+<p>这样输出的mermaid流程图就是清晰的了。以下是一个简单的流程图示例：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">## PySAGES Workflow</span><br><span class="line">\center</span><br><span class="line"></span><br><span class="line">#```mermaid</span><br><span class="line">sequenceDiagram</span><br><span class="line">    User--&gt;&gt;PySAGES: CV, Method</span><br><span class="line">    User-&gt;&gt;PySAGES: pysages.run()</span><br><span class="line">    PySAGES-&gt;&gt;Backend: Initialize()</span><br><span class="line">    PySAGES-&gt;&gt;Backend: Simulation.run()</span><br><span class="line">    Backend--&gt;&gt;PySAGES: Force</span><br><span class="line">    PySAGES--&gt;&gt;Backend: Bias Force</span><br><span class="line">    PySAGES-&gt;&gt;Backend: Stop()</span><br><span class="line">    Backend--&gt;&gt;User: Traj</span><br><span class="line">    User-&gt;&gt;PySAGES: pysages.analyse()</span><br><span class="line">#```</span><br></pre></td></tr></table></figure>
+<p>生成的效果如下所示：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120172324143-1887035879.png">
+</div>
+
+<h1 id="图片居中"><a href="#图片居中" class="headerlink" title="图片居中"></a>图片居中</h1><p>直接在Markdown的图片前配置一个<code>\center</code>即可。</p>
+<h1 id="字体大小"><a href="#字体大小" class="headerlink" title="字体大小"></a>字体大小</h1><p>类似于图片居中的配置，我们只要在需要配置的字体前加上<code>\small</code>即可切换到small字号的字体，关于其他字号的字体，大概是这样的顺序：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120172905308-1057105639.png">
+</div>
+
+<p>图片内容来自于参考链接1。</p>
+<h1 id="算法伪代码"><a href="#算法伪代码" class="headerlink" title="算法伪代码"></a>算法伪代码</h1><p>这是程序猿们常用的一个算法表示形式，在Markdown使用pandoc编译的情况下，我们需要单独下载一个名为<code>algorithms</code>的包，下载地址为：<a target="_blank" rel="noopener" href="https://ctan.org/pkg/algorithms%E3%80%82%E4%B8%8B%E8%BD%BD%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%BC%A9%E5%AE%8C%E6%88%90%E5%90%8E%EF%BC%8C%E5%9C%A8%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%89%A7%E8%A1%8C%E5%A6%82%E4%B8%8B%E6%8C%87%E4%BB%A4%E8%BF%9B%E8%A1%8C%E9%85%8D%E7%BD%AE%EF%BC%9A">https://ctan.org/pkg/algorithms。下载和解压缩完成后，在目录下执行如下指令进行配置：</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ latex algorithms.ins</span><br><span class="line">$ latex algorithms.dtx</span><br></pre></td></tr></table></figure>
+<p>运行完成后会在当前路径下生成两个sty文件。我的操作方法是把这两个sty文件拷贝到markdown的<code>*.md</code>文件同级目录下，然后修改pandoc的默认beamer配置文件<code>/usr/share/pandoc/data/templates/default.beamer</code>，添加这么两行内容：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\usepackage&#123;algorithm&#125;</span><br><span class="line">\usepackage&#123;algorithmic&#125;</span><br></pre></td></tr></table></figure>
+<p>然后就可以在Markdown里面写伪代码了，如下是一个简单的官方示例：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\begin</span>&#123;algorithmic&#125;[1]</span><br><span class="line"><span class="keyword">\REQUIRE</span> <span class="built_in">$</span>n <span class="keyword">\geq</span> 0<span class="built_in">$</span></span><br><span class="line"><span class="keyword">\ENSURE</span> <span class="built_in">$</span>y = x<span class="built_in">^</span>n<span class="built_in">$</span></span><br><span class="line"><span class="keyword">\STATE</span> <span class="built_in">$</span>y <span class="keyword">\leftarrow</span> 1<span class="built_in">$</span></span><br><span class="line"><span class="keyword">\STATE</span> <span class="built_in">$</span>X <span class="keyword">\leftarrow</span> x<span class="built_in">$</span></span><br><span class="line"><span class="keyword">\STATE</span> <span class="built_in">$</span>N <span class="keyword">\leftarrow</span> n<span class="built_in">$</span></span><br><span class="line"><span class="keyword">\WHILE</span>&#123;<span class="built_in">$</span>N <span class="keyword">\neq</span> 0<span class="built_in">$</span>&#125;</span><br><span class="line"><span class="keyword">\IF</span>&#123;<span class="built_in">$</span>N<span class="built_in">$</span> is even&#125;</span><br><span class="line"><span class="keyword">\STATE</span> <span class="built_in">$</span>X <span class="keyword">\leftarrow</span> X <span class="keyword">\times</span> X<span class="built_in">$</span></span><br><span class="line"><span class="keyword">\STATE</span> <span class="built_in">$</span>N <span class="keyword">\leftarrow</span> N / 2<span class="built_in">$</span></span><br><span class="line"><span class="keyword">\ELSE</span>[<span class="built_in">$</span>N<span class="built_in">$</span> is odd]</span><br><span class="line"><span class="keyword">\STATE</span> <span class="built_in">$</span>y <span class="keyword">\leftarrow</span> y <span class="keyword">\times</span> X<span class="built_in">$</span></span><br><span class="line"><span class="keyword">\STATE</span> <span class="built_in">$</span>N <span class="keyword">\leftarrow</span> N - 1<span class="built_in">$</span></span><br><span class="line"><span class="keyword">\ENDIF</span></span><br><span class="line"><span class="keyword">\ENDWHILE</span></span><br><span class="line"><span class="keyword">\end</span>&#123;algorithmic&#125;</span><br></pre></td></tr></table></figure>
+<p>编译后生成的效果是这样的：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120171713359-49133310.png">
+</div>
+
+<h1 id="添加页码"><a href="#添加页码" class="headerlink" title="添加页码"></a>添加页码</h1><p>由于默认的这个模板里面不显示页码，所以需要修改一下beamer模板，加入如下配置：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\expandafter</span><span class="keyword">\def</span><span class="keyword">\expandafter</span><span class="keyword">\insertshorttitle</span><span class="keyword">\expandafter</span>&#123;<span class="comment">%</span></span><br><span class="line">	<span class="keyword">\insertshorttitle</span><span class="keyword">\hfill</span><span class="comment">%</span></span><br><span class="line">	<span class="keyword">\insertframenumber</span><span class="keyword">\,</span>/<span class="keyword">\,</span><span class="keyword">\inserttotalframenumber</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="添加致谢"><a href="#添加致谢" class="headerlink" title="添加致谢"></a>添加致谢</h1><p>在markdown文件的结尾加上：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">## </span><br><span class="line"></span><br><span class="line">\center</span><br><span class="line">\Huge</span><br><span class="line">\vspace&#123;1cm&#125;</span><br><span class="line">Thanks for your attention!</span><br></pre></td></tr></table></figure>
+<p>如果需要，可以自己配上花体。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>接上一篇介绍的基本Markdown通过pandoc编译转为Beamer风格文档的文章，本文主要介绍一些Markdown转Beamer其中的进阶用法。如Mermaid流程图，和Algorithms算法伪代码的使用等。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/markdown2beamer.html">https://www.cnblogs.com/dechinphy/p/markdown2beamer.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/xovee/article/details/127811886">https://blog.csdn.net/xovee/article/details/127811886</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2025/01/23/%E4%BD%BF%E7%94%A8SpongeExt%E5%BF%AB%E6%8D%B7%E5%AE%8C%E6%88%90CudaSPONGE%E7%BB%93%E5%90%88PySAGES%E7%9A%84%E5%A2%9E%E5%BC%BA%E9%87%87%E6%A0%B7/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          使用SpongeExt快捷完成CudaSPONGE结合PySAGES的增强采样
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/01/20/CudaSPONGE%E4%B8%8EPySAGES%E5%88%9D%E6%AD%A5%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">CudaSPONGE与PySAGES初步性能测试</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=Markdown转Beamer进阶 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2025%2F01%2F20%2FMarkdown%25E8%25BD%25ACBeamer%25E8%25BF%259B%25E9%2598%25B6%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=Markdown转Beamer进阶 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2025%2F01%2F20%2FMarkdown%25E8%25BD%25ACBeamer%25E8%25BF%259B%25E9%2598%25B6%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=Markdown转Beamer进阶 - Hexo&url=http://dechinphy.github.io/2025/01/20/Markdown%E8%BD%ACBeamer%E8%BF%9B%E9%98%B6/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

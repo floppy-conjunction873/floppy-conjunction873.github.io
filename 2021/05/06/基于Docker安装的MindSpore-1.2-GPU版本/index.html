@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>基于Docker安装的MindSpore-1.2 GPU版本 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;继上一篇文章介绍了MindSpore的CPU版本的Docker容器化部署之后，MindSpore官方团队推出了MindSpore的GPU版本的Docker容器化部署方案，本文针对这一方案进行了安装测试，并且对于其中一些安装的时候可以遇到的问题的细节进行了处理。之所以采用容器化的解决方案，主要是为了做到SDK环境与编程环境的隔离，释放本地环境配置与部署的压力。当然，也使得本地的开发环境更加的“干净”。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "基于Docker安装的MindSpore-1.2 GPU版本 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;继上一篇文章介绍了MindSpore的CPU版本的Docker容器化部署之后，MindSpore官方团队推出了MindSpore的GPU版本的Docker容器化部署方案，本文针对这一方案进行了安装测试，并且对于其中一些安装的时候可以遇到的问题的细节进行了处理。之所以采用容器化的解决方案，主要是为了做到SDK环境与编程环境的隔离，释放本地环境配置与部署的压力。当然，也使得本地的开发环境更加的“干净”。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2021/05/06/%E5%9F%BA%E4%BA%8EDocker%E5%AE%89%E8%A3%85%E7%9A%84MindSpore-1.2-GPU%E7%89%88%E6%9C%AC/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;继上一篇文章介绍了MindSpore的CPU版本的Docker容器化部署之后，MindSpore官方团队推出了MindSpore的GPU版本的Docker容器化部署方案，本文针对这一方案进行了安装测试，并且对于其中一些安装的时候可以遇到的问题的细节进行了处理。之所以采用容器化的解决方案，主要是为了做到SDK环境与编程环境的隔离，释放本地环境配置与部署的压力。当然，也使得本地的开发环境更加的“干净”。&lt;/p&gt;" />
+    <meta name="twitter:title" content="基于Docker安装的MindSpore-1.2 GPU版本 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;继上一篇文章介绍了MindSpore的CPU版本的Docker容器化部署之后，MindSpore官方团队推出了MindSpore的GPU版本的Docker容器化部署方案，本文针对这一方案进行了安装测试，并且对于其中一些安装的时候可以遇到的问题的细节进行了处理。之所以采用容器化的解决方案，主要是为了做到SDK环境与编程环境的隔离，释放本地环境配置与部署的压力。当然，也使得本地的开发环境更加的“干净”。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;继上一篇文章介绍了MindSpore的CPU版本的Docker容器化部署之后，MindSpore官方团队推出了MindSpore的GPU版本的Docker容器化部署方案，本文针对这一方案进行了安装测试，并且对于其中一些安装的时候可以遇到的问题的细节进行了处理。之所以采用容器化的解决方案，主要是为了做到SDK环境与编程环境的隔离，释放本地环境配置与部署的压力。当然，也使得本地的开发环境更加的“干净”。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2021/05/06/%E5%9F%BA%E4%BA%8EDocker%E5%AE%89%E8%A3%85%E7%9A%84MindSpore-1.2-GPU%E7%89%88%E6%9C%AC/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "基于Docker安装的MindSpore-1.2 GPU版本 | Hexo",
+            "datePublished": "2021-05-06T08:26:20.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2021/05/06/%E5%9F%BA%E4%BA%8EDocker%E5%AE%89%E8%A3%85%E7%9A%84MindSpore-1.2-GPU%E7%89%88%E6%9C%AC/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidxdSfNcnzA85QewQ_um1Oo" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      基于Docker安装的MindSpore-1.2 GPU版本
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2021-05-06T08:26:20.000Z" itemprop="datePublished">2021-05-06</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>继上一篇文章介绍了MindSpore的CPU版本的Docker容器化部署之后，MindSpore官方团队推出了MindSpore的GPU版本的Docker容器化部署方案，本文针对这一方案进行了安装测试，并且对于其中一些安装的时候可以遇到的问题的细节进行了处理。之所以采用容器化的解决方案，主要是为了做到SDK环境与编程环境的隔离，释放本地环境配置与部署的压力。当然，也使得本地的开发环境更加的“干净”。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/mindspore.html">博客</a>中，我们介绍过MindSpore-CPU版本的Docker部署以及简单的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/linear.html">案例测试</a>，当时官方还不支持GPU版本的Docker容器化部署。经过MindSpore团队的努力，1.2.0版本的MindSpore-GPU终于推出了Docker版本的安装解决方案：<br><img src="https://img2020.cnblogs.com/blog/2277440/202105/2277440-20210506155407728-1856953433.png"><br>在本文中我们将针对这一方案进行直接的测试，并补充其中一些很有可能被忽略的细节，接下来直接上手。</p>
+<h1 id="更换华为云镜像源"><a href="#更换华为云镜像源" class="headerlink" title="更换华为云镜像源"></a>更换华为云镜像源</h1><p>在华为云官方提供的<a target="_blank" rel="noopener" href="https://mirrors.huaweicloud.com/">镜像源仓库</a>中找到适配自己系统的源，然后按照其中的指导进行配置。这里我们本地使用的是Ubuntu 20.04版本，可以按照如下的方法更新apt的源：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu2004:~# <span class="built_in">cp</span> -a /etc/apt/sources.list /etc/apt/sources.list.bak</span><br><span class="line">root@ubuntu2004:~# sed -i <span class="string">&quot;s@http://.*archive.ubuntu.com@http://repo.huaweicloud.com@g&quot;</span> /etc/apt/sources.list</span><br><span class="line">root@ubuntu2004:~# sed -i <span class="string">&quot;s@http://.*security.ubuntu.com@http://repo.huaweicloud.com@g&quot;</span> /etc/apt/sources.list</span><br><span class="line">root@ubuntu2004:~# apt-get update</span><br></pre></td></tr></table></figure>
+<p>更新镜像源会需要一定的时间，等待即可，这一步一般不会出什么问题。</p>
+<h1 id="MindSpore-GPU-Docker的安装"><a href="#MindSpore-GPU-Docker的安装" class="headerlink" title="MindSpore-GPU-Docker的安装"></a>MindSpore-GPU-Docker的安装</h1><p>这里可以参考MindSpore<a target="_blank" rel="noopener" href="https://www.mindspore.cn/install">官方的指导文档</a>一步步的进行操作，其中遇到一些非常规问题时我们再看看解决的策略：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu2004:~# DISTRIBUTION=$(. /etc/os-release; <span class="built_in">echo</span> $ID<span class="variable">$VERSION_ID</span>)</span><br><span class="line">root@ubuntu2004:~# curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -</span><br><span class="line">gpg: 找不到有效的 OpenPGP 数据。</span><br></pre></td></tr></table></figure>
+<p>第二步的操作时非常容易出问题的地方，因为本地的主机列表无法解析这个链接的ip地址。一开始我跟参考链接1的作者类似的，以为是需要上<a href="www.google.com">Google</a>才能够解决此类的问题，但是后来尝试了一下参考链接1中的解决方案，发现是可以生效的，这里直接演示解决的方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu2004:~# vi /etc/hosts <span class="comment"># 在文档的最后面加上下面的四行ip地址与域名相对照的列表</span></span><br><span class="line">root@ubuntu2004:~# <span class="built_in">cat</span> /etc/hosts | grep nvidia <span class="comment"># 查询修改情况</span></span><br><span class="line">185.199.108.153 nvidia.github.io</span><br><span class="line">185.199.109.153 nvidia.github.io</span><br><span class="line">185.199.110.153 nvidia.github.io</span><br><span class="line">185.199.111.153 nvidia.github.io</span><br></pre></td></tr></table></figure>
+<p>经过上述的简单配置之后，继续MindSpore-GPU-Docker的安装步骤：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu2004:~# curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -</span><br><span class="line">OK</span><br><span class="line">root@ubuntu2004:~# curl -s -L https://nvidia.github.io/nvidia-docker/<span class="variable">$DISTRIBUTION</span>/nvidia-docker.list | <span class="built_in">tee</span> /etc/apt/sources.list.d/nvidia-docker.list</span><br><span class="line">deb https://nvidia.github.io/libnvidia-container/stable/ubuntu18.04/$(ARCH) /</span><br><span class="line"><span class="comment">#deb https://nvidia.github.io/libnvidia-container/experimental/ubuntu18.04/$(ARCH) /</span></span><br><span class="line">deb https://nvidia.github.io/nvidia-container-runtime/stable/ubuntu18.04/$(ARCH) /</span><br><span class="line"><span class="comment">#deb https://nvidia.github.io/nvidia-container-runtime/experimental/ubuntu18.04/$(ARCH) /</span></span><br><span class="line">deb https://nvidia.github.io/nvidia-docker/ubuntu18.04/$(ARCH) /</span><br><span class="line">root@ubuntu2004:~# apt-get update &amp;&amp; <span class="built_in">sudo</span> apt-get install -y nvidia-container-toolkit nvidia-docker2</span><br><span class="line">root@ubuntu2004:~# systemctl restart docker</span><br></pre></td></tr></table></figure>
+<p>到这里所需要的依赖就已经安装完成了，最后还有一步是需要修改docker的配置文件，使得MindSpore可以使用Docker的<code>nvidia-container-runtime</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu2004:~# vi /etc/docker/daemon.json # 修改成如下所示的配置</span><br><span class="line">root@ubuntu2004:~# cat /etc/docker/daemon.json </span><br><span class="line">&#123;</span><br><span class="line">    &quot;runtimes&quot;: &#123;</span><br><span class="line">        &quot;nvidia&quot;: &#123;</span><br><span class="line">            &quot;path&quot;: &quot;nvidia-container-runtime&quot;,</span><br><span class="line">            &quot;runtimeArgs&quot;: []</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">root@ubuntu2004:~# systemctl daemon-reload # 重新加载配置</span><br><span class="line">root@ubuntu2004:~# systemctl restart docker # 重启Docker</span><br></pre></td></tr></table></figure>
+<p>上述配置都完成之后，终于到了最后一步，使用Docker来拉取MindSpore的官方镜像：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu2004:~# docker pull swr.cn-south-1.myhuaweicloud.com/mindspore/mindspore-gpu:1.2.0</span><br><span class="line">1.2.0: Pulling from mindspore/mindspore-gpu</span><br><span class="line">6e0aa5e7af40: Pull complete </span><br><span class="line">d47239a868b3: Pull complete </span><br><span class="line">49cbb10cca85: Pull complete </span><br><span class="line">4450dd082e0f: Pull complete </span><br><span class="line">b4bc5dc4c4f3: Pull complete </span><br><span class="line">5353957e2ca6: Pull complete </span><br><span class="line">f91e05a16062: Pull complete </span><br><span class="line">7a841761f52f: Pull complete </span><br><span class="line">698198ce2872: Pull complete </span><br><span class="line">05a2da03249e: Pull complete </span><br><span class="line">b1761864f72a: Pull complete </span><br><span class="line">29479e68065f: Pull complete </span><br><span class="line">4bf6be16ed12: Pull complete </span><br><span class="line">c429d95fc15b: Pull complete </span><br><span class="line">48c41c211021: Pull complete </span><br><span class="line">349cae3c1ede: Pull complete </span><br><span class="line">768237cdcd4d: Pull complete </span><br><span class="line">2fd2faf6c353: Pull complete </span><br><span class="line">268f4496a02c: Pull complete </span><br><span class="line">e962d4980323: Pull complete </span><br><span class="line">f1d280968a28: Pull complete </span><br><span class="line">bc3e02707e81: Pull complete </span><br><span class="line">Digest: sha256:3318c68d63cfe110e85d7ed93398b308f8458624dc96aad9a4d31bc6d345daa7</span><br><span class="line">Status: Downloaded newer image <span class="keyword">for</span> swr.cn-south-1.myhuaweicloud.com/mindspore/mindspore-gpu:1.2.0</span><br><span class="line">swr.cn-south-1.myhuaweicloud.com/mindspore/mindspore-gpu:1.2.0</span><br></pre></td></tr></table></figure>
+<p>关于Docker这里要多说两点：</p>
+<ol>
+<li>Docker在Ubuntu20.04上面的安装不是<code>apt-get install docker</code>，而是<code>apt-get install docker.io</code></li>
+<li>关于更多Docker的使用示例，可以参考这些以往的博客（<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/ortools.html">博客1</a>，<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cplex.html">博客2</a>，<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/pdflatex.html">博客3</a>，<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/mindspore.html">博客4</a>，<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/gitlab.html">博客5</a>）。</li>
+</ol>
+<h1 id="MindSpore-GPU的测试"><a href="#MindSpore-GPU的测试" class="headerlink" title="MindSpore-GPU的测试"></a>MindSpore-GPU的测试</h1><p>测试用例同样也来自于MindSpore的<a target="_blank" rel="noopener" href="https://www.mindspore.cn/install">官方文档</a>，这里只是额外补充了一个本地的目录映射，将测试目录<code>/home/dechin/projects/mindspore/test/</code>映射为MindSpore容器中的<code>/home</code>目录，这样在容器内操作所导致的文件变更都会在本地测试目录下同步。需要注意的是，这里的目录映射只能采用绝对路径而不能采用相对路径：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/mindspore/test$ <span class="built_in">sudo</span> docker run -it -v /dev/shm:/dev/shm -v /home/dechin/projects/mindspore/test/:/home --runtime=nvidia --privileged=<span class="literal">true</span> swr.cn-south-1.myhuaweicloud.com/mindspore/mindspore-gpu:1.2.0 /bin/bash</span><br><span class="line">[<span class="built_in">sudo</span>] dechin 的密码： </span><br><span class="line">root@0b44a5a66fca:/# <span class="built_in">cd</span> /home/</span><br><span class="line">root@0b44a5a66fca:/home# vim mindspore_test.py <span class="comment"># python文件的具体内容在后面</span></span><br><span class="line">root@0b44a5a66fca:/home# python mindspore_test.py </span><br><span class="line">[[[[2. 2. 2. 2.]</span><br><span class="line">   [2. 2. 2. 2.]</span><br><span class="line">   [2. 2. 2. 2.]]</span><br><span class="line"></span><br><span class="line">  [[2. 2. 2. 2.]</span><br><span class="line">   [2. 2. 2. 2.]</span><br><span class="line">   [2. 2. 2. 2.]]</span><br><span class="line"></span><br><span class="line">  [[2. 2. 2. 2.]</span><br><span class="line">   [2. 2. 2. 2.]</span><br><span class="line">   [2. 2. 2. 2.]]]]</span><br></pre></td></tr></table></figure>
+<p>如下所示是刚才在容器中用于测试的python代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># mindspore_test.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> mindspore.context <span class="keyword">as</span> context</span><br><span class="line"><span class="keyword">import</span> mindspore.ops <span class="keyword">as</span> ops</span><br><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> Tensor</span><br><span class="line"></span><br><span class="line">context.set_context(mode=context.PYNATIVE_MODE, device_target=<span class="string">&quot;GPU&quot;</span>)</span><br><span class="line"></span><br><span class="line">x = Tensor(np.ones([<span class="number">1</span>,<span class="number">3</span>,<span class="number">3</span>,<span class="number">4</span>]).astype(np.float32))</span><br><span class="line">y = Tensor(np.ones([<span class="number">1</span>,<span class="number">3</span>,<span class="number">3</span>,<span class="number">4</span>]).astype(np.float32))</span><br><span class="line"><span class="built_in">print</span>(ops.add(x, y))</span><br></pre></td></tr></table></figure>
+<p>我们可以看到最终是成功的运行了，说明MindSpore-GPU的Docker容器化环境部署成功。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>继上一篇文章介绍了MindSpore的CPU版本的Docker容器化部署之后，MindSpore官方团队推出了MindSpore的GPU版本的Docker容器化部署方案，本文针对这一方案进行了安装测试，并且对于其中一些安装的时候可以遇到的问题的细节进行了处理。之所以采用容器化的解决方案，主要是为了做到SDK环境与编程环境的隔离，释放本地环境配置与部署的压力。当然，也使得本地的开发环境更加的“干净”。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/dmg.html">https://www.cnblogs.com/dechinphy/p/dmg.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43002433/article/details/108888927">https://blog.csdn.net/weixin_43002433/article/details/108888927</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/mindspore.html">https://www.cnblogs.com/dechinphy/p/mindspore.html</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2021/05/07/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6%E6%A8%A1%E6%8B%9F%E8%BD%AF%E4%BB%B6VMD%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          分子动力学模拟软件VMD的安装与使用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/05/04/python3%E4%B9%8Blambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">python3之lambda表达式</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=基于Docker安装的MindSpore-1.2 GPU版本 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F05%2F06%2F%25E5%259F%25BA%25E4%25BA%258EDocker%25E5%25AE%2589%25E8%25A3%2585%25E7%259A%2584MindSpore-1.2-GPU%25E7%2589%2588%25E6%259C%25AC%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=基于Docker安装的MindSpore-1.2 GPU版本 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2021%2F05%2F06%2F%25E5%259F%25BA%25E4%25BA%258EDocker%25E5%25AE%2589%25E8%25A3%2585%25E7%259A%2584MindSpore-1.2-GPU%25E7%2589%2588%25E6%259C%25AC%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=基于Docker安装的MindSpore-1.2 GPU版本 - Hexo&url=http://dechinphy.github.io/2021/05/06/%E5%9F%BA%E4%BA%8EDocker%E5%AE%89%E8%A3%85%E7%9A%84MindSpore-1.2-GPU%E7%89%88%E6%9C%AC/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

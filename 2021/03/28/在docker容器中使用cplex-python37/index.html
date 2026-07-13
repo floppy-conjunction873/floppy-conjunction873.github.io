@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>在docker容器中使用cplex-python37 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;在这篇文章中我们介绍了如何使用docker去搭建一个cplex线性规划求解器的编程环境，制作完docker容器，我们也展示了如何写一个线性规划问题定义的文件，并使用cplex对给定一个背包问题的线性规划（实际上是一个二元规划问题）文件进行求解。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "在docker容器中使用cplex-python37 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;在这篇文章中我们介绍了如何使用docker去搭建一个cplex线性规划求解器的编程环境，制作完docker容器，我们也展示了如何写一个线性规划问题定义的文件，并使用cplex对给定一个背包问题的线性规划（实际上是一个二元规划问题）文件进行求解。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2021/03/28/%E5%9C%A8docker%E5%AE%B9%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8cplex-python37/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;在这篇文章中我们介绍了如何使用docker去搭建一个cplex线性规划求解器的编程环境，制作完docker容器，我们也展示了如何写一个线性规划问题定义的文件，并使用cplex对给定一个背包问题的线性规划（实际上是一个二元规划问题）文件进行求解。&lt;/p&gt;" />
+    <meta name="twitter:title" content="在docker容器中使用cplex-python37 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;在这篇文章中我们介绍了如何使用docker去搭建一个cplex线性规划求解器的编程环境，制作完docker容器，我们也展示了如何写一个线性规划问题定义的文件，并使用cplex对给定一个背包问题的线性规划（实际上是一个二元规划问题）文件进行求解。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;在这篇文章中我们介绍了如何使用docker去搭建一个cplex线性规划求解器的编程环境，制作完docker容器，我们也展示了如何写一个线性规划问题定义的文件，并使用cplex对给定一个背包问题的线性规划（实际上是一个二元规划问题）文件进行求解。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2021/03/28/%E5%9C%A8docker%E5%AE%B9%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8cplex-python37/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "在docker容器中使用cplex-python37 | Hexo",
+            "datePublished": "2021-03-28T14:31:44.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2021/03/28/%E5%9C%A8docker%E5%AE%B9%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8cplex-python37/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidLtrVaTRFhoAHQNmoPfyxo" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      在docker容器中使用cplex-python37
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2021-03-28T14:31:44.000Z" itemprop="datePublished">2021-03-28</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>在这篇文章中我们介绍了如何使用docker去搭建一个cplex线性规划求解器的编程环境，制作完docker容器，我们也展示了如何写一个线性规划问题定义的文件，并使用cplex对给定一个背包问题的线性规划（实际上是一个二元规划问题）文件进行求解。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>线性规划是常见的问题求解形式，可以直接跟实际问题进行对接，包括目标函数的建模和各种约束条件的限制等，最后对参数进行各种变更，以找到满足约束条件情况下可以达到的最优解。Cplex是一个由IBM主推的线性规划求解器，可以通过调用cplex的接口，直接对规定形式的线性规划的配置文件<code>.lp</code>文件进行求解。这里我们介绍一下，基于docker来调用cplex的python接口，对线性规划问题进行求解。</p>
+<h1 id="基于Docker部署Cplex环境"><a href="#基于Docker部署Cplex环境" class="headerlink" title="基于Docker部署Cplex环境"></a>基于Docker部署Cplex环境</h1><p>由于cplex依赖于python3.7版本，而我们本地使用的python版本是python3.8,因此我们考虑使用docker容器来制作一个python37+cplex的容器镜像，用于计算线性规划的问题。关于docker容器的使用，在另外3篇博客（<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/pdflatex.html">博客1</a>，<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/mindspore.html">博客2</a>，<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/singularity-install.html">博客3</a>）。首先我们在dockerhub上面找一个python37的镜像：<br><img src="https://img2020.cnblogs.com/blog/2277440/202103/2277440-20210328222638518-1737561699.png"><br>这里我们习惯性的选择星星最高的那个，然后下载到本地：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root cplex]# docker pull rackspacedot/python37</span><br><span class="line">Using default tag: latest</span><br><span class="line">latest: Pulling from rackspacedot/python37</span><br><span class="line">Digest: sha256:5ae238bd5d6b06af739ac1b2666111955966d563cb6aea8b366fb446425eb299</span><br><span class="line">Status: Downloaded newer image <span class="keyword">for</span> rackspacedot/python37:latest</span><br><span class="line">docker.io/rackspacedot/python37:latest</span><br></pre></td></tr></table></figure>
+<p>下载完成后，可以在本地的镜像仓库中看到这个新的镜像：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root cplex]# docker images</span><br><span class="line">REPOSITORY                                                 TAG       IMAGE ID       CREATED          SIZE</span><br><span class="line">rackspacedot/python37                                      latest    ab7083b6c7c4   3 months ago     1.02GB</span><br></pre></td></tr></table></figure>
+<p>下载完成后我们可以进入这个镜像，用<code>pip</code>安装一个最新的cplex。其实cplex的安装还是非常简单的，只是对于python的版本有要求而已。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root cplex]# docker run -it rackspacedot/python37 /bin/bash</span><br><span class="line">root@c766ed62d149:/# python3 -m pip install cplex</span><br><span class="line">Collecting cplex</span><br><span class="line">  Downloading cplex-20.1.0.1-cp37-cp37m-manylinux1_x86_64.whl (30.9 MB)</span><br><span class="line">     |████████████████████████████████| 30.9 MB 347 kB/s </span><br><span class="line">Installing collected packages: cplex</span><br><span class="line">Successfully installed cplex-20.1.0.1</span><br></pre></td></tr></table></figure>
+<p>安装完成后，我们可以进入python3的命令行界面，测试一下cplex的安装情况：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">root@c766ed62d149:/# python3</span><br><span class="line">Python 3.7.9 (default, Nov 18 2020, 14:29:12) </span><br><span class="line">[GCC 6.3.0 20170516] on linux</span><br><span class="line">Type <span class="string">&quot;help&quot;</span>, <span class="string">&quot;copyright&quot;</span>, <span class="string">&quot;credits&quot;</span> or <span class="string">&quot;license&quot;</span> <span class="keyword">for</span> more information.</span><br><span class="line">&gt;&gt;&gt; import cplex</span><br><span class="line">&gt;&gt;&gt; <span class="built_in">exit</span>()</span><br></pre></td></tr></table></figure>
+<p>这里如果没有报错，就表示安装成功了。那么最后，我们需要把刚才对容器镜像的修改永久的保留下来，我们先用<code>ps</code>查看刚才的修改被保存到哪里：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root cplex]# docker ps -n 2</span><br><span class="line">CONTAINER ID   IMAGE                   COMMAND       CREATED          STATUS                     PORTS     NAMES</span><br><span class="line">c766ed62d149   rackspacedot/python37   <span class="string">&quot;/bin/bash&quot;</span>   2 minutes ago    Exited (0) 6 seconds ago             xenodochial_ardinghelli</span><br><span class="line">af037db88540   cplex                   <span class="string">&quot;/bin/bash&quot;</span>   48 minutes ago   Up 48 minutes                        magical_cori</span><br></pre></td></tr></table></figure>
+<p>在过去的2条记录中我们发现对容器镜像的修改被保存到<code>c766</code>开头的容器中，这时我们可以直接对这个编号的容器进行提交保存：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root cplex]# docker commit c766 cplex-py37</span><br><span class="line">sha256:34e2729697010b1320c2f7dbfd1fc45004e9ffae6a1d26ffb8748b5627cb2224</span><br></pre></td></tr></table></figure>
+<p>如果出现以上的反馈，就表示我们成功的把刚才下载cplex的这一修改永久的保存进<code>cplex-py37</code>这个新容器中，这样就可以在本地的容器仓库里面看到这个新的容器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root cplex]# docker images</span><br><span class="line">REPOSITORY                                                 TAG       IMAGE ID       CREATED              SIZE</span><br><span class="line">cplex-py37                                                 latest    34e272969701   About a minute ago   1.15GB</span><br></pre></td></tr></table></figure>
+<p>到这里，我们使用docker部署的cplex求解器的环境就已经完成了，下一步我们用真实的线性规划的问题来进行测试。</p>
+<h1 id="线性规划问题求解"><a href="#线性规划问题求解" class="headerlink" title="线性规划问题求解"></a>线性规划问题求解</h1><p>上面的章节主要是为了展示基于docker的cplex环境部署，用同样的方法我们此前已经制作好了一个名为<code>cplex</code>的容器镜像，这里我们直接用来测试。容器的拉起方法，要绑定本地存放有线性规划问题定义的文件所在的目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root cplex]# docker run -it -v /home/dechin/projects/2021-quantum/cplex/:/home/ cplex /bin/bash</span><br></pre></td></tr></table></figure>
+<h2 id="线性规划问题定义"><a href="#线性规划问题定义" class="headerlink" title="线性规划问题定义"></a>线性规划问题定义</h2><p>Cplex可以识别<code>lp</code>格式的文件，这里我们展示一个测试用例来说明这个线性规划的问题是如何定义的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root cplex]# <span class="built_in">cat</span> test.lp </span><br><span class="line">Maximize</span><br><span class="line"> obj: 2 x1 + 3 x2 + 4 x3</span><br><span class="line">Subject To</span><br><span class="line"> c1: 3 x1 + 4 x2 + 5 x3 &lt;= 8</span><br><span class="line">Bounds</span><br><span class="line"> 0 &lt;= x1 &lt;= 1</span><br><span class="line"> 0 &lt;= x2 &lt;= 1</span><br><span class="line"> 0 &lt;= x3 &lt;= 1</span><br><span class="line">Binary</span><br><span class="line"> x1 x2 x3</span><br><span class="line">End</span><br></pre></td></tr></table></figure>
+<p>在这个问题中，我们的目标是优化这样的一个函数：<br>$$<br>max{2x_1+3x_2+4x_3}<br>$$<br>就是找这么一个函数的最大值，这些参数$x_1,x_2,x_3$都是二元变量，即$x\in{0,1}$，而且需要满足给定的约束条件：<br>$$<br>3x_1+4x_2+5x_3\leq8<br>$$</p>
+<h2 id="问题解析与代码求解"><a href="#问题解析与代码求解" class="headerlink" title="问题解析与代码求解"></a>问题解析与代码求解</h2><p>其实这是一个典型的单背包问题的案例：给定一个承重量为8的背包，需要装3个物品${x_1,x_2,x_3}$中的某几个拿去卖。这三个物品的重量分别是${3,4,5}$，因此我们没办法将所有的物品一次性装到包里面，因为这会超过背包的承重量。而这3个物品的收益分别是${2,3,4}$，对于这个问题来说，就是要最大化这个收益。比如说，我们只装$x_1,x_2$两个物品，也就是$x_1&#x3D;1,x_2&#x3D;1,x_3&#x3D;0$，那么总重量是7,并没有超过背包的承重量，而总的收益是5。这是一组可行解，但不一定是最优解，接下来我们看看cplex是否有可能找到这个问题的最优解。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">root@af037db88540:/home<span class="comment"># python3</span></span><br><span class="line">Python <span class="number">3.7</span><span class="number">.9</span> (default, Nov <span class="number">18</span> <span class="number">2020</span>, <span class="number">14</span>:<span class="number">29</span>:<span class="number">12</span>) </span><br><span class="line">[GCC <span class="number">6.3</span><span class="number">.0</span> <span class="number">20170516</span>] on linux</span><br><span class="line"><span class="type">Type</span> <span class="string">&quot;help&quot;</span>, <span class="string">&quot;copyright&quot;</span>, <span class="string">&quot;credits&quot;</span> <span class="keyword">or</span> <span class="string">&quot;license&quot;</span> <span class="keyword">for</span> more information.</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> cplex</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>lp = cplex.Cplex() <span class="comment"># 初始化对象</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>lp.read(<span class="string">&#x27;test.lp&#x27;</span>) <span class="comment"># 读取线性规划文件</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>lp.solve() <span class="comment"># 求解</span></span><br><span class="line">Version identifier: <span class="number">12.10</span><span class="number">.0</span><span class="number">.0</span> | <span class="number">2019</span>-<span class="number">11</span>-<span class="number">27</span> | 843d4de</span><br><span class="line">CPXPARAM_Read_DataCheck                          <span class="number">1</span></span><br><span class="line">Found incumbent of value <span class="number">0.000000</span> after <span class="number">0.00</span> sec. (<span class="number">0.00</span> ticks)</span><br><span class="line">Tried aggregator <span class="number">1</span> time.</span><br><span class="line">MIP Presolve eliminated <span class="number">1</span> rows <span class="keyword">and</span> <span class="number">3</span> columns.</span><br><span class="line">MIP Presolve modified <span class="number">3</span> coefficients.</span><br><span class="line">All rows <span class="keyword">and</span> columns eliminated.</span><br><span class="line">Presolve time = <span class="number">0.00</span> sec. (<span class="number">0.00</span> ticks)</span><br><span class="line"></span><br><span class="line">Root node processing (before b&amp;c):</span><br><span class="line">  Real time             =    <span class="number">0.00</span> sec. (<span class="number">0.00</span> ticks)</span><br><span class="line">Parallel b&amp;c, <span class="number">8</span> threads:</span><br><span class="line">  Real time             =    <span class="number">0.00</span> sec. (<span class="number">0.00</span> ticks)</span><br><span class="line">  Sync time (average)   =    <span class="number">0.00</span> sec.</span><br><span class="line">  Wait time (average)   =    <span class="number">0.00</span> sec.</span><br><span class="line">                          ------------</span><br><span class="line">Total (root+branch&amp;cut) =    <span class="number">0.00</span> sec. (<span class="number">0.00</span> ticks)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>lp.solution.get_objective_value() <span class="comment"># 获取求解的目标函数值</span></span><br><span class="line"><span class="number">6.0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>lp.solution.get_values() <span class="comment"># 获取最终的参数值</span></span><br><span class="line">[<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>]</span><br></pre></td></tr></table></figure>
+<p>这个示例中我们将每一步的含义都直接注释在代码中，我们直接调用cplex的接口，写好<code>lp</code>文件，就可以很轻松的进行求解了。得到的最终的解是${1,0,1}$，也就是总重量为8,未超过承重量，而总收益为6,高于我们刚才手工找到的可行解的收益值。同时这也是这个问题的唯一最优解，这一点其实我们可以手工验证。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>在这篇文章中我们介绍了如何使用docker去搭建一个cplex线性规划求解器的编程环境，制作完docker容器，我们也展示了如何写一个线性规划问题定义的文件，并使用cplex对给定一个背包问题的线性规划（实际上是一个二元规划问题）文件进行求解。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cplex.html">https://www.cnblogs.com/dechinphy/p/cplex.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33670304/article/details/102882863">https://blog.csdn.net/qq_33670304/article/details/102882863</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2021/03/29/%E5%88%9B%E5%BB%BAortools%E7%9A%84Dockerfile/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          创建ortools的Dockerfile
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/03/28/%E9%85%8D%E7%BD%AEdocker%E7%9A%84pdflatex%E7%8E%AF%E5%A2%83/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">配置docker的pdflatex环境</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=在docker容器中使用cplex-python37 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F03%2F28%2F%25E5%259C%25A8docker%25E5%25AE%25B9%25E5%2599%25A8%25E4%25B8%25AD%25E4%25BD%25BF%25E7%2594%25A8cplex-python37%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=在docker容器中使用cplex-python37 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2021%2F03%2F28%2F%25E5%259C%25A8docker%25E5%25AE%25B9%25E5%2599%25A8%25E4%25B8%25AD%25E4%25BD%25BF%25E7%2594%25A8cplex-python37%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=在docker容器中使用cplex-python37 - Hexo&url=http://dechinphy.github.io/2021/03/28/%E5%9C%A8docker%E5%AE%B9%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8cplex-python37/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

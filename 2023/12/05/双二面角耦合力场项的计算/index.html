@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>双二面角耦合力场项的计算 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文介绍了最新的一些分子力场中有可能使用到的1-5相互作用——双二面角耦合项的计算。而常规的计算方式是，通过量化的计算得到每一个Residue的α碳对应的两个二面角的数值在空间中的离散化数值。然后在分子模拟的过程中使用插值的方案，对相关的条目进行计算，例如使用双三次样条插值。但其实这种插值算法的使用有可能导致一些其他的问题，比如深度学习中可能会经常提到的“过拟合”问题。由于这个条目本身就只是一个修正项，从数值大小上来说并不算大，因此这些细节是否需要优化还有待商榷。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "双二面角耦合力场项的计算 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文介绍了最新的一些分子力场中有可能使用到的1-5相互作用——双二面角耦合项的计算。而常规的计算方式是，通过量化的计算得到每一个Residue的α碳对应的两个二面角的数值在空间中的离散化数值。然后在分子模拟的过程中使用插值的方案，对相关的条目进行计算，例如使用双三次样条插值。但其实这种插值算法的使用有可能导致一些其他的问题，比如深度学习中可能会经常提到的“过拟合”问题。由于这个条目本身就只是一个修正项，从数值大小上来说并不算大，因此这些细节是否需要优化还有待商榷。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2023/12/05/%E5%8F%8C%E4%BA%8C%E9%9D%A2%E8%A7%92%E8%80%A6%E5%90%88%E5%8A%9B%E5%9C%BA%E9%A1%B9%E7%9A%84%E8%AE%A1%E7%AE%97/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文介绍了最新的一些分子力场中有可能使用到的1-5相互作用——双二面角耦合项的计算。而常规的计算方式是，通过量化的计算得到每一个Residue的α碳对应的两个二面角的数值在空间中的离散化数值。然后在分子模拟的过程中使用插值的方案，对相关的条目进行计算，例如使用双三次样条插值。但其实这种插值算法的使用有可能导致一些其他的问题，比如深度学习中可能会经常提到的“过拟合”问题。由于这个条目本身就只是一个修正项，从数值大小上来说并不算大，因此这些细节是否需要优化还有待商榷。&lt;/p&gt;" />
+    <meta name="twitter:title" content="双二面角耦合力场项的计算 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文介绍了最新的一些分子力场中有可能使用到的1-5相互作用——双二面角耦合项的计算。而常规的计算方式是，通过量化的计算得到每一个Residue的α碳对应的两个二面角的数值在空间中的离散化数值。然后在分子模拟的过程中使用插值的方案，对相关的条目进行计算，例如使用双三次样条插值。但其实这种插值算法的使用有可能导致一些其他的问题，比如深度学习中可能会经常提到的“过拟合”问题。由于这个条目本身就只是一个修正项，从数值大小上来说并不算大，因此这些细节是否需要优化还有待商榷。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文介绍了最新的一些分子力场中有可能使用到的1-5相互作用——双二面角耦合项的计算。而常规的计算方式是，通过量化的计算得到每一个Residue的α碳对应的两个二面角的数值在空间中的离散化数值。然后在分子模拟的过程中使用插值的方案，对相关的条目进行计算，例如使用双三次样条插值。但其实这种插值算法的使用有可能导致一些其他的问题，比如深度学习中可能会经常提到的“过拟合”问题。由于这个条目本身就只是一个修正项，从数值大小上来说并不算大，因此这些细节是否需要优化还有待商榷。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2023/12/05/%E5%8F%8C%E4%BA%8C%E9%9D%A2%E8%A7%92%E8%80%A6%E5%90%88%E5%8A%9B%E5%9C%BA%E9%A1%B9%E7%9A%84%E8%AE%A1%E7%AE%97/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "双二面角耦合力场项的计算 | Hexo",
+            "datePublished": "2023-12-05T02:41:19.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2023/12/05/%E5%8F%8C%E4%BA%8C%E9%9D%A2%E8%A7%92%E8%80%A6%E5%90%88%E5%8A%9B%E5%9C%BA%E9%A1%B9%E7%9A%84%E8%AE%A1%E7%AE%97/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidmfdA0SlqXR91DHftjcLKM" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      双二面角耦合力场项的计算
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2023-12-05T02:41:19.000Z" itemprop="datePublished">2023-12-05</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文介绍了最新的一些分子力场中有可能使用到的1-5相互作用——双二面角耦合项的计算。而常规的计算方式是，通过量化的计算得到每一个Residue的α碳对应的两个二面角的数值在空间中的离散化数值。然后在分子模拟的过程中使用插值的方案，对相关的条目进行计算，例如使用双三次样条插值。但其实这种插值算法的使用有可能导致一些其他的问题，比如深度学习中可能会经常提到的“过拟合”问题。由于这个条目本身就只是一个修正项，从数值大小上来说并不算大，因此这些细节是否需要优化还有待商榷。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>当我们使用分子力场进行分子动力学模拟时，通常包括成键相互作用（键长项、键角项和二面角项）和非成键相互作用（范德华力）。而其中成键相互作用，可以根据作用的范围，进一步定义成1-2相互作用、1-3相互作用和1-4相互作用，也就是键长键角和二面角。在FF19SB力场中，为了进一步提升力场模拟的精确度，引入了一个CMAP参数，用于计算$C_{\alpha}$位置上的二面角耦合相互作用，也可以理解为1-5相互作用，作为力场的一个修正项。这里我们介绍具体的双二面角耦合势能项的计算方法。</p>
+<h1 id="输入与输出"><a href="#输入与输出" class="headerlink" title="输入与输出"></a>输入与输出</h1><p>具体的双二面角耦合相互作用，可以参考如下图示（图片截取自参考文献1）：</p>
+<div align=center>
+	<img src="https://img2023.cnblogs.com/blog/2277440/202312/2277440-20231205104301627-655947452.png">
+</div>
+
+<p>力场项的输入是$C_{\alpha}$周边的两个二面角：$\phi$和$\psi$，而我们需要计算的是这两个参数对应的一个势能修正项：$E_{mod}&#x3D;E(\phi,\psi)$。根据实验数据和量化计算出来的数据，Amber中给出了每一个氨基酸种类的二面角格点势能：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">CMAP</span><br><span class="line">%FLAG CMAP_COUNT   1</span><br><span class="line">%FLAG CMAP_TITLE</span><br><span class="line">Gly CMAP</span><br><span class="line">%FLAG CMAP_RESLIST  1</span><br><span class="line">GLY</span><br><span class="line">%FLAG CMAP_RESOLUTION 24</span><br><span class="line">%FLAG CMAP_PARAMETER</span><br><span class="line">  0.82366   1.09817   1.13106   1.38658   2.11377   3.63194   5.20835   4.52792</span><br><span class="line">  4.24857   3.42100   2.57125   2.21561   4.26659   2.21561   2.57125   3.42110</span><br><span class="line">  4.24858   4.52792   4.29107   3.63184   2.03731   1.32036   1.12797   1.09814</span><br><span class="line">  1.01976   0.89767   0.89484   1.21525   1.97095   3.70570   4.38855   4.65256</span><br><span class="line">  4.43948   3.89754   4.21954   2.92219   1.83300   1.61528   2.13407   3.13273</span><br><span class="line">  4.03304   4.37836   4.21500   3.54162   2.14871   1.44646   1.20387   1.08264</span><br><span class="line">  0.94294   0.79652   0.83328   1.24136   2.06053   3.43883   4.17385   4.53101</span><br><span class="line">  4.43115   4.03641   3.71837   2.02965   1.28863   1.21833   1.89263   2.85593</span><br><span class="line">  4.80291   4.23497   4.08718   3.49858   2.17811   1.53114   1.22608   1.06909</span><br><span class="line">  1.06124   0.90425   0.95129   1.35925   1.80900   3.18916   3.85055   4.27470</span><br><span class="line">  4.17515   3.68355   2.71193   1.96823   0.88051   1.02084   1.59189   2.52883</span><br><span class="line">  3.47767   4.03244   3.86779   3.39508   2.23969   1.66969   1.33019   1.16679</span><br><span class="line">  1.08157   1.02005   1.10493   1.29605   1.79270   2.88632   3.63402   4.05349</span><br><span class="line">  3.97657   3.35415   2.24207   1.18576   0.74267   0.67495   1.31122   2.24278</span><br><span class="line">  3.21905   3.69186   4.76949   4.00571   2.34764   1.77622   1.34849   1.12849</span><br><span class="line">  1.09360   0.76295   0.64220   1.00733   1.73708   2.50787   3.41571   4.45847</span><br><span class="line">  3.84910   3.11193   1.97839   1.18177   0.33803   0.43176   1.23577   2.17947</span><br><span class="line">  2.92428   3.38497   3.39138   3.10177   3.35228   2.15282   1.45287   1.28536</span><br><span class="line">  0.61764   0.23640   0.15650   0.65857   1.56522   2.44967   3.17669   3.78043</span><br><span class="line">  4.22216   2.79953   1.66579   0.59084   0.15579   0.43594   1.52040   2.27449</span><br><span class="line">  2.76979   3.16911   3.12455   2.92674   2.45824   1.88927   1.36443   0.95121</span><br><span class="line"> -0.00243  -0.14438   0.06931   0.84132   1.89921   2.91978   3.46170   3.60722</span><br><span class="line">  3.77366   2.18724   1.52870   0.20777   0.22187   1.10049   2.08960   2.88893</span><br><span class="line">  3.46272   3.66327   3.40280   3.02172   2.23074   1.32476   0.62376   0.25154</span><br><span class="line"> -0.24862   0.05886   0.73935   1.98217   3.25167   4.06285   4.21447   3.90130</span><br><span class="line">  2.90300   1.70374   0.74057   0.52755   1.12943   2.10802   2.78056   3.65981</span><br><span class="line">  4.30377   4.58476   4.35318   3.65296   2.33204   0.81283   0.00000  -0.29835</span><br><span class="line">  0.44379   1.32981   2.39709   3.82578   5.02459   5.42450   4.99639   4.00610</span><br><span class="line">  2.64886   1.63847   1.37610   1.71448   2.28503   2.64949   3.24747   4.17266</span><br><span class="line">  5.17265   5.75041   5.58476   4.21912   2.20540   0.64843   0.02065  -0.08593</span><br><span class="line">  2.15530   3.40478   4.51993   5.80241   6.12627   6.00746   5.12631   4.58197</span><br><span class="line">  2.80154   2.55737   2.87599   2.95502   2.71629   2.60279   3.64721   4.53964</span><br><span class="line">  5.90407   6.82108   6.15044   4.18011   2.15201   0.96807   0.81255   1.19704</span><br><span class="line">  4.21011   5.19583   5.45356   5.26216   5.22957   4.91772   4.44698   3.93537</span><br><span class="line">  3.74038   4.11322   3.92595   2.94210   2.11295   2.42266   3.12536   4.83315</span><br><span class="line">  6.43292   6.19670   5.13463   3.65052   2.40663   2.07125   2.29840   3.03351</span><br><span class="line">  5.33877   4.55338   3.87255   3.87071   3.62149   3.87069   4.31250   4.77933</span><br><span class="line">  5.37137   5.20874   3.65026   2.18763   2.20027   2.18700   3.65026   5.21405</span><br><span class="line">  5.24065   4.77943   4.31250   3.87553   3.63325   5.19982   3.88530   4.53465</span><br><span class="line">  4.20747   3.02450   2.29840   2.07135   2.40664   3.65062   5.13204   6.19680</span><br><span class="line">  6.43292   4.83351   3.12587   2.96667   2.11029   2.93241   3.92594   4.11322</span><br><span class="line">  3.74082   3.93551   4.44698   4.92068   5.53058   5.24416   5.35209   5.19605</span><br><span class="line">  2.15668   1.19704   0.81255   0.96806   2.15211   4.17062   6.15034   6.82108</span><br><span class="line">  5.90407   4.54177   3.63728   2.60267   2.71853   2.95502   2.87589   2.55737</span><br><span class="line">  2.80717   3.89294   5.12631   6.00746   6.12372   5.80230   5.01898   3.40679</span><br><span class="line">  0.45450  -0.08700   0.02065   0.64843   2.20540   4.21912   5.58476   5.75041</span><br><span class="line">  5.17265   4.16788   3.24747   2.64460   2.28503   1.72593   1.37610   1.63847</span><br><span class="line">  2.64538   4.01006   5.00425   5.42091   5.02459   3.80593   2.39681   1.32981</span><br><span class="line"> -0.24862  -0.29835   0.00000   0.81283   2.33214   3.64847   4.35318   4.59008</span><br><span class="line">  4.30377   3.65991   2.78056   2.10802   1.84494   0.52754   0.74067   1.61716</span><br><span class="line">  2.90300   3.89516   4.21447   4.06285   3.25166   1.98217   0.73946   0.07427</span><br><span class="line"> -0.00243   0.25154   0.64043   1.82987   2.23143   3.02038   3.40280   3.66327</span><br><span class="line">  3.46272   2.88893   2.08960   1.10049   0.22171   0.20862   1.52897   2.18595</span><br><span class="line">  3.24376   3.60722   3.46170   2.91968   1.89590   0.84888   0.07066  -0.14460</span><br><span class="line">  0.61764   0.94007   1.36444   1.88927   2.45691   2.92674   3.12469   3.16911</span><br><span class="line">  2.76979   2.27377   1.52040   0.44049   0.15579   0.59084   1.66579   2.79477</span><br><span class="line">  4.25589   3.78043   3.17669   2.45043   1.56512   0.65855   0.15650   0.23719</span><br><span class="line">  1.09360   1.28549   1.45287   2.15281   2.67683   3.10177   3.39138   3.38497</span><br><span class="line">  2.91731   2.17947   1.23582   0.43170   0.33793   1.00844   1.97383   3.11193</span><br><span class="line">  3.84910   4.46392   3.41571   2.50787   1.73708   1.00733   0.64220   0.76295</span><br><span class="line">  0.97094   1.11640   1.33640   1.77623   2.30465   3.21763   3.71128   3.69186</span><br><span class="line">  3.21905   2.24277   1.31122   0.67238   0.74272   1.18578   2.24207   3.35415</span><br><span class="line">  3.97657   4.05349   3.63266   2.88632   1.79270   1.23680   1.00391   1.05657</span><br><span class="line">  0.98044   1.16708   1.33038   1.66969   2.23969   3.39508   3.86779   4.03243</span><br><span class="line">  3.47590   2.52883   1.59193   1.02084   0.88051   1.46518   2.71203   3.68355</span><br><span class="line">  4.17470   4.27471   3.85203   3.18916   1.80900   1.35925   0.95109   0.90998</span><br><span class="line">  0.92229   1.06909   1.22608   1.53114   2.17810   3.49858   4.08708   4.23358</span><br><span class="line">  3.81032   2.85593   1.89254   1.21833   1.28863   2.03059   3.37664   4.03661</span><br><span class="line">  4.43079   4.53101   4.17385   3.43883   2.06053   1.24136   0.83440   0.79652</span><br><span class="line">  1.01976   1.08264   1.20394   1.44647   2.14870   3.54162   4.22527   4.37836</span><br><span class="line">  4.03304   3.13273   2.13407   1.61528   1.83300   2.92219   4.10899   3.89754</span><br><span class="line">  4.43948   4.65256   4.38856   3.70570   1.97095   1.21515   0.89442   0.89767</span><br></pre></td></tr></table></figure>
+<p>这里是一个24*24大小的Resolution表格，对应的是在空间中将两个二面角的大小划分成24份，每份为15度，而这里的值给出的是每一个离散的二面角组合的势能值。拿到这个表之后，我们需要对它做一个连续化处理，也就是使用所谓的插值法，这里选用的是三次样条插值。</p>
+<h1 id="三次样条插值"><a href="#三次样条插值" class="headerlink" title="三次样条插值"></a>三次样条插值</h1><p>三次样条插值算法的原理还是比较简单粗暴的，直接根据通用公式$f(x)&#x3D;ax^3+bx^2+cx+d$进行计算，那么就要求至少有四个输入输出值$x_1,y_1,x_2,y_2,x_3,y_3,x_4,y_4$用于插值：<br>$$<br>\left(\begin{matrix}<br>x_1^3&amp;&amp;x_1^2&amp;&amp;x_1&amp;&amp;1\<br>x_2^3&amp;&amp;x_2^2&amp;&amp;x_2&amp;&amp;1\<br>x_3^3&amp;&amp;x_3^2&amp;&amp;x_3&amp;&amp;1\<br>x_4^3&amp;&amp;x_4^2&amp;&amp;x_4&amp;&amp;1<br>\end{matrix}\right)\left(<br>\begin{matrix}<br>a\b\c\d<br>\end{matrix}<br>\right)&#x3D;\left(<br>\begin{matrix}<br>y_1\y_2\y_3\y_4<br>\end{matrix}<br>\right)<br>$$<br>这样就可以通过计算矩阵的逆来得到一组插值参数：<br>$$<br>\left(<br>\begin{matrix}<br>a\b\c\d<br>\end{matrix}<br>\right)&#x3D;<br>\left(\begin{matrix}<br>x_1^3&amp;&amp;x_1^2&amp;&amp;x_1&amp;&amp;1\<br>x_2^3&amp;&amp;x_2^2&amp;&amp;x_2&amp;&amp;1\<br>x_3^3&amp;&amp;x_3^2&amp;&amp;x_3&amp;&amp;1\<br>x_4^3&amp;&amp;x_4^2&amp;&amp;x_4&amp;&amp;1<br>\end{matrix}\right)^{-1}\left(<br>\begin{matrix}<br>y_1\y_2\y_3\y_4<br>\end{matrix}<br>\right)<br>$$<br>如此一来我们就把一组离散的数据插值成一个可以求导的连续函数：<br>$$<br>f(x)&#x3D;ax^3+bx^2+cx+d\<br>\frac{df}{dx}&#x3D;3ax^2+2bx+c<br>$$</p>
+<h1 id="双三次插值"><a href="#双三次插值" class="headerlink" title="双三次插值"></a>双三次插值</h1><p>回到双二面角耦合相互租用的场景，我们按照15度一个点，对整个二面角的自变量空间做了一个离散化，可以先用可视化的形式看一下对应的能量分布。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">string = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">0.82366   1.09817   1.13106   1.38658   2.11377   3.63194   5.20835   4.52792</span></span><br><span class="line"><span class="string">  4.24857   3.42100   2.57125   2.21561   4.26659   2.21561   2.57125   3.42110</span></span><br><span class="line"><span class="string">  4.24858   4.52792   4.29107   3.63184   2.03731   1.32036   1.12797   1.09814</span></span><br><span class="line"><span class="string">  1.01976   0.89767   0.89484   1.21525   1.97095   3.70570   4.38855   4.65256</span></span><br><span class="line"><span class="string">  4.43948   3.89754   4.21954   2.92219   1.83300   1.61528   2.13407   3.13273</span></span><br><span class="line"><span class="string">  4.03304   4.37836   4.21500   3.54162   2.14871   1.44646   1.20387   1.08264</span></span><br><span class="line"><span class="string">  0.94294   0.79652   0.83328   1.24136   2.06053   3.43883   4.17385   4.53101</span></span><br><span class="line"><span class="string">  4.43115   4.03641   3.71837   2.02965   1.28863   1.21833   1.89263   2.85593</span></span><br><span class="line"><span class="string">  4.80291   4.23497   4.08718   3.49858   2.17811   1.53114   1.22608   1.06909</span></span><br><span class="line"><span class="string">  1.06124   0.90425   0.95129   1.35925   1.80900   3.18916   3.85055   4.27470</span></span><br><span class="line"><span class="string">  4.17515   3.68355   2.71193   1.96823   0.88051   1.02084   1.59189   2.52883</span></span><br><span class="line"><span class="string">  3.47767   4.03244   3.86779   3.39508   2.23969   1.66969   1.33019   1.16679</span></span><br><span class="line"><span class="string">  1.08157   1.02005   1.10493   1.29605   1.79270   2.88632   3.63402   4.05349</span></span><br><span class="line"><span class="string">  3.97657   3.35415   2.24207   1.18576   0.74267   0.67495   1.31122   2.24278</span></span><br><span class="line"><span class="string">  3.21905   3.69186   4.76949   4.00571   2.34764   1.77622   1.34849   1.12849</span></span><br><span class="line"><span class="string">  1.09360   0.76295   0.64220   1.00733   1.73708   2.50787   3.41571   4.45847</span></span><br><span class="line"><span class="string">  3.84910   3.11193   1.97839   1.18177   0.33803   0.43176   1.23577   2.17947</span></span><br><span class="line"><span class="string">  2.92428   3.38497   3.39138   3.10177   3.35228   2.15282   1.45287   1.28536</span></span><br><span class="line"><span class="string">  0.61764   0.23640   0.15650   0.65857   1.56522   2.44967   3.17669   3.78043</span></span><br><span class="line"><span class="string">  4.22216   2.79953   1.66579   0.59084   0.15579   0.43594   1.52040   2.27449</span></span><br><span class="line"><span class="string">  2.76979   3.16911   3.12455   2.92674   2.45824   1.88927   1.36443   0.95121</span></span><br><span class="line"><span class="string"> -0.00243  -0.14438   0.06931   0.84132   1.89921   2.91978   3.46170   3.60722</span></span><br><span class="line"><span class="string">  3.77366   2.18724   1.52870   0.20777   0.22187   1.10049   2.08960   2.88893</span></span><br><span class="line"><span class="string">  3.46272   3.66327   3.40280   3.02172   2.23074   1.32476   0.62376   0.25154</span></span><br><span class="line"><span class="string"> -0.24862   0.05886   0.73935   1.98217   3.25167   4.06285   4.21447   3.90130</span></span><br><span class="line"><span class="string">  2.90300   1.70374   0.74057   0.52755   1.12943   2.10802   2.78056   3.65981</span></span><br><span class="line"><span class="string">  4.30377   4.58476   4.35318   3.65296   2.33204   0.81283   0.00000  -0.29835</span></span><br><span class="line"><span class="string">  0.44379   1.32981   2.39709   3.82578   5.02459   5.42450   4.99639   4.00610</span></span><br><span class="line"><span class="string">  2.64886   1.63847   1.37610   1.71448   2.28503   2.64949   3.24747   4.17266</span></span><br><span class="line"><span class="string">  5.17265   5.75041   5.58476   4.21912   2.20540   0.64843   0.02065  -0.08593</span></span><br><span class="line"><span class="string">  2.15530   3.40478   4.51993   5.80241   6.12627   6.00746   5.12631   4.58197</span></span><br><span class="line"><span class="string">  2.80154   2.55737   2.87599   2.95502   2.71629   2.60279   3.64721   4.53964</span></span><br><span class="line"><span class="string">  5.90407   6.82108   6.15044   4.18011   2.15201   0.96807   0.81255   1.19704</span></span><br><span class="line"><span class="string">  4.21011   5.19583   5.45356   5.26216   5.22957   4.91772   4.44698   3.93537</span></span><br><span class="line"><span class="string">  3.74038   4.11322   3.92595   2.94210   2.11295   2.42266   3.12536   4.83315</span></span><br><span class="line"><span class="string">  6.43292   6.19670   5.13463   3.65052   2.40663   2.07125   2.29840   3.03351</span></span><br><span class="line"><span class="string">  5.33877   4.55338   3.87255   3.87071   3.62149   3.87069   4.31250   4.77933</span></span><br><span class="line"><span class="string">  5.37137   5.20874   3.65026   2.18763   2.20027   2.18700   3.65026   5.21405</span></span><br><span class="line"><span class="string">  5.24065   4.77943   4.31250   3.87553   3.63325   5.19982   3.88530   4.53465</span></span><br><span class="line"><span class="string">  4.20747   3.02450   2.29840   2.07135   2.40664   3.65062   5.13204   6.19680</span></span><br><span class="line"><span class="string">  6.43292   4.83351   3.12587   2.96667   2.11029   2.93241   3.92594   4.11322</span></span><br><span class="line"><span class="string">  3.74082   3.93551   4.44698   4.92068   5.53058   5.24416   5.35209   5.19605</span></span><br><span class="line"><span class="string">  2.15668   1.19704   0.81255   0.96806   2.15211   4.17062   6.15034   6.82108</span></span><br><span class="line"><span class="string">  5.90407   4.54177   3.63728   2.60267   2.71853   2.95502   2.87589   2.55737</span></span><br><span class="line"><span class="string">  2.80717   3.89294   5.12631   6.00746   6.12372   5.80230   5.01898   3.40679</span></span><br><span class="line"><span class="string">  0.45450  -0.08700   0.02065   0.64843   2.20540   4.21912   5.58476   5.75041</span></span><br><span class="line"><span class="string">  5.17265   4.16788   3.24747   2.64460   2.28503   1.72593   1.37610   1.63847</span></span><br><span class="line"><span class="string">  2.64538   4.01006   5.00425   5.42091   5.02459   3.80593   2.39681   1.32981</span></span><br><span class="line"><span class="string"> -0.24862  -0.29835   0.00000   0.81283   2.33214   3.64847   4.35318   4.59008</span></span><br><span class="line"><span class="string">  4.30377   3.65991   2.78056   2.10802   1.84494   0.52754   0.74067   1.61716</span></span><br><span class="line"><span class="string">  2.90300   3.89516   4.21447   4.06285   3.25166   1.98217   0.73946   0.07427</span></span><br><span class="line"><span class="string"> -0.00243   0.25154   0.64043   1.82987   2.23143   3.02038   3.40280   3.66327</span></span><br><span class="line"><span class="string">  3.46272   2.88893   2.08960   1.10049   0.22171   0.20862   1.52897   2.18595</span></span><br><span class="line"><span class="string">  3.24376   3.60722   3.46170   2.91968   1.89590   0.84888   0.07066  -0.14460</span></span><br><span class="line"><span class="string">  0.61764   0.94007   1.36444   1.88927   2.45691   2.92674   3.12469   3.16911</span></span><br><span class="line"><span class="string">  2.76979   2.27377   1.52040   0.44049   0.15579   0.59084   1.66579   2.79477</span></span><br><span class="line"><span class="string">  4.25589   3.78043   3.17669   2.45043   1.56512   0.65855   0.15650   0.23719</span></span><br><span class="line"><span class="string">  1.09360   1.28549   1.45287   2.15281   2.67683   3.10177   3.39138   3.38497</span></span><br><span class="line"><span class="string">  2.91731   2.17947   1.23582   0.43170   0.33793   1.00844   1.97383   3.11193</span></span><br><span class="line"><span class="string">  3.84910   4.46392   3.41571   2.50787   1.73708   1.00733   0.64220   0.76295</span></span><br><span class="line"><span class="string">  0.97094   1.11640   1.33640   1.77623   2.30465   3.21763   3.71128   3.69186</span></span><br><span class="line"><span class="string">  3.21905   2.24277   1.31122   0.67238   0.74272   1.18578   2.24207   3.35415</span></span><br><span class="line"><span class="string">  3.97657   4.05349   3.63266   2.88632   1.79270   1.23680   1.00391   1.05657</span></span><br><span class="line"><span class="string">  0.98044   1.16708   1.33038   1.66969   2.23969   3.39508   3.86779   4.03243</span></span><br><span class="line"><span class="string">  3.47590   2.52883   1.59193   1.02084   0.88051   1.46518   2.71203   3.68355</span></span><br><span class="line"><span class="string">  4.17470   4.27471   3.85203   3.18916   1.80900   1.35925   0.95109   0.90998</span></span><br><span class="line"><span class="string">  0.92229   1.06909   1.22608   1.53114   2.17810   3.49858   4.08708   4.23358</span></span><br><span class="line"><span class="string">  3.81032   2.85593   1.89254   1.21833   1.28863   2.03059   3.37664   4.03661</span></span><br><span class="line"><span class="string">  4.43079   4.53101   4.17385   3.43883   2.06053   1.24136   0.83440   0.79652</span></span><br><span class="line"><span class="string">  1.01976   1.08264   1.20394   1.44647   2.14870   3.54162   4.22527   4.37836</span></span><br><span class="line"><span class="string">  4.03304   3.13273   2.13407   1.61528   1.83300   2.92219   4.10899   3.89754</span></span><br><span class="line"><span class="string">  4.43948   4.65256   4.38856   3.70570   1.97095   1.21515   0.89442   0.89767</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">phi = np.arange(<span class="number">24</span>) * <span class="number">15</span></span><br><span class="line">psi = np.arange(<span class="number">24</span>) * <span class="number">15</span></span><br><span class="line">resolutions = np.array([<span class="built_in">float</span>(s) <span class="keyword">for</span> s <span class="keyword">in</span> string.split()], np.float32).reshape((<span class="number">24</span>, <span class="number">24</span>))</span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">10</span>))</span><br><span class="line">plt.title(<span class="string">&#x27;GLY Resolutions&#x27;</span>)</span><br><span class="line">plt.contourf(phi, psi, resolutions, cmap=plt.cm.hot)</span><br><span class="line">plt.xlabel(<span class="string">r&#x27;$\phi$&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">r&#x27;$\psi$&#x27;</span>)</span><br><span class="line">plt.xticks(phi)</span><br><span class="line">plt.yticks(psi)</span><br><span class="line">plt.grid()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>得到的结果如下图所示：</p>
+<div align=center>
+	<img src="https://img2023.cnblogs.com/blog/2277440/202312/2277440-20231205143519633-725712612.png">
+</div>
+
+<p>此时需要注意的是，我们手头仅有每一个格点上的对应能量值，但是我们需要的是整个自变量空间的能量值，而且需要是连续的，这样才能够进行自动微分，进而求解对应的力。这时候需要用到双三次样条插值法。我们假设需要插值的点处在某一个<code>方格子中间</code>，注意不是格点了，是在某一个方格子的中间。那么此时我们可以以这个方格的位置为中心，构造出一个九宫格。虽然是九宫格，但其实是4横4纵一共16个能量点。这里给出的插值目标函数为：<br>$$<br>E_{interp}&#x3D;\sum_{i,j&#x3D;1}^4c_{i,j}\left(\frac{\phi-\phi_L}{\Delta\phi}\right)^{i-1}\left(\frac{\psi-\psi_L}{\Delta\psi}\right)^{j-1}<br>$$<br>由于系数我们是当做一维来计算的，所以需要做一个展开令$a_{J}&#x3D;a_{4i+j-4}&#x3D;c_{i,j}$，同时，我们可以将角度的变换关系全都放到系数项里面，这样表示$\phi$和$\psi$时在形式上就会更加简单。经过变换后会得到一个矩阵方程：<br>$$<br>\sum_{J}M_{I,J}a_J&#x3D;E_I<br>$$<br>其中$M_{I,J}$可以通过格点的$\phi,\psi$与中心方格的中心点的$\phi_L,\psi_L$构造出来，这里不展开写公式，详细内容参见代码实现。那么最后得到系数矩阵$M_{I,J}$和能量表之后，就可以进一步得到需要插值的系数：<br>$$<br>a&#x3D;M^{-1}E<br>$$<br>具体的代码实现如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">M = np.zeros((<span class="number">16</span>, <span class="number">16</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">16</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">16</span>):</span><br><span class="line">        ii = i // <span class="number">4</span></span><br><span class="line">        ij = i % <span class="number">4</span></span><br><span class="line">        ji = j // <span class="number">4</span></span><br><span class="line">        jj = j % <span class="number">4</span></span><br><span class="line">        M[i][j] = (-<span class="number">1.5</span> + ij) ** ji * (-<span class="number">1.5</span> + ii) ** jj</span><br><span class="line">M = np.matrix(M, np.float32)</span><br><span class="line">c_0 = np.einsum(<span class="string">&#x27;ij,j-&gt;i&#x27;</span>, M.I, E_sub.reshape(-<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<p>这样就可以得到一组参数：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[ 0.80195737 -0.09009341  0.089855    0.00695395  0.00651729  0.04415806</span><br><span class="line">  0.00911433 -0.01563221  0.1316725   0.02541727 -0.02819001  0.01033084</span><br><span class="line">  0.03029101 -0.00083557  0.00954252 -0.00721776]</span><br></pre></td></tr></table></figure>
+<p>根据这个参数，可以代入到上面计算势能的插值函数$<br>E_{interp}&#x3D;\sum_{i,j&#x3D;1}^4c_{i,j}\left(\frac{\phi-\phi_L}{\Delta\phi}\right)^{i-1}\left(\frac{\psi-\psi_L}{\Delta\psi}\right)^{j-1}<br>$中，计算出格点内给定位置的势能值。完整的$\phi-\psi$空间参数计算Python代码如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> product</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">string = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">0.82366   1.09817   1.13106   1.38658   2.11377   3.63194   5.20835   4.52792</span></span><br><span class="line"><span class="string">  4.24857   3.42100   2.57125   2.21561   4.26659   2.21561   2.57125   3.42110</span></span><br><span class="line"><span class="string">  4.24858   4.52792   4.29107   3.63184   2.03731   1.32036   1.12797   1.09814</span></span><br><span class="line"><span class="string">  1.01976   0.89767   0.89484   1.21525   1.97095   3.70570   4.38855   4.65256</span></span><br><span class="line"><span class="string">  4.43948   3.89754   4.21954   2.92219   1.83300   1.61528   2.13407   3.13273</span></span><br><span class="line"><span class="string">  4.03304   4.37836   4.21500   3.54162   2.14871   1.44646   1.20387   1.08264</span></span><br><span class="line"><span class="string">  0.94294   0.79652   0.83328   1.24136   2.06053   3.43883   4.17385   4.53101</span></span><br><span class="line"><span class="string">  4.43115   4.03641   3.71837   2.02965   1.28863   1.21833   1.89263   2.85593</span></span><br><span class="line"><span class="string">  4.80291   4.23497   4.08718   3.49858   2.17811   1.53114   1.22608   1.06909</span></span><br><span class="line"><span class="string">  1.06124   0.90425   0.95129   1.35925   1.80900   3.18916   3.85055   4.27470</span></span><br><span class="line"><span class="string">  4.17515   3.68355   2.71193   1.96823   0.88051   1.02084   1.59189   2.52883</span></span><br><span class="line"><span class="string">  3.47767   4.03244   3.86779   3.39508   2.23969   1.66969   1.33019   1.16679</span></span><br><span class="line"><span class="string">  1.08157   1.02005   1.10493   1.29605   1.79270   2.88632   3.63402   4.05349</span></span><br><span class="line"><span class="string">  3.97657   3.35415   2.24207   1.18576   0.74267   0.67495   1.31122   2.24278</span></span><br><span class="line"><span class="string">  3.21905   3.69186   4.76949   4.00571   2.34764   1.77622   1.34849   1.12849</span></span><br><span class="line"><span class="string">  1.09360   0.76295   0.64220   1.00733   1.73708   2.50787   3.41571   4.45847</span></span><br><span class="line"><span class="string">  3.84910   3.11193   1.97839   1.18177   0.33803   0.43176   1.23577   2.17947</span></span><br><span class="line"><span class="string">  2.92428   3.38497   3.39138   3.10177   3.35228   2.15282   1.45287   1.28536</span></span><br><span class="line"><span class="string">  0.61764   0.23640   0.15650   0.65857   1.56522   2.44967   3.17669   3.78043</span></span><br><span class="line"><span class="string">  4.22216   2.79953   1.66579   0.59084   0.15579   0.43594   1.52040   2.27449</span></span><br><span class="line"><span class="string">  2.76979   3.16911   3.12455   2.92674   2.45824   1.88927   1.36443   0.95121</span></span><br><span class="line"><span class="string"> -0.00243  -0.14438   0.06931   0.84132   1.89921   2.91978   3.46170   3.60722</span></span><br><span class="line"><span class="string">  3.77366   2.18724   1.52870   0.20777   0.22187   1.10049   2.08960   2.88893</span></span><br><span class="line"><span class="string">  3.46272   3.66327   3.40280   3.02172   2.23074   1.32476   0.62376   0.25154</span></span><br><span class="line"><span class="string"> -0.24862   0.05886   0.73935   1.98217   3.25167   4.06285   4.21447   3.90130</span></span><br><span class="line"><span class="string">  2.90300   1.70374   0.74057   0.52755   1.12943   2.10802   2.78056   3.65981</span></span><br><span class="line"><span class="string">  4.30377   4.58476   4.35318   3.65296   2.33204   0.81283   0.00000  -0.29835</span></span><br><span class="line"><span class="string">  0.44379   1.32981   2.39709   3.82578   5.02459   5.42450   4.99639   4.00610</span></span><br><span class="line"><span class="string">  2.64886   1.63847   1.37610   1.71448   2.28503   2.64949   3.24747   4.17266</span></span><br><span class="line"><span class="string">  5.17265   5.75041   5.58476   4.21912   2.20540   0.64843   0.02065  -0.08593</span></span><br><span class="line"><span class="string">  2.15530   3.40478   4.51993   5.80241   6.12627   6.00746   5.12631   4.58197</span></span><br><span class="line"><span class="string">  2.80154   2.55737   2.87599   2.95502   2.71629   2.60279   3.64721   4.53964</span></span><br><span class="line"><span class="string">  5.90407   6.82108   6.15044   4.18011   2.15201   0.96807   0.81255   1.19704</span></span><br><span class="line"><span class="string">  4.21011   5.19583   5.45356   5.26216   5.22957   4.91772   4.44698   3.93537</span></span><br><span class="line"><span class="string">  3.74038   4.11322   3.92595   2.94210   2.11295   2.42266   3.12536   4.83315</span></span><br><span class="line"><span class="string">  6.43292   6.19670   5.13463   3.65052   2.40663   2.07125   2.29840   3.03351</span></span><br><span class="line"><span class="string">  5.33877   4.55338   3.87255   3.87071   3.62149   3.87069   4.31250   4.77933</span></span><br><span class="line"><span class="string">  5.37137   5.20874   3.65026   2.18763   2.20027   2.18700   3.65026   5.21405</span></span><br><span class="line"><span class="string">  5.24065   4.77943   4.31250   3.87553   3.63325   5.19982   3.88530   4.53465</span></span><br><span class="line"><span class="string">  4.20747   3.02450   2.29840   2.07135   2.40664   3.65062   5.13204   6.19680</span></span><br><span class="line"><span class="string">  6.43292   4.83351   3.12587   2.96667   2.11029   2.93241   3.92594   4.11322</span></span><br><span class="line"><span class="string">  3.74082   3.93551   4.44698   4.92068   5.53058   5.24416   5.35209   5.19605</span></span><br><span class="line"><span class="string">  2.15668   1.19704   0.81255   0.96806   2.15211   4.17062   6.15034   6.82108</span></span><br><span class="line"><span class="string">  5.90407   4.54177   3.63728   2.60267   2.71853   2.95502   2.87589   2.55737</span></span><br><span class="line"><span class="string">  2.80717   3.89294   5.12631   6.00746   6.12372   5.80230   5.01898   3.40679</span></span><br><span class="line"><span class="string">  0.45450  -0.08700   0.02065   0.64843   2.20540   4.21912   5.58476   5.75041</span></span><br><span class="line"><span class="string">  5.17265   4.16788   3.24747   2.64460   2.28503   1.72593   1.37610   1.63847</span></span><br><span class="line"><span class="string">  2.64538   4.01006   5.00425   5.42091   5.02459   3.80593   2.39681   1.32981</span></span><br><span class="line"><span class="string"> -0.24862  -0.29835   0.00000   0.81283   2.33214   3.64847   4.35318   4.59008</span></span><br><span class="line"><span class="string">  4.30377   3.65991   2.78056   2.10802   1.84494   0.52754   0.74067   1.61716</span></span><br><span class="line"><span class="string">  2.90300   3.89516   4.21447   4.06285   3.25166   1.98217   0.73946   0.07427</span></span><br><span class="line"><span class="string"> -0.00243   0.25154   0.64043   1.82987   2.23143   3.02038   3.40280   3.66327</span></span><br><span class="line"><span class="string">  3.46272   2.88893   2.08960   1.10049   0.22171   0.20862   1.52897   2.18595</span></span><br><span class="line"><span class="string">  3.24376   3.60722   3.46170   2.91968   1.89590   0.84888   0.07066  -0.14460</span></span><br><span class="line"><span class="string">  0.61764   0.94007   1.36444   1.88927   2.45691   2.92674   3.12469   3.16911</span></span><br><span class="line"><span class="string">  2.76979   2.27377   1.52040   0.44049   0.15579   0.59084   1.66579   2.79477</span></span><br><span class="line"><span class="string">  4.25589   3.78043   3.17669   2.45043   1.56512   0.65855   0.15650   0.23719</span></span><br><span class="line"><span class="string">  1.09360   1.28549   1.45287   2.15281   2.67683   3.10177   3.39138   3.38497</span></span><br><span class="line"><span class="string">  2.91731   2.17947   1.23582   0.43170   0.33793   1.00844   1.97383   3.11193</span></span><br><span class="line"><span class="string">  3.84910   4.46392   3.41571   2.50787   1.73708   1.00733   0.64220   0.76295</span></span><br><span class="line"><span class="string">  0.97094   1.11640   1.33640   1.77623   2.30465   3.21763   3.71128   3.69186</span></span><br><span class="line"><span class="string">  3.21905   2.24277   1.31122   0.67238   0.74272   1.18578   2.24207   3.35415</span></span><br><span class="line"><span class="string">  3.97657   4.05349   3.63266   2.88632   1.79270   1.23680   1.00391   1.05657</span></span><br><span class="line"><span class="string">  0.98044   1.16708   1.33038   1.66969   2.23969   3.39508   3.86779   4.03243</span></span><br><span class="line"><span class="string">  3.47590   2.52883   1.59193   1.02084   0.88051   1.46518   2.71203   3.68355</span></span><br><span class="line"><span class="string">  4.17470   4.27471   3.85203   3.18916   1.80900   1.35925   0.95109   0.90998</span></span><br><span class="line"><span class="string">  0.92229   1.06909   1.22608   1.53114   2.17810   3.49858   4.08708   4.23358</span></span><br><span class="line"><span class="string">  3.81032   2.85593   1.89254   1.21833   1.28863   2.03059   3.37664   4.03661</span></span><br><span class="line"><span class="string">  4.43079   4.53101   4.17385   3.43883   2.06053   1.24136   0.83440   0.79652</span></span><br><span class="line"><span class="string">  1.01976   1.08264   1.20394   1.44647   2.14870   3.54162   4.22527   4.37836</span></span><br><span class="line"><span class="string">  4.03304   3.13273   2.13407   1.61528   1.83300   2.92219   4.10899   3.89754</span></span><br><span class="line"><span class="string">  4.43948   4.65256   4.38856   3.70570   1.97095   1.21515   0.89442   0.89767</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">E_interp</span>(<span class="params">c, phi, psi</span>):</span><br><span class="line">    <span class="comment"># 根据计算好的参数以及输入的phi和psi值，计算势能值</span></span><br><span class="line">    rc = c.reshape((<span class="number">4</span>, <span class="number">4</span>))</span><br><span class="line">    E = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">            E += rc[i][j] * phi ** i * psi ** j</span><br><span class="line">    <span class="keyword">return</span> E</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_c0</span>(<span class="params">E_sub</span>):</span><br><span class="line">    <span class="comment"># 计算插值参数</span></span><br><span class="line">    M = np.zeros((<span class="number">16</span>, <span class="number">16</span>))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">16</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">16</span>):</span><br><span class="line">            ii = i // <span class="number">4</span></span><br><span class="line">            ij = i % <span class="number">4</span></span><br><span class="line">            ji = j // <span class="number">4</span></span><br><span class="line">            jj = j % <span class="number">4</span></span><br><span class="line">            M[i][j] = (-<span class="number">1.5</span> + ii) ** ji * (-<span class="number">1.5</span> + ij) ** jj</span><br><span class="line">    M = np.matrix(M, np.float32)</span><br><span class="line">    c_0 = np.einsum(<span class="string">&#x27;ij,j-&gt;i&#x27;</span>, M.I, E_sub.reshape(-<span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> c_0</span><br><span class="line"></span><br><span class="line">resolutions = np.array([<span class="built_in">float</span>(s) <span class="keyword">for</span> s <span class="keyword">in</span> string.split()], np.float32).reshape((<span class="number">24</span>, <span class="number">24</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_resolution_0</span>(<span class="params">resolutions, phi_L=<span class="number">0.</span>, psi_L=<span class="number">0.</span></span>):</span><br><span class="line">    <span class="comment"># 遍历空间中每个网格的中心，计算势能值</span></span><br><span class="line">    Einterp = np.zeros((<span class="number">23</span>, <span class="number">23</span>))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">23</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">23</span>):</span><br><span class="line">            idx = <span class="built_in">list</span>(product([i-<span class="number">1</span>, i, i+<span class="number">1</span>, (i+<span class="number">2</span>) % <span class="number">24</span>], [j-<span class="number">1</span>, j, i+<span class="number">1</span>, (j+<span class="number">2</span>) % <span class="number">24</span>]))</span><br><span class="line">            E_sub = np.array([resolutions[x] <span class="keyword">for</span> x <span class="keyword">in</span> idx]).reshape((<span class="number">4</span>, <span class="number">4</span>))</span><br><span class="line">            c0 = get_c0(E_sub)</span><br><span class="line">            Einterp[i][j] = E_interp(c0, phi_L, psi_L)</span><br><span class="line">    <span class="keyword">return</span> Einterp</span><br><span class="line"></span><br><span class="line">phi = np.arange(<span class="number">23</span>) * <span class="number">15</span></span><br><span class="line">psi = np.arange(<span class="number">23</span>) * <span class="number">15</span></span><br><span class="line">hi, si = <span class="number">0.</span>, <span class="number">0.</span></span><br><span class="line"><span class="comment"># 网格中心的势能分布</span></span><br><span class="line">resolutions_0 = get_resolution_0(resolutions, hi, si)</span><br><span class="line">hi, si = -<span class="number">0.5</span>, -<span class="number">0.5</span></span><br><span class="line"><span class="comment"># 网格格点的势能分布</span></span><br><span class="line">resolutions_1  =get_resolution_0(resolutions, hi, si)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘图</span></span><br><span class="line">plt.figure(figsize=(<span class="number">20</span>, <span class="number">10</span>))</span><br><span class="line">plt.subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;GLY Resolutions Center&#x27;</span>)</span><br><span class="line">plt.contourf(phi+<span class="number">7.5</span>, psi+<span class="number">7.5</span>, resolutions_0, cmap=plt.cm.hot)</span><br><span class="line">plt.xlabel(<span class="string">r&#x27;$\phi$&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">r&#x27;$\psi$&#x27;</span>)</span><br><span class="line">plt.xticks(phi+<span class="number">7.5</span>, rotation=<span class="number">60</span>)</span><br><span class="line">plt.yticks(psi+<span class="number">7.5</span>)</span><br><span class="line">plt.grid()</span><br><span class="line">plt.subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;GLY Resolutions Grid&#x27;</span>)</span><br><span class="line">plt.contourf(phi, psi, resolutions_1, cmap=plt.cm.hot)</span><br><span class="line">plt.xlabel(<span class="string">r&#x27;$\phi$&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">r&#x27;$\psi$&#x27;</span>)</span><br><span class="line">plt.xticks(phi, rotation=<span class="number">60</span>)</span><br><span class="line">plt.yticks(psi)</span><br><span class="line">plt.grid()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>输出的结果如下所示：</p>
+<div align=center>
+	<img src="https://img2023.cnblogs.com/blog/2277440/202312/2277440-20231205190955528-686915234.png">
+</div>
+将这个结果对比原始的Resolution，我们发现格点上的势能分布是完全一致的。但是如果使用的是网格中心的势能值用来统计分布，势能面就会出现较大的差异，但其实我们做插值的时候，也要考虑是否存在“过拟合”的问题。
+
+<h1 id="Amber算法复现"><a href="#Amber算法复现" class="headerlink" title="Amber算法复现"></a>Amber算法复现</h1><p>在Amber里面，就是直接使用双三次样条插值进行计算，这里不对其算法进行展开介绍，但是可以贴一部分用于复现的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_c1</span>(<span class="params">E_sub</span>):</span><br><span class="line">    dM = np.matrix([[<span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">                    [<span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">                    [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">                    [<span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>],</span><br><span class="line">                    [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">                    [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">2.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">3.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">                    [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">                    [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">2.</span>, <span class="number">2.</span>, <span class="number">2.</span>, <span class="number">2.</span>, <span class="number">3.</span>, <span class="number">3.</span>, <span class="number">3.</span>, <span class="number">3.</span>],</span><br><span class="line">                    [<span class="number">0.</span>, <span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">                    [<span class="number">0.</span>, <span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">                    [<span class="number">0.</span>, <span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">                    [<span class="number">0.</span>, <span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>],</span><br><span class="line">                    [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">                    [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">2.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">3.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">                    [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>],</span><br><span class="line">                    [<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>, <span class="number">0.</span>, <span class="number">2.</span>, <span class="number">4.</span>, <span class="number">6.</span>, <span class="number">0.</span>, <span class="number">3.</span>, <span class="number">6.</span>, <span class="number">9.</span>]],</span><br><span class="line">                    np.float32)</span><br><span class="line">    dE = np.array([E_sub[<span class="number">1</span>][<span class="number">1</span>], E_sub[<span class="number">2</span>][<span class="number">1</span>], E_sub[<span class="number">1</span>][<span class="number">2</span>], E_sub[<span class="number">2</span>][<span class="number">2</span>],</span><br><span class="line">                   <span class="number">0.5</span> * (E_sub[<span class="number">2</span>][<span class="number">1</span>] - E_sub[<span class="number">0</span>][<span class="number">1</span>]), <span class="number">0.5</span> * (E_sub[<span class="number">3</span>][<span class="number">1</span>] - E_sub[<span class="number">1</span>][<span class="number">1</span>]),</span><br><span class="line">                   <span class="number">0.5</span> * (E_sub[<span class="number">2</span>][<span class="number">2</span>] - E_sub[<span class="number">0</span>][<span class="number">2</span>]), <span class="number">0.5</span> * (E_sub[<span class="number">3</span>][<span class="number">2</span>] - E_sub[<span class="number">1</span>][<span class="number">2</span>]),</span><br><span class="line">                   <span class="number">0.5</span> * (E_sub[<span class="number">1</span>][<span class="number">2</span>] - E_sub[<span class="number">1</span>][<span class="number">0</span>]), <span class="number">0.5</span> * (E_sub[<span class="number">2</span>][<span class="number">2</span>] - E_sub[<span class="number">2</span>][<span class="number">0</span>]),</span><br><span class="line">                   <span class="number">0.5</span> * (E_sub[<span class="number">1</span>][<span class="number">3</span>] - E_sub[<span class="number">1</span>][<span class="number">1</span>]), <span class="number">0.5</span> * (E_sub[<span class="number">2</span>][<span class="number">3</span>] - E_sub[<span class="number">2</span>][<span class="number">1</span>]),</span><br><span class="line">                   <span class="number">0.25</span> * (E_sub[<span class="number">2</span>][<span class="number">2</span>] + E_sub[<span class="number">0</span>][<span class="number">0</span>] - E_sub[<span class="number">2</span>][<span class="number">0</span>] - E_sub[<span class="number">0</span>][<span class="number">2</span>]),</span><br><span class="line">                   <span class="number">0.25</span> * (E_sub[<span class="number">3</span>][<span class="number">2</span>] + E_sub[<span class="number">1</span>][<span class="number">0</span>] - E_sub[<span class="number">3</span>][<span class="number">0</span>] - E_sub[<span class="number">1</span>][<span class="number">2</span>]),</span><br><span class="line">                   <span class="number">0.25</span> * (E_sub[<span class="number">2</span>][<span class="number">2</span>] + E_sub[<span class="number">0</span>][<span class="number">2</span>] - E_sub[<span class="number">2</span>][<span class="number">1</span>] - E_sub[<span class="number">0</span>][<span class="number">3</span>]),</span><br><span class="line">                   <span class="number">0.25</span> * (E_sub[<span class="number">3</span>][<span class="number">3</span>] + E_sub[<span class="number">1</span>][<span class="number">1</span>] - E_sub[<span class="number">3</span>][<span class="number">1</span>] - E_sub[<span class="number">1</span>][<span class="number">3</span>])],</span><br><span class="line">                   np.float32)</span><br><span class="line">    c_1 = np.einsum(<span class="string">&#x27;ij,j-&gt;i&#x27;</span>, dM.I, dE)</span><br><span class="line">    <span class="keyword">return</span> c_1</span><br></pre></td></tr></table></figure>
+<p>这个双三次样条插值算法的基本原理，不是像之前我们提到的一样使用格点中心点作为中心来进行插值，而是选取了中心网格的左上角格点作为中心(0,0)，然后对中间网格的四个格点、以及边的一阶差分、二阶差分进行插值。这样做的好处是，在网格的边缘处，不仅仅是势能面光滑，且一阶导数可以连续。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了最新的一些分子力场中有可能使用到的1-5相互作用——双二面角耦合项的计算。而常规的计算方式是，通过量化的计算得到每一个Residue的α碳对应的两个二面角的数值在空间中的离散化数值。然后在分子模拟的过程中使用插值的方案，对相关的条目进行计算，例如使用双三次样条插值。但其实这种插值算法的使用有可能导致一些其他的问题，比如深度学习中可能会经常提到的“过拟合”问题。由于这个条目本身就只是一个修正项，从数值大小上来说并不算大，因此这些细节是否需要优化还有待商榷。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cmap.html">https://www.cnblogs.com/dechinphy/p/cmap.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ol>
+<li>Extending the Treatment of Backbone Energetics in Protein Force Fields: Limitations of Gas-Phase Quantum Mechanics in Reproducing Protein Conformational Distributions in Molecular Dynamics Simulations.</li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2023/12/18/Python%E5%AE%9A%E4%BD%8D%E9%94%99%E8%AF%AF%EF%BC%9A%E6%AE%B5%E9%94%99%E8%AF%AF-(%E6%A0%B8%E5%BF%83%E5%B7%B2%E8%BD%AC%E5%82%A8)/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          Python定位错误：段错误 (核心已转储)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/11/21/Jupyter-Notebook%E6%8A%A5%E9%94%99'500---Internal-Server-Error'%E7%9A%84%E8%A7%A3%E5%86%B3/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">Jupyter Notebook报错&#39;500 : Internal Server Error&#39;的解决方法</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=双二面角耦合力场项的计算 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2023%2F12%2F05%2F%25E5%258F%258C%25E4%25BA%258C%25E9%259D%25A2%25E8%25A7%2592%25E8%2580%25A6%25E5%2590%2588%25E5%258A%259B%25E5%259C%25BA%25E9%25A1%25B9%25E7%259A%2584%25E8%25AE%25A1%25E7%25AE%2597%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=双二面角耦合力场项的计算 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2023%2F12%2F05%2F%25E5%258F%258C%25E4%25BA%258C%25E9%259D%25A2%25E8%25A7%2592%25E8%2580%25A6%25E5%2590%2588%25E5%258A%259B%25E5%259C%25BA%25E9%25A1%25B9%25E7%259A%2584%25E8%25AE%25A1%25E7%25AE%2597%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=双二面角耦合力场项的计算 - Hexo&url=http://dechinphy.github.io/2023/12/05/%E5%8F%8C%E4%BA%8C%E9%9D%A2%E8%A7%92%E8%80%A6%E5%90%88%E5%8A%9B%E5%9C%BA%E9%A1%B9%E7%9A%84%E8%AE%A1%E7%AE%97/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>Tkinter常用功能示例（一） | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文主要介绍一些Python的Tkinter GUI框架的常用功能模块，包含基本窗口的创建、菜单栏、文本框、TreeView、按钮、滚动条、标签的设定等，另外包含了一些面向对象的GUI的简单示例。总的来说，Tkinter加上第三方的ttk，基本的GUI功能是都具备的，可以用来实现一些简单的小项目。对于大的项目来说，用PyQT&amp;#x2F;QT可能会是一个更加专业的选择。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "Tkinter常用功能示例（一） | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文主要介绍一些Python的Tkinter GUI框架的常用功能模块，包含基本窗口的创建、菜单栏、文本框、TreeView、按钮、滚动条、标签的设定等，另外包含了一些面向对象的GUI的简单示例。总的来说，Tkinter加上第三方的ttk，基本的GUI功能是都具备的，可以用来实现一些简单的小项目。对于大的项目来说，用PyQT&amp;#x2F;QT可能会是一个更加专业的选择。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2024/04/15/Tkinter%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD%E7%A4%BA%E4%BE%8B%EF%BC%88%E4%B8%80%EF%BC%89/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文主要介绍一些Python的Tkinter GUI框架的常用功能模块，包含基本窗口的创建、菜单栏、文本框、TreeView、按钮、滚动条、标签的设定等，另外包含了一些面向对象的GUI的简单示例。总的来说，Tkinter加上第三方的ttk，基本的GUI功能是都具备的，可以用来实现一些简单的小项目。对于大的项目来说，用PyQT&amp;#x2F;QT可能会是一个更加专业的选择。&lt;/p&gt;" />
+    <meta name="twitter:title" content="Tkinter常用功能示例（一） | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文主要介绍一些Python的Tkinter GUI框架的常用功能模块，包含基本窗口的创建、菜单栏、文本框、TreeView、按钮、滚动条、标签的设定等，另外包含了一些面向对象的GUI的简单示例。总的来说，Tkinter加上第三方的ttk，基本的GUI功能是都具备的，可以用来实现一些简单的小项目。对于大的项目来说，用PyQT&amp;#x2F;QT可能会是一个更加专业的选择。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文主要介绍一些Python的Tkinter GUI框架的常用功能模块，包含基本窗口的创建、菜单栏、文本框、TreeView、按钮、滚动条、标签的设定等，另外包含了一些面向对象的GUI的简单示例。总的来说，Tkinter加上第三方的ttk，基本的GUI功能是都具备的，可以用来实现一些简单的小项目。对于大的项目来说，用PyQT&amp;#x2F;QT可能会是一个更加专业的选择。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2024/04/15/Tkinter%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD%E7%A4%BA%E4%BE%8B%EF%BC%88%E4%B8%80%EF%BC%89/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "Tkinter常用功能示例（一） | Hexo",
+            "datePublished": "2024-04-15T03:26:48.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2024/04/15/Tkinter%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD%E7%A4%BA%E4%BE%8B%EF%BC%88%E4%B8%80%EF%BC%89/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidmGLNWGwcUqcoCuQ1pUrtG" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      Tkinter常用功能示例（一）
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2024-04-15T03:26:48.000Z" itemprop="datePublished">2024-04-15</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文主要介绍一些Python的Tkinter GUI框架的常用功能模块，包含基本窗口的创建、菜单栏、文本框、TreeView、按钮、滚动条、标签的设定等，另外包含了一些面向对象的GUI的简单示例。总的来说，Tkinter加上第三方的ttk，基本的GUI功能是都具备的，可以用来实现一些简单的小项目。对于大的项目来说，用PyQT&#x2F;QT可能会是一个更加专业的选择。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>Tkinter是一个Python自带的GUI框架，虽然现在主流的还是用pyqt的多一些，但是Tkinter在环境配置上可以节省很多工作，可以用来做一些小项目。如果是大型项目，用pyqt或者QT确实会更加专业一些。本文主要介绍一些简单的Tkinter的示例，比如文本框定义、标签定义和TreeView定义等。</p>
+<h1 id="窗口初始化"><a href="#窗口初始化" class="headerlink" title="窗口初始化"></a>窗口初始化</h1><p>最基本的来说，类似于代码界的Hello Word，我们可以用Tkinter创建一个简单的窗体：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"><span class="comment"># 主窗口</span></span><br><span class="line">root = tk.Tk()</span><br><span class="line">root.title(<span class="string">&#x27;Title&#x27;</span>)</span><br><span class="line">root.geometry(<span class="string">&#x27;320x240&#x27;</span>)</span><br><span class="line"><span class="comment"># 启动运行</span></span><br><span class="line">root.mainloop()</span><br></pre></td></tr></table></figure>
+
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240415112718295-1255484558.png">
+</div>
+
+<h1 id="菜单栏"><a href="#菜单栏" class="headerlink" title="菜单栏"></a>菜单栏</h1><p>一般我们窗体上会有一个菜单栏，常用的菜单功能比如打开文件、文本操作等：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line">root = tk.Tk()</span><br><span class="line">root.title(<span class="string">&#x27;Title&#x27;</span>)</span><br><span class="line">root.geometry(<span class="string">&#x27;320x240&#x27;</span>)</span><br><span class="line"><span class="comment"># 菜单</span></span><br><span class="line">menubar = tk.Menu(root)</span><br><span class="line"><span class="comment"># 子菜单</span></span><br><span class="line">submenu = tk.Menu(menubar, activebackground=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">submenu.add_command(label=<span class="string">&#x27;Sub Menu 1&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">submenu.add_command(label=<span class="string">&#x27;Sub Menu 2&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line"><span class="comment"># 把子菜单添加到主菜单中</span></span><br><span class="line">menubar.add_cascade(label=<span class="string">&#x27;Menu 1&#x27;</span>, menu=submenu)</span><br><span class="line">menubar.add_command(label=<span class="string">&#x27;Quit&#x27;</span>, command=root.destroy)</span><br><span class="line"><span class="comment"># 把主菜单配置到窗体中</span></span><br><span class="line">root.config(menu=menubar)</span><br><span class="line">root.mainloop()</span><br></pre></td></tr></table></figure>
+
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240415113333743-1960808318.png">
+</div>
+
+<h1 id="文本框"><a href="#文本框" class="headerlink" title="文本框"></a>文本框</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line">root = tk.Tk()</span><br><span class="line">root.title(<span class="string">&#x27;Title&#x27;</span>)</span><br><span class="line">root.geometry(<span class="string">&#x27;320x240&#x27;</span>)</span><br><span class="line">menubar = tk.Menu(root)</span><br><span class="line">submenu = tk.Menu(menubar, activebackground=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">submenu.add_command(label=<span class="string">&#x27;Sub Menu 1&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">submenu.add_command(label=<span class="string">&#x27;Sub Menu 2&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">menubar.add_cascade(label=<span class="string">&#x27;Menu 1&#x27;</span>, menu=submenu)</span><br><span class="line">menubar.add_command(label=<span class="string">&#x27;Quit&#x27;</span>, command=root.destroy)</span><br><span class="line"><span class="comment"># 创建文本框，只能用字符数设置文本框的宽度</span></span><br><span class="line">text_box = tk.Entry(root, bd=<span class="number">10</span>)</span><br><span class="line"><span class="comment"># 设置默认文本内容</span></span><br><span class="line">text_box.insert(<span class="number">0</span>, <span class="string">&#x27;Default Text&#x27;</span>)</span><br><span class="line"><span class="comment"># 占满当前布局</span></span><br><span class="line">text_box.pack()</span><br><span class="line">root.config(menu=menubar)</span><br><span class="line">root.mainloop()</span><br></pre></td></tr></table></figure>
+
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240415144628010-626267002.png">
+</div>
+
+<p>除了Entry文本框，还可以使用Text来定义文本框。如果使用Text定义文本框，定义时可以配置大小。如果对比这两个控件，最简单的来说就是，Entry适用于单行的输入（如登录界面的账号密码等），Text适用于多行的文本输入（文本编辑器）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line">root = tk.Tk()</span><br><span class="line">root.title(<span class="string">&#x27;Title&#x27;</span>)</span><br><span class="line">root.geometry(<span class="string">&#x27;320x240&#x27;</span>)</span><br><span class="line">menubar = tk.Menu(root)</span><br><span class="line">submenu = tk.Menu(menubar, activebackground=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">submenu.add_command(label=<span class="string">&#x27;Sub Menu 1&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">submenu.add_command(label=<span class="string">&#x27;Sub Menu 2&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">menubar.add_cascade(label=<span class="string">&#x27;Menu 1&#x27;</span>, menu=submenu)</span><br><span class="line">menubar.add_command(label=<span class="string">&#x27;Quit&#x27;</span>, command=root.destroy)</span><br><span class="line"><span class="comment"># 设置文本框的大小</span></span><br><span class="line">text_box = tk.Text(root, height=<span class="number">10</span>, width=<span class="number">20</span>)</span><br><span class="line">text_box.insert(<span class="string">&#x27;0.0&#x27;</span>, <span class="string">&#x27;Default Text&#x27;</span>)</span><br><span class="line">text_box.pack()</span><br><span class="line">root.config(menu=menubar)</span><br><span class="line">root.mainloop()</span><br></pre></td></tr></table></figure>
+
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240415145443676-545078405.png">
+</div>
+
+<h1 id="树结构"><a href="#树结构" class="headerlink" title="树结构"></a>树结构</h1><p>通俗的来看，树的结构就跟本地存放文件的目录一样，分有层级。如果广义的来看，凡是有索引的键值对结构，甚至是普通的矩阵形式，都可以用这种目录树的形式来显示。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> ttk</span><br><span class="line">root = tk.Tk()</span><br><span class="line">root.title(<span class="string">&#x27;Title&#x27;</span>)</span><br><span class="line">root.geometry(<span class="string">&#x27;320x240&#x27;</span>)</span><br><span class="line">menubar = tk.Menu(root)</span><br><span class="line">submenu = tk.Menu(menubar, activebackground=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">submenu.add_command(label=<span class="string">&#x27;Sub Menu 1&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">submenu.add_command(label=<span class="string">&#x27;Sub Menu 2&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">menubar.add_cascade(label=<span class="string">&#x27;Menu 1&#x27;</span>, menu=submenu)</span><br><span class="line">menubar.add_command(label=<span class="string">&#x27;Quit&#x27;</span>, command=root.destroy)</span><br><span class="line">text_box = tk.Text(root, height=<span class="number">10</span>, width=<span class="number">20</span>)</span><br><span class="line">text_box.insert(<span class="string">&#x27;0.0&#x27;</span>, <span class="string">&#x27;Default Text&#x27;</span>)</span><br><span class="line">text_box.pack()</span><br><span class="line"><span class="comment"># 定义树结构</span></span><br><span class="line">tree = ttk.Treeview(root)</span><br><span class="line"><span class="comment"># 一级节点</span></span><br><span class="line">tree0 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Tree-0&quot;</span>, text=<span class="string">&quot;Tree-0&quot;</span>, values=(<span class="string">&quot;0&quot;</span>))</span><br><span class="line">tree1 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">1</span>, <span class="string">&quot;Tree-1&quot;</span>, text=<span class="string">&quot;Tree-1&quot;</span>, values=(<span class="string">&quot;1&quot;</span>))</span><br><span class="line"><span class="comment"># 二级节点</span></span><br><span class="line">tree00 = tree.insert(tree0, <span class="number">0</span>, <span class="string">&quot;Tree-0-0&quot;</span>, text=<span class="string">&quot;Tree-0-0&quot;</span>, values=(<span class="string">&quot;0-0&quot;</span>))</span><br><span class="line">tree01 = tree.insert(tree0, <span class="number">1</span>, <span class="string">&quot;Tree-0-1&quot;</span>, text=<span class="string">&quot;Tree-0-1&quot;</span>, values=(<span class="string">&quot;0-1&quot;</span>))</span><br><span class="line">tree02 = tree.insert(tree0, <span class="number">2</span>, <span class="string">&quot;Tree-0-2&quot;</span>, text=<span class="string">&quot;Tree-0-2&quot;</span>, values=(<span class="string">&quot;0-2&quot;</span>))</span><br><span class="line"><span class="comment"># 默认布局</span></span><br><span class="line">tree.pack()</span><br><span class="line">root.config(menu=menubar)</span><br><span class="line">root.mainloop()</span><br></pre></td></tr></table></figure>
+
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240415150308691-942306124.png">
+</div>
+
+<h1 id="网格布局"><a href="#网格布局" class="headerlink" title="网格布局"></a>网格布局</h1><p>上一个章节中的默认布局是上下布局，我们可以手动设定一个横向的grid布局，行和列分别用row和column来设定：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> ttk</span><br><span class="line">root = tk.Tk()</span><br><span class="line">root.title(<span class="string">&#x27;Title&#x27;</span>)</span><br><span class="line">root.geometry(<span class="string">&#x27;320x240&#x27;</span>)</span><br><span class="line">menubar = tk.Menu(root)</span><br><span class="line">submenu = tk.Menu(menubar, activebackground=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">submenu.add_command(label=<span class="string">&#x27;Sub Menu 1&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">submenu.add_command(label=<span class="string">&#x27;Sub Menu 2&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">menubar.add_cascade(label=<span class="string">&#x27;Menu 1&#x27;</span>, menu=submenu)</span><br><span class="line">menubar.add_command(label=<span class="string">&#x27;Quit&#x27;</span>, command=root.destroy)</span><br><span class="line">text_box = tk.Text(root, height=<span class="number">10</span>, width=<span class="number">20</span>)</span><br><span class="line">text_box.insert(<span class="string">&#x27;0.0&#x27;</span>, <span class="string">&#x27;Default Text&#x27;</span>)</span><br><span class="line"><span class="comment"># 文本框放在第一行第一列</span></span><br><span class="line">text_box.grid(row=<span class="number">0</span>, column=<span class="number">0</span>)</span><br><span class="line">tree = ttk.Treeview(root)</span><br><span class="line">tree0 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Tree-0&quot;</span>, text=<span class="string">&quot;Tree-0&quot;</span>, values=(<span class="string">&quot;0&quot;</span>))</span><br><span class="line">tree1 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">1</span>, <span class="string">&quot;Tree-1&quot;</span>, text=<span class="string">&quot;Tree-1&quot;</span>, values=(<span class="string">&quot;1&quot;</span>))</span><br><span class="line">tree00 = tree.insert(tree0, <span class="number">0</span>, <span class="string">&quot;Tree-0-0&quot;</span>, text=<span class="string">&quot;Tree-0-0&quot;</span>, values=(<span class="string">&quot;0-0&quot;</span>))</span><br><span class="line">tree01 = tree.insert(tree0, <span class="number">1</span>, <span class="string">&quot;Tree-0-1&quot;</span>, text=<span class="string">&quot;Tree-0-1&quot;</span>, values=(<span class="string">&quot;0-1&quot;</span>))</span><br><span class="line">tree02 = tree.insert(tree0, <span class="number">2</span>, <span class="string">&quot;Tree-0-2&quot;</span>, text=<span class="string">&quot;Tree-0-2&quot;</span>, values=(<span class="string">&quot;0-2&quot;</span>))</span><br><span class="line"><span class="comment"># 树形图放在第一行第二列</span></span><br><span class="line">tree.grid(row=<span class="number">0</span>, column=<span class="number">1</span>)</span><br><span class="line">root.config(menu=menubar)</span><br><span class="line">root.mainloop()</span><br></pre></td></tr></table></figure>
+
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240415153513752-1994366913.png">
+</div>
+
+<p>需要注意的是，pack和grid两者是冲突的，不能同时使用。</p>
+<h1 id="按钮"><a href="#按钮" class="headerlink" title="按钮"></a>按钮</h1><p>按钮Button是一个用于事件触发的组件，定义形式较为简单：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> ttk</span><br><span class="line">root = tk.Tk()</span><br><span class="line">root.title(<span class="string">&#x27;Title&#x27;</span>)</span><br><span class="line">root.geometry(<span class="string">&#x27;320x240&#x27;</span>)</span><br><span class="line">menubar = tk.Menu(root)</span><br><span class="line">submenu = tk.Menu(menubar, activebackground=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">submenu.add_command(label=<span class="string">&#x27;Sub Menu 1&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">submenu.add_command(label=<span class="string">&#x27;Sub Menu 2&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">menubar.add_cascade(label=<span class="string">&#x27;Menu 1&#x27;</span>, menu=submenu)</span><br><span class="line">menubar.add_command(label=<span class="string">&#x27;Quit&#x27;</span>, command=root.destroy)</span><br><span class="line">text_box = tk.Text(root, height=<span class="number">10</span>, width=<span class="number">20</span>)</span><br><span class="line">text_box.insert(<span class="string">&#x27;0.0&#x27;</span>, <span class="string">&#x27;Default Text&#x27;</span>)</span><br><span class="line">text_box.grid(row=<span class="number">0</span>, column=<span class="number">0</span>)</span><br><span class="line"><span class="comment"># 定义按钮</span></span><br><span class="line">button = tk.Button(root, text=<span class="string">&#x27;Button&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line"><span class="comment"># 把按钮放在第一行第二列</span></span><br><span class="line">button.grid(row=<span class="number">0</span>, column=<span class="number">1</span>)</span><br><span class="line">tree = ttk.Treeview(root)</span><br><span class="line">tree0 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Tree-0&quot;</span>, text=<span class="string">&quot;Tree-0&quot;</span>, values=(<span class="string">&quot;0&quot;</span>))</span><br><span class="line">tree1 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">1</span>, <span class="string">&quot;Tree-1&quot;</span>, text=<span class="string">&quot;Tree-1&quot;</span>, values=(<span class="string">&quot;1&quot;</span>))</span><br><span class="line">tree00 = tree.insert(tree0, <span class="number">0</span>, <span class="string">&quot;Tree-0-0&quot;</span>, text=<span class="string">&quot;Tree-0-0&quot;</span>, values=(<span class="string">&quot;0-0&quot;</span>))</span><br><span class="line">tree01 = tree.insert(tree0, <span class="number">1</span>, <span class="string">&quot;Tree-0-1&quot;</span>, text=<span class="string">&quot;Tree-0-1&quot;</span>, values=(<span class="string">&quot;0-1&quot;</span>))</span><br><span class="line">tree02 = tree.insert(tree0, <span class="number">2</span>, <span class="string">&quot;Tree-0-2&quot;</span>, text=<span class="string">&quot;Tree-0-2&quot;</span>, values=(<span class="string">&quot;0-2&quot;</span>))</span><br><span class="line"><span class="comment"># 树形结构放在第一行第三列</span></span><br><span class="line">tree.grid(row=<span class="number">0</span>, column=<span class="number">2</span>)</span><br><span class="line">root.config(menu=menubar)</span><br><span class="line">root.mainloop()</span><br></pre></td></tr></table></figure>
+
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240415153830275-249432987.png">
+</div>
+
+<h1 id="滚动条"><a href="#滚动条" class="headerlink" title="滚动条"></a>滚动条</h1><p>虽然滚动条是一个很常见的功能，但是如果我们要在网格布局里面加滚动条，那就要把那些需要加滚动条的控件单独放到某个容器内，常用的有Widget和Frame。Frame是从Widget继承过来的，可以加一些边框阴影什么的，这里我们先用Frame来做一个简单示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> ttk</span><br><span class="line">root = tk.Tk()</span><br><span class="line">root.title(<span class="string">&#x27;Title&#x27;</span>)</span><br><span class="line">root.geometry(<span class="string">&#x27;320x240&#x27;</span>)</span><br><span class="line">menubar = tk.Menu(root)</span><br><span class="line">submenu = tk.Menu(menubar, activebackground=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">submenu.add_command(label=<span class="string">&#x27;Sub Menu 1&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">submenu.add_command(label=<span class="string">&#x27;Sub Menu 2&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">menubar.add_cascade(label=<span class="string">&#x27;Menu 1&#x27;</span>, menu=submenu)</span><br><span class="line">menubar.add_command(label=<span class="string">&#x27;Quit&#x27;</span>, command=root.destroy)</span><br><span class="line"><span class="comment"># 定义一个指定大小的Frame</span></span><br><span class="line">left_frame = tk.Frame(root, height=<span class="number">10</span>, width=<span class="number">20</span>)</span><br><span class="line">text_box = tk.Text(left_frame, height=<span class="number">10</span>, width=<span class="number">20</span>)</span><br><span class="line">text_box.insert(<span class="string">&#x27;0.0&#x27;</span>, <span class="string">&#x27;Default Text&#x27;</span>)</span><br><span class="line"><span class="comment"># 定义滚动条</span></span><br><span class="line">scroll_text = tk.Scrollbar(left_frame)</span><br><span class="line"><span class="comment"># 定义滚动条的滚动方向</span></span><br><span class="line">scroll_text.pack(side=tk.RIGHT, fill=tk.Y)</span><br><span class="line"><span class="comment"># 耦合滚动条与控件的视图</span></span><br><span class="line">scroll_text.config(command=text_box.yview)</span><br><span class="line"><span class="comment"># 把滚动条添加到文本框的操作内</span></span><br><span class="line">text_box.config(yscrollcommand=scroll_text.<span class="built_in">set</span>)</span><br><span class="line"><span class="comment"># 这里是一个关键点，滚动条不能与grid共用，因此这里需要创建一个独立的容器才能加上滚动条</span></span><br><span class="line">text_box.pack()</span><br><span class="line"><span class="comment"># 把Frame放在第一行第一列，这里放的就不是文本框控件了</span></span><br><span class="line">left_frame.grid(row=<span class="number">0</span>, column=<span class="number">0</span>)</span><br><span class="line">button = tk.Button(root, text=<span class="string">&#x27;Button&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">button.grid(row=<span class="number">0</span>, column=<span class="number">1</span>)</span><br><span class="line">tree = ttk.Treeview(root)</span><br><span class="line">tree0 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Tree-0&quot;</span>, text=<span class="string">&quot;Tree-0&quot;</span>, values=(<span class="string">&quot;0&quot;</span>))</span><br><span class="line">tree1 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">1</span>, <span class="string">&quot;Tree-1&quot;</span>, text=<span class="string">&quot;Tree-1&quot;</span>, values=(<span class="string">&quot;1&quot;</span>))</span><br><span class="line">tree00 = tree.insert(tree0, <span class="number">0</span>, <span class="string">&quot;Tree-0-0&quot;</span>, text=<span class="string">&quot;Tree-0-0&quot;</span>, values=(<span class="string">&quot;0-0&quot;</span>))</span><br><span class="line">tree01 = tree.insert(tree0, <span class="number">1</span>, <span class="string">&quot;Tree-0-1&quot;</span>, text=<span class="string">&quot;Tree-0-1&quot;</span>, values=(<span class="string">&quot;0-1&quot;</span>))</span><br><span class="line">tree02 = tree.insert(tree0, <span class="number">2</span>, <span class="string">&quot;Tree-0-2&quot;</span>, text=<span class="string">&quot;Tree-0-2&quot;</span>, values=(<span class="string">&quot;0-2&quot;</span>))</span><br><span class="line">tree.grid(row=<span class="number">0</span>, column=<span class="number">2</span>)</span><br><span class="line">root.config(menu=menubar)</span><br><span class="line">root.mainloop()</span><br></pre></td></tr></table></figure>
+
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240415160555253-1869363796.png">
+</div>
+
+<h1 id="面向对象的GUI"><a href="#面向对象的GUI" class="headerlink" title="面向对象的GUI"></a>面向对象的GUI</h1><p>真正要做项目的时候，还是需要一个对象封装，便于局部的控制和更新，也方便功能维护与测试。一个应用对象应该包含GUI界面和操作函数，我们可以先对上面的这个简单案例做一个模块分离，构建一个简单的应用类型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> ttk</span><br><span class="line"><span class="comment"># 自定义一个应用的对象</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Object</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># GUI界面只是应用的一个内置属性</span></span><br><span class="line">        <span class="variable language_">self</span>.root = tk.Tk()</span><br><span class="line">        <span class="variable language_">self</span>.root.title(<span class="string">&#x27;Title&#x27;</span>)</span><br><span class="line">        <span class="comment"># 分模块初始化</span></span><br><span class="line">        <span class="variable language_">self</span>.init_menu()</span><br><span class="line">        <span class="variable language_">self</span>.init_text_box()</span><br><span class="line">        <span class="variable language_">self</span>.init_button()</span><br><span class="line">        <span class="variable language_">self</span>.init_tree()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_menu</span>(<span class="params">self</span>):</span><br><span class="line">        “”“菜单栏模块封装”“”</span><br><span class="line">        menubar = tk.Menu(<span class="variable language_">self</span>.root)</span><br><span class="line">        submenu = tk.Menu(menubar, activebackground=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">        submenu.add_command(label=<span class="string">&#x27;Sub Menu 1&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">        submenu.add_command(label=<span class="string">&#x27;Sub Menu 2&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">        menubar.add_cascade(label=<span class="string">&#x27;Menu 1&#x27;</span>, menu=submenu)</span><br><span class="line">        menubar.add_command(label=<span class="string">&#x27;Quit&#x27;</span>, command=<span class="variable language_">self</span>.root.destroy)</span><br><span class="line">        <span class="variable language_">self</span>.root.config(menu=menubar)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_text_box</span>(<span class="params">self</span>):</span><br><span class="line">        “”“文本框模块封装”“”</span><br><span class="line">        left_frame = tk.Frame(<span class="variable language_">self</span>.root)</span><br><span class="line">        text_box = tk.Text(left_frame, height=<span class="number">10</span>, width=<span class="number">20</span>)</span><br><span class="line">        text_box.insert(<span class="string">&#x27;0.0&#x27;</span>, <span class="string">&#x27;Default Text&#x27;</span>)</span><br><span class="line">        scroll_text = tk.Scrollbar(left_frame)</span><br><span class="line">        scroll_text.pack(side=tk.RIGHT, fill=tk.Y)</span><br><span class="line">        scroll_text.config(command=text_box.yview)</span><br><span class="line">        text_box.config(yscrollcommand=scroll_text.<span class="built_in">set</span>)</span><br><span class="line">        text_box.pack()</span><br><span class="line">        left_frame.grid(row=<span class="number">0</span>, column=<span class="number">0</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_button</span>(<span class="params">self</span>):</span><br><span class="line">        “”“按钮模块封装”“”</span><br><span class="line">        button = tk.Button(<span class="variable language_">self</span>.root, text=<span class="string">&#x27;Button&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">        button.grid(row=<span class="number">0</span>, column=<span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_tree</span>(<span class="params">self</span>):</span><br><span class="line">        “”“树形结构模块封装”“”</span><br><span class="line">        right_frame = tk.Frame(<span class="variable language_">self</span>.root)</span><br><span class="line">        tree = ttk.Treeview(right_frame)</span><br><span class="line">        tree0 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Tree-0&quot;</span>, text=<span class="string">&quot;Tree-0&quot;</span>, values=(<span class="string">&quot;0&quot;</span>))</span><br><span class="line">        tree1 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">1</span>, <span class="string">&quot;Tree-1&quot;</span>, text=<span class="string">&quot;Tree-1&quot;</span>, values=(<span class="string">&quot;1&quot;</span>))</span><br><span class="line">        tree00 = tree.insert(tree0, <span class="number">0</span>, <span class="string">&quot;Tree-0-0&quot;</span>, text=<span class="string">&quot;Tree-0-0&quot;</span>, values=(<span class="string">&quot;0-0&quot;</span>))</span><br><span class="line">        tree01 = tree.insert(tree0, <span class="number">1</span>, <span class="string">&quot;Tree-0-1&quot;</span>, text=<span class="string">&quot;Tree-0-1&quot;</span>, values=(<span class="string">&quot;0-1&quot;</span>))</span><br><span class="line">        tree02 = tree.insert(tree0, <span class="number">2</span>, <span class="string">&quot;Tree-0-2&quot;</span>, text=<span class="string">&quot;Tree-0-2&quot;</span>, values=(<span class="string">&quot;0-2&quot;</span>))</span><br><span class="line">        tree10 = tree.insert(tree1, <span class="number">0</span>, <span class="string">&quot;Tree-1-0&quot;</span>, text=<span class="string">&quot;Tree-1-0&quot;</span>, values=(<span class="string">&quot;1-0&quot;</span>))</span><br><span class="line">        tree100 = tree.insert(tree10, <span class="number">0</span>, <span class="string">&quot;Tree-1-0-0&quot;</span>, text=<span class="string">&quot;Tree-1-0-0\ntest\nmulti-line&quot;</span>, values=(<span class="string">&quot;1-0-0&quot;</span>))</span><br><span class="line">        tree.pack()</span><br><span class="line">        right_frame.grid(row=<span class="number">0</span>, column=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">self</span>):</span><br><span class="line">        “”“运行启动”“”</span><br><span class="line">        <span class="variable language_">self</span>.root.mainloop()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    my_app = Object()</span><br><span class="line">    my_app.run()</span><br></pre></td></tr></table></figure>
+
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240415174825352-790279381.png">
+</div>
+
+<p>在此基础之上我们可以实现一些功能函数，比如给按钮添加一些功能：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> ttk</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Object</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.root = tk.Tk()</span><br><span class="line">        <span class="variable language_">self</span>.root.title(<span class="string">&#x27;Title&#x27;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.init_menu()</span><br><span class="line">        <span class="variable language_">self</span>.init_text_box()</span><br><span class="line">        <span class="variable language_">self</span>.init_button()</span><br><span class="line">        <span class="variable language_">self</span>.init_tree()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_menu</span>(<span class="params">self</span>):</span><br><span class="line">        menubar = tk.Menu(<span class="variable language_">self</span>.root)</span><br><span class="line">        submenu = tk.Menu(menubar, activebackground=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">        submenu.add_command(label=<span class="string">&#x27;Sub Menu 1&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">        submenu.add_command(label=<span class="string">&#x27;Sub Menu 2&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">        menubar.add_cascade(label=<span class="string">&#x27;Menu 1&#x27;</span>, menu=submenu)</span><br><span class="line">        menubar.add_command(label=<span class="string">&#x27;Quit&#x27;</span>, command=<span class="variable language_">self</span>.root.destroy)</span><br><span class="line">        <span class="variable language_">self</span>.root.config(menu=menubar)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_text_box</span>(<span class="params">self</span>):</span><br><span class="line">        left_frame = tk.Frame(<span class="variable language_">self</span>.root)</span><br><span class="line">        text_box = tk.Text(left_frame, height=<span class="number">10</span>, width=<span class="number">20</span>)</span><br><span class="line">        text_box.insert(<span class="string">&#x27;0.0&#x27;</span>, <span class="string">&#x27;Default Text&#x27;</span>)</span><br><span class="line">        scroll_text = tk.Scrollbar(left_frame)</span><br><span class="line">        scroll_text.pack(side=tk.RIGHT, fill=tk.Y)</span><br><span class="line">        scroll_text.config(command=text_box.yview)</span><br><span class="line">        text_box.config(yscrollcommand=scroll_text.<span class="built_in">set</span>)</span><br><span class="line">        text_box.pack()</span><br><span class="line">        left_frame.grid(row=<span class="number">0</span>, column=<span class="number">0</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_button</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 给按钮控件链接了一个update_tree的内部函数</span></span><br><span class="line">        button = tk.Button(<span class="variable language_">self</span>.root, text=<span class="string">&#x27;Button&#x27;</span>, command=<span class="variable language_">self</span>.update_tree)</span><br><span class="line">        button.grid(row=<span class="number">0</span>, column=<span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_tree</span>(<span class="params">self</span>):</span><br><span class="line">        right_frame = tk.Frame(<span class="variable language_">self</span>.root)</span><br><span class="line">        tree = ttk.Treeview(right_frame)</span><br><span class="line">        tree0 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Tree-0&quot;</span>, text=<span class="string">&quot;Tree-0&quot;</span>, values=(<span class="string">&quot;0&quot;</span>))</span><br><span class="line">        tree1 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">1</span>, <span class="string">&quot;Tree-1&quot;</span>, text=<span class="string">&quot;Tree-1&quot;</span>, values=(<span class="string">&quot;1&quot;</span>))</span><br><span class="line">        tree00 = tree.insert(tree0, <span class="number">0</span>, <span class="string">&quot;Tree-0-0&quot;</span>, text=<span class="string">&quot;Tree-0-0&quot;</span>, values=(<span class="string">&quot;0-0&quot;</span>))</span><br><span class="line">        tree01 = tree.insert(tree0, <span class="number">1</span>, <span class="string">&quot;Tree-0-1&quot;</span>, text=<span class="string">&quot;Tree-0-1&quot;</span>, values=(<span class="string">&quot;0-1&quot;</span>))</span><br><span class="line">        tree02 = tree.insert(tree0, <span class="number">2</span>, <span class="string">&quot;Tree-0-2&quot;</span>, text=<span class="string">&quot;Tree-0-2&quot;</span>, values=(<span class="string">&quot;0-2&quot;</span>))</span><br><span class="line">        tree10 = tree.insert(tree1, <span class="number">0</span>, <span class="string">&quot;Tree-1-0&quot;</span>, text=<span class="string">&quot;Tree-1-0&quot;</span>, values=(<span class="string">&quot;1-0&quot;</span>))</span><br><span class="line">        tree100 = tree.insert(tree10, <span class="number">0</span>, <span class="string">&quot;Tree-1-0-0&quot;</span>, text=<span class="string">&quot;Tree-1-0-0\ntest\nmulti-line&quot;</span>, values=(<span class="string">&quot;1-0-0&quot;</span>))</span><br><span class="line">        tree.pack()</span><br><span class="line">        right_frame.grid(row=<span class="number">0</span>, column=<span class="number">2</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">update_tree</span>(<span class="params">self</span>):</span><br><span class="line">        ““”该函数的主要功能，是替换树形结构的内容“””</span><br><span class="line">        right_frame = tk.Frame(<span class="variable language_">self</span>.root)</span><br><span class="line">        tree = ttk.Treeview(right_frame)</span><br><span class="line">        tree0 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Tree-0&quot;</span>, text=<span class="string">&quot;Tree-0&quot;</span>, values=(<span class="string">&quot;0&quot;</span>))</span><br><span class="line">        tree1 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">1</span>, <span class="string">&quot;Tree-1&quot;</span>, text=<span class="string">&quot;Tree-1&quot;</span>, values=(<span class="string">&quot;1&quot;</span>))</span><br><span class="line">        tree.pack()</span><br><span class="line">        right_frame.grid(row=<span class="number">0</span>, column=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.root.mainloop()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    my_app = Object()</span><br><span class="line">    my_app.run()</span><br></pre></td></tr></table></figure>
+<p>点击按钮之前的树形结构显示：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240415175116732-854906174.png">
+</div>
+点击按钮之后的树形结构显示：
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240415175125749-2101751791.png">
+</div>
+
+<h1 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h1><p>标签也比较容易理解，通常就是一些界面上不可变更的文字内容，用于标明各个控件的功能。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> ttk</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Object</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.root = tk.Tk()</span><br><span class="line">        <span class="variable language_">self</span>.root.title(<span class="string">&#x27;Title&#x27;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.init_menu()</span><br><span class="line">        <span class="variable language_">self</span>.init_text_box()</span><br><span class="line">        <span class="variable language_">self</span>.init_button()</span><br><span class="line">        <span class="variable language_">self</span>.init_tree()</span><br><span class="line">        init_text = <span class="string">&quot;Welcome to tkinter.&quot;</span></span><br><span class="line">        <span class="comment"># 用一个文本参数来初始化底部标签控件，类似于提示信息或者日志信息的内容显示</span></span><br><span class="line">        <span class="variable language_">self</span>.init_label(init_text)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_menu</span>(<span class="params">self</span>):</span><br><span class="line">        menubar = tk.Menu(<span class="variable language_">self</span>.root)</span><br><span class="line">        submenu = tk.Menu(menubar, activebackground=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">        submenu.add_command(label=<span class="string">&#x27;Sub Menu 1&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">        submenu.add_command(label=<span class="string">&#x27;Sub Menu 2&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">        menubar.add_cascade(label=<span class="string">&#x27;Menu 1&#x27;</span>, menu=submenu)</span><br><span class="line">        menubar.add_command(label=<span class="string">&#x27;Quit&#x27;</span>, command=<span class="variable language_">self</span>.root.destroy)</span><br><span class="line">        <span class="variable language_">self</span>.root.config(menu=menubar)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_text_box</span>(<span class="params">self</span>):</span><br><span class="line">        left_frame = tk.Frame(<span class="variable language_">self</span>.root)</span><br><span class="line">        text_box = tk.Text(left_frame, height=<span class="number">10</span>, width=<span class="number">20</span>)</span><br><span class="line">        text_box.insert(<span class="string">&#x27;0.0&#x27;</span>, <span class="string">&#x27;Default Text&#x27;</span>)</span><br><span class="line">        scroll_text = tk.Scrollbar(left_frame)</span><br><span class="line">        scroll_text.pack(side=tk.RIGHT, fill=tk.Y)</span><br><span class="line">        scroll_text.config(command=text_box.yview)</span><br><span class="line">        text_box.config(yscrollcommand=scroll_text.<span class="built_in">set</span>)</span><br><span class="line">        text_box.pack()</span><br><span class="line">        left_frame.grid(row=<span class="number">0</span>, column=<span class="number">0</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_button</span>(<span class="params">self</span>):</span><br><span class="line">        button = tk.Button(<span class="variable language_">self</span>.root, text=<span class="string">&#x27;Button&#x27;</span>, command=<span class="variable language_">self</span>.update_tree)</span><br><span class="line">        button.grid(row=<span class="number">0</span>, column=<span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_tree</span>(<span class="params">self</span>):</span><br><span class="line">        right_frame = tk.Frame(<span class="variable language_">self</span>.root)</span><br><span class="line">        tree = ttk.Treeview(right_frame)</span><br><span class="line">        tree0 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Tree-0&quot;</span>, text=<span class="string">&quot;Tree-0&quot;</span>, values=(<span class="string">&quot;0&quot;</span>))</span><br><span class="line">        tree1 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">1</span>, <span class="string">&quot;Tree-1&quot;</span>, text=<span class="string">&quot;Tree-1&quot;</span>, values=(<span class="string">&quot;1&quot;</span>))</span><br><span class="line">        tree00 = tree.insert(tree0, <span class="number">0</span>, <span class="string">&quot;Tree-0-0&quot;</span>, text=<span class="string">&quot;Tree-0-0&quot;</span>, values=(<span class="string">&quot;0-0&quot;</span>))</span><br><span class="line">        tree01 = tree.insert(tree0, <span class="number">1</span>, <span class="string">&quot;Tree-0-1&quot;</span>, text=<span class="string">&quot;Tree-0-1&quot;</span>, values=(<span class="string">&quot;0-1&quot;</span>))</span><br><span class="line">        tree02 = tree.insert(tree0, <span class="number">2</span>, <span class="string">&quot;Tree-0-2&quot;</span>, text=<span class="string">&quot;Tree-0-2&quot;</span>, values=(<span class="string">&quot;0-2&quot;</span>))</span><br><span class="line">        tree10 = tree.insert(tree1, <span class="number">0</span>, <span class="string">&quot;Tree-1-0&quot;</span>, text=<span class="string">&quot;Tree-1-0&quot;</span>, values=(<span class="string">&quot;1-0&quot;</span>))</span><br><span class="line">        tree100 = tree.insert(tree10, <span class="number">0</span>, <span class="string">&quot;Tree-1-0-0&quot;</span>, text=<span class="string">&quot;Tree-1-0-0\ntest\nmulti-line&quot;</span>, values=(<span class="string">&quot;1-0-0&quot;</span>))</span><br><span class="line">        tree.pack()</span><br><span class="line">        right_frame.grid(row=<span class="number">0</span>, column=<span class="number">2</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_label</span>(<span class="params">self, text</span>):</span><br><span class="line">        “”“添加标签控件，放在第二行”“”</span><br><span class="line">        information = tk.Label(<span class="variable language_">self</span>.root, text=text)</span><br><span class="line">        information.grid(row=<span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">update_tree</span>(<span class="params">self</span>):</span><br><span class="line">        right_frame = tk.Frame(<span class="variable language_">self</span>.root)</span><br><span class="line">        tree = ttk.Treeview(right_frame)</span><br><span class="line">        tree0 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Tree-0&quot;</span>, text=<span class="string">&quot;Tree-0&quot;</span>, values=(<span class="string">&quot;0&quot;</span>))</span><br><span class="line">        tree1 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">1</span>, <span class="string">&quot;Tree-1&quot;</span>, text=<span class="string">&quot;Tree-1&quot;</span>, values=(<span class="string">&quot;1&quot;</span>))</span><br><span class="line">        tree.pack()</span><br><span class="line">        right_frame.grid(row=<span class="number">0</span>, column=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.root.mainloop()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    my_app = Object()</span><br><span class="line">    my_app.run()</span><br></pre></td></tr></table></figure>
+
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240416091902172-86519231.png">
+</div>
+
+<p>用标签这个控件，还可以结合可变的交互式输入内容，例如我们用到的文本框里面的文字，做一个信息提示小组件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> ttk</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Object</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.root = tk.Tk()</span><br><span class="line">        <span class="variable language_">self</span>.root.title(<span class="string">&#x27;Title&#x27;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.init_menu()</span><br><span class="line">        <span class="comment"># 初始化文本框对象</span></span><br><span class="line">        <span class="variable language_">self</span>.text_box = <span class="variable language_">self</span>.init_text_box()</span><br><span class="line">        <span class="variable language_">self</span>.init_button()</span><br><span class="line">        <span class="variable language_">self</span>.init_tree()</span><br><span class="line">        init_text = <span class="string">&quot;Welcome to tkinter.&quot;</span></span><br><span class="line">        <span class="comment"># 初始化标签对象</span></span><br><span class="line">        <span class="variable language_">self</span>.label=<span class="variable language_">self</span>.init_label(init_text)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_menu</span>(<span class="params">self</span>):</span><br><span class="line">        menubar = tk.Menu(<span class="variable language_">self</span>.root)</span><br><span class="line">        submenu = tk.Menu(menubar, activebackground=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line">        submenu.add_command(label=<span class="string">&#x27;Sub Menu 1&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">        submenu.add_command(label=<span class="string">&#x27;Sub Menu 2&#x27;</span>, command=<span class="literal">None</span>)</span><br><span class="line">        menubar.add_cascade(label=<span class="string">&#x27;Menu 1&#x27;</span>, menu=submenu)</span><br><span class="line">        menubar.add_command(label=<span class="string">&#x27;Quit&#x27;</span>, command=<span class="variable language_">self</span>.root.destroy)</span><br><span class="line">        <span class="variable language_">self</span>.root.config(menu=menubar)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_text_box</span>(<span class="params">self</span>):</span><br><span class="line">        left_frame = tk.Frame(<span class="variable language_">self</span>.root)</span><br><span class="line">        text_box = tk.Text(left_frame, height=<span class="number">10</span>, width=<span class="number">20</span>)</span><br><span class="line">        text_box.insert(<span class="string">&#x27;0.0&#x27;</span>, <span class="string">&#x27;Default Text&#x27;</span>)</span><br><span class="line">        scroll_text = tk.Scrollbar(left_frame)</span><br><span class="line">        scroll_text.pack(side=tk.RIGHT, fill=tk.Y)</span><br><span class="line">        scroll_text.config(command=text_box.yview)</span><br><span class="line">        text_box.config(yscrollcommand=scroll_text.<span class="built_in">set</span>)</span><br><span class="line">        text_box.pack()</span><br><span class="line">        left_frame.grid(row=<span class="number">0</span>, column=<span class="number">0</span>)</span><br><span class="line">        <span class="comment"># 返回文本框对象</span></span><br><span class="line">        <span class="keyword">return</span> text_box</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_button</span>(<span class="params">self</span>):</span><br><span class="line">        button = tk.Button(<span class="variable language_">self</span>.root, text=<span class="string">&#x27;Button&#x27;</span>, command=<span class="variable language_">self</span>.update_tree)</span><br><span class="line">        button.grid(row=<span class="number">0</span>, column=<span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_tree</span>(<span class="params">self</span>):</span><br><span class="line">        right_frame = tk.Frame(<span class="variable language_">self</span>.root)</span><br><span class="line">        tree = ttk.Treeview(right_frame)</span><br><span class="line">        tree0 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Tree-0&quot;</span>, text=<span class="string">&quot;Tree-0&quot;</span>, values=(<span class="string">&quot;0&quot;</span>))</span><br><span class="line">        tree1 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">1</span>, <span class="string">&quot;Tree-1&quot;</span>, text=<span class="string">&quot;Tree-1&quot;</span>, values=(<span class="string">&quot;1&quot;</span>))</span><br><span class="line">        tree00 = tree.insert(tree0, <span class="number">0</span>, <span class="string">&quot;Tree-0-0&quot;</span>, text=<span class="string">&quot;Tree-0-0&quot;</span>, values=(<span class="string">&quot;0-0&quot;</span>))</span><br><span class="line">        tree01 = tree.insert(tree0, <span class="number">1</span>, <span class="string">&quot;Tree-0-1&quot;</span>, text=<span class="string">&quot;Tree-0-1&quot;</span>, values=(<span class="string">&quot;0-1&quot;</span>))</span><br><span class="line">        tree02 = tree.insert(tree0, <span class="number">2</span>, <span class="string">&quot;Tree-0-2&quot;</span>, text=<span class="string">&quot;Tree-0-2&quot;</span>, values=(<span class="string">&quot;0-2&quot;</span>))</span><br><span class="line">        tree10 = tree.insert(tree1, <span class="number">0</span>, <span class="string">&quot;Tree-1-0&quot;</span>, text=<span class="string">&quot;Tree-1-0&quot;</span>, values=(<span class="string">&quot;1-0&quot;</span>))</span><br><span class="line">        tree100 = tree.insert(tree10, <span class="number">0</span>, <span class="string">&quot;Tree-1-0-0&quot;</span>, text=<span class="string">&quot;Tree-1-0-0\ntest\nmulti-line&quot;</span>, values=(<span class="string">&quot;1-0-0&quot;</span>))</span><br><span class="line">        tree.pack()</span><br><span class="line">        right_frame.grid(row=<span class="number">0</span>, column=<span class="number">2</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_label</span>(<span class="params">self, text</span>):</span><br><span class="line">        information = tk.Label(<span class="variable language_">self</span>.root, text=text)</span><br><span class="line">        information.grid(row=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> information</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">update_tree</span>(<span class="params">self</span>):</span><br><span class="line">        right_frame = tk.Frame(<span class="variable language_">self</span>.root)</span><br><span class="line">        tree = ttk.Treeview(right_frame)</span><br><span class="line">        tree0 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">0</span>, <span class="string">&quot;Tree-0&quot;</span>, text=<span class="string">&quot;Tree-0&quot;</span>, values=(<span class="string">&quot;0&quot;</span>))</span><br><span class="line">        tree1 = tree.insert(<span class="string">&quot;&quot;</span>, <span class="number">1</span>, <span class="string">&quot;Tree-1&quot;</span>, text=<span class="string">&quot;Tree-1&quot;</span>, values=(<span class="string">&quot;1&quot;</span>))</span><br><span class="line">        tree.pack()</span><br><span class="line">        right_frame.grid(row=<span class="number">0</span>, column=<span class="number">2</span>)</span><br><span class="line">        <span class="comment"># 在按钮的功能函数中增加对标签控件的刷新</span></span><br><span class="line">        <span class="variable language_">self</span>.update_label()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">update_label</span>(<span class="params">self</span>):</span><br><span class="line">        text = <span class="variable language_">self</span>.text_box.get(<span class="string">&quot;1.0&quot;</span>, <span class="string">&quot;end&quot;</span>)</span><br><span class="line">        <span class="comment"># 销毁原本的标签内容</span></span><br><span class="line">        <span class="variable language_">self</span>.label.after(<span class="number">0</span>, <span class="variable language_">self</span>.label.destroy())</span><br><span class="line">        <span class="comment"># 输入新的标签内容</span></span><br><span class="line">        <span class="variable language_">self</span>.label = <span class="variable language_">self</span>.init_label(text)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.root.mainloop()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    my_app = Object()</span><br><span class="line">    my_app.run()</span><br></pre></td></tr></table></figure>
+<p>第一次点击按钮</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240416092816034-1438561123.png">
+</div>
+更新文本内容后，第二次点击按钮
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240416092807788-1654003597.png">
+</div>
+
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文主要介绍一些Python的Tkinter GUI框架的常用功能模块，包含基本窗口的创建、菜单栏、文本框、TreeView、按钮、滚动条、标签的设定等，另外包含了一些面向对象的GUI的简单示例。总的来说，Tkinter加上第三方的ttk，基本的GUI功能是都具备的，可以用来实现一些简单的小项目。对于大的项目来说，用PyQT&#x2F;QT可能会是一个更加专业的选择。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/tkinter1.html">https://www.cnblogs.com/dechinphy/p/tkinter1.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2024/04/17/%E7%9B%B4%E6%96%B9%E5%9B%BE%E4%B8%8E%E6%A0%B8%E5%AF%86%E5%BA%A6%E4%BC%B0%E8%AE%A1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          直方图与核密度估计
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/04/12/MindSpore%E8%BF%90%E8%A1%8C%E6%8A%A5%E9%94%99RuntimeError--Unsupported-device-targ/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">MindSpore运行报错RuntimeError: Unsupported device target GPU解决方案</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=Tkinter常用功能示例（一） - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F04%2F15%2FTkinter%25E5%25B8%25B8%25E7%2594%25A8%25E5%258A%259F%25E8%2583%25BD%25E7%25A4%25BA%25E4%25BE%258B%25EF%25BC%2588%25E4%25B8%2580%25EF%25BC%2589%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=Tkinter常用功能示例（一） - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2024%2F04%2F15%2FTkinter%25E5%25B8%25B8%25E7%2594%25A8%25E5%258A%259F%25E8%2583%25BD%25E7%25A4%25BA%25E4%25BE%258B%25EF%25BC%2588%25E4%25B8%2580%25EF%25BC%2589%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=Tkinter常用功能示例（一） - Hexo&url=http://dechinphy.github.io/2024/04/15/Tkinter%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD%E7%A4%BA%E4%BE%8B%EF%BC%88%E4%B8%80%EF%BC%89/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>在C++中调用Python | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文介绍了一个在C++内部调用Python中封装的函数或者接口的方法，从环境配置到具体示例都有讲解，并且在其中包含有不少的坑点，需要一步一步去踩。不同的编程语言具有不同的优势，Python轮子众多而语法简单，上手容易，但是性能比较首先，C++的最明显优势就是在于其性能的天然优越性。但是我们不需要对哪一种编程语言有所偏倚，都有所掌握，并且能够有所互通，利用好各自的优势，才能够发挥最大的价值。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "在C++中调用Python | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文介绍了一个在C++内部调用Python中封装的函数或者接口的方法，从环境配置到具体示例都有讲解，并且在其中包含有不少的坑点，需要一步一步去踩。不同的编程语言具有不同的优势，Python轮子众多而语法简单，上手容易，但是性能比较首先，C++的最明显优势就是在于其性能的天然优越性。但是我们不需要对哪一种编程语言有所偏倚，都有所掌握，并且能够有所互通，利用好各自的优势，才能够发挥最大的价值。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2021/05/20/%E5%9C%A8C++%E4%B8%AD%E8%B0%83%E7%94%A8Python/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文介绍了一个在C++内部调用Python中封装的函数或者接口的方法，从环境配置到具体示例都有讲解，并且在其中包含有不少的坑点，需要一步一步去踩。不同的编程语言具有不同的优势，Python轮子众多而语法简单，上手容易，但是性能比较首先，C++的最明显优势就是在于其性能的天然优越性。但是我们不需要对哪一种编程语言有所偏倚，都有所掌握，并且能够有所互通，利用好各自的优势，才能够发挥最大的价值。&lt;/p&gt;" />
+    <meta name="twitter:title" content="在C++中调用Python | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文介绍了一个在C++内部调用Python中封装的函数或者接口的方法，从环境配置到具体示例都有讲解，并且在其中包含有不少的坑点，需要一步一步去踩。不同的编程语言具有不同的优势，Python轮子众多而语法简单，上手容易，但是性能比较首先，C++的最明显优势就是在于其性能的天然优越性。但是我们不需要对哪一种编程语言有所偏倚，都有所掌握，并且能够有所互通，利用好各自的优势，才能够发挥最大的价值。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文介绍了一个在C++内部调用Python中封装的函数或者接口的方法，从环境配置到具体示例都有讲解，并且在其中包含有不少的坑点，需要一步一步去踩。不同的编程语言具有不同的优势，Python轮子众多而语法简单，上手容易，但是性能比较首先，C++的最明显优势就是在于其性能的天然优越性。但是我们不需要对哪一种编程语言有所偏倚，都有所掌握，并且能够有所互通，利用好各自的优势，才能够发挥最大的价值。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2021/05/20/%E5%9C%A8C++%E4%B8%AD%E8%B0%83%E7%94%A8Python/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "在C++中调用Python | Hexo",
+            "datePublished": "2021-05-20T09:20:09.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2021/05/20/%E5%9C%A8C++%E4%B8%AD%E8%B0%83%E7%94%A8Python/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidK2sDZoo76Y-ptQ7iHyuHr" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      在C++中调用Python
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2021-05-20T09:20:09.000Z" itemprop="datePublished">2021-05-20</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文介绍了一个在C++内部调用Python中封装的函数或者接口的方法，从环境配置到具体示例都有讲解，并且在其中包含有不少的坑点，需要一步一步去踩。不同的编程语言具有不同的优势，Python轮子众多而语法简单，上手容易，但是性能比较首先，C++的最明显优势就是在于其性能的天然优越性。但是我们不需要对哪一种编程语言有所偏倚，都有所掌握，并且能够有所互通，利用好各自的优势，才能够发挥最大的价值。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>虽然现在Python编程语言十分的火爆，但是实际上非要用一门语言去完成所有的任务，并不是说不可以，而是不合适。在一些特定的、对于性能要求比较高的场景，还是需要用到传统的C++来进行编程的。但是C++的一个缺点是比较难找到很好的轮子，这也是很多人专用Python的一个重要原因。这篇文章我们要介绍的是一个比较特殊的场景——用C++的代码去调用Python函数中实现的一些功能。这样的话，如果代码的主体还是用C++完成的，而部分功能为了简便，引入一些Python中已经封装好的函数，这样就可以很好的结合两种语言各自的特点。而另一种工作方式：通过Python来调用一些C++或者Fortran中实现的高性能函数，可以参考这一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/line-profiler.html">博客</a>。这两种不同的使用方法各有优劣，但是如果以Python为主导，就很难避开GIL的问题，这里我们就不过多的展开。</p>
+<h1 id="Python的安装"><a href="#Python的安装" class="headerlink" title="Python的安装"></a>Python的安装</h1><p>为了使用<code>Python.h</code>这个扩展项，我们需要安装一个<code>python*-dev</code>而不是<code>python*</code>，这两者略有区别，下面的案例展示的是在Ubuntu20.04下安装<code>python3.9-dev</code>的方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ <span class="built_in">sudo</span> apt install python3.9-dev</span><br><span class="line">正在读取软件包列表... 完成</span><br><span class="line">正在分析软件包的依赖关系树       </span><br><span class="line">正在读取状态信息... 完成       </span><br><span class="line">下列软件包是自动安装的并且现在不需要了：</span><br><span class="line">  chromium-codecs-ffmpeg-extra gstreamer1.0-vaapi</span><br><span class="line">  libgstreamer-plugins-bad1.0-0 linux-headers-5.8.0-43-generic</span><br><span class="line">  linux-hwe-5.8-headers-5.8.0-43 linux-image-5.8.0-43-generic</span><br><span class="line">  linux-modules-5.8.0-43-generic linux-modules-extra-5.8.0-43-generic</span><br><span class="line">使用<span class="string">&#x27;sudo apt autoremove&#x27;</span>来卸载它(它们)。</span><br><span class="line">将会同时安装下列软件：</span><br><span class="line">  libexpat1-dev libpython3.9 libpython3.9-dev zlib1g-dev</span><br><span class="line">下列【新】软件包将被安装：</span><br><span class="line">  libexpat1-dev libpython3.9 libpython3.9-dev python3.9-dev zlib1g-dev</span><br><span class="line">升级了 0 个软件包，新安装了 5 个软件包，要卸载 0 个软件包，有 30 个软件包未被升级。</span><br><span class="line">需要下载 6,613 kB 的归档。</span><br><span class="line">解压缩后会消耗 28.7 MB 的额外空间。</span><br><span class="line">您希望继续执行吗？ [Y/n] Y</span><br><span class="line">获取:1 http://repo.huaweicloud.com/ubuntu focal/main amd64 libexpat1-dev amd64 2.2.9-1build1 [116 kB]</span><br><span class="line">获取:2 http://repo.huaweicloud.com/ubuntu focal-updates/universe amd64 libpython3.9 amd64 3.9.0-5~20.04 [1,710 kB]</span><br><span class="line">获取:3 http://repo.huaweicloud.com/ubuntu focal-updates/universe amd64 libpython3.9-dev amd64 3.9.0-5~20.04 [4,119 kB]</span><br><span class="line">获取:4 http://repo.huaweicloud.com/ubuntu focal-updates/main amd64 zlib1g-dev amd64 1:1.2.11.dfsg-2ubuntu1.2 [155 kB]</span><br><span class="line">获取:5 http://repo.huaweicloud.com/ubuntu focal-updates/universe amd64 python3.9-dev amd64 3.9.0-5~20.04 [512 kB]</span><br><span class="line">已下载 6,613 kB，耗时 4秒 (1,594 kB/s)</span><br><span class="line">正在选中未选择的软件包 libexpat1-dev:amd64。</span><br><span class="line">(正在读取数据库 ... 系统当前共安装有 269544 个文件和目录。)</span><br><span class="line">准备解压 .../libexpat1-dev_2.2.9-1build1_amd64.deb  ...</span><br><span class="line">正在解压 libexpat1-dev:amd64 (2.2.9-1build1) ...</span><br><span class="line">正在选中未选择的软件包 libpython3.9:amd64。</span><br><span class="line">准备解压 .../libpython3.9_3.9.0-5~20.04_amd64.deb  ...</span><br><span class="line">正在解压 libpython3.9:amd64 (3.9.0-5~20.04) ...</span><br><span class="line">正在选中未选择的软件包 libpython3.9-dev:amd64。</span><br><span class="line">准备解压 .../libpython3.9-dev_3.9.0-5~20.04_amd64.deb  ...</span><br><span class="line">正在解压 libpython3.9-dev:amd64 (3.9.0-5~20.04) ...</span><br><span class="line">正在选中未选择的软件包 zlib1g-dev:amd64。</span><br><span class="line">准备解压 .../zlib1g-dev_1%3a1.2.11.dfsg-2ubuntu1.2_amd64.deb  ...</span><br><span class="line">正在解压 zlib1g-dev:amd64 (1:1.2.11.dfsg-2ubuntu1.2) ...</span><br><span class="line">正在选中未选择的软件包 python3.9-dev。</span><br><span class="line">准备解压 .../python3.9-dev_3.9.0-5~20.04_amd64.deb  ...</span><br><span class="line">正在解压 python3.9-dev (3.9.0-5~20.04) ...</span><br><span class="line">正在设置 libpython3.9:amd64 (3.9.0-5~20.04) ...</span><br><span class="line">正在设置 libexpat1-dev:amd64 (2.2.9-1build1) ...</span><br><span class="line">正在设置 zlib1g-dev:amd64 (1:1.2.11.dfsg-2ubuntu1.2) ...</span><br><span class="line">正在设置 libpython3.9-dev:amd64 (3.9.0-5~20.04) ...</span><br><span class="line">正在设置 python3.9-dev (3.9.0-5~20.04) ...</span><br><span class="line">正在处理用于 man-db (2.9.1-1) 的触发器 ...</span><br><span class="line">正在处理用于 libc-bin (2.31-0ubuntu9.2) 的触发器 ...</span><br></pre></td></tr></table></figure>
+<p>安装完成后，如果在当前命令行下运行<code>python3.9</code>，是可以看到一个python专属的命令行界面的，可以通过<code>exit()</code>退出。但是我们这里侧重的是跟C++的配合工作，因此我们更加关注lib和include目录下是否有生成相关的目录，可以执行如下指令进行查看：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ ll /usr/lib/ | grep python</span><br><span class="line">drwxr-xr-x  26 root root   20480 5月   7 16:27 python2.7/</span><br><span class="line">drwxr-xr-x   3 root root    4096 2月  10 02:47 python3/</span><br><span class="line">drwxr-xr-x  30 root root   20480 5月   7 16:30 python3.8/</span><br><span class="line">drwxr-xr-x  31 root root   12288 5月  20 16:31 python3.9/</span><br></pre></td></tr></table></figure>
+<p>这里我们看到有一个3.9的版本，也就是我们刚才安装的版本，再看看include下的目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ ll /usr/include/ | grep python</span><br><span class="line">drwxr-xr-x  2 root root   4096 5月   7 16:31 python3.8/</span><br><span class="line">drwxr-xr-x  4 root root   4096 5月  20 16:31 python3.9/</span><br></pre></td></tr></table></figure>
+<p>这里我们就可以看到一些区别了，有一些版本的python不一定会有这两个目录，但是只有具备了这两个目录，才能够被C++调用。</p>
+<h1 id="VS-Code配置"><a href="#VS-Code配置" class="headerlink" title="VS Code配置"></a>VS Code配置</h1><p>这里我们使用的IDE是VS Code，但是上述提到的几个路径，在VS Code中默认是不被包含的，因此在代码编辑的过程中在<code>include &lt;Python.h&gt;</code>这一步就会报错了。这一章节的目的主要是解决IDE中的报错问题，还不是最终运行中出现的问题，因为运行时我是通过命令行执行g++来运行的，而不是直接用IDE来跑。首先在VS Code界面上按顺序同时按住：<code>ctrl+shift+P</code>，在弹出的窗口中输入<code>C/C++ Edit Configurations(JSON)</code>查找相关JSON配置文件，在列表中点击后会自动在VS Code中打开这个配置文件：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Linux&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;includePath&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                <span class="string">&quot;$&#123;workspaceFolder&#125;/**&quot;</span></span><br><span class="line">            <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;defines&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;compilerPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/usr/bin/gcc&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;cStandard&quot;</span><span class="punctuation">:</span> <span class="string">&quot;gnu17&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;cppStandard&quot;</span><span class="punctuation">:</span> <span class="string">&quot;c++11&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;intelliSenseMode&quot;</span><span class="punctuation">:</span> <span class="string">&quot;linux-gcc-x64&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="number">4</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>我们所需要做的工作就是，在这个includePath中把相关的路径都加上，比如我这边添加的路径是以下3个：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Linux&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;includePath&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                <span class="string">&quot;$&#123;workspaceFolder&#125;/**&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="string">&quot;/usr/include/python3.9/&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="string">&quot;/usr/lib/python3.9/&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="string">&quot;/usr/include/python3.9/cpython/&quot;</span></span><br><span class="line">            <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;defines&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;compilerPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/usr/bin/gcc&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;cStandard&quot;</span><span class="punctuation">:</span> <span class="string">&quot;gnu17&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;cppStandard&quot;</span><span class="punctuation">:</span> <span class="string">&quot;c++11&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;intelliSenseMode&quot;</span><span class="punctuation">:</span> <span class="string">&quot;linux-gcc-x64&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="number">4</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>添加后，<code>include &lt;Python.h&gt;</code>就不会显示报错了。</p>
+<h1 id="Hello-World测试"><a href="#Hello-World测试" class="headerlink" title="Hello World测试"></a>Hello World测试</h1><p>行业潜规则，我们先用C++来调用一个Python的打印函数，输出Hello World试试：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cp.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Python.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span> </span>&#123;</span><br><span class="line">  <span class="built_in">Py_Initialize</span>();</span><br><span class="line">  <span class="built_in">PyRun_SimpleString</span>(<span class="string">&quot;print(&#x27;hello world&#x27;)\n&quot;</span>);</span><br><span class="line">  <span class="built_in">Py_Finalize</span>();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里需要注意的是一个运行方式，我们是用g++来进行编译的，但是g++默认是找不到我们刚才在IDE中所设定的几个<code>includePath</code>的，因此需要我们手动在编译的时候加上几个参数。这些参数其实也可以运行<code>python3.9-config</code>去一个一个查看，这里我们直接推荐一种可以运行成功的参数，其中最重要的是<code>-I</code>和<code>-l</code>这两个路径一定要包含：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ g++ -o cpy cp.cpp -lm -std=c++11 -I/usr/include/python3.9/ -lpython3.9</span><br><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ ll</span><br><span class="line">总用量 4697388</span><br><span class="line">drwxrwxr-x 2 dechin dechin       4096 5月  20 17:10 ./</span><br><span class="line">drwxrwxr-x 8 dechin dechin       4096 5月  19 15:32 ../</span><br><span class="line">-rw-rw-r-- 1 dechin dechin        152 5月  20 17:04 cp.cpp</span><br><span class="line">-rwxrwxr-x 1 dechin dechin      16776 5月  20 17:10 cpy*</span><br></pre></td></tr></table></figure>
+<p>运行完成后，就会在当前目录下生成一个刚才指定的名字<code>cpy</code>的一个可执行文件，如果是windows系统，则会生成一个<code>cpy.exe</code>的文件。让我们执行这个文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ ./cpy </span><br><span class="line">hello world</span><br></pre></td></tr></table></figure>
+<p>成功打印Hello World，又离成功更近了一步。</p>
+<h1 id="调用Python函数string-split"><a href="#调用Python函数string-split" class="headerlink" title="调用Python函数string.split()"></a>调用Python函数string.split()</h1><p>在C++中如果我们想分割一个字符串，虽然说也是可以实现的，但是应该没有比Python中执行一个<code>string.split()</code>更加方便快捷的方案了，因此我们测试一个用C++调用Python的split函数的功能。</p>
+<h2 id="第一次尝试"><a href="#第一次尝试" class="headerlink" title="第一次尝试"></a>第一次尝试</h2><p>一开始我们是写了这样一个简单的案例，用<code>PyImport_ImportModule</code>方法去调用pysplit这个python模块：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cp.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Python.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">Py_Initialize</span>();</span><br><span class="line">  <span class="keyword">if</span> (!<span class="built_in">Py_IsInitialized</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;Initialize failed!&quot;</span> &lt;&lt; endl;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">  PyObject* pModule = <span class="literal">NULL</span>;</span><br><span class="line">  PyObject* pFunc;</span><br><span class="line">  <span class="built_in">PyRun_SimpleString</span>(<span class="string">&quot;import os&quot;</span>);</span><br><span class="line">  <span class="built_in">PyRun_SimpleString</span>(<span class="string">&quot;os.system(&#x27;pwd&#x27;)&quot;</span>);</span><br><span class="line">  pModule = <span class="built_in">PyImport_ImportModule</span>(<span class="string">&quot;pysplit&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (pModule == <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;Module Not Found!&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">  <span class="comment">// pFunc = PyObject_GetAttrString(pModule, &quot;sp&quot;);</span></span><br><span class="line">  <span class="comment">// PyObject* args = Py_BuildValue(&quot;s&quot;, &quot;Test String Hello Every One !&quot;);</span></span><br><span class="line">  <span class="comment">// PyObject* pRet = PyObject_CallObject(pFunc, args);</span></span><br><span class="line">  string cList[<span class="number">10</span>];</span><br><span class="line">  <span class="comment">// PyArg_Parse(pRet, &quot;[items]&quot;, &amp;cList);</span></span><br><span class="line">  cout &lt;&lt; <span class="string">&quot;res:&quot;</span> &lt;&lt; cList &lt;&lt; endl;</span><br><span class="line">  <span class="built_in">Py_Finalize</span>();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对应的Python模块的内容为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pysplit.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sp</span>(<span class="params">string</span>):</span><br><span class="line">    <span class="keyword">return</span> string.split()</span><br></pre></td></tr></table></figure>
+<p>这是一个非常简单的函数，但是我们在调用的时候就直接返回了一个错误：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ g++ -o cpy cp.cpp -lm -std=c++11 -I/usr/include/python3.9/ -lpython3.9 &amp;&amp; ./cpy</span><br><span class="line">[<span class="string">&#x27;pysplit.py&#x27;</span>, <span class="string">&#x27;cpy&#x27;</span>, <span class="string">&#x27;cp.cpp&#x27;</span>]</span><br><span class="line">Module Not Found!</span><br><span class="line">res:0x7ffc622ae900</span><br></pre></td></tr></table></figure>
+<p>这个错误是说，找不到<code>pysplit</code>这个模块。但是我们同时借助于<code>PyRun_SimpleString</code>调用了Python中的os库，执行了一个查看路径和当前路径下文件的功能，我们发现这个C++文件和需要引入的pysplit.py其实是在同一个路径下的，这就很奇怪了没有导入成功。</p>
+<h2 id="第二次尝试"><a href="#第二次尝试" class="headerlink" title="第二次尝试"></a>第二次尝试</h2><p>经过一番的资料查询，最后发现，即使是在相同的路径下，也需要通过Python的<code>sys</code>将当前目录添加到系统路径中，才能够识别到这个模块，同样也是使用<code>PyRun_SimpleString</code>的函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cp.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Python.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">Py_Initialize</span>();</span><br><span class="line">  <span class="keyword">if</span> (!<span class="built_in">Py_IsInitialized</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;Initialize failed!&quot;</span> &lt;&lt; endl;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">  PyObject* pModule = <span class="literal">NULL</span>;</span><br><span class="line">  PyObject* pFunc;</span><br><span class="line">  <span class="built_in">PyRun_SimpleString</span>(<span class="string">&quot;import sys&quot;</span>);</span><br><span class="line">  <span class="built_in">PyRun_SimpleString</span>(<span class="string">&quot;sys.path.append(&#x27;./&#x27;)&quot;</span>);</span><br><span class="line">  pModule = <span class="built_in">PyImport_ImportModule</span>(<span class="string">&quot;pysplit&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (pModule == <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;Module Not Found!&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">  pFunc = <span class="built_in">PyObject_GetAttrString</span>(pModule, <span class="string">&quot;sp&quot;</span>);</span><br><span class="line">  PyObject* args = <span class="built_in">Py_BuildValue</span>(<span class="string">&quot;s&quot;</span>, <span class="string">&quot;Test String Hello Every One !&quot;</span>);</span><br><span class="line">  PyObject* pRet = <span class="built_in">PyObject_CallObject</span>(pFunc, args);</span><br><span class="line">  string cList[<span class="number">10</span>];</span><br><span class="line">  <span class="comment">// PyArg_Parse(pRet, &quot;[items]&quot;, &amp;cList);</span></span><br><span class="line">  cout &lt;&lt; <span class="string">&quot;res:&quot;</span> &lt;&lt; cList &lt;&lt; endl;</span><br><span class="line">  <span class="built_in">Py_Finalize</span>();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是执行后，又出现了一个新的问题，说输入格式必须要是一个tuple格式的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ g++ -o cpy cp.cpp -lm -std=c++11 -I/usr/include/python3.9/ -lpython3.9 &amp;&amp; ./cpy</span><br><span class="line">res:0x7ffe94beb320</span><br><span class="line">TypeError: argument list must be a tuple</span><br></pre></td></tr></table></figure>
+<p>这个也可以理解，Python中的函数调用，输入参数都被打包成了一个tuple格式，比如<code>**args</code>，而类似<code>**kwargs</code>则是打包成一个字典格式，类似的功能在这篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/args.html">博客</a>中有所介绍。</p>
+<h2 id="第三次尝试"><a href="#第三次尝试" class="headerlink" title="第三次尝试"></a>第三次尝试</h2><p>上面的问题，在StackOverFlow上有一个类似的情况，有<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/60487083/passing-array-tuple-from-python-back-to-c">一个回答</a>解决了这个问题，解决方案是，用<code>PyObject_CallFunctionObjArgs</code>来替代<code>PyObject_CallObject</code>去实现函数调用命令，相关代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cp.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Python.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">Py_Initialize</span>();</span><br><span class="line">  <span class="keyword">if</span> (!<span class="built_in">Py_IsInitialized</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;Initialize failed!&quot;</span> &lt;&lt; endl;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">  PyObject* pModule = <span class="literal">NULL</span>;</span><br><span class="line">  PyObject* pFunc;</span><br><span class="line">  <span class="built_in">PyRun_SimpleString</span>(<span class="string">&quot;import sys&quot;</span>);</span><br><span class="line">  <span class="built_in">PyRun_SimpleString</span>(<span class="string">&quot;sys.path.append(&#x27;./&#x27;)&quot;</span>);</span><br><span class="line">  pModule = <span class="built_in">PyImport_ImportModule</span>(<span class="string">&quot;pysplit&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span> (pModule == <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;Module Not Found!&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">  pFunc = <span class="built_in">PyObject_GetAttrString</span>(pModule, <span class="string">&quot;sp&quot;</span>);</span><br><span class="line">  PyObject* args = <span class="built_in">Py_BuildValue</span>(<span class="string">&quot;s&quot;</span>, <span class="string">&quot;Test String Hello Every One !&quot;</span>);</span><br><span class="line">  PyObject* pRet = <span class="built_in">PyObject_CallFunctionObjArgs</span>(pFunc, args, <span class="literal">NULL</span>);</span><br><span class="line">  <span class="type">int</span> size = <span class="built_in">PyList_Size</span>(pRet);</span><br><span class="line">  cout &lt;&lt; <span class="string">&quot;List size is: &quot;</span> &lt;&lt; size &lt;&lt; endl;</span><br><span class="line">  <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;size;i++)</span><br><span class="line">  &#123;</span><br><span class="line">    PyObject* cRet = <span class="built_in">PyList_GET_ITEM</span>(pRet, i);</span><br><span class="line">    <span class="type">char</span>* s;</span><br><span class="line">    <span class="built_in">PyArg_Parse</span>(cRet, <span class="string">&quot;s&quot;</span>, &amp;s);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;The &quot;</span> &lt;&lt; i &lt;&lt; <span class="string">&quot;th term is: &quot;</span> &lt;&lt; s &lt;&lt; endl;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">Py_Finalize</span>();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后，因为从Python中获取的是一个List格式的数据，因此我们首先需要用<code>PyList_GET_ITEM</code>去逐项提取，然后用<code>PyArg_Parse</code>将提取出来的元素保存到一个C++的<code>char</code>字符串中，执行结果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/gitlab/dechin/$ g++ -o cpy cp.cpp -lm -std=c++11 -I/usr/include/python3.9/ -lpython3.9 &amp;&amp; ./cpy</span><br><span class="line">List size is: 6</span><br><span class="line">The 0th term is: Test</span><br><span class="line">The 1th term is: String</span><br><span class="line">The 2th term is: Hello</span><br><span class="line">The 3th term is: Every</span><br><span class="line">The 4th term is: One</span><br><span class="line">The 5th term is: !</span><br></pre></td></tr></table></figure>
+<p>Yes！终于成功了！</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了一个在C++内部调用Python中封装的函数或者接口的方法，从环境配置到具体示例都有讲解，并且在其中包含有不少的坑点，需要一步一步去踩。不同的编程语言具有不同的优势，Python轮子众多而语法简单，上手容易，但是性能比较首先，C++的最明显优势就是在于其性能的天然优越性。但是我们不需要对哪一种编程语言有所偏倚，都有所掌握，并且能够有所互通，利用好各自的优势，才能够发挥最大的价值。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cppio.html">https://www.cnblogs.com/dechinphy/p/cppio.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a><br>打赏专用链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a><br>腾讯云专栏同步：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/91958">https://cloud.tencent.com/developer/column/91958</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/271219435">https://zhuanlan.zhihu.com/p/271219435</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/79896193">https://zhuanlan.zhihu.com/p/79896193</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/ppCuda/article/details/91049765">https://blog.csdn.net/ppCuda/article/details/91049765</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/60487083/passing-array-tuple-from-python-back-to-c">https://stackoverflow.com/questions/60487083/passing-array-tuple-from-python-back-to-c</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2021/05/24/python3%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E6%8C%87%E5%AE%9A%E8%A1%8C%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%A1%88/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          python3读取文件指定行的三种方案
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/05/19/C++%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E9%80%90%E8%A1%8C%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%AD%97%E7%AC%A6%E5%8C%B9%E9%85%8D/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">C++基础——文件逐行读取与字符匹配</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=在C++中调用Python - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F05%2F20%2F%25E5%259C%25A8C%2B%2B%25E4%25B8%25AD%25E8%25B0%2583%25E7%2594%25A8Python%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=在C++中调用Python - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2021%2F05%2F20%2F%25E5%259C%25A8C%2B%2B%25E4%25B8%25AD%25E8%25B0%2583%25E7%2594%25A8Python%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=在C++中调用Python - Hexo&url=http://dechinphy.github.io/2021/05/20/%E5%9C%A8C++%E4%B8%AD%E8%B0%83%E7%94%A8Python/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

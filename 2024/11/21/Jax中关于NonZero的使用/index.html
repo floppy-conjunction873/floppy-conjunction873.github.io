@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>Jax中关于NonZero的使用 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;在使用Jax的过程中，有时候会遇到函数输出是一个动态的Shape，这种情况下我们很难利用到Jax的即时编译的功能，不能使得性能最大化。这也是使用Tensor数据结构来计算的一个特点，有好有坏。本文介绍了Jax的另外一个函数NonZero，可以使得我们能够编译那些动态Shape输出的函数。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "Jax中关于NonZero的使用 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;在使用Jax的过程中，有时候会遇到函数输出是一个动态的Shape，这种情况下我们很难利用到Jax的即时编译的功能，不能使得性能最大化。这也是使用Tensor数据结构来计算的一个特点，有好有坏。本文介绍了Jax的另外一个函数NonZero，可以使得我们能够编译那些动态Shape输出的函数。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2024/11/21/Jax%E4%B8%AD%E5%85%B3%E4%BA%8ENonZero%E7%9A%84%E4%BD%BF%E7%94%A8/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;在使用Jax的过程中，有时候会遇到函数输出是一个动态的Shape，这种情况下我们很难利用到Jax的即时编译的功能，不能使得性能最大化。这也是使用Tensor数据结构来计算的一个特点，有好有坏。本文介绍了Jax的另外一个函数NonZero，可以使得我们能够编译那些动态Shape输出的函数。&lt;/p&gt;" />
+    <meta name="twitter:title" content="Jax中关于NonZero的使用 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;在使用Jax的过程中，有时候会遇到函数输出是一个动态的Shape，这种情况下我们很难利用到Jax的即时编译的功能，不能使得性能最大化。这也是使用Tensor数据结构来计算的一个特点，有好有坏。本文介绍了Jax的另外一个函数NonZero，可以使得我们能够编译那些动态Shape输出的函数。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;在使用Jax的过程中，有时候会遇到函数输出是一个动态的Shape，这种情况下我们很难利用到Jax的即时编译的功能，不能使得性能最大化。这也是使用Tensor数据结构来计算的一个特点，有好有坏。本文介绍了Jax的另外一个函数NonZero，可以使得我们能够编译那些动态Shape输出的函数。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2024/11/21/Jax%E4%B8%AD%E5%85%B3%E4%BA%8ENonZero%E7%9A%84%E4%BD%BF%E7%94%A8/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "Jax中关于NonZero的使用 | Hexo",
+            "datePublished": "2024-11-21T02:25:44.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2024/11/21/Jax%E4%B8%AD%E5%85%B3%E4%BA%8ENonZero%E7%9A%84%E4%BD%BF%E7%94%A8/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidP379TXW3-O2BwweCeboqA" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      Jax中关于NonZero的使用
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2024-11-21T02:25:44.000Z" itemprop="datePublished">2024-11-21</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>在使用Jax的过程中，有时候会遇到函数输出是一个动态的Shape，这种情况下我们很难利用到Jax的即时编译的功能，不能使得性能最大化。这也是使用Tensor数据结构来计算的一个特点，有好有坏。本文介绍了Jax的另外一个函数NonZero，可以使得我们能够编译那些动态Shape输出的函数。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在Jax的JIT即时编译中，会追踪每一个Tensor的Shape变化。如果在计算的过程中出现了一些动态Shape的Tensor（Shape大小跟输入的数据有关），那么就无法使用Jax的JIT进行编译优化。最常见的就是<code>numpy.where</code>这种操作，因为这个操作返回的是符合判定条件的Index序号，而不同输入对应的输出Index长度一般是不一致的，因此在Jax的JIT中无法对该操作进行编译。当然，需要特别说明的是，<code>numpy.where</code>这个操作有两种用法，一种是<code>numpy.where(condition, 1, 0)</code>直接给输入打上Mask。另一种用法是<code>numpy.where(condition)</code>，这种用法返回的就是一个Index序列，也就是我们需要讨论的应用场景。</p>
+<h1 id="普通模式"><a href="#普通模式" class="headerlink" title="普通模式"></a>普通模式</h1><p>我们考虑一个比较简单的Toy Model用于测试：<br>$$<br>E&#x3D;\sum_{|r_i-r_j|\leq \epsilon}q_iq_j<br>$$<br>在不采用即时编译的场景下，Jax的代码可以这么写：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">&#x27;XLA_PYTHON_CLIENT_PREALLOCATE&#x27;</span>]=<span class="string">&#x27;false&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">np.random.seed(<span class="number">0</span>)</span><br><span class="line"><span class="keyword">import</span> jax</span><br><span class="line"><span class="keyword">from</span> jax <span class="keyword">import</span> numpy <span class="keyword">as</span> jnp</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">func</span>(<span class="params">r, q, cutoff=<span class="number">0.2</span></span>):</span><br><span class="line">    dis = jnp.<span class="built_in">abs</span>(r[:, <span class="literal">None</span>] - r[<span class="literal">None</span>])</span><br><span class="line">    maski, maskj = jnp.where(dis&lt;=cutoff)</span><br><span class="line">    qi = q[maski]</span><br><span class="line">    qj = q[maskj]</span><br><span class="line">    <span class="keyword">return</span> jnp.<span class="built_in">sum</span>(qi*qj)</span><br><span class="line"></span><br><span class="line">N = <span class="number">100</span></span><br><span class="line">r = jnp.array(np.random.random(N), jnp.float32)</span><br><span class="line">q = jnp.array(np.random.random(N), jnp.float32)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (func(r, q))</span><br><span class="line"><span class="comment"># 1035.7422</span></span><br></pre></td></tr></table></figure>
+<p>那么我们先记住这个输出的结果，因为采用的随机种子是一致的，一会儿可以直接跟JIT的输出结果进行对比。</p>
+<h1 id="JIT模式"><a href="#JIT模式" class="headerlink" title="JIT模式"></a>JIT模式</h1><p>Jax的JIT模式的使用方法常见的就是三种，一种是在函数头顶加一个<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/decoretor.html">装饰器</a>，一种是在函数引用的时候使用<code>jax.jit(function)</code>来调用，最后一种是配合<code>partial</code><a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/partial.html">偏函数</a>来使用，都不是很复杂。那么这里先用装饰器的形式演示一下Jax中即时编译的用法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">&#x27;XLA_PYTHON_CLIENT_PREALLOCATE&#x27;</span>]=<span class="string">&#x27;false&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">np.random.seed(<span class="number">0</span>)</span><br><span class="line"><span class="keyword">import</span> jax</span><br><span class="line"><span class="keyword">from</span> jax <span class="keyword">import</span> numpy <span class="keyword">as</span> jnp</span><br><span class="line"></span><br><span class="line"><span class="meta">@jax.jit</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">func</span>(<span class="params">r, q, cutoff=<span class="number">0.2</span></span>):</span><br><span class="line">    dis = jnp.<span class="built_in">abs</span>(r[:, <span class="literal">None</span>] - r[<span class="literal">None</span>])</span><br><span class="line">    maski, maskj = jnp.where(dis&lt;=cutoff)</span><br><span class="line">    qi = q[maski]</span><br><span class="line">    qj = q[maskj]</span><br><span class="line">    <span class="keyword">return</span> jnp.<span class="built_in">sum</span>(qi*qj)</span><br><span class="line"></span><br><span class="line">N = <span class="number">100</span></span><br><span class="line">r = jnp.array(np.random.random(N), jnp.float32)</span><br><span class="line">q = jnp.array(np.random.random(N), jnp.float32)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (func(r, q))</span><br></pre></td></tr></table></figure>
+<p>正如前面所说，因为<code>numpy.where</code>对应的输出是一个动态的Shape，那么在编译阶段就会报错。报错信息如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;/home/dechin/projects/gitee/dechin/tests/jax_mask.py&quot;</span>, line 21, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    <span class="built_in">print</span> (func(r, q))</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/_src/traceback_util.py&quot;</span>, line 162, <span class="keyword">in</span> reraise_with_filtered_traceback</span><br><span class="line">    <span class="built_in">return</span> fun(*args, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/_src/api.py&quot;</span>, line 622, <span class="keyword">in</span> cache_miss</span><br><span class="line">    execute = dispatch._xla_call_impl_lazy(fun_, *tracers, **params)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/_src/dispatch.py&quot;</span>, line 236, <span class="keyword">in</span> _xla_call_impl_lazy</span><br><span class="line">    <span class="built_in">return</span> xla_callable(fun, device, backend, name, donated_invars, keep_unused,</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/linear_util.py&quot;</span>, line 303, <span class="keyword">in</span> memoized_fun</span><br><span class="line">    ans = call(fun, *args)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/_src/dispatch.py&quot;</span>, line 359, <span class="keyword">in</span> _xla_callable_uncached</span><br><span class="line">    <span class="built_in">return</span> lower_xla_callable(fun, device, backend, name, donated_invars, False,</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/_src/profiler.py&quot;</span>, line 314, <span class="keyword">in</span> wrapper</span><br><span class="line">    <span class="built_in">return</span> func(*args, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/_src/dispatch.py&quot;</span>, line 445, <span class="keyword">in</span> lower_xla_callable</span><br><span class="line">    jaxpr, out_type, consts = pe.trace_to_jaxpr_final2(</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/_src/profiler.py&quot;</span>, line 314, <span class="keyword">in</span> wrapper</span><br><span class="line">    <span class="built_in">return</span> func(*args, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/interpreters/partial_eval.py&quot;</span>, line 2077, <span class="keyword">in</span> trace_to_jaxpr_final2</span><br><span class="line">    jaxpr, out_type, consts = trace_to_subjaxpr_dynamic2(fun, main, debug_info)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/interpreters/partial_eval.py&quot;</span>, line 2027, <span class="keyword">in</span> trace_to_subjaxpr_dynamic2</span><br><span class="line">    ans = fun.call_wrapped(*in_tracers_)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/linear_util.py&quot;</span>, line 167, <span class="keyword">in</span> call_wrapped</span><br><span class="line">    ans = self.f(*args, **dict(self.params, **kwargs))</span><br><span class="line">  File <span class="string">&quot;/home/dechin/projects/gitee/dechin/tests/jax_mask.py&quot;</span>, line 12, <span class="keyword">in</span> func</span><br><span class="line">    maski, maskj = jnp.where(dis&lt;=cutoff)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/_src/numpy/lax_numpy.py&quot;</span>, line 1077, <span class="keyword">in</span> <span class="built_in">where</span></span><br><span class="line">    <span class="built_in">return</span> nonzero(condition, size=size, fill_value=fill_value)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/_src/numpy/lax_numpy.py&quot;</span>, line 1332, <span class="keyword">in</span> nonzero</span><br><span class="line">    size = core.concrete_or_error(operator.index, size,</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/core.py&quot;</span>, line 1278, <span class="keyword">in</span> concrete_or_error</span><br><span class="line">    raise ConcretizationTypeError(val, context)</span><br><span class="line">jax._src.traceback_util.UnfilteredStackTrace: jax._src.errors.ConcretizationTypeError: Abstract tracer value encountered <span class="built_in">where</span> concrete value is expected: Traced&lt;ShapedArray(int32[])&gt;with&lt;DynamicJaxprTrace(level=0/1)&gt;</span><br><span class="line">The size argument of jnp.nonzero must be statically specified to use jnp.nonzero within JAX transformations.</span><br><span class="line">The error occurred <span class="keyword">while</span> tracing the <span class="keyword">function</span> func at /home/dechin/projects/gitee/dechin/tests/jax_mask.py:9 <span class="keyword">for</span> jit. This concrete value was not available <span class="keyword">in</span> Python because it depends on the value of the argument <span class="string">&#x27;r&#x27;</span>.</span><br><span class="line"></span><br><span class="line">See https://jax.readthedocs.io/en/latest/errors.html#jax.errors.ConcretizationTypeError</span><br><span class="line"></span><br><span class="line">The stack trace below excludes JAX-internal frames.</span><br><span class="line">The preceding is the original exception that occurred, unmodified.</span><br><span class="line"></span><br><span class="line">--------------------</span><br><span class="line"></span><br><span class="line">The above exception was the direct cause of the following exception:</span><br><span class="line"></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;/home/dechin/projects/gitee/dechin/tests/jax_mask.py&quot;</span>, line 21, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    <span class="built_in">print</span> (func(r, q))</span><br><span class="line">  File <span class="string">&quot;/home/dechin/projects/gitee/dechin/tests/jax_mask.py&quot;</span>, line 12, <span class="keyword">in</span> func</span><br><span class="line">    maski, maskj = jnp.where(dis&lt;=cutoff)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/_src/numpy/lax_numpy.py&quot;</span>, line 1077, <span class="keyword">in</span> <span class="built_in">where</span></span><br><span class="line">    <span class="built_in">return</span> nonzero(condition, size=size, fill_value=fill_value)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/jax/lib/python3.10/site-packages/jax/_src/numpy/lax_numpy.py&quot;</span>, line 1332, <span class="keyword">in</span> nonzero</span><br><span class="line">    size = core.concrete_or_error(operator.index, size,</span><br><span class="line">jax._src.errors.ConcretizationTypeError: Abstract tracer value encountered <span class="built_in">where</span> concrete value is expected: Traced&lt;ShapedArray(int32[])&gt;with&lt;DynamicJaxprTrace(level=0/1)&gt;</span><br><span class="line">The size argument of jnp.nonzero must be statically specified to use jnp.nonzero within JAX transformations.</span><br><span class="line">The error occurred <span class="keyword">while</span> tracing the <span class="keyword">function</span> func at /home/dechin/projects/gitee/dechin/tests/jax_mask.py:9 <span class="keyword">for</span> jit. This concrete value was not available <span class="keyword">in</span> Python because it depends on the value of the argument <span class="string">&#x27;r&#x27;</span>.</span><br><span class="line"></span><br><span class="line">See https://jax.readthedocs.io/en/latest/errors.html#jax.errors.ConcretizationTypeError</span><br></pre></td></tr></table></figure>
+<p>想避免这个报错，要么就是对该函数不做编译（牺牲性能），要么就是自己写一个CUDA算子（增加工作量），再就是我们这里用到的NonZero定长输出的方法（预置条件）。</p>
+<h1 id="NonZero的使用"><a href="#NonZero的使用" class="headerlink" title="NonZero的使用"></a>NonZero的使用</h1><p>使用Jax的NonZero函数时，也有一点需要注意：虽然NonZero可以做到固定长度的输出，但是这个固定的长度本身也是一个名为<code>size</code>的传入参数。也就是说，NonZero的输出Shape也是要取决于输入参数的。Jax开发时也考虑到了这一点，所以在编译时提供了一个功能可以设置静态参量：<code>static_argnames</code>，例如我们的案例中，将<code>size</code>这个名称的传参设置为静态参量，这样就可以使用Jax的即时编译了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">&#x27;XLA_PYTHON_CLIENT_PREALLOCATE&#x27;</span>]=<span class="string">&#x27;false&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">np.random.seed(<span class="number">0</span>)</span><br><span class="line"><span class="keyword">import</span> jax</span><br><span class="line"><span class="keyword">from</span> jax <span class="keyword">import</span> numpy <span class="keyword">as</span> jnp</span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> partial</span><br><span class="line"></span><br><span class="line"><span class="meta">@partial(<span class="params">jax.jit, static_argnames=<span class="string">&#x27;size&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">func</span>(<span class="params">r, q, cutoff=<span class="number">0.2</span>, size=<span class="number">5000</span></span>):</span><br><span class="line">    <span class="keyword">if</span> q.shape[<span class="number">0</span>] != r.shape[<span class="number">0</span>]+<span class="number">1</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;The q.shape[0] should be equal to r.shape[0]+1&quot;</span>)</span><br><span class="line"></span><br><span class="line">    dis = jnp.<span class="built_in">abs</span>(r[:, <span class="literal">None</span>] - r[<span class="literal">None</span>])</span><br><span class="line">    maski, maskj = jnp.nonzero(jnp.where(dis&lt;=cutoff, <span class="number">1</span>, <span class="number">0</span>), size=size, fill_value=-<span class="number">1</span>)</span><br><span class="line">    qi = q[maski]</span><br><span class="line">    qj = q[maskj]</span><br><span class="line">    <span class="keyword">return</span> jnp.<span class="built_in">sum</span>(qi*qj)</span><br><span class="line"></span><br><span class="line">N = <span class="number">100</span></span><br><span class="line">r = jnp.array(np.random.random(N), jnp.float32)</span><br><span class="line">q = jnp.array(np.random.random(N), jnp.float32)</span><br><span class="line">padder = jnp.array([<span class="number">0.</span>], jnp.float32)</span><br><span class="line">q = jnp.append(q, padder)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (func(r, q))</span><br><span class="line"><span class="comment"># 1035.7422</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，函数用Jax的JIT成功编译，并且输出结果跟前面未编译时候是一致的。当然，这里还用到了一个小技巧，就是NonZero函数输出结果时，不到长度的输出结果会被自动Pad到给定的长度，这里Pad的值使用的是我们给出的<code>fill_value</code>。因为NonZero输出的也是索引，这样我们可以把Pad的这些索引设置为<code>-1</code>，然后在构建参数$q$的时候事先在末尾<code>append</code>一个0，这样就可以确保计算的输出结果直接就是正确的。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>在使用Jax的过程中，有时候会遇到函数输出是一个动态的Shape，这种情况下我们很难利用到Jax的即时编译的功能，不能使得性能最大化。这也是使用Tensor数据结构来计算的一个特点，有好有坏。本文介绍了Jax的另外一个函数NonZero，可以使得我们能够编译那些动态Shape输出的函数。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/nonzero.html">https://www.cnblogs.com/dechinphy/p/nonzero.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2024/11/26/PySAGES%E5%AE%9E%E8%AE%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          PySAGES实记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/11/19/Conda%E7%8E%AF%E5%A2%83Git-Pull%E6%8A%A5%E9%94%99/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">Conda环境Git Pull报错</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=Jax中关于NonZero的使用 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F11%2F21%2FJax%25E4%25B8%25AD%25E5%2585%25B3%25E4%25BA%258ENonZero%25E7%259A%2584%25E4%25BD%25BF%25E7%2594%25A8%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=Jax中关于NonZero的使用 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2024%2F11%2F21%2FJax%25E4%25B8%25AD%25E5%2585%25B3%25E4%25BA%258ENonZero%25E7%259A%2584%25E4%25BD%25BF%25E7%2594%25A8%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=Jax中关于NonZero的使用 - Hexo&url=http://dechinphy.github.io/2024/11/21/Jax%E4%B8%AD%E5%85%B3%E4%BA%8ENonZero%E7%9A%84%E4%BD%BF%E7%94%A8/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

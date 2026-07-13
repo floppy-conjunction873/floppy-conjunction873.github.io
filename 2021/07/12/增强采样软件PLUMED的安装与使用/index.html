@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>增强采样软件PLUMED的安装与使用 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文作为一个入门级的文章，主要介绍了分子动力学模拟中增强采样的基本概念与相应工具的安装和使用。PLUMED是业界比较出名的一款增强采样开源软件，能够对接多个分子动力学模拟软件，如GROMACS等，并利用这些软件生成的路径信息来进行采样。并且为了可以在python上也能看到路径信息等重要数据，可以考虑使用mdconvert将路径数据转化成python上常用的hdf5格式并用h5py进行读写。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "增强采样软件PLUMED的安装与使用 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文作为一个入门级的文章，主要介绍了分子动力学模拟中增强采样的基本概念与相应工具的安装和使用。PLUMED是业界比较出名的一款增强采样开源软件，能够对接多个分子动力学模拟软件，如GROMACS等，并利用这些软件生成的路径信息来进行采样。并且为了可以在python上也能看到路径信息等重要数据，可以考虑使用mdconvert将路径数据转化成python上常用的hdf5格式并用h5py进行读写。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2021/07/12/%E5%A2%9E%E5%BC%BA%E9%87%87%E6%A0%B7%E8%BD%AF%E4%BB%B6PLUMED%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文作为一个入门级的文章，主要介绍了分子动力学模拟中增强采样的基本概念与相应工具的安装和使用。PLUMED是业界比较出名的一款增强采样开源软件，能够对接多个分子动力学模拟软件，如GROMACS等，并利用这些软件生成的路径信息来进行采样。并且为了可以在python上也能看到路径信息等重要数据，可以考虑使用mdconvert将路径数据转化成python上常用的hdf5格式并用h5py进行读写。&lt;/p&gt;" />
+    <meta name="twitter:title" content="增强采样软件PLUMED的安装与使用 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文作为一个入门级的文章，主要介绍了分子动力学模拟中增强采样的基本概念与相应工具的安装和使用。PLUMED是业界比较出名的一款增强采样开源软件，能够对接多个分子动力学模拟软件，如GROMACS等，并利用这些软件生成的路径信息来进行采样。并且为了可以在python上也能看到路径信息等重要数据，可以考虑使用mdconvert将路径数据转化成python上常用的hdf5格式并用h5py进行读写。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文作为一个入门级的文章，主要介绍了分子动力学模拟中增强采样的基本概念与相应工具的安装和使用。PLUMED是业界比较出名的一款增强采样开源软件，能够对接多个分子动力学模拟软件，如GROMACS等，并利用这些软件生成的路径信息来进行采样。并且为了可以在python上也能看到路径信息等重要数据，可以考虑使用mdconvert将路径数据转化成python上常用的hdf5格式并用h5py进行读写。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2021/07/12/%E5%A2%9E%E5%BC%BA%E9%87%87%E6%A0%B7%E8%BD%AF%E4%BB%B6PLUMED%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "增强采样软件PLUMED的安装与使用 | Hexo",
+            "datePublished": "2021-07-12T01:36:25.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2021/07/12/%E5%A2%9E%E5%BC%BA%E9%87%87%E6%A0%B7%E8%BD%AF%E4%BB%B6PLUMED%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidty67nLKWU69UidJ1_G4GL" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      增强采样软件PLUMED的安装与使用
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2021-07-12T01:36:25.000Z" itemprop="datePublished">2021-07-12</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文作为一个入门级的文章，主要介绍了分子动力学模拟中增强采样的基本概念与相应工具的安装和使用。PLUMED是业界比较出名的一款增强采样开源软件，能够对接多个分子动力学模拟软件，如GROMACS等，并利用这些软件生成的路径信息来进行采样。并且为了可以在python上也能看到路径信息等重要数据，可以考虑使用mdconvert将路径数据转化成python上常用的hdf5格式并用h5py进行读写。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>增强采样（Enhanced Sampling）是一种在分子动力学模拟中常用的技术，其作用是帮助我们更加快速的在时间轴上找到尽可能多的体系结构及其对应的能量。比如一个氢气的燃烧反应，在中间过程中会产生众多的反应产物，但是我们光从结果来看的话，就是从$H_2$加$O_2$，经过燃烧以后变成了$H_2O$，那么中间的过程就被我们全部忽略了。实际上化学反应是一个整体的过程，是非常复杂的，如果要控制一个化学反应的过程，或者制备某个中间态的产物，或者需要提升最终预期产物的占比，我们不得不考虑整个化学反应的路径。</p>
+<p>由于分子动力学模拟是基于牛顿力学的，因此中间发生的位移和碰撞我们都认为是连续的过程，但是为了在时间轴上更快的读取数据，我们不能无限制的对时间进行分割，只能通过对时间进行采样来获得一个近似的过程。最典型的就是均匀采样，比如每隔10ps采一个样本点。但是这种方法在保障计算效率的前提下，很容易忽略了中间过程中出现时间极其短暂的一个体系状态。因此就需要使用到增强抽样的方法，对于高简并度的状态，我们降低其被采样的概率，而对于低简并度的状态，我们提升其被采到的概率。常见的方法有：Meta Dynamics、VES和ITS等。这里我们探索一下分子动力学模拟软件PLUMED的安装，该软件已经集成了很大一部分的CV和增强采样的方法。</p>
+<h1 id="PLUMED的下载与安装"><a href="#PLUMED的下载与安装" class="headerlink" title="PLUMED的下载与安装"></a>PLUMED的下载与安装</h1><p>首先访问其官方<a target="_blank" rel="noopener" href="https://www.plumed.org/download">下载网站</a>找到一个合适的版本进行下载，比如这里我是直接下载的最新的版本：<br><img src="https://img2020.cnblogs.com/blog/2277440/202107/2277440-20210712092013999-1684349324.png"><br>下载完成后可以用<code>tar -xvf plumed-2.7.1.tgz</code>指令来进行解压缩，可以看到解压后的目录如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed$ ll</span><br><span class="line">总用量 103736</span><br><span class="line">drwxrwxr-x  3 dechin dechin      4096 7月  12 09:21 ./</span><br><span class="line">drwxrwxr-x 10 dechin dechin      4096 7月  12 09:20 ../</span><br><span class="line">drwxrwxr-x 18 dechin dechin      4096 4月  16 14:48 plumed-2.7.1/</span><br><span class="line">-rw-rw-r--  1 dechin dechin 106210796 7月  12 09:21 plumed-2.7.1.tgz</span><br><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed$ <span class="built_in">cd</span> plumed-2.7.1/</span><br><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed/plumed-2.7.1$ ll</span><br><span class="line">总用量 504</span><br><span class="line">drwxrwxr-x 18 dechin dechin   4096 4月  16 14:48 ./</span><br><span class="line">drwxrwxr-x  3 dechin dechin   4096 7月  12 09:21 ../</span><br><span class="line">drwxrwxr-x  6 dechin dechin   4096 4月  16 14:48 astyle/</span><br><span class="line">-rw-rw-r--  1 dechin dechin     71 4月  16 14:48 .astyle.options</span><br><span class="line">drwxrwxr-x  2 dechin dechin   4096 4月  16 14:48 CHANGES/</span><br><span class="line">-rw-rw-r--  1 dechin dechin     94 4月  16 14:48 .codecov.yml</span><br><span class="line">drwxrwxr-x  4 dechin dechin   4096 4月  16 14:48 conda/</span><br><span class="line">-rwxrwxr-x  1 dechin dechin 323087 4月  16 14:48 configure*</span><br><span class="line">-rw-rw-r--  1 dechin dechin  43692 4月  16 14:48 configure.ac</span><br><span class="line">-rw-rw-r--  1 dechin dechin   7639 4月  16 14:48 COPYING.LESSER</span><br><span class="line">drwxrwxr-x  2 dechin dechin   4096 4月  16 14:48 developer-doc/</span><br><span class="line">drwxrwxr-x  2 dechin dechin   4096 4月  16 14:48 docker/</span><br><span class="line">drwxrwxr-x  3 dechin dechin   4096 4月  16 14:48 .github/</span><br><span class="line">-rw-rw-r--  1 dechin dechin    179 4月  16 14:48 .gitignore</span><br><span class="line">-rw-rw-r--  1 dechin dechin    245 4月  16 14:48 .lgtm.yml</span><br><span class="line">drwxrwxr-x  2 dechin dechin   4096 4月  16 14:48 macports/</span><br><span class="line">-rw-rw-r--  1 dechin dechin   2485 4月  16 14:48 Makefile</span><br><span class="line">-rw-rw-r--  1 dechin dechin   1200 4月  16 14:48 Makefile.conf.in</span><br><span class="line">drwxrwxr-x  7 dechin dechin   4096 4月  16 14:48 patches/</span><br><span class="line">-rw-rw-r--  1 dechin dechin    527 4月  16 14:48 PEOPLE</span><br><span class="line">drwxrwxr-x  3 dechin dechin   4096 4月  16 14:48 python/</span><br><span class="line">-rw-rw-r--  1 dechin dechin   8146 4月  16 14:48 README.md</span><br><span class="line">drwxrwxr-x 26 dechin dechin   4096 4月  16 14:48 regtest/</span><br><span class="line">-rwxrwxr-x  1 dechin dechin   5397 4月  16 14:48 release.sh*</span><br><span class="line">drwxrwxr-x  2 dechin dechin   4096 4月  16 14:48 scripts/</span><br><span class="line">-rw-rw-r--  1 dechin dechin    319 4月  16 14:48 sourceme.sh.in</span><br><span class="line">drwxrwxr-x 45 dechin dechin   4096 4月  16 14:48 src/</span><br><span class="line">-rw-rw-r--  1 dechin dechin      0 4月  16 14:48 stamp-h.in</span><br><span class="line">drwxrwxr-x  6 dechin dechin   4096 4月  16 14:48 <span class="built_in">test</span>/</span><br><span class="line">drwxrwxr-x  2 dechin dechin   4096 4月  16 14:48 .travis/</span><br><span class="line">-rw-rw-r--  1 dechin dechin  10558 4月  16 14:48 .travis.yml</span><br><span class="line">drwxrwxr-x  4 dechin dechin   4096 4月  16 14:48 user-doc/</span><br><span class="line">-rw-rw-r--  1 dechin dechin    322 4月  16 14:48 VERSION</span><br><span class="line">drwxrwxr-x  2 dechin dechin   4096 4月  16 14:48 vim/</span><br></pre></td></tr></table></figure>
+<p>直接在这个<code>plumed-2.7.1</code>（注意对应自己安装的版本）目录下执行如下的指令进行安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ./configure --prefix=/usr/local</span><br><span class="line">$ make -j 4</span><br><span class="line">$ <span class="built_in">sudo</span> make install</span><br></pre></td></tr></table></figure>
+<h2 id="安装验证"><a href="#安装验证" class="headerlink" title="安装验证"></a>安装验证</h2><p>安装完成后，可以在命令行中直接使用<code>plumed</code>指令，可以用如下帮助指令，确认软件是否被安装成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed/examples$ plumed <span class="built_in">help</span></span><br><span class="line">Usage: plumed [options] [<span class="built_in">command</span>] [<span class="built_in">command</span> options]</span><br><span class="line">  plumed [<span class="built_in">command</span>] -h|--<span class="built_in">help</span>: to <span class="built_in">print</span> <span class="built_in">help</span> <span class="keyword">for</span> a specific <span class="built_in">command</span></span><br><span class="line">Options:</span><br><span class="line">  [<span class="built_in">help</span>|-h|--<span class="built_in">help</span>]          : to <span class="built_in">print</span> this <span class="built_in">help</span></span><br><span class="line">  [--is-installed]          : fails <span class="keyword">if</span> plumed is not installed</span><br><span class="line">  [--has-mpi]               : fails <span class="keyword">if</span> plumed is running without MPI</span><br><span class="line">  [--has-dlopen]            : fails <span class="keyword">if</span> plumed is compiled without dlopen</span><br><span class="line">  [--load LIB]              : loads a shared object (typically a plugin library)</span><br><span class="line">  [--standalone-executable] : tells plumed not to look <span class="keyword">for</span> commands implemented as scripts</span><br><span class="line">Commands:</span><br><span class="line">  plumed completion : dump a <span class="keyword">function</span> usable <span class="keyword">for</span> programmable completion</span><br><span class="line">  plumed driver : analyze trajectories with plumed</span><br><span class="line">  plumed driver-float : analyze trajectories with plumed (single precision version)</span><br><span class="line">  plumed gen_example : construct an example <span class="keyword">for</span> the manual that <span class="built_in">users</span> can interact with</span><br><span class="line">  plumed gentemplate : <span class="built_in">print</span> out a template input <span class="keyword">for</span> a particular action</span><br><span class="line">  plumed info : provide informations about plumed</span><br><span class="line">  plumed kt : <span class="built_in">print</span> out the value of kT at a particular temperature</span><br><span class="line">  plumed manual : <span class="built_in">print</span> out a description of the keywords <span class="keyword">for</span> an action <span class="keyword">in</span> html</span><br><span class="line">  plumed pathtools : <span class="built_in">print</span> out a description of the keywords <span class="keyword">for</span> an action <span class="keyword">in</span> html</span><br><span class="line">  plumed pdbrenumber : Modify atom numbers <span class="keyword">in</span> a PDB, possibly using hybrid-36 coding</span><br><span class="line">  plumed pesmd : Langevin dynamics on PLUMED energy landscape</span><br><span class="line">  plumed simplemd : run lj code</span><br><span class="line">  plumed sum_hills : <span class="built_in">sum</span> the hills with  plumed</span><br><span class="line">  plumed patch : patch an MD engine</span><br><span class="line">  plumed vim2html : convert plumed input file to colored html using vim syntax</span><br><span class="line">  plumed selector : create lists of serial atom numbers</span><br><span class="line">  plumed config : inquire plumed about how it was configure</span><br><span class="line">  plumed newcv : create a new collective variable from a template</span><br><span class="line">  plumed mklib : compile a .cpp file into a shared library</span><br><span class="line">  plumed partial_tempering : scale parameters <span class="keyword">in</span> a gromacs topology to implement solute or partial tempering</span><br></pre></td></tr></table></figure>
+<h1 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a>简单示例</h1><p>使用plumed，需要有一个完整的反应路径文件，这里我们可以用<code>wget</code>直接下载plumed仓库中的示例轨迹文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed/examples$ wget https://plumed.github.io/doc-v2.4/user-doc/html/tutorial-resources/trieste-1.tar.gz</span><br><span class="line">--2021-07-12 10:18:18--  https://plumed.github.io/doc-v2.4/user-doc/html/tutorial-resources/trieste-1.tar.gz</span><br><span class="line">正在解析主机 plumed.github.io (plumed.github.io)... ::1, 185.199.109.153, 185.199.108.153, ...</span><br><span class="line">正在连接 plumed.github.io (plumed.github.io)|::1|:443... 失败：拒绝连接。</span><br><span class="line">正在连接 plumed.github.io (plumed.github.io)|185.199.109.153|:443... 已连接。</span><br><span class="line">已发出 HTTP 请求，正在等待回应... 301 Moved Permanently</span><br><span class="line">位置：https://www.plumed.org/doc-v2.4/user-doc/html/tutorial-resources/trieste-1.tar.gz [跟随至新的 URL]</span><br><span class="line">--2021-07-12 10:18:19--  https://www.plumed.org/doc-v2.4/user-doc/html/tutorial-resources/trieste-1.tar.gz</span><br><span class="line">正在解析主机 www.plumed.org (www.plumed.org)... ::1, 185.199.109.153, 185.199.108.153, ...</span><br><span class="line">正在连接 www.plumed.org (www.plumed.org)|::1|:443... 失败：拒绝连接。</span><br><span class="line">正在连接 www.plumed.org (www.plumed.org)|185.199.109.153|:443... 已连接。</span><br><span class="line">已发出 HTTP 请求，正在等待回应... 200 OK</span><br><span class="line">长度： 335374 (328K) [application/gzip]</span><br><span class="line">正在保存至: “trieste-1.tar.gz”</span><br><span class="line"></span><br><span class="line">trieste-1.tar.gz    100%[==================&gt;] 327.51K  --.-KB/s    用时 0.04s </span><br><span class="line"></span><br><span class="line">2021-07-12 10:18:20 (8.02 MB/s) - 已保存 “trieste-1.tar.gz” [335374/335374])</span><br></pre></td></tr></table></figure>
+<p>同样的执行解压：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed/examples$ ll</span><br><span class="line">总用量 336</span><br><span class="line">drwxrwxr-x 2 dechin dechin   4096 7月  12 10:18 ./</span><br><span class="line">drwxrwxr-x 4 dechin dechin   4096 7月  12 09:38 ../</span><br><span class="line">-rw-rw-r-- 1 dechin dechin 335374 11月 18  2020 trieste-1.tar.gz</span><br><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed/examples$ tar -xvf trieste-1.tar.gz </span><br><span class="line">trieste-1/</span><br><span class="line">trieste-1/.solutions/</span><br><span class="line">trieste-1/.solutions/ref-rna.pdb</span><br><span class="line">trieste-1/.solutions/plumed-ex2c.dat</span><br><span class="line">trieste-1/.solutions/plumed-ex2.dat</span><br><span class="line">trieste-1/.solutions/plumed-ex2b.dat</span><br><span class="line">trieste-1/.solutions/plumed-ex1b.dat</span><br><span class="line">trieste-1/.solutions/plumed-ex1.dat</span><br><span class="line">trieste-1/traj-broken.xtc</span><br><span class="line">trieste-1/ref.pdb</span><br><span class="line">trieste-1/traj-whole.xtc</span><br></pre></td></tr></table></figure>
+<p>解压后可以在目录下看到一个pdb的配置文件和两个xtc的轨迹文件，这个是用gromacs生成的数据文件格式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed/examples/trieste-1$ ll</span><br><span class="line">总用量 752</span><br><span class="line">drwxr-xr-x 3 dechin dechin   4096 11月 18  2020 ./</span><br><span class="line">drwxrwxr-x 3 dechin dechin   4096 7月  12 10:19 ../</span><br><span class="line">-rw-r--r-- 1 dechin dechin 519979 11月 18  2020 ref.pdb</span><br><span class="line">drwxr-xr-x 2 dechin dechin   4096 11月 18  2020 .solutions/</span><br><span class="line">-rw-r--r-- 1 dechin dechin 117620 11月 18  2020 traj-broken.xtc</span><br><span class="line">-rw-r--r-- 1 dechin dechin 116036 11月 18  2020 traj-whole.xtc</span><br></pre></td></tr></table></figure>
+<p>在具备了轨迹文件之后，就可以按照官方的文档示例来编写<code>plumed.dat</code>配置输入文件，用于定义需要计算的内容，比如这里定义的是计算1号原子和2号原子之间的距离，并每10个step将其写入到名为<code>colvar</code>的文件下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed/examples/trieste-1$ <span class="built_in">cat</span> plumed.dat </span><br><span class="line">d1: DISTANCE ATOMS=1,2 </span><br><span class="line">PRINT ARG=d1 FILE=colvar STRIDE=10</span><br></pre></td></tr></table></figure>
+<p>执行plumed指令得到的结果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed/examples/trieste-1$ plumed driver --mf_xtc traj-whole.xtc --plumed plumed.dat </span><br><span class="line"></span><br><span class="line">DRIVER: Found molfile format trajectory xtc with name traj-whole.xtc</span><br><span class="line">PLUMED: PLUMED is starting</span><br><span class="line">PLUMED: Version: 2.7.1 (git: Unknown) compiled on Jul 12 2021 at 09:24:30</span><br><span class="line">PLUMED: Please cite these papers when using PLUMED [1][2]</span><br><span class="line">PLUMED: For further information see the PLUMED web page at http://www.plumed.org</span><br><span class="line">PLUMED: Root: /usr/local/lib/plumed</span><br><span class="line">PLUMED: For installed feature, see /usr/local/lib/plumed/src/config/config.txt</span><br><span class="line">PLUMED: Molecular dynamics engine: driver</span><br><span class="line">PLUMED: Precision of reals: 8</span><br><span class="line">PLUMED: Running over 1 node</span><br><span class="line">PLUMED: Number of threads: 1</span><br><span class="line">PLUMED: Cache line size: 512</span><br><span class="line">PLUMED: Number of atoms: 6580</span><br><span class="line">PLUMED: File suffix: </span><br><span class="line">PLUMED: FILE: plumed.dat</span><br><span class="line">PLUMED: Action DISTANCE</span><br><span class="line">PLUMED:   with label d1</span><br><span class="line">PLUMED:   between atoms 1 2</span><br><span class="line">PLUMED:   using periodic boundary conditions</span><br><span class="line">PLUMED: Action PRINT</span><br><span class="line">PLUMED:   with label @1</span><br><span class="line">PLUMED:   with stride 10</span><br><span class="line">PLUMED:   with arguments d1</span><br><span class="line">PLUMED:   on file colvar</span><br><span class="line">PLUMED:   with format  %f</span><br><span class="line">PLUMED: END FILE: plumed.dat</span><br><span class="line">PLUMED: Timestep: 1.000000</span><br><span class="line">PLUMED: KbT has not been <span class="built_in">set</span> by the MD engine</span><br><span class="line">PLUMED: It should be <span class="built_in">set</span> by hand <span class="built_in">where</span> needed</span><br><span class="line">PLUMED: Relevant bibliography:</span><br><span class="line">PLUMED:   [1] The PLUMED consortium, Nat. Methods 16, 670 (2019)</span><br><span class="line">PLUMED:   [2] Tribello, Bonomi, Branduardi, Camilloni, and Bussi, Comput. Phys. Commun. 185, 604 (2014)</span><br><span class="line">PLUMED: Please <span class="built_in">read</span> and cite <span class="built_in">where</span> appropriate!</span><br><span class="line">PLUMED: Finished setup</span><br><span class="line">PLUMED:                                               Cycles        Total      Average      Minimum      Maximum</span><br><span class="line">PLUMED:                                                    1     0.003111     0.003111     0.003111     0.003111</span><br><span class="line">PLUMED: 1 Prepare dependencies                             5     0.000005     0.000001     0.000000     0.000003</span><br><span class="line">PLUMED: 2 Sharing data                                     1     0.001410     0.001410     0.001410     0.001410</span><br><span class="line">PLUMED: 3 Waiting <span class="keyword">for</span> data                                 1     0.000022     0.000022     0.000022     0.000022</span><br><span class="line">PLUMED: 4 Calculating (forward loop)                       1     0.000017     0.000017     0.000017     0.000017</span><br><span class="line">PLUMED: 5 Applying (backward loop)                         1     0.000047     0.000047     0.000047     0.000047</span><br><span class="line">PLUMED: 6 Update                                           1     0.000052     0.000052     0.000052     0.000052</span><br></pre></td></tr></table></figure>
+<p>在这个给定的轨迹文件中其实包含了5个step，但是由于我们设置了每10个step打印一次，因此最终存储到colvar中的数据只有1个值：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed/examples/trieste-1$ ll</span><br><span class="line">总用量 760</span><br><span class="line">drwxr-xr-x 3 dechin dechin   4096 7月  12 10:22 ./</span><br><span class="line">drwxrwxr-x 3 dechin dechin   4096 7月  12 10:19 ../</span><br><span class="line">-rw-rw-r-- 1 dechin dechin     37 7月  12 10:22 colvar</span><br><span class="line">-rw-rw-r-- 1 dechin dechin     60 7月  12 10:21 plumed.dat</span><br><span class="line">-rw-r--r-- 1 dechin dechin 519979 11月 18  2020 ref.pdb</span><br><span class="line">drwxr-xr-x 2 dechin dechin   4096 11月 18  2020 .solutions/</span><br><span class="line">-rw-r--r-- 1 dechin dechin 117620 11月 18  2020 traj-broken.xtc</span><br><span class="line">-rw-r--r-- 1 dechin dechin 116036 11月 18  2020 traj-whole.xtc</span><br><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed/examples/trieste-1$ <span class="built_in">cat</span> colvar </span><br><span class="line"><span class="comment">#! FIELDS time d1</span></span><br><span class="line"> 0.000000 0.095760</span><br></pre></td></tr></table></figure>
+<p>但是如果我们把上面的存储步长<code>STRIDE</code>修改为1的话，得到的colvar就是如下所示的结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed/examples/trieste-1$ <span class="built_in">cat</span> colvar </span><br><span class="line"><span class="comment">#! FIELDS time d1</span></span><br><span class="line"> 0.000000 0.095760</span><br><span class="line"> 1.000000 0.096845</span><br><span class="line"> 2.000000 0.095885</span><br><span class="line"> 3.000000 0.096010</span><br><span class="line"> 4.000000 0.095321</span><br></pre></td></tr></table></figure>
+<p>这里是将5个step中的所有对应的原子距离都返回了出来。</p>
+<h1 id="轨迹文件的格式转换"><a href="#轨迹文件的格式转换" class="headerlink" title="轨迹文件的格式转换"></a>轨迹文件的格式转换</h1><p>上面用到的xtc文件是GROMACS生成的轨迹文件扩展名，由于是二进制文件并不方便读取，这里我们可以将其转换成hdf5的格式，然后就可以用python直接来读取其中的数据。这里我们需要借助于mdtraj这个工具。</p>
+<h2 id="用pip安装mdtraj"><a href="#用pip安装mdtraj" class="headerlink" title="用pip安装mdtraj"></a>用pip安装mdtraj</h2><p>经过尝试用conda来装失败了，因此建议直接使用pip来进行安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed/examples/trieste-1$ python3.9 -m pip install mdtraj</span><br><span class="line">Collecting mdtraj</span><br><span class="line">  Downloading mdtraj-1.9.6-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.whl (6.0 MB)</span><br><span class="line">     |████████████████████████████████| 6.0 MB 1.1 MB/s </span><br><span class="line">Collecting astunparse</span><br><span class="line">  Using cached astunparse-1.6.3-py2.py3-none-any.whl (12 kB)</span><br><span class="line">Requirement already satisfied: numpy&gt;=1.6 <span class="keyword">in</span> /home/dechin/anaconda3/envs/AmberTools21/lib/python3.9/site-packages (from mdtraj) (1.21.0)</span><br><span class="line">Requirement already satisfied: scipy <span class="keyword">in</span> /home/dechin/anaconda3/envs/AmberTools21/lib/python3.9/site-packages (from mdtraj) (1.7.0)</span><br><span class="line">Requirement already satisfied: pyparsing <span class="keyword">in</span> /home/dechin/anaconda3/envs/AmberTools21/lib/python3.9/site-packages (from mdtraj) (2.4.7)</span><br><span class="line">Requirement already satisfied: six&lt;2.0,&gt;=1.6.1 <span class="keyword">in</span> /home/dechin/anaconda3/envs/AmberTools21/lib/python3.9/site-packages (from astunparse-&gt;mdtraj) (1.16.0)</span><br><span class="line">Requirement already satisfied: wheel&lt;1.0,&gt;=0.23.0 <span class="keyword">in</span> /home/dechin/anaconda3/envs/AmberTools21/lib/python3.9/site-packages (from astunparse-&gt;mdtraj) (0.36.2)</span><br><span class="line">Installing collected packages: astunparse, mdtraj</span><br><span class="line">Successfully installed astunparse-1.6.3 mdtraj-1.9.6</span><br></pre></td></tr></table></figure>
+<p>安装完成后会生成一个名为mdconvert的可执行文件，一般情况是在系统路径下可以直接指令调用的，下述是mdconvert的帮助文档：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ mdconvert -h</span><br><span class="line">usage: mdconvert [-h] </span><br><span class="line">                 -o OUTPUT         <span class="comment"># 必需，指定输出文件 </span></span><br><span class="line">                 [-c CHUNK]        <span class="comment"># 可选，指定一次读入内存的帧数，默认1000.</span></span><br><span class="line">                 [-f]              <span class="comment"># 可选，如果输出文件已存在，则强制覆盖 </span></span><br><span class="line">                 [-s STRIDE]       <span class="comment"># 可选，只加载 every stride-th frame </span></span><br><span class="line">                 [-i INDEX]        <span class="comment"># 可选，更加灵活地指定加载特定的帧(Python格式)，eg： -i N; -i -1; -i N:M </span></span><br><span class="line">                 [-a ATOM_INDICES] <span class="comment"># 可选，通过文件指定只加载特定的某些原子，文件内容为原子序号(从0开始计数)</span></span><br><span class="line">                 [-t TOPOLOGY]     <span class="comment"># 可选，指定拓扑文件(PDB/prmtop 格式)，一旦指定即可将轨迹输出为pdb格式。</span></span><br><span class="line">                 input [input ...] <span class="comment"># 必需，指定输入文件(可以是多条轨迹)</span></span><br></pre></td></tr></table></figure>
+<p>通过mdconvert，可以将上面的案例中所提到的xtc文件配合pdb文件转化成hdf5格式的文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed/examples/trieste-1$ mdconvert -o test.h5 -t ref.pdb traj-whole.xtc </span><br><span class="line">Warning: <span class="string">&#x27;step&#x27;</span> data from input file(s) will be discarded. output format only supports fields: <span class="string">&#x27;xyz&#x27;</span>, <span class="string">&#x27;time&#x27;</span>, <span class="string">&#x27;cell_lengths&#x27;</span>, <span class="string">&#x27;cell_angles&#x27;</span>, <span class="string">&#x27;velocities&#x27;</span>, <span class="string">&#x27;kineticEnergy&#x27;</span>, <span class="string">&#x27;potentialEnergy&#x27;</span>, <span class="string">&#x27;temperature&#x27;</span>, <span class="string">&#x27;lambda&#x27;</span>, <span class="string">&#x27;topology&#x27;</span></span><br><span class="line">converted 5 frames, 6580 atoms</span><br></pre></td></tr></table></figure>
+<p>而读取hdf5的文件，可以用python中的h5py来实现，没有安装h5py的可以通过pip简单的安装一下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(base) dechin@ubuntu2004:~/projects/gitlab/dechin/src/plumed/examples/trieste-1$ python3 -m pip install h5py==2.9</span><br><span class="line">Collecting h5py==2.9</span><br><span class="line">  Downloading h5py-2.9.0-cp38-cp38-manylinux1_x86_64.whl (2.8 MB)</span><br><span class="line">     |████████████████████████████████| 2.8 MB 997 kB/s </span><br><span class="line">Requirement already satisfied: numpy&gt;=1.7 <span class="keyword">in</span> /home/dechin/anaconda3/lib/python3.8/site-packages (from h5py==2.9) (1.20.2)</span><br><span class="line">Requirement already satisfied: six <span class="keyword">in</span> /home/dechin/.local/lib/python3.8/site-packages (from h5py==2.9) (1.16.0)</span><br><span class="line">Installing collected packages: h5py</span><br><span class="line">  Attempting uninstall: h5py</span><br><span class="line">    Found existing installation: h5py 3.2.1</span><br><span class="line">    Uninstalling h5py-3.2.1:</span><br><span class="line">      Successfully uninstalled h5py-3.2.1</span><br><span class="line">Successfully installed h5py-2.10.0</span><br></pre></td></tr></table></figure>
+<p>具体的h5py的使用方法这里就不进行展开了，可以参考官方的<a target="_blank" rel="noopener" href="https://docs.h5py.org/en/stable/">使用文档</a>。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文作为一个入门级的文章，主要介绍了分子动力学模拟中增强采样的基本概念与相应工具的安装和使用。PLUMED是业界比较出名的一款增强采样开源软件，能够对接多个分子动力学模拟软件，如GROMACS等，并利用这些软件生成的路径信息来进行采样。并且为了可以在python上也能看到路径信息等重要数据，可以考虑使用mdconvert将路径数据转化成python上常用的hdf5格式并用h5py进行读写。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/plumed.html">https://www.cnblogs.com/dechinphy/p/plumed.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>打赏专用链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<p>腾讯云专栏同步：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/91958">https://cloud.tencent.com/developer/column/91958</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/edbcd57ffa03">https://www.jianshu.com/p/edbcd57ffa03</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.chembiosim.com/alter-md-trajectory-file-format-with-mdconvert/">https://blog.chembiosim.com/alter-md-trajectory-file-format-with-mdconvert/</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.chembiosim.com/plumed-basics-01/">https://blog.chembiosim.com/plumed-basics-01/</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2021/07/23/PyVista%EF%BC%9A%E4%B8%80%E6%AC%BEPython%E7%9A%84%E4%B8%89%E7%BB%B4%E5%8F%AF%E8%A7%86%E5%8C%96%E8%BD%AF%E4%BB%B6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          PyVista：一款Python的三维可视化软件
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/07/06/MindInsight-%E4%B8%80%E6%AC%BE%E5%9F%BA%E4%BA%8EMindSpore%E6%A1%86%E6%9E%B6%E7%9A%84%E8%AE%AD%E7%BB%83%E5%8F%AF%E8%A7%86%E5%8C%96%E6%8F%92%E4%BB%B6/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">MindInsight:一款基于MindSpore框架的训练可视化插件</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=增强采样软件PLUMED的安装与使用 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F07%2F12%2F%25E5%25A2%259E%25E5%25BC%25BA%25E9%2587%2587%25E6%25A0%25B7%25E8%25BD%25AF%25E4%25BB%25B6PLUMED%25E7%259A%2584%25E5%25AE%2589%25E8%25A3%2585%25E4%25B8%258E%25E4%25BD%25BF%25E7%2594%25A8%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=增强采样软件PLUMED的安装与使用 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2021%2F07%2F12%2F%25E5%25A2%259E%25E5%25BC%25BA%25E9%2587%2587%25E6%25A0%25B7%25E8%25BD%25AF%25E4%25BB%25B6PLUMED%25E7%259A%2584%25E5%25AE%2589%25E8%25A3%2585%25E4%25B8%258E%25E4%25BD%25BF%25E7%2594%25A8%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=增强采样软件PLUMED的安装与使用 - Hexo&url=http://dechinphy.github.io/2021/07/12/%E5%A2%9E%E5%BC%BA%E9%87%87%E6%A0%B7%E8%BD%AF%E4%BB%B6PLUMED%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

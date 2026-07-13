@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>关于分子力场中二面角项的思考 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;接前面一篇关于键长和键角的相互作用力计算的文章，本文简单的计算了一下传统分子力场项中常见的二面角项的相互作用力。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "关于分子力场中二面角项的思考 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;接前面一篇关于键长和键角的相互作用力计算的文章，本文简单的计算了一下传统分子力场项中常见的二面角项的相互作用力。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2025/11/13/%E5%85%B3%E4%BA%8E%E5%88%86%E5%AD%90%E5%8A%9B%E5%9C%BA%E4%B8%AD%E4%BA%8C%E9%9D%A2%E8%A7%92%E9%A1%B9%E7%9A%84%E6%80%9D%E8%80%83/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;接前面一篇关于键长和键角的相互作用力计算的文章，本文简单的计算了一下传统分子力场项中常见的二面角项的相互作用力。&lt;/p&gt;" />
+    <meta name="twitter:title" content="关于分子力场中二面角项的思考 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;接前面一篇关于键长和键角的相互作用力计算的文章，本文简单的计算了一下传统分子力场项中常见的二面角项的相互作用力。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;接前面一篇关于键长和键角的相互作用力计算的文章，本文简单的计算了一下传统分子力场项中常见的二面角项的相互作用力。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2025/11/13/%E5%85%B3%E4%BA%8E%E5%88%86%E5%AD%90%E5%8A%9B%E5%9C%BA%E4%B8%AD%E4%BA%8C%E9%9D%A2%E8%A7%92%E9%A1%B9%E7%9A%84%E6%80%9D%E8%80%83/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "关于分子力场中二面角项的思考 | Hexo",
+            "datePublished": "2025-11-13T03:20:05.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2025/11/13/%E5%85%B3%E4%BA%8E%E5%88%86%E5%AD%90%E5%8A%9B%E5%9C%BA%E4%B8%AD%E4%BA%8C%E9%9D%A2%E8%A7%92%E9%A1%B9%E7%9A%84%E6%80%9D%E8%80%83/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidFEhZDJ_eszG1vBJcsKUA7" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      关于分子力场中二面角项的思考
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2025-11-13T03:20:05.000Z" itemprop="datePublished">2025-11-13</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>接前面一篇关于键长和键角的相互作用力计算的文章，本文简单的计算了一下传统分子力场项中常见的二面角项的相互作用力。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在分子动力学模拟所使用的分子力场中，可以大致的分为成键相互作用、非成键相互作用和多体相互作用。在上一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/17999562/bond-angle">文章</a>中，我们介绍了成键相互作用力中的键能和键角能这两项，其代表的分别是两体成键相互作用和三体成键相互作用，本文主要介绍二面角项Dihedral Energy，也是四体成键相互作用中的一种（另有一种Improper Dihedral Energy，暂不在这里进行介绍）。</p>
+<h1 id="二面角能量项的定义"><a href="#二面角能量项的定义" class="headerlink" title="二面角能量项的定义"></a>二面角能量项的定义</h1><p>要构成一个二面角，一般需要4个原子$i,j,k,l$。因为二面角是力场中的成键相互作用，因此在一个二面角中至少存在这三根键：$b_{ij},b_{jk},b_{kl}$。我们知道，由三个不在一条直线上的点，就可以确定一个平面。在二面角中，所谓的“二面”，指的是$P_{ijk}$和$P_{jkl}$这两个平面。换句话说，计算二面角，就是计算$P_{ijk}$和$P_{jkl}$这两个平面的夹角$\psi$。</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202402/2277440-20240205093710574-1878113757.png">
+</div>
+
+<p>一般的计算流程就是，先计算出来平面$P_{ijk}$和$P_{jkl}$的法向量，然后求两个法向量之间的夹角$\phi$，就可以得到两个平面之间的夹角$\psi&#x3D;\pi-\phi$。那么，首先我们要使用$i,j,k,l$四个点的位置信息$\textbf{r}<em>i,\textbf{r}<em>j,\textbf{r}<em>k,\textbf{r}<em>l$去计算平面法向量$\textbf{n}</em>{ijk},\textbf{n}</em>{jkl}$。根据右手螺旋定则，我们调整一下原子序号的顺序，这样可以使得计算二面角的时候免去符号计算的问题，那么有：<br>$$<br>\textbf{n}</em>{kji}&#x3D;\frac{\textbf{r}</em>{kj}\times \textbf{r}<em>{ji}}{\left|\textbf{r}</em>{kj}\times \textbf{r}<em>{ji}\right|},\textbf{n}</em>{jkl}&#x3D;\frac{\textbf{r}<em>{jk}\times \textbf{r}</em>{kl}}{\left|\textbf{r}<em>{jk}\times \textbf{r}</em>{kl}\right|}<br>$$<br>然后可以计算得二面角：<br>$$<br>\psi&#x3D;\pi-\phi&#x3D;\pi-arccos(\textbf{n}<em>{kji}\cdot\textbf{n}</em>{jkl})<br>$$<br>然后使用二面角势能项计算相应势能：<br>$$<br>E(\psi)&#x3D;k_{\psi}[1+cos(n\psi-\psi_p)]<br>$$<br>其中$n$是一个正整数，$k_{\psi}$和$\psi_p$都是常数。当然，二面角的计算可能会有其他形式的公式，但这里我们只介绍这一种比较常用的二面角计算形式。</p>
+<h1 id="二面角作用力计算"><a href="#二面角作用力计算" class="headerlink" title="二面角作用力计算"></a>二面角作用力计算</h1><p>二面角能量项计算之后，是要作用到每一个对应的原子上的，一共会产生四个作用力：$\textbf{F}<em>i,\textbf{F}<em>j,\textbf{F}<em>k,\textbf{F}<em>l$，其中需要满足相互作用力之和为0的约束条件：<br>$$<br>\textbf{F}<em>i+\textbf{F}<em>j+\textbf{F}<em>k+\textbf{F}<em>l&#x3D;0<br>$$<br>但是需要特别说明的是，二面角作用力是力矩不守恒的，也就是二面角会使得相应的原子进行旋转操作。根据相互作用力的微分形式定义有：<br>$$<br>\textbf{F}<em>i&#x3D;-\frac{\partial E}{\partial \textbf{R}<em>i}&#x3D;-\frac{d E}{d \psi}\frac{\partial \psi}{\partial \textbf{R}<em>i}<br>$$<br>其中前半部分有：<br>$$<br>-\frac{\partial E}{\partial \psi}&#x3D;nk</em>{\psi}sin(n\psi-\psi_p)<br>$$<br>后半部分涉及到对向量的求导，因为在$\psi$的计算表达式中，只有$\textbf{n}</em>{kji}$跟$\textbf{R}<em>i$有关联，因此又需要做几步链式法则（这里用到了矩阵点乘的求导法则）：<br>$$<br>\frac{\partial \psi}{\partial \textbf{R}<em>i}&#x3D;\frac{\partial \psi}{\partial \textbf{n}</em>{kji}}\frac{\partial \textbf{n}</em>{kji}}{\partial \textbf{R}<em>i}\<br>\frac{\partial \psi}{\partial \textbf{n}</em>{kji}}&#x3D;\frac{\textbf{n}</em>{jkl}}{\sqrt{1-(\textbf{n}</em>{kji}\cdot\textbf{n}</em>{jkl})^2}}<br>$$<br>后半部分还需要再做一次链式法则：<br>$$<br>\frac{\partial \textbf{n}</em>{kji}}{\partial \textbf{R}<em>i}&#x3D;\frac{\partial \textbf{n}</em>{kji}}{\partial \textbf{e}</em>{ji}}\frac{\partial\textbf{e}</em>{ji}}{\partial\textbf{r}</em>{ji}}\frac{\partial \textbf{r}</em>{ji}}{\partial \textbf{R}<em>i}&#x3D;\frac{\partial \textbf{n}</em>{kji}}{\partial \textbf{e}</em>{ji}}\frac{\partial\textbf{e}<em>{ji}}{\partial\textbf{r}</em>{ji}}\textit{I}<br>$$<br>最前面的这一项是一个雅克比矩阵的形式：<br>$$<br>\frac{\partial \textbf{n}<em>{kji}}{\partial \textbf{e}</em>{ji}}&#x3D;\left(<br>\begin{matrix}<br>0&amp;&amp;z_j-z_k&amp;&amp;y_k-y_j\<br>z_k-z_j&amp;&amp;0&amp;&amp;x_j-x_k\<br>y_j-y_k&amp;&amp;x_k-x_j&amp;&amp;0<br>\end{matrix}<br>\right)<br>$$<br>归一化部分对应的雅克比矩阵为：<br>$$<br>\frac{\partial\textbf{e}<em>{ji}}{\partial\textbf{r}</em>{ji}}&#x3D;\left(<br>\begin{matrix}<br>\frac{1}{|\textbf{r}<em>{ji}|}-\frac{x^2}{|\textbf{r}</em>{ji}|^3}&amp;&amp;-\frac{xy}{|\textbf{r}<em>{ji}|^3}&amp;&amp;-\frac{xz}{|\textbf{r}</em>{ji}|^3}\<br>-\frac{xy}{|\textbf{r}<em>{ji}|^3}&amp;&amp;\frac{1}{|\textbf{r}</em>{ji}|}-\frac{y^2}{|\textbf{r}<em>{ji}|^3}&amp;&amp;-\frac{yz}{|\textbf{r}</em>{ji}|^3}\<br>-\frac{xz}{|\textbf{r}<em>{ji}|^3}&amp;&amp;-\frac{yz}{|\textbf{r}</em>{ji}|^3}&amp;&amp;\frac{1}{|\textbf{r}<em>{ji}|}-\frac{z^2}{|\textbf{r}</em>{ji}|^3}<br>\end{matrix}<br>\right)&#x3D;\frac{1}{|\textbf{r}<em>{ji}|^3}\left(<br>\begin{matrix}<br>y^2+z^2&amp;&amp;-xy&amp;&amp;-xz\<br>-xy&amp;&amp;x^2+z^2&amp;&amp;-yz\<br>-xz&amp;&amp;-yz&amp;&amp;x^2+y^2<br>\end{matrix}<br>\right)<br>$$<br>整理可得：<br>$$<br>\textbf{F}<em>i&#x3D;\frac{nk\sin(n\psi-\psi_p)}{|\sin\theta||\textbf{N}</em>{kji}|}(\textbf{n}</em>{jkl}-\textbf{n}<em>{kji}\cos\theta)\times\textbf{r}</em>{kj}<br>$$<br>其中<br>$$<br>\textbf{N}<em>{kji}&#x3D;\textbf{r}</em>{kj}\times\textbf{r}<em>{ji}\<br>\textbf{N}</em>{jkl}&#x3D;\textbf{r}<em>{jk}\times\textbf{r}</em>{kl}<br>$$<br>是平面法向量的非标准化结果。那么类似的道理，可以得到原子$l$的作用力：<br>$$<br>\textbf{F}<em>l&#x3D;-\frac{nk\sin(n\psi-\psi_p)}{|\sin\theta||\textbf{N}</em>{jkl}|}(\textbf{n}<em>{kji}-\textbf{n}</em>{jkl}\cos\theta)\times\textbf{r}<em>{kj}<br>$$<br>比较关键的是$j$和$k$两个原子的受力，会包含多项：<br>$$<br>\begin{align*}<br>\textbf{F}<em>j&amp;&#x3D;-\frac{\partial E}{\partial \textbf{R}<em>j}&#x3D;-\frac{\partial E}{\partial \psi}\frac{\partial\psi}{\partial\textbf{R}<em>j}\<br>&amp;&#x3D;nk\sin(n\psi-\psi_p)\left(\frac{\partial\psi}{\partial\textbf{n}</em>{kji}}\frac{\partial\textbf{n}</em>{kji}}{\partial\textbf{R}<em>j}+\frac{\partial\psi}{\partial\textbf{n}</em>{jkl}}\frac{\partial\textbf{n}</em>{jkl}}{\partial\textbf{R}<em>j}\right)\<br>&amp;&#x3D;\frac{nk\sin(n\psi-\psi_p)}{|\sin\theta|}\left[\textbf{n}</em>{jkl}\frac{\partial\textbf{n}</em>{kji}}{\partial\textbf{N}<em>{kji}}\left(\frac{\partial\textbf{N}</em>{kji}}{\partial\textbf{r}<em>{kj}}\frac{\partial\textbf{r}</em>{kj}}{\partial\textbf{R}<em>j}+\frac{\partial\textbf{N}</em>{kji}}{\partial\textbf{r}<em>{ji}}\frac{\partial\textbf{r}</em>{ji}}{\partial\textbf{R}<em>j}\right)+\textbf{n}</em>{kji}\frac{\partial\textbf{n}<em>{jkl}}{\partial\textbf{N}</em>{jkl}}\frac{\partial\textbf{N}<em>{jkl}}{\partial\textbf{r}</em>{jk}}\frac{\partial\textbf{r}<em>{jk}}{\partial\textbf{R}</em>{j}}\right]\<br>&amp;&#x3D;\frac{nk\sin(n\psi-\psi_p)}{|\sin\theta|}\left[\textbf{n}<em>{jkl}\frac{\partial\textbf{n}</em>{kji}}{\partial\textbf{N}<em>{kji}}\left(\frac{\partial\textbf{N}</em>{kji}}{\partial\textbf{r}<em>{kj}}-\frac{\partial\textbf{N}</em>{kji}}{\partial\textbf{r}<em>{ji}}\right)-\textbf{n}</em>{kji}\frac{\partial\textbf{n}<em>{jkl}}{\partial\textbf{N}</em>{jkl}}\frac{\partial\textbf{N}<em>{jkl}}{\partial\textbf{r}</em>{jk}}\right]\<br>&amp;&#x3D;\frac{nk\sin(n\psi-\psi_p)}{|\sin\theta|}\left(\textbf{n}<em>{jkl}\frac{\partial\textbf{n}</em>{kji}}{\partial\textbf{N}<em>{kji}}\frac{\partial\textbf{N}</em>{kji}}{\partial\textbf{r}<em>{kj}}-\textbf{n}</em>{kji}\frac{\partial\textbf{n}<em>{jkl}}{\partial\textbf{N}</em>{jkl}}\frac{\partial\textbf{N}<em>{jkl}}{\partial\textbf{r}</em>{jk}}\right)-\textbf{F}<em>i\<br>&amp;&#x3D;\frac{nk\sin(n\psi-\psi_p)}{|\sin\theta|}\left[-\frac{1}{\left|\textbf{N}</em>{kji}\right|}\left(\textbf{n}<em>{jkl}-\cos\theta\textbf{n}</em>{kji}\right)\times\textbf{r}<em>{ji}+\frac{1}{\left|\textbf{N}</em>{jkl}\right|}\left(\textbf{n}<em>{kji}-\cos\theta\textbf{n}</em>{jkl}\right)\times\textbf{r}<em>{kl}\right]-\textbf{F}<em>i<br>\end{align*}<br>$$<br>此处用到一个化简，如果有$\textbf{r}&#x3D;\textbf{r}<em>1\times\textbf{r}<em>2$，则：<br>$$<br>\textbf{e}\frac{\partial\textbf{r}}{\partial\textbf{r}<em>1}&#x3D;-\textbf{e}\times\textbf{r}<em>2\<br>\textbf{e}\frac{\partial\textbf{r}}{\partial\textbf{r}<em>2}&#x3D;\textbf{e}\times\textbf{r}<em>1<br>$$<br>那么使用类似的方法也可以计算得原子$k$上的作用力：<br>$$<br>\begin{align*}<br>\textbf{F}<em>k&amp;&#x3D;\frac{\partial E}{\partial \textbf{R}<em>k}&#x3D;-\frac{\partial E}{\partial\psi}\frac{\partial\psi}{\partial\textbf{R}<em>k}\<br>&amp;&#x3D;\frac{nk\sin(n\psi-\psi_p)}{|\sin\theta|}\left[\textbf{n}</em>{jkl}\frac{\partial\textbf{n}</em>{kji}}{\partial\textbf{N}</em>{kji}}\frac{\partial\textbf{N}</em>{kji}}{\partial\textbf{r}</em>{kj}}\frac{\partial\textbf{r}</em>{kj}}{\partial\textbf{R}<em>k}+\textbf{n}</em>{kji}\frac{\partial\textbf{n}</em>{jkl}}{\partial\textbf{N}</em>{jkl}}\left(\frac{\partial\textbf{N}</em>{jkl}}{\partial\textbf{r}</em>{jk}}\frac{\partial\textbf{r}</em>{jk}}{\partial\textbf{R}<em>{k}}+\frac{\partial\textbf{N}</em>{jkl}}{\partial\textbf{r}<em>{kl}}\frac{\partial\textbf{r}</em>{kl}}{\partial\textbf{R}<em>{k}}\right)\right]\<br>&amp;&#x3D;\frac{nk\sin(n\psi-\psi_p)}{|\sin\theta|}\left[-\textbf{n}</em>{jkl}\frac{\partial\textbf{n}<em>{kji}}{\partial\textbf{N}</em>{kji}}\frac{\partial\textbf{N}<em>{kji}}{\partial\textbf{r}</em>{kj}}+\textbf{n}<em>{kji}\frac{\partial\textbf{n}</em>{jkl}}{\partial\textbf{N}<em>{jkl}}\left(\frac{\partial\textbf{N}</em>{jkl}}{\partial\textbf{r}<em>{jk}}-\frac{\partial\textbf{N}</em>{jkl}}{\partial\textbf{r}<em>{kl}}\right)\right]\<br>&amp;&#x3D;\frac{nk\sin(n\psi-\psi_p)}{|\sin\theta|}\left(\textbf{n}</em>{kji}\frac{\partial\textbf{n}<em>{jkl}}{\partial\textbf{N}</em>{jkl}}\frac{\partial\textbf{N}<em>{jkl}}{\partial\textbf{r}</em>{jk}}-\textbf{n}<em>{jkl}\frac{\partial\textbf{n}</em>{kji}}{\partial\textbf{N}<em>{kji}}\frac{\partial\textbf{N}</em>{kji}}{\partial\textbf{r}<em>{kj}}\right)-\textbf{F}<em>l\<br>&amp;&#x3D;\frac{nk\sin(n\psi-\psi_p)}{|\sin\theta|}\left[-\frac{1}{|\textbf{N}</em>{jkl}|}(\textbf{n}</em>{kji}-\cos\theta\textbf{n}<em>{jkl})\times\textbf{r}</em>{kl}+\frac{1}{|\textbf{N}<em>{kji}|}(\textbf{n}</em>{jkl}-\cos\theta\textbf{n}<em>{kji})\times\textbf{n}</em>{ji}\right]-\textbf{F}_l\<br>&amp;&#x3D;-\textbf{F}_j-\textbf{F}_i-\textbf{F}_l<br>\end{align*}<br>$$<br>那么到这里为止，我们就得到了所有的二面角的四个顶点原子的作用力。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>接前面一篇关于键长和键角的相互作用力计算的文章，本文简单的计算了一下传统分子力场项中常见的二面角项的相互作用力。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/dihedral-1.html">https://www.cnblogs.com/dechinphy/p/dihedral-1.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2025/11/13/%E5%BC%B9%E7%B0%A7%E7%9A%84%E5%BC%B9%E5%8A%9B%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B2%BF%E7%9D%80%E5%BC%B9%E7%B0%A7%EF%BC%9F/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          弹簧的弹力为什么沿着弹簧？
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/11/03/%E4%BD%BF%E7%94%A8conda%E5%AE%89%E8%A3%85gcc%E5%92%8Cg++/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">使用conda安装gcc和g++</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=关于分子力场中二面角项的思考 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2025%2F11%2F13%2F%25E5%2585%25B3%25E4%25BA%258E%25E5%2588%2586%25E5%25AD%2590%25E5%258A%259B%25E5%259C%25BA%25E4%25B8%25AD%25E4%25BA%258C%25E9%259D%25A2%25E8%25A7%2592%25E9%25A1%25B9%25E7%259A%2584%25E6%2580%259D%25E8%2580%2583%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=关于分子力场中二面角项的思考 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2025%2F11%2F13%2F%25E5%2585%25B3%25E4%25BA%258E%25E5%2588%2586%25E5%25AD%2590%25E5%258A%259B%25E5%259C%25BA%25E4%25B8%25AD%25E4%25BA%258C%25E9%259D%25A2%25E8%25A7%2592%25E9%25A1%25B9%25E7%259A%2584%25E6%2580%259D%25E8%2580%2583%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=关于分子力场中二面角项的思考 - Hexo&url=http://dechinphy.github.io/2025/11/13/%E5%85%B3%E4%BA%8E%E5%88%86%E5%AD%90%E5%8A%9B%E5%9C%BA%E4%B8%AD%E4%BA%8C%E9%9D%A2%E8%A7%92%E9%A1%B9%E7%9A%84%E6%80%9D%E8%80%83/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

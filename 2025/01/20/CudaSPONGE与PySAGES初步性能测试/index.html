@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>CudaSPONGE与PySAGES初步性能测试 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;接前一篇关于PySAGES结合CudaSPONGE使用方法的文章，本文主要还是使用了一样的测试案例。仅通过不同的测试步长，来定性的分析PySAGES的MetaDynamics实现方案结合MD软件之后的性能数据。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "CudaSPONGE与PySAGES初步性能测试 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;接前一篇关于PySAGES结合CudaSPONGE使用方法的文章，本文主要还是使用了一样的测试案例。仅通过不同的测试步长，来定性的分析PySAGES的MetaDynamics实现方案结合MD软件之后的性能数据。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2025/01/20/CudaSPONGE%E4%B8%8EPySAGES%E5%88%9D%E6%AD%A5%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;接前一篇关于PySAGES结合CudaSPONGE使用方法的文章，本文主要还是使用了一样的测试案例。仅通过不同的测试步长，来定性的分析PySAGES的MetaDynamics实现方案结合MD软件之后的性能数据。&lt;/p&gt;" />
+    <meta name="twitter:title" content="CudaSPONGE与PySAGES初步性能测试 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;接前一篇关于PySAGES结合CudaSPONGE使用方法的文章，本文主要还是使用了一样的测试案例。仅通过不同的测试步长，来定性的分析PySAGES的MetaDynamics实现方案结合MD软件之后的性能数据。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;接前一篇关于PySAGES结合CudaSPONGE使用方法的文章，本文主要还是使用了一样的测试案例。仅通过不同的测试步长，来定性的分析PySAGES的MetaDynamics实现方案结合MD软件之后的性能数据。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2025/01/20/CudaSPONGE%E4%B8%8EPySAGES%E5%88%9D%E6%AD%A5%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "CudaSPONGE与PySAGES初步性能测试 | Hexo",
+            "datePublished": "2025-01-20T03:03:30.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2025/01/20/CudaSPONGE%E4%B8%8EPySAGES%E5%88%9D%E6%AD%A5%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidWFYZ9mPWf_gy5pMQD3Q5T" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      CudaSPONGE与PySAGES初步性能测试
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2025-01-20T03:03:30.000Z" itemprop="datePublished">2025-01-20</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>接前一篇关于PySAGES结合CudaSPONGE使用方法的文章，本文主要还是使用了一样的测试案例。仅通过不同的测试步长，来定性的分析PySAGES的MetaDynamics实现方案结合MD软件之后的性能数据。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面的一篇博客中，我们介绍过<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18572403/cudasponge">CudaSPONGE的基础使用方法</a>、<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18573762/sponge-python">CudaSPONGE调用Python接口函数</a>以及<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18615556/pysages-sponge">CudaSPONGE结合增强采样软件PySAGES的使用方法</a>。在这篇文章中，我们将介绍CudaSPONGE和PySAGES相结合的初步性能测试结果。</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120154603670-881094536.png">
+</div>
+
+<h1 id="测试案例"><a href="#测试案例" class="headerlink" title="测试案例"></a>测试案例</h1><p>我们沿用<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18615556/pysages-sponge">这一篇文章</a>中的测试案例，对一个简单的多肽体系的两个二面角参数空间执行MetaDynamics增强采样方法：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120110904747-252270899.png">
+</div>
+
+<p>我们的预期结果，在普通的NVT下，二面角的采样空间较为集中：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120111123859-361557245.png">
+</div>
+
+<p>而加上PySAEGES的增强采样之后，理论上采样点可以均匀的遍布在整个采样空间：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120111448246-54983946.png">
+</div>
+
+<p>这是我们对于这个采样结果的预期，其实图片内容也就是实际结果。但是本文主要侧重于性能测试，而我们的性能测试，就基于这个案例来开展。</p>
+<h1 id="调用逻辑"><a href="#调用逻辑" class="headerlink" title="调用逻辑"></a>调用逻辑</h1><p>其实对于PySAGES来说，他们有自己的一套函数调用逻辑：把不同的MD软件作为Backend，由PySAGES来进行封装和调用，并且用于控制MD模拟的进行。所以如果按照PySAGES的调用逻辑来说，应该用这么一个框架来结合PySAGES和CudaSPONGE：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120111908752-1373851574.png">
+</div>
+
+<p>但是因为CudaSPONGE主要基于CUDA-C开发，为了发挥更多的性能优势，CudaSPONGE也有自己的一套调用逻辑，结合PySAGES之后是这样的：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120112051733-799269886.png">
+</div>
+
+<p>其实这个问题的本质就在于，以哪一种软件为核心。如果以PySAGES为核心，就是采用上面的一种交互形式。如果是以MD软件为核心，就是采用下面的这种形式。不过对于CudaSPONGE v1.4版本来说，因为提供的API有限，其实只能使用下面的这种调用形式，也就是以MD软件为核心的调用形式。本文所使用到的测试案例代码，都可以参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18615556/pysages-sponge">参考链接1</a>中的内容。</p>
+<h1 id="MetaDynamics说明"><a href="#MetaDynamics说明" class="headerlink" title="MetaDynamics说明"></a>MetaDynamics说明</h1><p>关于MetaDynamics的原理，建议还是翻阅一下Parrinello组的原始文章《Escaping free-energy minima》。简单的来说就是，我们在一个定义好的序参量空间，每隔固定的MD步数，就施加一个高斯势，这部分的总和组成一个偏置势：<br>$$<br>V(s,t)&#x3D;\int_0^td\tau w G\left[s,s(\tau)\right]<br>$$<br>如果使用一个well-tempered来加速自由能面的收敛，那这个参数$\omega$需要从一个常数变成一个随偏置势增长而逐渐减小的一个可变量：<br>$$<br>w(t)&#x3D;\omega e^{-\frac{1}{\gamma -1}\beta V(s,t)}<br>$$<br>这里PySAGES中的MetaDynamics就是用的这个增强采样方法，也是我们重点测试的方法对象。需要提及的是，虽然每隔固定的步数我们才会施加一个高斯势，但其实历史累积的高斯势的作用力一直都存在。所以，只要在MD过程中添加了MetaDynamics方法，就意味着每一步都需要计算一个序参量的值，及其对应的偏置势产生的偏置作用力。在很多情况下，偏置作用力的计算有可能会成为整个分子模拟过程的瓶颈部分。因此，MetaDynamics方法的性能至关重要。</p>
+<h1 id="初步测试数据"><a href="#初步测试数据" class="headerlink" title="初步测试数据"></a>初步测试数据</h1><p>经过初步的测试，分别运行了2000、4000、6000、8000、10000个Step的NVT和Meta NVT，运行时长和Meta时长占比如下：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202501/2277440-20250120152816877-374743689.png">
+</div>
+可以看到的是，Meta的运行时长目前可能要达到90%左右。当然，这里面影响的因素有很多，暂时还不确定性能表现与文章中描述不同的原因在哪里。因为这里面的数据传输都是使用的Dlpack进行转换，理论上可以做到Zero-Copy。不过性能后续可以再慢慢优化，就目前来说，使用PySAGES去开发一个增强采样方法，然后使用CudaSPONGE来运行分子动力学模拟的部分，开发成本相对来说是比较低的，并且获得的性能增益也不错。测试平台信息如下：
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GPU: RTX 3080Ti</span><br><span class="line">Jax: 0.3.25</span><br><span class="line">Jaxlib: 0.3.25+cuda11.cudnn82</span><br><span class="line">nvcc: 11.6.124</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>接前一篇关于PySAGES结合CudaSPONGE使用方法的文章，本文主要还是使用了一样的测试案例。仅通过不同的测试步长，来定性的分析PySAGES的MetaDynamics实现方案结合MD软件之后的性能数据。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/sponge_ext_01.html">https://www.cnblogs.com/dechinphy/p/sponge_ext_01.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18615556/pysages-sponge">https://www.cnblogs.com/dechinphy/p/18615556/pysages-sponge</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2025/01/20/Markdown%E8%BD%ACBeamer%E8%BF%9B%E9%98%B6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          Markdown转Beamer进阶
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/12/25/Markdown%E8%BD%ACBeamer/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">Markdown转Beamer</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=CudaSPONGE与PySAGES初步性能测试 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2025%2F01%2F20%2FCudaSPONGE%25E4%25B8%258EPySAGES%25E5%2588%259D%25E6%25AD%25A5%25E6%2580%25A7%25E8%2583%25BD%25E6%25B5%258B%25E8%25AF%2595%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=CudaSPONGE与PySAGES初步性能测试 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2025%2F01%2F20%2FCudaSPONGE%25E4%25B8%258EPySAGES%25E5%2588%259D%25E6%25AD%25A5%25E6%2580%25A7%25E8%2583%25BD%25E6%25B5%258B%25E8%25AF%2595%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=CudaSPONGE与PySAGES初步性能测试 - Hexo&url=http://dechinphy.github.io/2025/01/20/CudaSPONGE%E4%B8%8EPySAGES%E5%88%9D%E6%AD%A5%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

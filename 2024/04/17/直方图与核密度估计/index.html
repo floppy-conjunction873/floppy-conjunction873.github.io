@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>直方图与核密度估计 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;核密度估计（KDE）方法，相当于用多个波包的组合形式来近似一个真实的概率密度，以获得一个连续可微分的概率密度函数。本文通过一些简单的概率分布的示例，演示了一下KDE的使用方法。其实KDE的思想在很多领域都会以不同的形式出现，是一个比较基础的概率分布近似手段。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "直方图与核密度估计 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;核密度估计（KDE）方法，相当于用多个波包的组合形式来近似一个真实的概率密度，以获得一个连续可微分的概率密度函数。本文通过一些简单的概率分布的示例，演示了一下KDE的使用方法。其实KDE的思想在很多领域都会以不同的形式出现，是一个比较基础的概率分布近似手段。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2024/04/17/%E7%9B%B4%E6%96%B9%E5%9B%BE%E4%B8%8E%E6%A0%B8%E5%AF%86%E5%BA%A6%E4%BC%B0%E8%AE%A1/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;核密度估计（KDE）方法，相当于用多个波包的组合形式来近似一个真实的概率密度，以获得一个连续可微分的概率密度函数。本文通过一些简单的概率分布的示例，演示了一下KDE的使用方法。其实KDE的思想在很多领域都会以不同的形式出现，是一个比较基础的概率分布近似手段。&lt;/p&gt;" />
+    <meta name="twitter:title" content="直方图与核密度估计 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;核密度估计（KDE）方法，相当于用多个波包的组合形式来近似一个真实的概率密度，以获得一个连续可微分的概率密度函数。本文通过一些简单的概率分布的示例，演示了一下KDE的使用方法。其实KDE的思想在很多领域都会以不同的形式出现，是一个比较基础的概率分布近似手段。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;核密度估计（KDE）方法，相当于用多个波包的组合形式来近似一个真实的概率密度，以获得一个连续可微分的概率密度函数。本文通过一些简单的概率分布的示例，演示了一下KDE的使用方法。其实KDE的思想在很多领域都会以不同的形式出现，是一个比较基础的概率分布近似手段。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2024/04/17/%E7%9B%B4%E6%96%B9%E5%9B%BE%E4%B8%8E%E6%A0%B8%E5%AF%86%E5%BA%A6%E4%BC%B0%E8%AE%A1/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "直方图与核密度估计 | Hexo",
+            "datePublished": "2024-04-17T07:12:45.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2024/04/17/%E7%9B%B4%E6%96%B9%E5%9B%BE%E4%B8%8E%E6%A0%B8%E5%AF%86%E5%BA%A6%E4%BC%B0%E8%AE%A1/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidd5_M4-zd8bcE6-yWXr3Ln" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      直方图与核密度估计
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2024-04-17T07:12:45.000Z" itemprop="datePublished">2024-04-17</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>核密度估计（KDE）方法，相当于用多个波包的组合形式来近似一个真实的概率密度，以获得一个连续可微分的概率密度函数。本文通过一些简单的概率分布的示例，演示了一下KDE的使用方法。其实KDE的思想在很多领域都会以不同的形式出现，是一个比较基础的概率分布近似手段。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>直方图是一种经常被用于统计的图形表达形式，简单来说它的功能就是用一系列的样本数据，去分析样本的分布规律。而直方图跟核密度估计（Kernel Density Estimation，KDE）方法的主要差别在于，直方图得到的是一个离散化的统计分布，而KDE方法得到的是一个连续的概率分布函数。如果将得到的分布重新用于采样，两者都可以结合蒙特卡洛方法实现这样的功能，但是KDE的优点在于它得到的结果是可微分的，那么就可以应用于有偏估计的分子动力学模拟中，如元动力学（Meta Dynamics）方法。这里主要用Python实现一个简单的KDE函数的功能，也顺带介绍一下Numpy和Matplotlib中关于直方图的使用方法。</p>
+<h1 id="制备样本"><a href="#制备样本" class="headerlink" title="制备样本"></a>制备样本</h1><p>在使用直方图和KDE前，我们需要先制备一些样本，这里可以使用Numpy生成一些随机数，便于测试，例如均匀随机数，其概率密度为：<br>$$<br>f(x)&#x3D;\left{<br>\begin{matrix}<br>\frac{1}{b-a}, a&lt;x&lt;b\<br>0, others<br>\end{matrix}<br>\right.<br>$$<br>对应的numpy生成方法为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data = np.random.uniform(-<span class="number">3</span>, <span class="number">3</span>, (<span class="number">10000</span>, ))</span><br></pre></td></tr></table></figure>
+<p>这个分布表示在-3到3的范围内进行均匀随机采样，采10000个样本点。还可以使用高斯分布，其概率密度为：<br>$$<br>f(x)&#x3D;\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}<br>$$<br>对应的numpy生成方法为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data = np.random.normal(<span class="number">0</span>, <span class="number">1</span>, (<span class="number">10000</span>, ))</span><br></pre></td></tr></table></figure>
+<p>这个采样表示从$\mu&#x3D;0, \sigma&#x3D;1$的条件下对高斯函数进行采10000个样本点，也就是正态分布。还有一种比较常见的指数分布：<br>$$<br>f(x)&#x3D;ax^{a-1},0\le x\le 1,a&gt;0<br>$$<br>对应的numpy的采样方法为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data = np.random.power(<span class="number">5</span>, <span class="number">10000</span>)</span><br></pre></td></tr></table></figure>
+<p>这里配置参数$a&#x3D;5$，采10000个样本点。这种采样方法，随着$x$的增长，概率密度会越来越大。</p>
+<h1 id="核密度估计函数"><a href="#核密度估计函数" class="headerlink" title="核密度估计函数"></a>核密度估计函数</h1><p>首先我们可以给出核密度估计函数的形式：<br>$$<br>f(x)&#x3D;\frac{\sum_{t&#x3D;1}^M\omega_tK(x-x_t,\sigma)}{\sum_{t&#x3D;1}^M\omega_t}<br>$$<br>其中$K(x-x_t,\sigma)$表示一个带宽为$\sigma$的核函数，比如这里我们可以选用前面提到的高斯函数（或者简化为正态分布），用其他的函数作为波包也是可以的。值得注意的是，这里的带宽$\sigma$可以理解为波包宽度的设定。从高斯函数的表达形式也可以看出来，当$x&#x3D;\mu$时$f(x)$取得最大值$f_{max}&#x3D;\frac{1}{\sqrt{2\pi}\sigma}$，$\sigma$的值越大，$f_{max}$的值就越小，那么波包的辐射范围就会越广，也就是所谓的带宽越大。</p>
+<p>按照KDE的这种算法，假定我们用高斯函数为核函数，那么理论上应该用一个for循环来实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, M):</span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(grids)):</span><br><span class="line">        grids[index] += omega[t] * gaussian(x[index] - xt, sigma)</span><br></pre></td></tr></table></figure>
+<p>但是因为在Numpy中支持了自动广播的机制，因此我们只需要一行代码就可以完成整个for循环里面的计算：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grids = gaussian(z[<span class="literal">None</span>] - x[:, <span class="literal">None</span>], sigma=sigma).<span class="built_in">sum</span>(axis=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<h1 id="完整示例"><a href="#完整示例" class="headerlink" title="完整示例"></a>完整示例</h1><p>我们可以先用一个小样本示例，看一下核密度估计函数到底在做什么：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gaussian</span>(<span class="params">x, mu=<span class="number">0</span>, sigma=<span class="number">1</span></span>):</span><br><span class="line">    “”“高斯波包函数“””</span><br><span class="line">    <span class="keyword">return</span> np.exp(-(x-mu)**<span class="number">2</span>/<span class="number">2</span>/sigma**<span class="number">2</span>)/np.sqrt(<span class="number">2</span>*np.pi)/sigma</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">kde</span>(<span class="params">x, grid_min, grid_max, bins, sigma</span>):</span><br><span class="line">    “”“带归一化的核密度估计函数”“”</span><br><span class="line">    grid_size = (grid_max - grid_min) / bins</span><br><span class="line">    z = grid_size*np.arange(bins) + grid_min + grid_size/<span class="number">2</span></span><br><span class="line">    res = gaussian(z[<span class="literal">None</span>]-x[:, <span class="literal">None</span>], sigma=sigma).<span class="built_in">sum</span>(axis=<span class="number">0</span>) / x.shape[-<span class="number">1</span>]</span><br><span class="line">    res /= res.<span class="built_in">sum</span>()*grid_size</span><br><span class="line">    <span class="keyword">return</span> res, z</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">9</span>))</span><br><span class="line">plt.title(<span class="string">&#x27;Kernel Density Estimation&#x27;</span>)</span><br><span class="line"><span class="comment"># 正态分布采样</span></span><br><span class="line">data = np.random.normal(<span class="number">0</span>, <span class="number">1</span>, (<span class="number">3</span>, ))</span><br><span class="line"><span class="comment"># Numpy生成的直方图参数</span></span><br><span class="line">hist, bin_edges = np.histogram(data, bins=<span class="number">20</span>, normed=<span class="literal">True</span>)</span><br><span class="line">subplot1 = plt.subplot2grid((<span class="number">4</span>, <span class="number">3</span>), (<span class="number">0</span>, <span class="number">0</span>))</span><br><span class="line">subplot1.set_title(<span class="string">&quot;Matplotlib Hist&quot;</span>)</span><br><span class="line">subplot1.set_ylabel(<span class="string">&quot;Normal Distribution&quot;</span>)</span><br><span class="line"><span class="comment"># Matplotlib自带的直方图</span></span><br><span class="line">subplot1.hist(data, bins=<span class="number">20</span>, rwidth=<span class="number">0.9</span>, color=<span class="string">&#x27;black&#x27;</span>, density=<span class="literal">True</span>)</span><br><span class="line">subplot2 = plt.subplot2grid((<span class="number">4</span>, <span class="number">3</span>), (<span class="number">0</span>, <span class="number">1</span>))</span><br><span class="line">subplot2.set_title(<span class="string">&quot;Numpy Histogram&quot;</span>)</span><br><span class="line">subplot2.bar(bin_edges[:-<span class="number">1</span>], hist, width=<span class="number">0.15</span>, color=<span class="string">&#x27;green&#x27;</span>, align=<span class="string">&#x27;center&#x27;</span>)</span><br><span class="line">subplot3 = plt.subplot2grid((<span class="number">4</span>, <span class="number">3</span>), (<span class="number">0</span>, <span class="number">2</span>))</span><br><span class="line">subplot3.set_title(<span class="string">&quot;KDE Function&quot;</span>)</span><br><span class="line"><span class="comment"># 三种不同带宽的核密度估计函数</span></span><br><span class="line">k, z = kde(data, -<span class="number">3</span>, <span class="number">3</span>, <span class="number">30</span>, <span class="number">0.2</span>)</span><br><span class="line">subplot3.plot(z, k, color=<span class="string">&#x27;orange&#x27;</span>, label=<span class="string">r&#x27;$\sigma$=0.2&#x27;</span>)</span><br><span class="line">k, z = kde(data, -<span class="number">3</span>, <span class="number">3</span>, <span class="number">30</span>, <span class="number">0.6</span>)</span><br><span class="line">subplot3.plot(z, k, color=<span class="string">&#x27;purple&#x27;</span>, label=<span class="string">r&#x27;$\sigma$=0.6&#x27;</span>)</span><br><span class="line">k, z = kde(data, -<span class="number">3</span>, <span class="number">3</span>, <span class="number">30</span>, <span class="number">1.0</span>)</span><br><span class="line">subplot3.plot(z, k, color=<span class="string">&#x27;red&#x27;</span>, label=<span class="string">r&#x27;$\sigma$=1.0&#x27;</span>)</span><br><span class="line">subplot3.legend()</span><br><span class="line"><span class="comment"># 有偏置的正态分布</span></span><br><span class="line">data = np.random.normal(<span class="number">0</span>, <span class="number">1</span>, (<span class="number">3</span>, )) + <span class="number">1</span></span><br><span class="line">hist, bin_edges = np.histogram(data, bins=<span class="number">20</span>, normed=<span class="literal">True</span>)</span><br><span class="line">subplot1 = plt.subplot2grid((<span class="number">4</span>, <span class="number">3</span>), (<span class="number">1</span>, <span class="number">0</span>))</span><br><span class="line">subplot1.set_ylabel(<span class="string">&quot;Bias Normal Distribution&quot;</span>)</span><br><span class="line">subplot1.hist(data, bins=<span class="number">20</span>, rwidth=<span class="number">0.9</span>, color=<span class="string">&#x27;black&#x27;</span>, density=<span class="literal">True</span>)</span><br><span class="line">subplot2 = plt.subplot2grid((<span class="number">4</span>, <span class="number">3</span>), (<span class="number">1</span>, <span class="number">1</span>))</span><br><span class="line">subplot2.bar(bin_edges[:-<span class="number">1</span>], hist, width=<span class="number">0.15</span>, color=<span class="string">&#x27;green&#x27;</span>, align=<span class="string">&#x27;center&#x27;</span>)</span><br><span class="line">subplot3 = plt.subplot2grid((<span class="number">4</span>, <span class="number">3</span>), (<span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line">k, z = kde(data, -<span class="number">3</span>, <span class="number">3</span>, <span class="number">30</span>, <span class="number">0.2</span>)</span><br><span class="line">subplot3.plot(z, k, color=<span class="string">&#x27;orange&#x27;</span>, label=<span class="string">r&#x27;$\sigma$=0.2&#x27;</span>)</span><br><span class="line">k, z = kde(data, -<span class="number">3</span>, <span class="number">3</span>, <span class="number">30</span>, <span class="number">0.6</span>)</span><br><span class="line">subplot3.plot(z, k, color=<span class="string">&#x27;purple&#x27;</span>, label=<span class="string">r&#x27;$\sigma$=0.6&#x27;</span>)</span><br><span class="line">k, z = kde(data, -<span class="number">3</span>, <span class="number">3</span>, <span class="number">30</span>, <span class="number">1.0</span>)</span><br><span class="line">subplot3.plot(z, k, color=<span class="string">&#x27;red&#x27;</span>, label=<span class="string">r&#x27;$\sigma$=1.0&#x27;</span>)</span><br><span class="line">subplot3.legend()</span><br><span class="line"><span class="comment"># 指数分布</span></span><br><span class="line">data = np.random.power(<span class="number">5</span>, <span class="number">3</span>)*<span class="number">7</span>-<span class="number">4</span></span><br><span class="line">hist, bin_edges = np.histogram(data, bins=<span class="number">20</span>, normed=<span class="literal">True</span>)</span><br><span class="line">subplot1 = plt.subplot2grid((<span class="number">4</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">0</span>))</span><br><span class="line">subplot1.set_ylabel(<span class="string">&quot;Exponential Distribution&quot;</span>)</span><br><span class="line">subplot1.hist(data, bins=<span class="number">20</span>, rwidth=<span class="number">0.9</span>, color=<span class="string">&#x27;black&#x27;</span>, density=<span class="literal">True</span>)</span><br><span class="line">subplot2 = plt.subplot2grid((<span class="number">4</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">1</span>))</span><br><span class="line">subplot2.bar(bin_edges[:-<span class="number">1</span>], hist, width=<span class="number">0.15</span>, color=<span class="string">&#x27;green&#x27;</span>, align=<span class="string">&#x27;center&#x27;</span>)</span><br><span class="line">subplot3 = plt.subplot2grid((<span class="number">4</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line">k, z = kde(data, -<span class="number">3</span>, <span class="number">3</span>, <span class="number">30</span>, <span class="number">0.2</span>)</span><br><span class="line">subplot3.plot(z, k, color=<span class="string">&#x27;orange&#x27;</span>, label=<span class="string">r&#x27;$\sigma$=0.2&#x27;</span>)</span><br><span class="line">k, z = kde(data, -<span class="number">3</span>, <span class="number">3</span>, <span class="number">30</span>, <span class="number">0.6</span>)</span><br><span class="line">subplot3.plot(z, k, color=<span class="string">&#x27;purple&#x27;</span>, label=<span class="string">r&#x27;$\sigma$=0.6&#x27;</span>)</span><br><span class="line">k, z = kde(data, -<span class="number">3</span>, <span class="number">3</span>, <span class="number">30</span>, <span class="number">1.0</span>)</span><br><span class="line">subplot3.plot(z, k, color=<span class="string">&#x27;red&#x27;</span>, label=<span class="string">r&#x27;$\sigma$=1.0&#x27;</span>)</span><br><span class="line">subplot3.legend()</span><br><span class="line"><span class="comment"># 均匀分布</span></span><br><span class="line">data = np.random.uniform(-<span class="number">3</span>, <span class="number">3</span>, (<span class="number">3</span>, ))</span><br><span class="line">hist, bin_edges = np.histogram(data, bins=<span class="number">20</span>, normed=<span class="literal">True</span>)</span><br><span class="line">subplot1 = plt.subplot2grid((<span class="number">4</span>, <span class="number">3</span>), (<span class="number">3</span>, <span class="number">0</span>))</span><br><span class="line">subplot1.set_ylabel(<span class="string">&quot;Uniform Distribution&quot;</span>)</span><br><span class="line">subplot1.hist(data, bins=<span class="number">20</span>, rwidth=<span class="number">0.9</span>, color=<span class="string">&#x27;black&#x27;</span>, density=<span class="literal">True</span>)</span><br><span class="line">subplot2 = plt.subplot2grid((<span class="number">4</span>, <span class="number">3</span>), (<span class="number">3</span>, <span class="number">1</span>))</span><br><span class="line">subplot2.bar(bin_edges[:-<span class="number">1</span>], hist, width=<span class="number">0.15</span>, color=<span class="string">&#x27;green&#x27;</span>, align=<span class="string">&#x27;center&#x27;</span>)</span><br><span class="line">subplot3 = plt.subplot2grid((<span class="number">4</span>, <span class="number">3</span>), (<span class="number">3</span>, <span class="number">2</span>))</span><br><span class="line">k, z = kde(data, -<span class="number">3</span>, <span class="number">3</span>, <span class="number">30</span>, <span class="number">0.2</span>)</span><br><span class="line">subplot3.plot(z, k, color=<span class="string">&#x27;orange&#x27;</span>, label=<span class="string">r&#x27;$\sigma$=0.2&#x27;</span>)</span><br><span class="line">k, z = kde(data, -<span class="number">3</span>, <span class="number">3</span>, <span class="number">30</span>, <span class="number">0.6</span>)</span><br><span class="line">subplot3.plot(z, k, color=<span class="string">&#x27;purple&#x27;</span>, label=<span class="string">r&#x27;$\sigma$=0.6&#x27;</span>)</span><br><span class="line">k, z = kde(data, -<span class="number">3</span>, <span class="number">3</span>, <span class="number">30</span>, <span class="number">1.0</span>)</span><br><span class="line">subplot3.plot(z, k, color=<span class="string">&#x27;red&#x27;</span>, label=<span class="string">r&#x27;$\sigma$=1.0&#x27;</span>)</span><br><span class="line">subplot3.legend()</span><br><span class="line"><span class="comment"># 画图</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>得到的结果如下图所示：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240417164017316-804841193.png">
+</div>
+
+<p>在这个结果中我们看到，因为采样比较稀疏，直方图只会显示被采到的那个格点，而核密度估计函数则是以波包的形式，将采样概率密度辐射到整个的采样空间上，这就实现了一个连续化。如果把采样密度调大一点，比如我们调整为采样10000次，那么得到的结果是这样的：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202404/2277440-20240417163901949-1253524552.png">
+</div>
+
+<p>这也表明，只有足够多的样本数量，才能够相对准确的复原出采样的分布函数，而且这跟边界条件的连续性有比较大的关系。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>核密度估计（KDE）方法，相当于用多个波包的组合形式来近似一个真实的概率密度，以获得一个连续可微分的概率密度函数。本文通过一些简单的概率分布的示例，演示了一下KDE的使用方法。其实KDE的思想在很多领域都会以不同的形式出现，是一个比较基础的概率分布近似手段。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/kde.html">https://www.cnblogs.com/dechinphy/p/kde.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2024/04/18/%E6%89%8B%E6%90%93%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          手搓自动微分
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/04/15/Tkinter%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD%E7%A4%BA%E4%BE%8B%EF%BC%88%E4%B8%80%EF%BC%89/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">Tkinter常用功能示例（一）</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=直方图与核密度估计 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F04%2F17%2F%25E7%259B%25B4%25E6%2596%25B9%25E5%259B%25BE%25E4%25B8%258E%25E6%25A0%25B8%25E5%25AF%2586%25E5%25BA%25A6%25E4%25BC%25B0%25E8%25AE%25A1%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=直方图与核密度估计 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2024%2F04%2F17%2F%25E7%259B%25B4%25E6%2596%25B9%25E5%259B%25BE%25E4%25B8%258E%25E6%25A0%25B8%25E5%25AF%2586%25E5%25BA%25A6%25E4%25BC%25B0%25E8%25AE%25A1%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=直方图与核密度估计 - Hexo&url=http://dechinphy.github.io/2024/04/17/%E7%9B%B4%E6%96%B9%E5%9B%BE%E4%B8%8E%E6%A0%B8%E5%AF%86%E5%BA%A6%E4%BC%B0%E8%AE%A1/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

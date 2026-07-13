@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>Python实现量子态采样 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;量子态是用于表征一个量子系统所处状态的物理量，在矩阵力学中我们可以将其视为一个普通的矢量，在概率学上我们又可以将其转换为概率分布函数。在获得一个概率分布函数之后，我们自然可以对其进行采样，这就完成了对一个量子系统进行模拟采样的过程。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "Python实现量子态采样 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;量子态是用于表征一个量子系统所处状态的物理量，在矩阵力学中我们可以将其视为一个普通的矢量，在概率学上我们又可以将其转换为概率分布函数。在获得一个概率分布函数之后，我们自然可以对其进行采样，这就完成了对一个量子系统进行模拟采样的过程。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2021/02/04/Python%E5%AE%9E%E7%8E%B0%E9%87%8F%E5%AD%90%E6%80%81%E9%87%87%E6%A0%B7/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;量子态是用于表征一个量子系统所处状态的物理量，在矩阵力学中我们可以将其视为一个普通的矢量，在概率学上我们又可以将其转换为概率分布函数。在获得一个概率分布函数之后，我们自然可以对其进行采样，这就完成了对一个量子系统进行模拟采样的过程。&lt;/p&gt;" />
+    <meta name="twitter:title" content="Python实现量子态采样 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;量子态是用于表征一个量子系统所处状态的物理量，在矩阵力学中我们可以将其视为一个普通的矢量，在概率学上我们又可以将其转换为概率分布函数。在获得一个概率分布函数之后，我们自然可以对其进行采样，这就完成了对一个量子系统进行模拟采样的过程。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;量子态是用于表征一个量子系统所处状态的物理量，在矩阵力学中我们可以将其视为一个普通的矢量，在概率学上我们又可以将其转换为概率分布函数。在获得一个概率分布函数之后，我们自然可以对其进行采样，这就完成了对一个量子系统进行模拟采样的过程。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2021/02/04/Python%E5%AE%9E%E7%8E%B0%E9%87%8F%E5%AD%90%E6%80%81%E9%87%87%E6%A0%B7/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "Python实现量子态采样 | Hexo",
+            "datePublished": "2021-02-03T16:19:01.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2021/02/04/Python%E5%AE%9E%E7%8E%B0%E9%87%8F%E5%AD%90%E6%80%81%E9%87%87%E6%A0%B7/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidatI13la2PgBCGZE-Qx1Nz" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      Python实现量子态采样
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2021-02-03T16:19:01.000Z" itemprop="datePublished">2021-02-04</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>量子态是用于表征一个量子系统所处状态的物理量，在矩阵力学中我们可以将其视为一个普通的矢量，在概率学上我们又可以将其转换为概率分布函数。在获得一个概率分布函数之后，我们自然可以对其进行采样，这就完成了对一个量子系统进行模拟采样的过程。</p>
+<span id="more"></span>
+
+<h1 id="什么是量子态矢量？"><a href="#什么是量子态矢量？" class="headerlink" title="什么是量子态矢量？"></a>什么是量子态矢量？</h1><p>在前面一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/magic.html">量子系统模拟的博客</a>中，我们介绍了使用python去模拟一个量子系统演化的过程。当我们尝试理解量子态和量子门操作时，可以通过其矩阵形式的运算来描述量子态演化的过程：<br>$$<br>\left|\psi_t\right&gt;&#x3D;e^{-iHt}\left|\psi_0\right&gt;<br>$$<br>这里的狄拉克标记符号和矩阵指数运算，在这篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/magic.html">博客</a>中同样进行了介绍。我们可以简单的将该过程理解为：一个矩阵和一个矢量进行了一个点乘操作，得到了一个更新后的态矢量：<br>$$<br>\overrightarrow{x’}&#x3D;\textbf{A}\overrightarrow{x}<br>$$<br>在量子计算的框架下，由于通用的量子门操作都是酉矩阵(Unitary)，因此不论是更新前还是更新后的操作，得到的态矢量总是归一化的：<br>$$<br>\left&lt;\psi|\psi\right&gt;&#x3D;1<br>$$<br>因此，在本文中考虑采样时，为了方便计算，我们将态矢量先转换为概率幅矢量，再进行采样。概率幅矢量的特征表现为：<br>$$<br>\sum_{i&#x3D;0}^{2^n-1}p_i&#x3D;1<br>$$<br>这里的$n$就表示该量子系统的比特数，一个量子系统的量子态元素个数，或者是概率幅的元素个数是比特数的指数倍数(跟量子比特所占用的能级数有关，最常用的是两能级系统，因此为$2^n$个元素个数)。</p>
+<h1 id="如何实现采样？"><a href="#如何实现采样？" class="headerlink" title="如何实现采样？"></a>如何实现采样？</h1><p>在上一个章节中所表述的是量子态的形式，在转换为概率幅矢量之后，其每一个元素都代表获取到当前二进制量子态的概率。这样我们获得一个量子态的态矢量或者概率幅矢量时，其实就是获得了该系统的概率分布。通过该概率分布，我们可以进行蒙特卡罗模拟：先在$[0,1)$上面进行均匀随机撒点，同时将概率幅矢量转换为其对应的累积分布图，最后计算随机撒的点对应的累积分布图的位置，即可获得当前概率下的模拟采样，具体实现请参考如下示例。</p>
+<h1 id="采样示例一"><a href="#采样示例一" class="headerlink" title="采样示例一"></a>采样示例一</h1><p>我们先假设一个概率幅的分布，再对其进行采样。</p>
+<h2 id="给定一个指数下降的概率幅分布"><a href="#给定一个指数下降的概率幅分布" class="headerlink" title="给定一个指数下降的概率幅分布"></a>给定一个指数下降的概率幅分布</h2><p>这里我们先给定一个$e^{-x}$的概率分布函数，注意我们采取的是概率幅，因此要对其进行归一化的话只需要计算$y_i&#x3D;\frac{y_i}{\sum_jy_j}$即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">x=[i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)]</span><br><span class="line">y=[np.exp(-i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)]</span><br><span class="line">y/=<span class="built_in">sum</span>(y)</span><br><span class="line">plt.title(<span class="string">&#x27;Distribution of Quantum States&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Quantum States&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Probabilities&#x27;</span>)</span><br><span class="line">plt.xticks(x,(<span class="string">&#x27;0&#x27;</span>*(<span class="number">7</span>-<span class="built_in">len</span>(<span class="built_in">str</span>(<span class="built_in">bin</span>(i))))+<span class="built_in">str</span>(<span class="built_in">bin</span>(i)).split(<span class="string">&#x27;b&#x27;</span>)[<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)),rotation=<span class="number">70</span>)</span><br><span class="line">plt.plot(x,y,color=<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2020.cnblogs.com/blog/2277440/202102/2277440-20210203234912983-459534509.png"><br>在这个案例中我们还使用了一些<code>matplotlib</code>的特殊绘图技巧，这里我们不展开介绍，后续会单独写一篇文章来分析常用的matploblib画图姿势。</p>
+<h2 id="均匀随机数"><a href="#均匀随机数" class="headerlink" title="均匀随机数"></a>均匀随机数</h2><p>这里我们直接使用python的<code>random</code>函数，就可以生成$[0,1)$之间的均匀随机数，撒点数量越多，呈现的均匀分布的结果就越明显。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">x = [random.random() <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>)]</span><br><span class="line">y = [random.random() <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>)]</span><br><span class="line">plt.figure()</span><br><span class="line">plt.plot(x,y,<span class="string">&#x27;.&#x27;</span>,color=<span class="string">&#x27;red&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="https://img2020.cnblogs.com/blog/2277440/202102/2277440-20210203235627143-1247718895.png"></p>
+<h2 id="累积分布函数"><a href="#累积分布函数" class="headerlink" title="累积分布函数"></a>累积分布函数</h2><p>所谓的累积分布函数，其实就是将前面获取到的概率幅矢量做一个累积叠加的操作，对应的计算方法如下：<br>$$<br>y_i&#x3D;\sum_{j&lt;&#x3D;i}y_j<br>$$<br>我们很容易可以预测，在累积分布函数的终点一定是1,这是因为前面所定义的$\sum_{i&#x3D;0}^{2^n-1}p_i&#x3D;1$。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">x=[i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)]</span><br><span class="line">y=[np.exp(-i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)]</span><br><span class="line">y/=<span class="built_in">sum</span>(y)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(y)-<span class="number">1</span>):</span><br><span class="line">    y[i+<span class="number">1</span>]+=y[i]</span><br><span class="line">plt.title(<span class="string">&#x27;Cumulative Distribution Function&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Quantum States&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Cumulative Probabilities&#x27;</span>)</span><br><span class="line">plt.xticks(x,(<span class="string">&#x27;0&#x27;</span>*(<span class="number">7</span>-<span class="built_in">len</span>(<span class="built_in">str</span>(<span class="built_in">bin</span>(i))))+<span class="built_in">str</span>(<span class="built_in">bin</span>(i)).split(<span class="string">&#x27;b&#x27;</span>)[<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)),rotation=<span class="number">70</span>)</span><br><span class="line">plt.plot(x,y,color=<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="https://img2020.cnblogs.com/blog/2277440/202102/2277440-20210204000524576-500451471.png"></p>
+<h2 id="量子态采样"><a href="#量子态采样" class="headerlink" title="量子态采样"></a>量子态采样</h2><p>这里我们将概率分布函数和模拟采样结果直接放在一起进行对比：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">x=[i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)]</span><br><span class="line">y=[np.exp(-i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)]</span><br><span class="line">y/=<span class="built_in">sum</span>(y)</span><br><span class="line">plt.plot(x,y,color=<span class="string">&#x27;black&#x27;</span>,label=<span class="string">&#x27;Real Distribution&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(y)-<span class="number">1</span>):</span><br><span class="line">    y[i+<span class="number">1</span>]+=y[i]</span><br><span class="line"></span><br><span class="line">sp=np.zeros(<span class="number">32</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">50</span>):</span><br><span class="line">    r = random.random()</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>):</span><br><span class="line">        <span class="keyword">if</span> y[j]&gt;r:</span><br><span class="line">            sp[j]+=<span class="number">1</span>/<span class="number">50</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">plt.title(<span class="string">&#x27;Sampling Results with 50 times&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Quantum States&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Probabilities&#x27;</span>)</span><br><span class="line">plt.xticks(x,(<span class="string">&#x27;0&#x27;</span>*(<span class="number">7</span>-<span class="built_in">len</span>(<span class="built_in">str</span>(<span class="built_in">bin</span>(i))))+<span class="built_in">str</span>(<span class="built_in">bin</span>(i)).split(<span class="string">&#x27;b&#x27;</span>)[<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)),rotation=<span class="number">70</span>)</span><br><span class="line">plt.plot(x,sp,color=<span class="string">&#x27;red&#x27;</span>,label=<span class="string">&#x27;Simulated Sampling&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="https://img2020.cnblogs.com/blog/2277440/202102/2277440-20210204001535029-1364044933.png"><br>这里我们可以看到结果已经是非常的接近了，如果我们继续提高采样次数，结果当然会更加接近真实分布：<br><img src="https://img2020.cnblogs.com/blog/2277440/202102/2277440-20210204001715791-1206325838.png"><br>因此，在获得概率幅之后，我们可以根据场景对精度的要求，对该概率幅进行采样，到这里就完成了所有的功能实现。</p>
+<h1 id="采样示例二"><a href="#采样示例二" class="headerlink" title="采样示例二"></a>采样示例二</h1><p>除了单调函数外，这里我们再考虑另外一种形式的分布：正弦概率分布函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">x=[i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)]</span><br><span class="line">y=[np.sin(i/<span class="number">2</span>)+<span class="number">1</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)]</span><br><span class="line">y/=<span class="built_in">sum</span>(y)</span><br><span class="line">plt.title(<span class="string">&#x27;Distribution of Quantum States&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Quantum States&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Probabilities&#x27;</span>)</span><br><span class="line">plt.xticks(x,(<span class="string">&#x27;0&#x27;</span>*(<span class="number">7</span>-<span class="built_in">len</span>(<span class="built_in">str</span>(<span class="built_in">bin</span>(i))))+<span class="built_in">str</span>(<span class="built_in">bin</span>(i)).split(<span class="string">&#x27;b&#x27;</span>)[<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)),rotation=<span class="number">70</span>)</span><br><span class="line">plt.plot(x,y,color=<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="https://img2020.cnblogs.com/blog/2277440/202102/2277440-20210204002125100-1681007589.png"><br>由于上面一个示例我们已经介绍完成了基本的操作流程和原理，这里我们就不过多的赘述，直接展示累积分布函数和最终的模拟采样效果：</p>
+<h2 id="累积分布函数-1"><a href="#累积分布函数-1" class="headerlink" title="累积分布函数"></a>累积分布函数</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">x=[i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)]</span><br><span class="line">y=[np.sin(i/<span class="number">2</span>)+<span class="number">1</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)]</span><br><span class="line">y/=<span class="built_in">sum</span>(y)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(y)-<span class="number">1</span>):</span><br><span class="line">    y[i+<span class="number">1</span>]+=y[i]</span><br><span class="line">plt.title(<span class="string">&#x27;Cumulative Distribution Function&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Quantum States&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Cumulative Probabilities&#x27;</span>)</span><br><span class="line">plt.xticks(x,(<span class="string">&#x27;0&#x27;</span>*(<span class="number">7</span>-<span class="built_in">len</span>(<span class="built_in">str</span>(<span class="built_in">bin</span>(i))))+<span class="built_in">str</span>(<span class="built_in">bin</span>(i)).split(<span class="string">&#x27;b&#x27;</span>)[<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)),rotation=<span class="number">70</span>)</span><br><span class="line">plt.plot(x,y,color=<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="https://img2020.cnblogs.com/blog/2277440/202102/2277440-20210204002344662-1754440908.png"></p>
+<h2 id="模拟采样结果"><a href="#模拟采样结果" class="headerlink" title="模拟采样结果"></a>模拟采样结果</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">x=[i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)]</span><br><span class="line">y=[np.sin(i/<span class="number">2</span>)+<span class="number">1</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)]</span><br><span class="line">y/=<span class="built_in">sum</span>(y)</span><br><span class="line">plt.plot(x,y,color=<span class="string">&#x27;black&#x27;</span>,label=<span class="string">&#x27;Real Distribution&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(y)-<span class="number">1</span>):</span><br><span class="line">    y[i+<span class="number">1</span>]+=y[i]</span><br><span class="line"></span><br><span class="line">sp=np.zeros(<span class="number">32</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3000</span>):</span><br><span class="line">    r = random.random()</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>):</span><br><span class="line">        <span class="keyword">if</span> y[j]&gt;r:</span><br><span class="line">            sp[j]+=<span class="number">1</span>/<span class="number">3000</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">plt.title(<span class="string">&#x27;Sampling Results with 3000 times&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Quantum States&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Probabilities&#x27;</span>)</span><br><span class="line">plt.xticks(x,(<span class="string">&#x27;0&#x27;</span>*(<span class="number">7</span>-<span class="built_in">len</span>(<span class="built_in">str</span>(<span class="built_in">bin</span>(i))))+<span class="built_in">str</span>(<span class="built_in">bin</span>(i)).split(<span class="string">&#x27;b&#x27;</span>)[<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>)),rotation=<span class="number">70</span>)</span><br><span class="line">plt.plot(x,sp,color=<span class="string">&#x27;red&#x27;</span>,label=<span class="string">&#x27;Simulated Sampling&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="https://img2020.cnblogs.com/blog/2277440/202102/2277440-20210204002538170-340387408.png"></p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>对一个量子态矢量进行采样的过程，主要可以分为三个步骤：</p>
+<ol>
+<li>计算量子态对应的概率分布函数(矢量);</li>
+<li>计算量子态对应的累积分布函数(矢量);</li>
+<li>均匀随机采样，映射到累积分布函数中所对应的量子态，在足够多的采样次数下就可以完整的模拟出原始的量子态分布。</li>
+</ol>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/state.html">https://www.cnblogs.com/dechinphy/p/state.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2021/02/06/%E4%BD%BF%E7%94%A8Python%E8%B0%83%E7%94%A8SMTP%E6%9C%8D%E5%8A%A1%E8%87%AA%E5%8A%A8%E5%8F%91%E9%80%81Email/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          使用Python调用SMTP服务自动发送Email
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/02/02/%E4%BD%BF%E7%94%A8timeout-decorator%E4%B8%BApython%E5%87%BD%E6%95%B0%E4%BB%BB%E5%8A%A1%E8%AE%BE%E7%BD%AE%E8%B6%85%E6%97%B6%E6%97%B6%E9%97%B4/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">使用timeout-decorator为python函数任务设置超时时间</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=Python实现量子态采样 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F02%2F04%2FPython%25E5%25AE%259E%25E7%258E%25B0%25E9%2587%258F%25E5%25AD%2590%25E6%2580%2581%25E9%2587%2587%25E6%25A0%25B7%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=Python实现量子态采样 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2021%2F02%2F04%2FPython%25E5%25AE%259E%25E7%258E%25B0%25E9%2587%258F%25E5%25AD%2590%25E6%2580%2581%25E9%2587%2587%25E6%25A0%25B7%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=Python实现量子态采样 - Hexo&url=http://dechinphy.github.io/2021/02/04/Python%E5%AE%9E%E7%8E%B0%E9%87%8F%E5%AD%90%E6%80%81%E9%87%87%E6%A0%B7/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

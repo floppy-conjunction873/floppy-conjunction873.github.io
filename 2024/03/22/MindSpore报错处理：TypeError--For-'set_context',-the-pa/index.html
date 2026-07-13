@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>MindSpore报错处理：TypeError: For &#39;set_context&#39;, the parameter device_id can not be set repeatedly, origin value [0] has been in effect. | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文主要介绍了一个在使用MindSpore框架进行编程的时候遇到的一个小问题–重复设定运算设备的编号。之所以会出现这个问题，是因为在调用的包里面有对MindSpore的引用，里面还包含了一些基于MindSpore的运算和即时编译，因此如果不给定设备编号的话，MindSpore内部会默认分配一个设备编号。而如果我们在自己的测试案例中又希望指定一个设备编号，那么就要把这个set_context句柄放在引用的最前面。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "MindSpore报错处理：TypeError: For &#39;set_context&#39;, the parameter device_id can not be set repeatedly, origin value [0] has been in effect. | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文主要介绍了一个在使用MindSpore框架进行编程的时候遇到的一个小问题–重复设定运算设备的编号。之所以会出现这个问题，是因为在调用的包里面有对MindSpore的引用，里面还包含了一些基于MindSpore的运算和即时编译，因此如果不给定设备编号的话，MindSpore内部会默认分配一个设备编号。而如果我们在自己的测试案例中又希望指定一个设备编号，那么就要把这个set_context句柄放在引用的最前面。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2024/03/22/MindSpore%E6%8A%A5%E9%94%99%E5%A4%84%E7%90%86%EF%BC%9ATypeError--For-&#39;set_context&#39;,-the-pa/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文主要介绍了一个在使用MindSpore框架进行编程的时候遇到的一个小问题–重复设定运算设备的编号。之所以会出现这个问题，是因为在调用的包里面有对MindSpore的引用，里面还包含了一些基于MindSpore的运算和即时编译，因此如果不给定设备编号的话，MindSpore内部会默认分配一个设备编号。而如果我们在自己的测试案例中又希望指定一个设备编号，那么就要把这个set_context句柄放在引用的最前面。&lt;/p&gt;" />
+    <meta name="twitter:title" content="MindSpore报错处理：TypeError: For &#39;set_context&#39;, the parameter device_id can not be set repeatedly, origin value [0] has been in effect. | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文主要介绍了一个在使用MindSpore框架进行编程的时候遇到的一个小问题–重复设定运算设备的编号。之所以会出现这个问题，是因为在调用的包里面有对MindSpore的引用，里面还包含了一些基于MindSpore的运算和即时编译，因此如果不给定设备编号的话，MindSpore内部会默认分配一个设备编号。而如果我们在自己的测试案例中又希望指定一个设备编号，那么就要把这个set_context句柄放在引用的最前面。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文主要介绍了一个在使用MindSpore框架进行编程的时候遇到的一个小问题–重复设定运算设备的编号。之所以会出现这个问题，是因为在调用的包里面有对MindSpore的引用，里面还包含了一些基于MindSpore的运算和即时编译，因此如果不给定设备编号的话，MindSpore内部会默认分配一个设备编号。而如果我们在自己的测试案例中又希望指定一个设备编号，那么就要把这个set_context句柄放在引用的最前面。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2024/03/22/MindSpore%E6%8A%A5%E9%94%99%E5%A4%84%E7%90%86%EF%BC%9ATypeError--For-&#39;set_context&#39;,-the-pa/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "MindSpore报错处理：TypeError: For &#39;set_context&#39;, the parameter device_id can not be set repeatedly, origin value [0] has been in effect. | Hexo",
+            "datePublished": "2024-03-22T01:59:38.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2024/03/22/MindSpore%E6%8A%A5%E9%94%99%E5%A4%84%E7%90%86%EF%BC%9ATypeError--For-&#39;set_context&#39;,-the-pa/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidpeI4qvdh5ovMX4FObvQCf" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      MindSpore报错处理：TypeError: For &#39;set_context&#39;, the parameter device_id can not be set repeatedly, origin value [0] has been in effect.
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2024-03-22T01:59:38.000Z" itemprop="datePublished">2024-03-22</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文主要介绍了一个在使用MindSpore框架进行编程的时候遇到的一个小问题–重复设定运算设备的编号。之所以会出现这个问题，是因为在调用的包里面有对MindSpore的引用，里面还包含了一些基于MindSpore的运算和即时编译，因此如果不给定设备编号的话，MindSpore内部会默认分配一个设备编号。而如果我们在自己的测试案例中又希望指定一个设备编号，那么就要把这个set_context句柄放在引用的最前面。</p>
+<span id="more"></span>
+
+<h1 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h1><p>在使用MindSpore运行一个分子动力学模拟的测试程序时：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> context</span><br><span class="line"><span class="keyword">from</span> mindspore.nn <span class="keyword">import</span> Adam</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="keyword">import</span> sys</span><br><span class="line">    sys.path.insert(<span class="number">0</span>, <span class="string">&#x27;../..&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">from</span> sponge <span class="keyword">import</span> Sponge, Molecule, ForceField, set_global_units</span><br><span class="line">    <span class="keyword">from</span> sponge.callback <span class="keyword">import</span> WriteH5MD, RunInfo</span><br><span class="line">    </span><br><span class="line">    context.set_context(mode=context.GRAPH_MODE, device_target=<span class="string">&#x27;GPU&#x27;</span>, device_id=<span class="number">1</span>)</span><br><span class="line">    set_global_units(<span class="string">&#x27;nm&#x27;</span>, <span class="string">&#x27;kj/mol&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    system = Molecule(template=<span class="string">&#x27;water.spce.yaml&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    system.reduplicate([<span class="number">0.3</span>, <span class="number">0</span>, <span class="number">0</span>])</span><br><span class="line">    new_sys = system.copy([<span class="number">0</span>, <span class="number">0</span>, -<span class="number">0.3</span>])</span><br><span class="line">    system.append(new_sys)</span><br><span class="line"></span><br><span class="line">    potential = ForceField(system, parameters=<span class="string">&#x27;SPCE&#x27;</span>)</span><br><span class="line">    opt = Adam(system.trainable_params(), <span class="number">1e-3</span>)</span><br><span class="line">    mini = Sponge(system, potential, opt)</span><br><span class="line"></span><br><span class="line">    run_info = RunInfo(<span class="number">5</span>)</span><br><span class="line">    cb_h5md = WriteH5MD(system, <span class="string">&#x27;tutorial_c01.h5md&#x27;</span>, save_freq=<span class="number">10</span>, write_velocity=<span class="literal">True</span>, write_force=<span class="literal">True</span>)</span><br><span class="line">    mini.run(<span class="number">10</span>, callbacks=[run_info, cb_h5md])</span><br></pre></td></tr></table></figure>
+<p>遇到这样的一个报错：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;potential_cell_doc.py&quot;</span>, line 11, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    context.set_context(mode=context.GRAPH_MODE, device_target=<span class="string">&#x27;GPU&#x27;</span>, device_id=1)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/mindsponge/lib/python3.9/site-packages/mindspore/_checkparam.py&quot;</span>, line 1313, <span class="keyword">in</span> wrapper</span><br><span class="line">    <span class="built_in">return</span> func(*args, **kwargs)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/mindsponge/lib/python3.9/site-packages/mindspore/context.py&quot;</span>, line 1493, <span class="keyword">in</span> set_context</span><br><span class="line">    ctx.setters[key](ctx, value)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/mindsponge/lib/python3.9/site-packages/mindspore/context.py&quot;</span>, line 430, <span class="keyword">in</span> set_device_id</span><br><span class="line">    self.set_param(ms_ctx_param.device_id, device_id)</span><br><span class="line">  File <span class="string">&quot;/home/dechin/anaconda3/envs/mindsponge/lib/python3.9/site-packages/mindspore/context.py&quot;</span>, line 175, <span class="keyword">in</span> set_param</span><br><span class="line">    self._context_handle.set_param(param, value)</span><br><span class="line">TypeError: For <span class="string">&#x27;set_context&#x27;</span>, the parameter device_id can not be <span class="built_in">set</span> repeatedly, origin value [0] has been <span class="keyword">in</span> effect.</span><br><span class="line"></span><br><span class="line">----------------------------------------------------</span><br><span class="line">- C++ Call Stack: (For framework developers)</span><br><span class="line">----------------------------------------------------</span><br><span class="line">mindspore/core/utils/ms_context.cc:477 CheckReadStatus</span><br></pre></td></tr></table></figure>
+<p>这里提示的是重复定义device_id的错误。但是实际上我通过vscode的文件检索功能，发现在整个程序引用中，并没有哪里调用到了这个device_id设置的位置。</p>
+<h1 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h1><p>既然不是程序本身设置了device_id，那就是程序内部调用了MindSpore的组件去执行GPU相关的运算，或者是在JIT编译过程会自动指定device_id。那么问题解决的思路就很简单了，直接把设置device_id的这个内容放到文件的最前头，在编译和调用MindSpore进行运算之间就指定好device_id：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mindspore <span class="keyword">import</span> context</span><br><span class="line">context.set_context(mode=context.GRAPH_MODE, device_target=<span class="string">&#x27;GPU&#x27;</span>, device_id=<span class="number">1</span>)</span><br><span class="line"><span class="keyword">from</span> mindspore.nn <span class="keyword">import</span> Adam</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="keyword">import</span> sys</span><br><span class="line">    sys.path.insert(<span class="number">0</span>, <span class="string">&#x27;../..&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">from</span> sponge <span class="keyword">import</span> Sponge, Molecule, ForceField, set_global_units</span><br><span class="line">    <span class="keyword">from</span> sponge.callback <span class="keyword">import</span> WriteH5MD, RunInfo</span><br><span class="line"></span><br><span class="line">    set_global_units(<span class="string">&#x27;nm&#x27;</span>, <span class="string">&#x27;kj/mol&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    system = Molecule(template=<span class="string">&#x27;water.spce.yaml&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    system.reduplicate([<span class="number">0.3</span>, <span class="number">0</span>, <span class="number">0</span>])</span><br><span class="line">    new_sys = system.copy([<span class="number">0</span>, <span class="number">0</span>, -<span class="number">0.3</span>])</span><br><span class="line">    system.append(new_sys)</span><br><span class="line"></span><br><span class="line">    potential = ForceField(system, parameters=<span class="string">&#x27;SPCE&#x27;</span>)</span><br><span class="line">    opt = Adam(system.trainable_params(), <span class="number">1e-3</span>)</span><br><span class="line">    mini = Sponge(system, potential, opt)</span><br><span class="line"></span><br><span class="line">    run_info = RunInfo(<span class="number">5</span>)</span><br><span class="line">    cb_h5md = WriteH5MD(system, <span class="string">&#x27;tutorial_c01.h5md&#x27;</span>, save_freq=<span class="number">10</span>, write_velocity=<span class="literal">True</span>, write_force=<span class="literal">True</span>)</span><br><span class="line">    mini.run(<span class="number">10</span>, callbacks=[run_info, cb_h5md])</span><br></pre></td></tr></table></figure>
+<p>重新运行后结果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[MindSPONGE] Started simulation at 2024-03-22 10:08:10</span><br><span class="line">[MindSPONGE] Step: 5, E_pot: 100.10054</span><br><span class="line">[MindSPONGE] Step: 10, E_pot: 89.08189</span><br><span class="line">[MindSPONGE] Finished simulation at 2024-03-22 10:08:13</span><br><span class="line">[MindSPONGE] Simulation <span class="keyword">time</span>: 2.83 seconds.</span><br><span class="line">--------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<p>问题成果解决。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文主要介绍了一个在使用MindSpore框架进行编程的时候遇到的一个小问题–重复设定运算设备的编号。之所以会出现这个问题，是因为在调用的包里面有对MindSpore的引用，里面还包含了一些基于MindSpore的运算和即时编译，因此如果不给定设备编号的话，MindSpore内部会默认分配一个设备编号。而如果我们在自己的测试案例中又希望指定一个设备编号，那么就要把这个set_context句柄放在引用的最前面。</p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2024/03/22/MindSponge%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6%E6%A8%A1%E6%8B%9F%E2%80%94%E2%80%94%E8%87%AA%E5%BB%BA%E5%8A%9B%E5%9C%BA%EF%BC%882024.03%EF%BC%89/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          MindSponge分子动力学模拟——自建力场（2024.03）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/03/12/MindSpore%E8%87%AA%E5%AE%9A%E4%B9%89%E7%AE%97%E5%AD%90%E4%B8%AD%E7%9A%84%E5%BC%A0%E9%87%8F%E7%BB%B4%E5%BA%A6%E9%97%AE%E9%A2%98/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">MindSpore自定义算子中的张量维度问题</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=MindSpore报错处理：TypeError: For 'set_context', the parameter device_id can not be set repeatedly, origin value [0] has been in effect. - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F03%2F22%2FMindSpore%25E6%258A%25A5%25E9%2594%2599%25E5%25A4%2584%25E7%2590%2586%25EF%25BC%259ATypeError--For-'set_context'%2C-the-pa%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=MindSpore报错处理：TypeError: For 'set_context', the parameter device_id can not be set repeatedly, origin value [0] has been in effect. - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2024%2F03%2F22%2FMindSpore%25E6%258A%25A5%25E9%2594%2599%25E5%25A4%2584%25E7%2590%2586%25EF%25BC%259ATypeError--For-'set_context'%2C-the-pa%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=MindSpore报错处理：TypeError: For 'set_context', the parameter device_id can not be set repeatedly, origin value [0] has been in effect. - Hexo&url=http://dechinphy.github.io/2024/03/22/MindSpore%E6%8A%A5%E9%94%99%E5%A4%84%E7%90%86%EF%BC%9ATypeError--For-'set_context',-the-pa/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

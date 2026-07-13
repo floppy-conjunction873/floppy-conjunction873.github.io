@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>Python计算傅里叶变换 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文介绍了离散傅里叶变换和快速傅里叶变换的基本原理及其对应的Python代码实现，并将计算结果与numpy所集成的fft函数进行对比。其实现在FFT计算的成熟工具已经有很多了，不论是CPU上scipy的fft模块还是GPU上的cufft动态链接库，都有非常好的性能。但还是得真正去了解计算背后的原理，和相关的物理图像，才能更恰当的使用这个强大的工具。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "Python计算傅里叶变换 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文介绍了离散傅里叶变换和快速傅里叶变换的基本原理及其对应的Python代码实现，并将计算结果与numpy所集成的fft函数进行对比。其实现在FFT计算的成熟工具已经有很多了，不论是CPU上scipy的fft模块还是GPU上的cufft动态链接库，都有非常好的性能。但还是得真正去了解计算背后的原理，和相关的物理图像，才能更恰当的使用这个强大的工具。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2024/09/23/Python%E8%AE%A1%E7%AE%97%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文介绍了离散傅里叶变换和快速傅里叶变换的基本原理及其对应的Python代码实现，并将计算结果与numpy所集成的fft函数进行对比。其实现在FFT计算的成熟工具已经有很多了，不论是CPU上scipy的fft模块还是GPU上的cufft动态链接库，都有非常好的性能。但还是得真正去了解计算背后的原理，和相关的物理图像，才能更恰当的使用这个强大的工具。&lt;/p&gt;" />
+    <meta name="twitter:title" content="Python计算傅里叶变换 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文介绍了离散傅里叶变换和快速傅里叶变换的基本原理及其对应的Python代码实现，并将计算结果与numpy所集成的fft函数进行对比。其实现在FFT计算的成熟工具已经有很多了，不论是CPU上scipy的fft模块还是GPU上的cufft动态链接库，都有非常好的性能。但还是得真正去了解计算背后的原理，和相关的物理图像，才能更恰当的使用这个强大的工具。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文介绍了离散傅里叶变换和快速傅里叶变换的基本原理及其对应的Python代码实现，并将计算结果与numpy所集成的fft函数进行对比。其实现在FFT计算的成熟工具已经有很多了，不论是CPU上scipy的fft模块还是GPU上的cufft动态链接库，都有非常好的性能。但还是得真正去了解计算背后的原理，和相关的物理图像，才能更恰当的使用这个强大的工具。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2024/09/23/Python%E8%AE%A1%E7%AE%97%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "Python计算傅里叶变换 | Hexo",
+            "datePublished": "2024-09-23T06:30:43.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2024/09/23/Python%E8%AE%A1%E7%AE%97%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidX1h7ej2WZDVupVx_2fZjx" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      Python计算傅里叶变换
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2024-09-23T06:30:43.000Z" itemprop="datePublished">2024-09-23</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文介绍了离散傅里叶变换和快速傅里叶变换的基本原理及其对应的Python代码实现，并将计算结果与numpy所集成的fft函数进行对比。其实现在FFT计算的成熟工具已经有很多了，不论是CPU上scipy的fft模块还是GPU上的cufft动态链接库，都有非常好的性能。但还是得真正去了解计算背后的原理，和相关的物理图像，才能更恰当的使用这个强大的工具。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>傅里叶变换在几乎所有计算相关领域都有可能被使用到，例如通信领域的滤波、材料领域的晶格倒易空间计算还有分子动力学中的倒易力场能量项等等。最简单的例子来说，计算周期性盒子的电势能$k\sum_i\frac{q_i}{r_i}$本身就是一个类似于调和级数的形式，很难求得精确解。但是在Edward求和方法中使用傅里叶变换，可以做到在倒易空间进行能量计算，可以逼近精确解。本文主要介绍傅里叶变换的原理及相应的Python代码实现。</p>
+<h1 id="DFT原理"><a href="#DFT原理" class="headerlink" title="DFT原理"></a>DFT原理</h1><p>DFT计算的本质是一个矩阵运算：<br>$$<br>y_k&#x3D;\sum_{n&#x3D;0}^{N-1}x_ne^{-j\frac{2\pi nk}{N}},0\leq k\leq N-1<br>$$</p>
+<p>$$<br>x_n&#x3D;\frac{1}{N}\sum_{k&#x3D;0}^{N-1}y_ke^{j\frac{2\pi nk}{N}},0\leq n\leq N-1<br>$$</p>
+<p>如果写成一个矩阵的形式，那就是：<br>$$<br>\left[\begin{matrix}<br>y_1\<br>y_2\<br>y_3\<br>…\<br>y_{N-1}<br>\end{matrix}\right]&#x3D;\left[\begin{matrix}<br>1&amp;&amp;1&amp;&amp;1&amp;&amp;…&amp;&amp;1\<br>1&amp;&amp;e^{-j\frac{2\pi}{N}\cdot1}&amp;&amp;e^{-j\frac{2\pi}{N}\cdot2}&amp;&amp;…&amp;&amp;e^{-j\frac{2\pi}{N}\cdot(N-1)}\<br>1&amp;&amp;e^{-j\frac{2\pi}{N}\cdot2}&amp;&amp;e^{-j\frac{2\pi}{N}\cdot4}&amp;&amp;…&amp;&amp;e^{-j\frac{2\pi}{N}\cdot2(N-1)}\<br>…&amp;&amp;…&amp;&amp;…&amp;&amp;…&amp;&amp;…\<br>1&amp;&amp;e^{-j\frac{2\pi}{N}\cdot(N-1)}&amp;&amp;e^{-j\frac{2\pi}{N}\cdot2(N-1)}&amp;&amp;…&amp;&amp;e^{-j\frac{2\pi}{N}\cdot(N-1)(N-1)}<br>\end{matrix}\right]\left[<br>\begin{matrix}<br>x_1\<br>x_2\<br>x_3\<br>…\<br>x_{N-1}<br>\end{matrix}\right]<br>$$<br>类似的，逆傅里叶变换的矩阵形式为：<br>$$<br>\left[<br>\begin{matrix}<br>x_1\<br>x_2\<br>x_3\<br>…\<br>x_{N-1}<br>\end{matrix}\right]<br>&#x3D;\left[\begin{matrix}<br>1&amp;&amp;1&amp;&amp;1&amp;&amp;…&amp;&amp;1\<br>1&amp;&amp;e^{j\frac{2\pi}{N}\cdot1}&amp;&amp;e^{j\frac{2\pi}{N}\cdot2}&amp;&amp;…&amp;&amp;e^{j\frac{2\pi}{N}\cdot(N-1)}\<br>1&amp;&amp;e^{j\frac{2\pi}{N}\cdot2}&amp;&amp;e^{j\frac{2\pi}{N}\cdot4}&amp;&amp;…&amp;&amp;e^{j\frac{2\pi}{N}\cdot2(N-1)}\<br>…&amp;&amp;…&amp;&amp;…&amp;&amp;…&amp;&amp;…\<br>1&amp;&amp;e^{j\frac{2\pi}{N}\cdot(N-1)}&amp;&amp;e^{j\frac{2\pi}{N}\cdot2(N-1)}&amp;&amp;…&amp;&amp;e^{j\frac{2\pi}{N}\cdot(N-1)(N-1)}<br>\end{matrix}\right]<br>\left[\begin{matrix}<br>y_1\<br>y_2\<br>y_3\<br>…\<br>y_{N-1}<br>\end{matrix}\right]<br>$$<br>如果记参数$W_{N,n,k}&#x3D;e^{-j\frac{2\pi}{N}nk}$，则其共轭$W_{N,n,k}^*&#x3D;e^{j\frac{2\pi}{N}nk}$是逆傅里叶变换的参数。而且根据复变函数的性质，该参数具有周期性：$W_{N,n+N,k}&#x3D;W_{N,n,k+N}&#x3D;W_{N,n,k}$，共轭参数同理。最后还有一个非常重要的性质：$W_{N&#x2F;m,n&#x2F;m,k}&#x3D;W_{N&#x2F;m,n,k&#x2F;m}&#x3D;W_{N,n,k}$，根据这个特性，可以将大规模的运算变成小范围的计算。在不考虑这些参数特性的情况下，我们可以使用Python做一个初步的DFT简单实现。</p>
+<h1 id="初步Python实现"><a href="#初步Python实现" class="headerlink" title="初步Python实现"></a>初步Python实现</h1><p>这里没有做任何的优化，仅仅是一个示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dft</span>(<span class="params">x</span>):</span><br><span class="line">    y = np.zeros_like(x, dtype=np.complex64)</span><br><span class="line">    N = x.shape[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">        y[k] = np.<span class="built_in">sum</span>(x * np.exp(-<span class="number">1j</span>*<span class="number">2</span>*np.pi*k*np.arange(N)/N))</span><br><span class="line">    <span class="keyword">return</span> y</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">idft</span>(<span class="params">y</span>):</span><br><span class="line">    x = np.zeros_like(y, dtype=np.float32)</span><br><span class="line">    N = y.shape[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> n <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">        x[n] = np.real(np.<span class="built_in">sum</span>(y * np.exp(<span class="number">1j</span>*<span class="number">2</span>*np.pi*n*np.arange(N)/N)) / N)</span><br><span class="line">    <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">N = <span class="number">128</span></span><br><span class="line">x = np.random.random(N).astype(np.float32)</span><br><span class="line">y0 = dft(x)</span><br><span class="line">y1 = np.fft.fft(x)</span><br><span class="line"><span class="built_in">print</span> (np.allclose(y0, y1))</span><br><span class="line"></span><br><span class="line">yr = np.random.random(N).astype(np.float32)</span><br><span class="line">yi = np.random.random(N).astype(np.float32)</span><br><span class="line">y = yr + <span class="number">1j</span>*yi</span><br><span class="line">x0 = idft(y)</span><br><span class="line">x1 = np.fft.ifft(y).real</span><br><span class="line"><span class="built_in">print</span> (np.allclose(x0, x1))</span><br><span class="line"><span class="comment"># True</span></span><br><span class="line"><span class="comment"># True</span></span><br></pre></td></tr></table></figure>
+<p>输出的两个结果都是<code>True</code>，也就说明这个计算结果是没问题的。</p>
+<h1 id="FFT快速傅里叶变换"><a href="#FFT快速傅里叶变换" class="headerlink" title="FFT快速傅里叶变换"></a>FFT快速傅里叶变换</h1><p>首先我们整理一下所有参数相关的优化点：</p>
+<p>$$<br>\left{<br>\begin{matrix}<br>W_{N,n+N,k}&#x3D;W_{N,n,k+N}&#x3D;W_{N,n,k}\<br>W_{N&#x2F;m,n&#x2F;m,k}&#x3D;W_{N&#x2F;m,n,k&#x2F;m}&#x3D;W_{N,n,k}\<br>W_{N,\beta,\frac{N}{2\beta}}&#x3D;W^*_{N,\beta,\frac{N}{2\beta}}&#x3D;-1\Rightarrow W_{N,n,k}\cdot W_{N,\beta,\frac{N}{2\beta}}&#x3D;-W_{N,n,k}\<br>W_{N,N-n,k}&#x3D;W_{N,N,k}\cdot W_{N,-n,k}&#x3D;W_{N,-n,k}&#x3D;W_{N,n,N-k}<br>\end{matrix}<br>\right.<br>$$</p>
+<p>此时如果我们把原始的输入$x_n$拆分为奇偶两组（如果总数N不是偶数，一般可以对输入数组做padding）：<br>$$<br>\left{<br>\begin{matrix}<br>x_{2r}\<br>x_{2r+1}<br>\end{matrix},0\leq r\leq \frac{N}{2}-1<br>\right.<br>$$<br>则有：<br>$$<br>y_k&#x3D;\sum_{n&#x3D;0}^{N-1}x_ne^{-j\frac{2\pi nk}{N}}&#x3D;\sum_{r&#x3D;0}^{\frac{N}{2}-1}x_{2r}W_{N,2r,k}+\sum_{r&#x3D;0}^{\frac{N}{2}-1}x_{2r+1}W_{N,2r+1,k}<br>$$<br>如果我们把$x_{2r}$和$x_{2r+1}$看作是两个独立的输入数据，那么上述分解可以进一步优化：<br>$$<br>\begin{align*}<br>y_k&amp;&#x3D;\sum_{r&#x3D;0}^{\frac{N}{2}-1}x_{2r}W_{N,2r,k}+\sum_{r&#x3D;0}^{\frac{N}{2}-1}x_{2r+1}W_{N,2r+1,k}\<br>&amp;&#x3D;\sum_{r&#x3D;0}^{\frac{N}{2}-1}x^{(odd)}<em>{r’}W</em>{\frac{N}{2},r’,k}+W_{N,1,k}\sum_{r&#x3D;0}^{\frac{N}{2}-1}x^{(even)}<em>{r’}W</em>{\frac{N}{2},r’,k}\<br>&amp;&#x3D;y^{(odd)}<em>k+W</em>{N,1,k}y^{(even)}<em>k<br>\end{align*}<br>$$<br>同理可以得到：<br>$$<br>\begin{align*}<br>y</em>{k+\frac{N}{2}}&amp;&#x3D;y^{(odd)}<em>{k+\frac{N}{2}}+W</em>{N,1,k+\frac{N}{2}}y^{(even)}<em>{k+\frac{N}{2}}\<br>&amp;&#x3D;y^{(odd)}</em>{k+\frac{N}{2}}-W_{N,1,k}y^{(even)}_{k+\frac{N}{2}}<br>\end{align*}<br>$$<br>这就是所谓的蝶形运算（图像来自于参考链接）：</p>
+<div align=center>
+	<img src="https://i-blog.csdnimg.cn/blog_migrate/34127b50478d4fd8a20df6bcc42f0cca.png">
+</div>
+这个运算式的意义在于，假如我们原本做一个$2^N$点数据的傅里叶变换，使用原始的DFT运算我们需要做$2^{2N}$次乘法和$2^N(2^N-1)$次加法，但是这种方法可以把计算量缩减到$2\cdot2^N+2^{\frac{N}{2}}$次乘法和$2^{\frac{N}{2}}(2^\frac{N}{2}-1)$次加法。做一次分解，就把复杂度从$O(2^{2N})$降到了$O(2^N)$（注意：这里的$N$跟前面用到的数据点总数不是一个含义，这里的$N$指代数据点总数是2的整数次方，只是两者的表述习惯都常用$N$）。相关代码实现如下：
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dft</span>(<span class="params">x</span>):</span><br><span class="line">    y = np.zeros_like(x, dtype=np.complex64)</span><br><span class="line">    N = x.shape[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">        y[k] = np.<span class="built_in">sum</span>(x * np.exp(-<span class="number">1j</span>*<span class="number">2</span>*np.pi*k*np.arange(N)/N))</span><br><span class="line">    <span class="keyword">return</span> y</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dft2</span>(<span class="params">x</span>):</span><br><span class="line">    y = np.zeros_like(x, dtype=np.complex64)</span><br><span class="line">    N = x.shape[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(N//<span class="number">2</span>):</span><br><span class="line">        c1 = np.exp(-<span class="number">1j</span>*<span class="number">2</span>*np.pi*k*np.arange(N//<span class="number">2</span>)/(N//<span class="number">2</span>))</span><br><span class="line">        c2 = np.exp(-<span class="number">1j</span>*<span class="number">2</span>*np.pi*k/N)</span><br><span class="line">        y1 = np.<span class="built_in">sum</span>(x[::<span class="number">2</span>] * c1)</span><br><span class="line">        y2 = np.<span class="built_in">sum</span>(x[<span class="number">1</span>::<span class="number">2</span>] * c1)</span><br><span class="line">        y[k] = y1 + c2 * y2</span><br><span class="line">        y[k+N//<span class="number">2</span>] = y1 - c2 * y2</span><br><span class="line">    <span class="keyword">return</span> y</span><br><span class="line"></span><br><span class="line">N = <span class="number">128</span></span><br><span class="line">x = np.random.random(N).astype(np.float32)</span><br><span class="line">y0 = dft2(x)</span><br><span class="line">y1 = np.fft.fft(x)</span><br><span class="line"><span class="built_in">print</span> (np.allclose(y0, y1))</span><br><span class="line"><span class="comment"># True</span></span><br></pre></td></tr></table></figure>
+
+<p>运行输出为<code>True</code>，表示计算结果一致。需要注意的是，这里的代码未考虑padding问题，不能作为正式的代码实现，仅仅是一个算法演示。既然能够分割一次，那么就可以分割多次，直到无法分割为止，或者分割到一个指定的参数为止。这也就是多重蝶形运算的原理：</p>
+<div align=center>
+	<img src="https://i-blog.csdnimg.cn/blog_migrate/99d15c9eab6f4de74581f20d3d0e3235.png">
+</div>
+
+<p>简单一点可以使用递归的方式进行计算：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dft</span>(<span class="params">x</span>):</span><br><span class="line">    y = np.zeros_like(x, dtype=np.complex64)</span><br><span class="line">    N = x.shape[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">        y[k] = np.<span class="built_in">sum</span>(x * np.exp(-<span class="number">1j</span>*<span class="number">2</span>*np.pi*k*np.arange(N)/N))</span><br><span class="line">    <span class="keyword">return</span> y</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dftn</span>(<span class="params">x, N_cut=<span class="number">2</span></span>):</span><br><span class="line">    y = np.zeros_like(x, dtype=np.complex64)</span><br><span class="line">    N = x.shape[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">if</span> N &gt; N_cut:</span><br><span class="line">        y1 = dftn(x[::<span class="number">2</span>])</span><br><span class="line">        y2 = dftn(x[<span class="number">1</span>::<span class="number">2</span>])</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> dft(x)</span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(N//<span class="number">2</span>):</span><br><span class="line">        c2 = np.exp(-<span class="number">1j</span>*<span class="number">2</span>*np.pi*k/N)</span><br><span class="line">        y[k] = y1[k] + c2 * y2[k]</span><br><span class="line">        y[k+N//<span class="number">2</span>] = y1[k] - c2 * y2[k]</span><br><span class="line">    <span class="keyword">return</span> y</span><br><span class="line"></span><br><span class="line">N = <span class="number">1024</span></span><br><span class="line">x = np.random.random(N).astype(np.float32)</span><br><span class="line">y0 = dftn(x)</span><br><span class="line">y1 = np.fft.fft(x)</span><br><span class="line"><span class="built_in">print</span> (np.allclose(y0, y1))</span><br><span class="line"><span class="comment"># True</span></span><br></pre></td></tr></table></figure>
+<p>这里的实现使用递归的方法，结合了前面实现的DFT算法和蝶形运算方法，得到的结果也是正确的。这里使用的蝶形运算优化方法，就是FFT快速傅里叶变换的基本思路。</p>
+<h1 id="N点快速傅里叶变换"><a href="#N点快速傅里叶变换" class="headerlink" title="N点快速傅里叶变换"></a>N点快速傅里叶变换</h1><p>所谓的N点FFT，其实就是每次只取N个数据点执行傅里叶变换。那么取数据点的方式就有很多种了，例如只取前N个数据点，或者降采样之后再取前N个数据点，再就是加窗，在经过窗函数的运算后，对每个窗体内的数据点做傅里叶变换。最简单的方式就是矩形窗，常见的还有汉宁窗和汉明窗，这里不做详细分析。值得注意的是，如果使用降采样的方法，采样率需要遵循奈奎斯特采样定理，要大于两倍的target frequency。尤其对于周期性边界条件和远程相互作用的场景，高频区域的贡献是不可忽视的。</p>
+<p>至于为什么不使用全域数据点的傅里叶变换，即使我们可以用快速傅里叶变换把计算复杂度缩减到$O(N\log N)$（这里的$N$是数据点数）的级别，对于那些大规模数据传输和计算的场景，也是不适用的，因此使用降低傅里叶变换点数的思路对于大多数的场景来说可以兼顾到性能与精确度。而窗体函数的出现，进一步优化了截断处数据泄露的问题。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了离散傅里叶变换和快速傅里叶变换的基本原理及其对应的Python代码实现，并将计算结果与numpy所集成的fft函数进行对比。其实现在FFT计算的成熟工具已经有很多了，不论是CPU上scipy的fft模块还是GPU上的cufft动态链接库，都有非常好的性能。但还是得真正去了解计算背后的原理，和相关的物理图像，才能更恰当的使用这个强大的工具。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/fft.html">https://www.cnblogs.com/dechinphy/p/fft.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42604176/article/details/105559756">https://blog.csdn.net/qq_42604176/article/details/105559756</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2024/09/26/Python%E5%AE%9E%E7%8E%B0%E5%A4%9A%E7%BB%B4%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          Python实现多维傅里叶变换
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/09/12/Edge%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BE%E7%BD%AE%E5%A4%9C%E9%97%B4%E6%A8%A1%E5%BC%8F-%E6%B7%B1%E8%89%B2%E6%A8%A1%E5%BC%8F/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">Edge浏览器设置夜间模式/深色模式</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=Python计算傅里叶变换 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F09%2F23%2FPython%25E8%25AE%25A1%25E7%25AE%2597%25E5%2582%2585%25E9%2587%258C%25E5%258F%25B6%25E5%258F%2598%25E6%258D%25A2%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=Python计算傅里叶变换 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2024%2F09%2F23%2FPython%25E8%25AE%25A1%25E7%25AE%2597%25E5%2582%2585%25E9%2587%258C%25E5%258F%25B6%25E5%258F%2598%25E6%258D%25A2%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=Python计算傅里叶变换 - Hexo&url=http://dechinphy.github.io/2024/09/23/Python%E8%AE%A1%E7%AE%97%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

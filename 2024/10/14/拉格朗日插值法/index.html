@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>拉格朗日插值法 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文通过线性插值和二次插值的形式，介绍了拉格朗日插值算法以及牛顿插值算法的基本形式。两种插值算法的最终函数形式是一致的，但是在不同场景下的参数求解计算量是不一致的，需要根据自己的应用场景选择更加合适的插值算法。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "拉格朗日插值法 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文通过线性插值和二次插值的形式，介绍了拉格朗日插值算法以及牛顿插值算法的基本形式。两种插值算法的最终函数形式是一致的，但是在不同场景下的参数求解计算量是不一致的，需要根据自己的应用场景选择更加合适的插值算法。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2024/10/14/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E6%8F%92%E5%80%BC%E6%B3%95/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文通过线性插值和二次插值的形式，介绍了拉格朗日插值算法以及牛顿插值算法的基本形式。两种插值算法的最终函数形式是一致的，但是在不同场景下的参数求解计算量是不一致的，需要根据自己的应用场景选择更加合适的插值算法。&lt;/p&gt;" />
+    <meta name="twitter:title" content="拉格朗日插值法 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文通过线性插值和二次插值的形式，介绍了拉格朗日插值算法以及牛顿插值算法的基本形式。两种插值算法的最终函数形式是一致的，但是在不同场景下的参数求解计算量是不一致的，需要根据自己的应用场景选择更加合适的插值算法。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文通过线性插值和二次插值的形式，介绍了拉格朗日插值算法以及牛顿插值算法的基本形式。两种插值算法的最终函数形式是一致的，但是在不同场景下的参数求解计算量是不一致的，需要根据自己的应用场景选择更加合适的插值算法。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2024/10/14/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E6%8F%92%E5%80%BC%E6%B3%95/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "拉格朗日插值法 | Hexo",
+            "datePublished": "2024-10-14T06:09:17.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2024/10/14/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E6%8F%92%E5%80%BC%E6%B3%95/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidQzSLw_wR16wEHT-hbcwZz" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      拉格朗日插值法
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2024-10-14T06:09:17.000Z" itemprop="datePublished">2024-10-14</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文通过线性插值和二次插值的形式，介绍了拉格朗日插值算法以及牛顿插值算法的基本形式。两种插值算法的最终函数形式是一致的，但是在不同场景下的参数求解计算量是不一致的，需要根据自己的应用场景选择更加合适的插值算法。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>2024年诺贝尔物理学奖和化学奖的揭幕，正式宣告了科学界对AI时代的认可，人工智能正在全方位的改变人类社会各种场景的互作模式，而数据拟合以及误差与算力的控制，则是大多数人工智能工作者所关注的重点。与数据拟合的思想不同的是，传统的数值计算中人们更倾向于使用多项式进行精确的参数计算，这种方法叫做插值。当然，插值算法的精确是相对于边界条件而言的，随着点数的变化，不同的插值算法有不同的余项。现在在模型训练中，因为数据点本身就是有误差的，所以强行使用插值算法会导致过拟合的现象。只有在一些传统的对精度要求较高的计算场景中，保留了插值算法的应用。</p>
+<h1 id="线性插值"><a href="#线性插值" class="headerlink" title="线性插值"></a>线性插值</h1><p>给定两个点：$(x_1,y_1),(x_2,y_2)$，其插值出来的线性函数为：<br>$$<br>f(x)&#x3D;\frac{y_2-y_1}{x_2-x_1}x+y_1-\frac{y_2-y_1}{x_2-x_1}x_1&#x3D;\frac{y_2-y_1}{x_2-x_1}x+y_2-\frac{y_2-y_1}{x_2-x_1}x_2<br>$$<br>稍微改写一下形式有：<br>$$<br>f(x)&#x3D;\left(\frac{x_2-x}{x_2-x_1}\right)y_1+\left(\frac{x-x_1}{x_2-x_1}\right)y_2<br>$$<br>可以得到$f(x_1)&#x3D;y_1,f(x_2)&#x3D;y_2$。</p>
+<h1 id="二次插值"><a href="#二次插值" class="headerlink" title="二次插值"></a>二次插值</h1><h1 id="给定三个点：-x-1-y-1-x-2-y-2-x-3-y-3-，假设其插值函数为：-f-x-ax-2-bx-c-，那么可以根据三个点联立方程组，写成矩阵形式就是：-left-begin-matrix-x-1-2-x-1-1-x-2-2-x-2-1-x-3-2-x-3-1-end-matrix-right-left-begin-matrix-a-b-c-end-matrix-right-left-begin-matrix-y-1-y-2-y-3-end-matrix-right-所以求解系数-a-b-c-变成了一个矩阵求逆问题，可以手动做一个初等变换：-begin-align-left-begin-matrix-x-1-2-x-1-1-1-0-0-x-2-2-x-2-1-0-1-0-x-3-2-x-3-1-0-0-1-end-matrix-right-rightarrow-left-begin-matrix-1-frac-1-x-1-frac-1-x-1-2-frac-1-x-1-2-0-0-1-frac-1-x-2-frac-1-x-2-2-0-frac-1-x-2-2-0-1-frac-1-x-3-frac-1-x-3-2-0-0-frac-1-x-3-2-end-matrix-right-rightarrow-left-begin-matrix-1-frac-1-x-1-frac-1-x-1-2-frac-1-x-1-2-0-0-0-frac-x-1-x-2-x-1x-2-frac-x-1-2-x-2-2-x-1-2x-2-2-frac-1-x-1-2-frac-1-x-2-2-0-0-frac-x-1-x-3-x-1x-3-frac-x-1-2-x-3-2-x-1-2x-3-2-frac-1-x-1-2-0-frac-1-x-3-2-end-matrix-right-rightarrow-left-begin-matrix-1-frac-1-x-1-frac-1-x-1-2-frac-1-x-1-2-0-0-0-frac-x-1-x-2-x-1x-2-frac-x-1-2-x-2-2-x-1-2x-2-2-frac-1-x-1-2-frac-1-x-2-2-0-0-frac-x-1-x-2-x-1x-2-frac-x-1-x-3-x-1-x-2-x-1-2x-2x-3-frac-x-3-x-1-x-2-x-1-2x-2-x-1-x-3-0-frac-x-1-x-2-x-2x-3-x-1-x-3-end-matrix-right-rightarrow-left-begin-matrix-1-frac-1-x-1-frac-1-x-1-2-frac-1-x-1-2-0-0-0-frac-x-1-x-2-x-1x-2-frac-x-1-2-x-2-2-x-1-2x-2-2-frac-1-x-1-2-frac-1-x-2-2-0-0-0-frac-x-1-x-2-x-2-x-3-x-1x-2-2x-3-frac-x-2-x-3-x-1x-2-x-1-x-3-frac-1-x-2-2-frac-x-1-x-2-x-2x-3-x-1-x-3-end-matrix-right-rightarrow-left-begin-matrix-1-frac-1-x-1-frac-1-x-1-2-frac-1-x-1-2-0-0-0-1-frac-x-1-x-2-x-1x-2-frac-x-2-x-1-x-1-x-2-frac-x-1-x-2-x-1-x-2-0-0-0-1-frac-x-2x-3-x-1-x-2-x-1-x-3-frac-x-1x-3-x-1-x-2-x-2-x-3-frac-x-1x-2-x-1-x-3-x-2-x-3-end-matrix-right-rightarrow-left-begin-matrix-1-frac-1-x-1-frac-1-x-1-2-frac-1-x-1-2-0-0-0-1-0-frac-x-2-x-3-x-1-x-2-x-1-x-3-frac-x-1-x-3-x-1-x-2-x-2-x-3-frac-x-1-x-2-x-1-x-3-x-2-x-3-0-0-1-frac-x-2x-3-x-1-x-2-x-1-x-3-frac-x-1x-3-x-1-x-2-x-2-x-3-frac-x-1x-2-x-1-x-3-x-2-x-3-end-matrix-right-rightarrow-left-begin-matrix-1-0-0-frac-1-x-1-x-2-x-1-x-3-frac-1-x-1-x-2-x-2-x-3-frac-1-x-1-x-3-x-2-x-3-0-1-0-frac-x-2-x-3-x-1-x-2-x-1-x-3-frac-x-1-x-3-x-1-x-2-x-2-x-3-frac-x-1-x-2-x-1-x-3-x-2-x-3-0-0-1-frac-x-2x-3-x-1-x-2-x-1-x-3-frac-x-1x-3-x-1-x-2-x-2-x-3-frac-x-1x-2-x-1-x-3-x-2-x-3-end-matrix-right-end-align-也就是说，最终的逆矩阵为：-left-begin-matrix-frac-1-x-1-x-2-x-1-x-3-frac-1-x-1-x-2-x-2-x-3-frac-1-x-1-x-3-x-2-x-3-frac-x-2-x-3-x-1-x-2-x-1-x-3-frac-x-1-x-3-x-1-x-2-x-2-x-3-frac-x-1-x-2-x-1-x-3-x-2-x-3-frac-x-2x-3-x-1-x-2-x-1-x-3-frac-x-1x-3-x-1-x-2-x-2-x-3-frac-x-1x-2-x-1-x-3-x-2-x-3-end-matrix-right-可以验证：-left-begin-matrix-x-1-2-x-1-1-x-2-2-x-2-1-x-3-2-x-3-1-end-matrix-right-left-begin-matrix-frac-1-x-1-x-2-x-1-x-3-frac-1-x-1-x-2-x-2-x-3-frac-1-x-1-x-3-x-2-x-3-frac-x-2-x-3-x-1-x-2-x-1-x-3-frac-x-1-x-3-x-1-x-2-x-2-x-3-frac-x-1-x-2-x-1-x-3-x-2-x-3-frac-x-2x-3-x-1-x-2-x-1-x-3-frac-x-1x-3-x-1-x-2-x-2-x-3-frac-x-1x-2-x-1-x-3-x-2-x-3-end-matrix-right"><a href="#给定三个点：-x-1-y-1-x-2-y-2-x-3-y-3-，假设其插值函数为：-f-x-ax-2-bx-c-，那么可以根据三个点联立方程组，写成矩阵形式就是：-left-begin-matrix-x-1-2-x-1-1-x-2-2-x-2-1-x-3-2-x-3-1-end-matrix-right-left-begin-matrix-a-b-c-end-matrix-right-left-begin-matrix-y-1-y-2-y-3-end-matrix-right-所以求解系数-a-b-c-变成了一个矩阵求逆问题，可以手动做一个初等变换：-begin-align-left-begin-matrix-x-1-2-x-1-1-1-0-0-x-2-2-x-2-1-0-1-0-x-3-2-x-3-1-0-0-1-end-matrix-right-rightarrow-left-begin-matrix-1-frac-1-x-1-frac-1-x-1-2-frac-1-x-1-2-0-0-1-frac-1-x-2-frac-1-x-2-2-0-frac-1-x-2-2-0-1-frac-1-x-3-frac-1-x-3-2-0-0-frac-1-x-3-2-end-matrix-right-rightarrow-left-begin-matrix-1-frac-1-x-1-frac-1-x-1-2-frac-1-x-1-2-0-0-0-frac-x-1-x-2-x-1x-2-frac-x-1-2-x-2-2-x-1-2x-2-2-frac-1-x-1-2-frac-1-x-2-2-0-0-frac-x-1-x-3-x-1x-3-frac-x-1-2-x-3-2-x-1-2x-3-2-frac-1-x-1-2-0-frac-1-x-3-2-end-matrix-right-rightarrow-left-begin-matrix-1-frac-1-x-1-frac-1-x-1-2-frac-1-x-1-2-0-0-0-frac-x-1-x-2-x-1x-2-frac-x-1-2-x-2-2-x-1-2x-2-2-frac-1-x-1-2-frac-1-x-2-2-0-0-frac-x-1-x-2-x-1x-2-frac-x-1-x-3-x-1-x-2-x-1-2x-2x-3-frac-x-3-x-1-x-2-x-1-2x-2-x-1-x-3-0-frac-x-1-x-2-x-2x-3-x-1-x-3-end-matrix-right-rightarrow-left-begin-matrix-1-frac-1-x-1-frac-1-x-1-2-frac-1-x-1-2-0-0-0-frac-x-1-x-2-x-1x-2-frac-x-1-2-x-2-2-x-1-2x-2-2-frac-1-x-1-2-frac-1-x-2-2-0-0-0-frac-x-1-x-2-x-2-x-3-x-1x-2-2x-3-frac-x-2-x-3-x-1x-2-x-1-x-3-frac-1-x-2-2-frac-x-1-x-2-x-2x-3-x-1-x-3-end-matrix-right-rightarrow-left-begin-matrix-1-frac-1-x-1-frac-1-x-1-2-frac-1-x-1-2-0-0-0-1-frac-x-1-x-2-x-1x-2-frac-x-2-x-1-x-1-x-2-frac-x-1-x-2-x-1-x-2-0-0-0-1-frac-x-2x-3-x-1-x-2-x-1-x-3-frac-x-1x-3-x-1-x-2-x-2-x-3-frac-x-1x-2-x-1-x-3-x-2-x-3-end-matrix-right-rightarrow-left-begin-matrix-1-frac-1-x-1-frac-1-x-1-2-frac-1-x-1-2-0-0-0-1-0-frac-x-2-x-3-x-1-x-2-x-1-x-3-frac-x-1-x-3-x-1-x-2-x-2-x-3-frac-x-1-x-2-x-1-x-3-x-2-x-3-0-0-1-frac-x-2x-3-x-1-x-2-x-1-x-3-frac-x-1x-3-x-1-x-2-x-2-x-3-frac-x-1x-2-x-1-x-3-x-2-x-3-end-matrix-right-rightarrow-left-begin-matrix-1-0-0-frac-1-x-1-x-2-x-1-x-3-frac-1-x-1-x-2-x-2-x-3-frac-1-x-1-x-3-x-2-x-3-0-1-0-frac-x-2-x-3-x-1-x-2-x-1-x-3-frac-x-1-x-3-x-1-x-2-x-2-x-3-frac-x-1-x-2-x-1-x-3-x-2-x-3-0-0-1-frac-x-2x-3-x-1-x-2-x-1-x-3-frac-x-1x-3-x-1-x-2-x-2-x-3-frac-x-1x-2-x-1-x-3-x-2-x-3-end-matrix-right-end-align-也就是说，最终的逆矩阵为：-left-begin-matrix-frac-1-x-1-x-2-x-1-x-3-frac-1-x-1-x-2-x-2-x-3-frac-1-x-1-x-3-x-2-x-3-frac-x-2-x-3-x-1-x-2-x-1-x-3-frac-x-1-x-3-x-1-x-2-x-2-x-3-frac-x-1-x-2-x-1-x-3-x-2-x-3-frac-x-2x-3-x-1-x-2-x-1-x-3-frac-x-1x-3-x-1-x-2-x-2-x-3-frac-x-1x-2-x-1-x-3-x-2-x-3-end-matrix-right-可以验证：-left-begin-matrix-x-1-2-x-1-1-x-2-2-x-2-1-x-3-2-x-3-1-end-matrix-right-left-begin-matrix-frac-1-x-1-x-2-x-1-x-3-frac-1-x-1-x-2-x-2-x-3-frac-1-x-1-x-3-x-2-x-3-frac-x-2-x-3-x-1-x-2-x-1-x-3-frac-x-1-x-3-x-1-x-2-x-2-x-3-frac-x-1-x-2-x-1-x-3-x-2-x-3-frac-x-2x-3-x-1-x-2-x-1-x-3-frac-x-1x-3-x-1-x-2-x-2-x-3-frac-x-1x-2-x-1-x-3-x-2-x-3-end-matrix-right" class="headerlink" title="给定三个点：$(x_1,y_1),(x_2,y_2),(x_3,y_3)$，假设其插值函数为：$f(x)&#x3D;ax^2+bx+c$，那么可以根据三个点联立方程组，写成矩阵形式就是：$$\left(\begin{matrix}x_1^2&amp;&amp;x_1&amp;&amp;1\x_2^2&amp;&amp;x_2&amp;&amp;1\x_3^2&amp;&amp;x_3&amp;&amp;1\end{matrix}\right)\left(\begin{matrix}a\b\c\end{matrix}\right)&#x3D;\left(\begin{matrix}y_1\y_2\y_3\end{matrix}\right)$$所以求解系数$a,b,c$变成了一个矩阵求逆问题，可以手动做一个初等变换：$$\begin{align*}\left(\begin{matrix}x_1^2&amp;&amp;x_1&amp;&amp;1&amp;&amp;1&amp;&amp;0&amp;&amp;0\x_2^2&amp;&amp;x_2&amp;&amp;1&amp;&amp;0&amp;&amp;1&amp;&amp;0\x_3^2&amp;&amp;x_3&amp;&amp;1&amp;&amp;0&amp;&amp;0&amp;&amp;1\end{matrix}\right)&amp;\rightarrow\left(\begin{matrix}1&amp;&amp;\frac{1}{x_1}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;0&amp;&amp;0\1&amp;&amp;\frac{1}{x_2}&amp;&amp;\frac{1}{x_2^2}&amp;&amp;0&amp;&amp;\frac{1}{x_2^2}&amp;&amp;0\1&amp;&amp;\frac{1}{x_3}&amp;&amp;\frac{1}{x_3^2}&amp;&amp;0&amp;&amp;0&amp;&amp;\frac{1}{x_3^2}\end{matrix}\right)\&amp;\rightarrow\left(\begin{matrix}1&amp;&amp;\frac{1}{x_1}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;0&amp;&amp;0\0&amp;&amp;\frac{x_1-x_2}{x_1x_2}&amp;&amp;\frac{x_1^2-x_2^2}{x_1^2x_2^2}&amp;&amp;-\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_2^2}&amp;&amp;0\0&amp;&amp;\frac{x_1-x_3}{x_1x_3}&amp;&amp;\frac{x_1^2-x_3^2}{x_1^2x_3^2}&amp;&amp;-\frac{1}{x_1^2}&amp;&amp;0&amp;&amp;\frac{1}{x_3^2}\end{matrix}\right)\&amp;\rightarrow\left(\begin{matrix}1&amp;&amp;\frac{1}{x_1}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;0&amp;&amp;0\0&amp;&amp;\frac{x_1-x_2}{x_1x_2}&amp;&amp;\frac{x_1^2-x_2^2}{x_1^2x_2^2}&amp;&amp;-\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_2^2}&amp;&amp;0\0&amp;&amp;\frac{x_1-x_2}{x_1x_2}&amp;&amp;\frac{(x_1+x_3)(x_1-x_2)}{x_1^2x_2x_3}&amp;&amp;-\frac{x_3(x_1-x_2)}{x_1^2x_2(x_1-x_3)}&amp;&amp;0&amp;&amp;\frac{x_1-x_2}{x_2x_3(x_1-x_3)}\end{matrix}\right)\&amp;\rightarrow\left(\begin{matrix}1&amp;&amp;\frac{1}{x_1}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;0&amp;&amp;0\0&amp;&amp;\frac{x_1-x_2}{x_1x_2}&amp;&amp;\frac{x_1^2-x_2^2}{x_1^2x_2^2}&amp;&amp;-\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_2^2}&amp;&amp;0\0&amp;&amp;0&amp;&amp;\frac{(x_1-x_2)(x_2-x_3)}{x_1x_2^2x_3}&amp;&amp;\frac{x_2-x_3}{x_1x_2(x_1-x_3)}&amp;&amp;-\frac{1}{x_2^2}&amp;&amp;\frac{x_1-x_2}{x_2x_3(x_1-x_3)}\end{matrix}\right)\&amp;\rightarrow\left(\begin{matrix}1&amp;&amp;\frac{1}{x_1}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;0&amp;&amp;0\0&amp;&amp;1&amp;&amp;\frac{x_1+x_2}{x_1x_2}&amp;&amp;-\frac{x_2}{x_1(x_1-x_2)}&amp;&amp;\frac{x_1}{x_2(x_1-x_2)}&amp;&amp;0\0&amp;&amp;0&amp;&amp;1&amp;&amp;\frac{x_2x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;-\frac{x_1x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{x_1x_2}{(x_1-x_3)(x_2-x_3)}\end{matrix}\right)\&amp;\rightarrow\left(\begin{matrix}1&amp;&amp;\frac{1}{x_1}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;0&amp;&amp;0\0&amp;&amp;1&amp;&amp;0&amp;&amp;-\frac{x_2+x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;\frac{x_1+x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;-\frac{x_1+x_2}{(x_1-x_3)(x_2-x_3)}\0&amp;&amp;0&amp;&amp;1&amp;&amp;\frac{x_2x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;-\frac{x_1x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{x_1x_2}{(x_1-x_3)(x_2-x_3)}\end{matrix}\right)\&amp;\rightarrow\left(\begin{matrix}1&amp;&amp;0&amp;&amp;0&amp;&amp;\frac{1}{(x_1-x_2)(x_1-x_3)}&amp;&amp;\frac{-1}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{1}{(x_1-x_3)(x_2-x_3)}\0&amp;&amp;1&amp;&amp;0&amp;&amp;-\frac{x_2+x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;\frac{x_1+x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;-\frac{x_1+x_2}{(x_1-x_3)(x_2-x_3)}\0&amp;&amp;0&amp;&amp;1&amp;&amp;\frac{x_2x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;-\frac{x_1x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{x_1x_2}{(x_1-x_3)(x_2-x_3)}\end{matrix}\right)\end{align*}$$也就是说，最终的逆矩阵为：$$\left(\begin{matrix}\frac{1}{(x_1-x_2)(x_1-x_3)}&amp;&amp;\frac{-1}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{1}{(x_1-x_3)(x_2-x_3)}\-\frac{x_2+x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;\frac{x_1+x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;-\frac{x_1+x_2}{(x_1-x_3)(x_2-x_3)}\\frac{x_2x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;-\frac{x_1x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{x_1x_2}{(x_1-x_3)(x_2-x_3)}\end{matrix}\right)$$可以验证：$$\left(\begin{matrix}x_1^2&amp;&amp;x_1&amp;&amp;1\x_2^2&amp;&amp;x_2&amp;&amp;1\x_3^2&amp;&amp;x_3&amp;&amp;1\end{matrix}\right)\left(\begin{matrix}\frac{1}{(x_1-x_2)(x_1-x_3)}&amp;&amp;\frac{-1}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{1}{(x_1-x_3)(x_2-x_3)}\-\frac{x_2+x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;\frac{x_1+x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;-\frac{x_1+x_2}{(x_1-x_3)(x_2-x_3)}\\frac{x_2x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;-\frac{x_1x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{x_1x_2}{(x_1-x_3)(x_2-x_3)}\end{matrix}\right)"></a>给定三个点：$(x_1,y_1),(x_2,y_2),(x_3,y_3)$，假设其插值函数为：$f(x)&#x3D;ax^2+bx+c$，那么可以根据三个点联立方程组，写成矩阵形式就是：<br>$$<br>\left(<br>\begin{matrix}<br>x_1^2&amp;&amp;x_1&amp;&amp;1\<br>x_2^2&amp;&amp;x_2&amp;&amp;1\<br>x_3^2&amp;&amp;x_3&amp;&amp;1<br>\end{matrix}<br>\right)\left(<br>\begin{matrix}<br>a\b\c<br>\end{matrix}<br>\right)&#x3D;\left(<br>\begin{matrix}<br>y_1\y_2\y_3<br>\end{matrix}<br>\right)<br>$$<br>所以求解系数$a,b,c$变成了一个矩阵求逆问题，可以手动做一个初等变换：<br>$$<br>\begin{align*}<br>\left(<br>\begin{matrix}<br>x_1^2&amp;&amp;x_1&amp;&amp;1&amp;&amp;1&amp;&amp;0&amp;&amp;0\<br>x_2^2&amp;&amp;x_2&amp;&amp;1&amp;&amp;0&amp;&amp;1&amp;&amp;0\<br>x_3^2&amp;&amp;x_3&amp;&amp;1&amp;&amp;0&amp;&amp;0&amp;&amp;1<br>\end{matrix}<br>\right)&amp;\rightarrow<br>\left(<br>\begin{matrix}<br>1&amp;&amp;\frac{1}{x_1}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;0&amp;&amp;0\<br>1&amp;&amp;\frac{1}{x_2}&amp;&amp;\frac{1}{x_2^2}&amp;&amp;0&amp;&amp;\frac{1}{x_2^2}&amp;&amp;0\<br>1&amp;&amp;\frac{1}{x_3}&amp;&amp;\frac{1}{x_3^2}&amp;&amp;0&amp;&amp;0&amp;&amp;\frac{1}{x_3^2}<br>\end{matrix}<br>\right)\<br>&amp;\rightarrow<br>\left(<br>\begin{matrix}<br>1&amp;&amp;\frac{1}{x_1}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;0&amp;&amp;0\<br>0&amp;&amp;\frac{x_1-x_2}{x_1x_2}&amp;&amp;\frac{x_1^2-x_2^2}{x_1^2x_2^2}&amp;&amp;-\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_2^2}&amp;&amp;0\<br>0&amp;&amp;\frac{x_1-x_3}{x_1x_3}&amp;&amp;\frac{x_1^2-x_3^2}{x_1^2x_3^2}&amp;&amp;-\frac{1}{x_1^2}&amp;&amp;0&amp;&amp;\frac{1}{x_3^2}<br>\end{matrix}<br>\right)\<br>&amp;\rightarrow<br>\left(<br>\begin{matrix}<br>1&amp;&amp;\frac{1}{x_1}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;0&amp;&amp;0\<br>0&amp;&amp;\frac{x_1-x_2}{x_1x_2}&amp;&amp;\frac{x_1^2-x_2^2}{x_1^2x_2^2}&amp;&amp;-\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_2^2}&amp;&amp;0\<br>0&amp;&amp;\frac{x_1-x_2}{x_1x_2}&amp;&amp;\frac{(x_1+x_3)(x_1-x_2)}{x_1^2x_2x_3}&amp;&amp;-\frac{x_3(x_1-x_2)}{x_1^2x_2(x_1-x_3)}&amp;&amp;0&amp;&amp;\frac{x_1-x_2}{x_2x_3(x_1-x_3)}<br>\end{matrix}<br>\right)\<br>&amp;\rightarrow<br>\left(<br>\begin{matrix}<br>1&amp;&amp;\frac{1}{x_1}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;0&amp;&amp;0\<br>0&amp;&amp;\frac{x_1-x_2}{x_1x_2}&amp;&amp;\frac{x_1^2-x_2^2}{x_1^2x_2^2}&amp;&amp;-\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_2^2}&amp;&amp;0\<br>0&amp;&amp;0&amp;&amp;\frac{(x_1-x_2)(x_2-x_3)}{x_1x_2^2x_3}&amp;&amp;\frac{x_2-x_3}{x_1x_2(x_1-x_3)}&amp;&amp;-\frac{1}{x_2^2}&amp;&amp;\frac{x_1-x_2}{x_2x_3(x_1-x_3)}<br>\end{matrix}<br>\right)\<br>&amp;\rightarrow<br>\left(<br>\begin{matrix}<br>1&amp;&amp;\frac{1}{x_1}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;0&amp;&amp;0\<br>0&amp;&amp;1&amp;&amp;\frac{x_1+x_2}{x_1x_2}&amp;&amp;-\frac{x_2}{x_1(x_1-x_2)}&amp;&amp;\frac{x_1}{x_2(x_1-x_2)}&amp;&amp;0\<br>0&amp;&amp;0&amp;&amp;1&amp;&amp;\frac{x_2x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;-\frac{x_1x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{x_1x_2}{(x_1-x_3)(x_2-x_3)}<br>\end{matrix}<br>\right)\<br>&amp;\rightarrow<br>\left(<br>\begin{matrix}<br>1&amp;&amp;\frac{1}{x_1}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;\frac{1}{x_1^2}&amp;&amp;0&amp;&amp;0\<br>0&amp;&amp;1&amp;&amp;0&amp;&amp;-\frac{x_2+x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;\frac{x_1+x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;-\frac{x_1+x_2}{(x_1-x_3)(x_2-x_3)}\<br>0&amp;&amp;0&amp;&amp;1&amp;&amp;\frac{x_2x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;-\frac{x_1x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{x_1x_2}{(x_1-x_3)(x_2-x_3)}<br>\end{matrix}<br>\right)\<br>&amp;\rightarrow<br>\left(<br>\begin{matrix}<br>1&amp;&amp;0&amp;&amp;0&amp;&amp;\frac{1}{(x_1-x_2)(x_1-x_3)}&amp;&amp;\frac{-1}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{1}{(x_1-x_3)(x_2-x_3)}\<br>0&amp;&amp;1&amp;&amp;0&amp;&amp;-\frac{x_2+x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;\frac{x_1+x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;-\frac{x_1+x_2}{(x_1-x_3)(x_2-x_3)}\<br>0&amp;&amp;0&amp;&amp;1&amp;&amp;\frac{x_2x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;-\frac{x_1x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{x_1x_2}{(x_1-x_3)(x_2-x_3)}<br>\end{matrix}<br>\right)<br>\end{align*}<br>$$<br>也就是说，最终的逆矩阵为：<br>$$<br>\left(<br>\begin{matrix}<br>\frac{1}{(x_1-x_2)(x_1-x_3)}&amp;&amp;\frac{-1}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{1}{(x_1-x_3)(x_2-x_3)}\<br>-\frac{x_2+x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;\frac{x_1+x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;-\frac{x_1+x_2}{(x_1-x_3)(x_2-x_3)}\<br>\frac{x_2x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;-\frac{x_1x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{x_1x_2}{(x_1-x_3)(x_2-x_3)}<br>\end{matrix}<br>\right)<br>$$<br>可以验证：<br>$$<br>\left(<br>\begin{matrix}<br>x_1^2&amp;&amp;x_1&amp;&amp;1\<br>x_2^2&amp;&amp;x_2&amp;&amp;1\<br>x_3^2&amp;&amp;x_3&amp;&amp;1<br>\end{matrix}<br>\right)<br>\left(<br>\begin{matrix}<br>\frac{1}{(x_1-x_2)(x_1-x_3)}&amp;&amp;\frac{-1}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{1}{(x_1-x_3)(x_2-x_3)}\<br>-\frac{x_2+x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;\frac{x_1+x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;-\frac{x_1+x_2}{(x_1-x_3)(x_2-x_3)}\<br>\frac{x_2x_3}{(x_1-x_2)(x_1-x_3)}&amp;&amp;-\frac{x_1x_3}{(x_1-x_2)(x_2-x_3)}&amp;&amp;\frac{x_1x_2}{(x_1-x_3)(x_2-x_3)}<br>\end{matrix}<br>\right)</h1><p>\left(<br>\begin{matrix}<br>1&amp;&amp;0&amp;&amp;0\<br>0&amp;&amp;1&amp;&amp;0\<br>0&amp;&amp;0&amp;&amp;1<br>\end{matrix}<br>\right)<br>$$<br>有了逆矩阵，就可以计算参数数值$a,b,c$，那么这里我们直接写出函数形式：<br>$$<br>f(x)&#x3D;\frac{(x-x_2)(x-x_3)}{(x_1-x_2)(x_1-x_3)}y_1+\frac{(x-x_1)(x-x_3)}{(x_2-x_1)(x_2-x_3)}y_2+\frac{(x-x_1)(x-x_2)}{(x_3-x_1)(x_3-x_2)}y_3<br>$$</p>
+<h1 id="拉格朗日插值法"><a href="#拉格朗日插值法" class="headerlink" title="拉格朗日插值法"></a>拉格朗日插值法</h1><p>观察前面线性插值和二次插值的函数规律，可以给出一个推广形式：<br>$$<br>f(x)&#x3D;\sum_{i&#x3D;1}^{N}c_i(x,x_1,x_2,…,x_N)y_N<br>$$<br>其中系数函数$c_i(x,x_1,x_2,…,x_N)&#x3D;\prod_{j&#x3D;1}^{i-1}\frac{x-x_j}{x_i-x_j}\prod_{k&#x3D;i+1}^{N}\frac{x-x_k}{x_i-x_k}$。可以给出$N$个数据点的$N-1$次插值函数解析式，这就是拉格朗日插值法，满足$f(x_i)&#x3D;y_i$的约束条件。</p>
+<h1 id="牛顿插值法"><a href="#牛顿插值法" class="headerlink" title="牛顿插值法"></a>牛顿插值法</h1><p>如果把线性插值中的函数表达式再修改一下形式，变成：<br>$$<br>f(x)&#x3D;y_1+\frac{y_2-y_1}{x_2-x_1}(x-x_1)<br>$$<br>类似的，二阶插值函数可以改成如下形式：<br>$$<br>f(x)&#x3D;y_1+\frac{y_2-y_1}{x_2-x_1}(x-x_1)+\frac{\frac{y_3-y_2}{x_3-x_2}-\frac{y_2-y_1}{x_2-x_1}}{x_3-x_1}(x-x_1)(x-x_2)<br>$$<br>如果定义一个一阶差商为：<br>$$<br>g(x_i,x_{i+1})&#x3D;\frac{y_{i+1}-y_i}{x_{i+1}-x_i}<br>$$<br>其含义为$(x_i,x_{i+1})$区间内的平均变化率。有了一阶差商的定义，就可以递归的定义二阶差商：<br>$$<br>g(x_i,x_{i+1},x_{i+2})&#x3D;\frac{g(x_{i+1},x_{i+2})-g(x_{i},x_{i+1})}{x_{i+2}-x_i}<br>$$<br>以及$m$阶的差商：<br>$$<br>g(x_i,x_{i+1},x_{i+2},…,x_{i+m})&#x3D;\frac{g(x_{i+1},x_{i+2},…,x_{i+m})-g(x_{i},x_{i+1},…,x_{i+m-1})}{x_{i+m}-x_i}<br>$$<br>则可以写出牛顿插值的函数形式为：<br>$$<br>f(x)&#x3D;y_1+\sum_{i&#x3D;1}^{N-1}g(x_1,…,x_{i+1})\prod_{j&#x3D;1}^{i}(x-x_j)<br>$$</p>
+<h1 id="插值形式对比"><a href="#插值形式对比" class="headerlink" title="插值形式对比"></a>插值形式对比</h1><p>拉格朗日插值算法和牛顿插值算法，插值的阶数是一致的，同样的点数插值出来的多项式也是唯一的，换句话说两个方法插值出来的函数其实是等价的。那么两个插值算法的优劣势在哪里？我们考虑这么一种情况，原本有$N$个数据点需要插值，此时如果再引入一个新的数据点，总点数变成了$N+1$。此时如果使用的是拉格朗日插值法，那么就需要我们把所有的系数全都再算一遍。而如果使用的是牛顿插值法，那么我们发现前面的$N$个系数是不需要发生变化的，我们只需要再计算一个新的系数即可，极大程度上的减少了点数更新所带来的参数计算量。但也并不是说拉格朗日插值没有用武之地，在现如今的张量计算时代，拉格朗日插值法的每一项系数都是同Shape的张量操作，反而是牛顿插值的递归形式在张量计算中会有一些麻烦。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文通过线性插值和二次插值的形式，介绍了拉格朗日插值算法以及牛顿插值算法的基本形式。两种插值算法的最终函数形式是一致的，但是在不同场景下的参数求解计算量是不一致的，需要根据自己的应用场景选择更加合适的插值算法。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/lg-interp.html">https://www.cnblogs.com/dechinphy/p/lg-interp.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2024/10/17/%E6%A0%BC%E7%82%B9%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E6%8F%92%E5%80%BC%E4%B8%8EPME%E7%AE%97%E6%B3%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          格点拉格朗日插值与PME算法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/09/27/Ewald%E6%B1%82%E5%92%8C%E5%9C%A8%E5%88%86%E5%AD%90%E9%9D%99%E7%94%B5%E5%8A%BF%E8%83%BD%E8%AE%A1%E7%AE%97%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">Ewald求和在分子静电势能计算中的应用</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=拉格朗日插值法 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F10%2F14%2F%25E6%258B%2589%25E6%25A0%25BC%25E6%259C%2597%25E6%2597%25A5%25E6%258F%2592%25E5%2580%25BC%25E6%25B3%2595%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=拉格朗日插值法 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2024%2F10%2F14%2F%25E6%258B%2589%25E6%25A0%25BC%25E6%259C%2597%25E6%2597%25A5%25E6%258F%2592%25E5%2580%25BC%25E6%25B3%2595%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=拉格朗日插值法 - Hexo&url=http://dechinphy.github.io/2024/10/14/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E6%8F%92%E5%80%BC%E6%B3%95/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

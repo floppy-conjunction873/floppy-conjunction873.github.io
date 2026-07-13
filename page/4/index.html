@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>Hexo</title>
+
+    <meta name="description" content="Hexo">
+    <meta name="keywords" content="">
+
+    
+
+
+
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content=""/>
+    <meta property="og:description" content=""/>
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="http://dechinphy.github.io/page/4/index.html" />
+    <meta property="og:site_name" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "",
+            "description": "",
+            "publisher": {
+                "@type": "Organization",
+                "name": "John Doe"
+            },
+        }
+    </script>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = false
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="index">
+  
+    
+      <article
+id="post-PyTorch中的求余"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2025/06/11/PyTorch%E4%B8%AD%E7%9A%84%E6%B1%82%E4%BD%99/">PyTorch中的求余</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文通过几个示例，介绍了在Python、Numpy和PyTorch三个不同的框架下，对于求余数函数的定义。比较特殊的是pytorch中的fmod函数，并不符合数学上的求余数方法，而是需要使用remainder函数。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2025-06-11T06:40:36.000Z" itemprop="datePublished">2025-06-11</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-Python中的cls变量"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2025/06/03/Python%E4%B8%AD%E7%9A%84cls%E5%8F%98%E9%87%8F/">Python中的cls变量</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了在Python的classmethod装饰的类方法的cls变量的意义，通过几个不同的示例对比，凸显cls变量在Python编程中的应用场景。对于大多数的场景来说，使用普通的Python类和函数定义即可。如果需要在类的外部使用类的内部函数，但是可能有多个不同初始化的类输入，那么可以使用staticmethod进行装饰。如果只有一个类，而有多种不同的输入场景下，可以使用classmethod进行装饰。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2025-06-03T08:32:40.000Z" itemprop="datePublished">2025-06-03</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-一个纯净的自动微分框架—autograd"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2025/05/23/%E4%B8%80%E4%B8%AA%E7%BA%AF%E5%87%80%E7%9A%84%E8%87%AA%E5%8A%A8%E5%BE%AE%E5%88%86%E6%A1%86%E6%9E%B6%E2%80%94autograd/">一个纯净的自动微分框架—autograd</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了一个可以基于CPU和numpy的自动微分计算框架。如果只是需要使用自动微分计算的功能，就可以直接在CPU环境下简便的部署，快捷的完成环境搭建。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2025-05-23T06:58:00.000Z" itemprop="datePublished">2025-05-23</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-QUBO建模"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2025/04/21/QUBO%E5%BB%BA%E6%A8%A1/">QUBO建模</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>这篇文章算是对Fred Glover的一篇综述的解读，添加了一些方便直观理解的示例具体的建模过程。对于不同的场景，可以使用不同的惩罚项进行QUBO建模，从而可以使用求解器或者Ising机进行求解。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2025-04-21T00:44:35.000Z" itemprop="datePublished">2025-04-21</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-解决Cupy相关报错"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2025/03/24/%E8%A7%A3%E5%86%B3Cupy%E7%9B%B8%E5%85%B3%E6%8A%A5%E9%94%99/">解决Cupy相关报错</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文记录了一些使用python-cupy的过程中有可能的遇到的一些问题，一部分是环境配置问题，还有一部分是运行输入问题。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2025-03-24T09:24:29.000Z" itemprop="datePublished">2025-03-24</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-KTransformers实战DeepSeek-R1-1.58bit量化模型"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2025/03/11/KTransformers%E5%AE%9E%E6%88%98DeepSeek-R1-1.58bit%E9%87%8F%E5%8C%96%E6%A8%A1%E5%9E%8B/">KTransformers实战DeepSeek-R1-1.58bit量化模型</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了国产的大模型推理工具KTransformers在本地成功运行的一个案例，在容器化部署的基础上，结合Open WebUI做了一个用户友好的大模型服务。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2025-03-11T02:49:58.000Z" itemprop="datePublished">2025-03-11</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-SlackBot流式响应"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2025/03/10/SlackBot%E6%B5%81%E5%BC%8F%E5%93%8D%E5%BA%94/">SlackBot流式响应</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><h1 id="输出verbose参数"><a href="#输出verbose参数" class="headerlink" title="输出verbose参数"></a>输出verbose参数</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> dateutil <span class="keyword">import</span> parser</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> slack_bolt <span class="keyword">import</span> App</span><br><span class="line"><span class="keyword">from</span> slack_bolt.adapter.socket_mode <span class="keyword">import</span> SocketModeHandler</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载环境变量</span></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化 Slack 应用</span></span><br><span class="line">app = App(</span><br><span class="line">    token=os.environ[<span class="string">&quot;SLACK_BOT_TOKEN&quot;</span>],</span><br><span class="line">    signing_secret=os.environ[<span class="string">&quot;SLACK_SIGNING_SECRET&quot;</span>]</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Ollama 配置（可通过环境变量覆盖）</span></span><br><span class="line">MODEL_NAME = <span class="string">&quot;deepseek-r1:32b-q40&quot;</span></span><br><span class="line">OLLAMA_ENDPOINT = os.getenv(<span class="string">&quot;OLLAMA_ENDPOINT&quot;</span>, <span class="string">&quot;http://localhost:11434/api/generate&quot;</span>)</span><br><span class="line">OLLAMA_MODEL = os.getenv(<span class="string">&quot;OLLAMA_MODEL&quot;</span>, MODEL_NAME)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PerformanceMetrics</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.start_time = <span class="literal">None</span></span><br><span class="line">        <span class="variable language_">self</span>.total_tokens = <span class="number">0</span></span><br><span class="line">        <span class="variable language_">self</span>.total_duration = <span class="number">0.0</span></span><br><span class="line">        <span class="variable language_">self</span>.last_update = <span class="literal">None</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">start_timing</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.start_time = time.time()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_chunk</span>(<span class="params">self, chunk_data: <span class="built_in">dict</span></span>):</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.start_time <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            created_at_str = chunk_data.get(<span class="string">&quot;created_at&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">            <span class="keyword">if</span> created_at_str:</span><br><span class="line">                <span class="comment"># 使用 dateutil 解析 ISO 8601 字符串</span></span><br><span class="line">                created_at = parser.parse(created_at_str).timestamp()</span><br><span class="line">                <span class="variable language_">self</span>.start_time = created_at</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="variable language_">self</span>.start_time = time.time()</span><br><span class="line">        <span class="comment"># 不同模型返回字段可能不同，需要根据实际情况调整</span></span><br><span class="line">        <span class="variable language_">self</span>.total_tokens += chunk_data.get(<span class="string">&quot;eval_count&quot;</span>, <span class="number">0</span>)</span><br><span class="line">        <span class="variable language_">self</span>.total_duration = chunk_data.get(<span class="string">&quot;eval_duration&quot;</span>, <span class="number">0</span>) / <span class="number">1e9</span>  <span class="comment"># 纳秒转秒</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_metrics</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.total_duration &gt; <span class="number">0</span>:</span><br><span class="line">            speed = <span class="variable language_">self</span>.total_tokens / <span class="variable language_">self</span>.total_duration</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            speed = <span class="number">0</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="string">f&quot;\n\n_性能统计：生成 <span class="subst">&#123;self.total_tokens&#125;</span> tokens | &quot;</span></span><br><span class="line">            <span class="string">f&quot;速度 <span class="subst">&#123;speed:<span class="number">.1</span>f&#125;</span> tokens/s | &quot;</span></span><br><span class="line">            <span class="string">f&quot;总耗时 <span class="subst">&#123;self.total_duration:<span class="number">.1</span>f&#125;</span>s_&quot;</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">query_ollama</span>(<span class="params">prompt: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;向 Ollama 发送请求并获取完整响应&quot;&quot;&quot;</span></span><br><span class="line">    payload = &#123;</span><br><span class="line">        <span class="string">&quot;model&quot;</span>: OLLAMA_MODEL,</span><br><span class="line">        <span class="string">&quot;prompt&quot;</span>: <span class="string">f&quot;请先输出思考过程（用THINKING:开头），再输出最终答案（用ANSWER:开头）：\n\n<span class="subst">&#123;prompt&#125;</span>&quot;</span>,</span><br><span class="line">        <span class="string">&quot;stream&quot;</span>: <span class="literal">False</span>,</span><br><span class="line">        <span class="string">&quot;verbose&quot;</span>: <span class="literal">True</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        response = requests.post(OLLAMA_ENDPOINT, json=payload, timeout=<span class="number">60000</span>)</span><br><span class="line">        response.raise_for_status()</span><br><span class="line">        <span class="keyword">return</span> response.json()</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;Ollama 请求失败: <span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">format_slack_response</span>(<span class="params">raw_response: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;将原始响应分割为思考过程和最终答案&quot;&quot;&quot;</span></span><br><span class="line">    thinking_match = re.search(<span class="string">r&quot;THINKING:(.*?)(ANSWER:|\Z)&quot;</span>, raw_response, re.DOTALL)</span><br><span class="line">    answer_match = re.search(<span class="string">r&quot;ANSWER:(.*)&quot;</span>, raw_response, re.DOTALL)</span><br><span class="line"></span><br><span class="line">    thinking = thinking_match.group(<span class="number">1</span>).strip() <span class="keyword">if</span> thinking_match <span class="keyword">else</span> <span class="string">&quot;未提供思考过程&quot;</span></span><br><span class="line">    answer = answer_match.group(<span class="number">1</span>).strip() <span class="keyword">if</span> answer_match <span class="keyword">else</span> raw_response</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        <span class="string">f&quot;*🤔 思考过程*：\n```<span class="subst">&#123;thinking&#125;</span>```\n\n&quot;</span></span><br><span class="line">        <span class="string">f&quot;*💡 最终回答*：\n```<span class="subst">&#123;answer&#125;</span>```&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.event(<span class="params"><span class="string">&quot;app_mention&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handle_ollama_query</span>(<span class="params">event, say</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;处理 Slack 提及事件&quot;&quot;&quot;</span></span><br><span class="line">    say(text=<span class="string">&quot;模型&#123;&#125;正在思考，请稍后...&quot;</span>.<span class="built_in">format</span>(MODEL_NAME))</span><br><span class="line">    <span class="comment"># 移除机器人提及标记</span></span><br><span class="line">    query = event[<span class="string">&quot;text&quot;</span>].replace(<span class="string">f&#x27;&lt;@<span class="subst">&#123;app.client.auth_test()[<span class="string">&quot;user_id&quot;</span>]&#125;</span>&gt;&#x27;</span>, <span class="string">&#x27;&#x27;</span>).strip()</span><br><span class="line">    </span><br><span class="line">    metrics = PerformanceMetrics()</span><br><span class="line">    <span class="comment"># 获取原始响应</span></span><br><span class="line">    raw_response = query_ollama(query)</span><br><span class="line">    metrics.add_chunk(raw_response)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 格式化响应</span></span><br><span class="line">    slack_message = format_slack_response(raw_response[<span class="string">&quot;response&quot;</span>]) + metrics.get_metrics()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 发送到 Slack 频道</span></span><br><span class="line">    say(text=slack_message, channel=event[<span class="string">&quot;channel&quot;</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    SocketModeHandler(app, os.environ[<span class="string">&quot;SLACK_APP_TOKEN&quot;</span>]).start()</span><br></pre></td></tr></table></figure>
+
+<h1 id="流式输出"><a href="#流式输出" class="headerlink" title="流式输出"></a>流式输出</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">from</span> slack_bolt <span class="keyword">import</span> App</span><br><span class="line"><span class="keyword">from</span> slack_bolt.adapter.socket_mode <span class="keyword">import</span> SocketModeHandler</span><br><span class="line"><span class="keyword">from</span> slack_sdk <span class="keyword">import</span> WebClient</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载环境变量</span></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化 Slack 应用</span></span><br><span class="line">app = App(</span><br><span class="line">    token=os.environ[<span class="string">&quot;SLACK_BOT_TOKEN&quot;</span>],</span><br><span class="line">    signing_secret=os.environ[<span class="string">&quot;SLACK_SIGNING_SECRET&quot;</span>]</span><br><span class="line">)</span><br><span class="line">client = WebClient(token=os.environ[<span class="string">&quot;SLACK_BOT_TOKEN&quot;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 全局停止请求跟踪</span></span><br><span class="line">stop_requests = &#123;&#125;</span><br><span class="line">stop_lock = threading.Lock()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Ollama 配置</span></span><br><span class="line"><span class="comment"># MODEL_NAME = &quot;deepseek-r1:32b-q40&quot;</span></span><br><span class="line">MODEL_NAME = <span class="string">&quot;deepseek-r1:14b&quot;</span></span><br><span class="line">OLLAMA_ENDPOINT = os.getenv(<span class="string">&quot;OLLAMA_ENDPOINT&quot;</span>, <span class="string">&quot;http://localhost:11434/api/generate&quot;</span>)</span><br><span class="line">OLLAMA_MODEL = os.getenv(<span class="string">&quot;OLLAMA_MODEL&quot;</span>, MODEL_NAME)</span><br><span class="line">OLLAMA_PARAMS = &#123;</span><br><span class="line">    <span class="string">&quot;num_ctx&quot;</span>: <span class="built_in">int</span>(os.getenv(<span class="string">&quot;OLLAMA_NUM_CTX&quot;</span>, <span class="number">4096</span>)),</span><br><span class="line">    <span class="string">&quot;num_gpu&quot;</span>: <span class="built_in">int</span>(os.getenv(<span class="string">&quot;OLLAMA_NUM_GPU&quot;</span>, <span class="number">64</span>)),</span><br><span class="line">    <span class="string">&quot;keep_alive&quot;</span>: os.getenv(<span class="string">&quot;OLLAMA_KEEP_ALIVE&quot;</span>, <span class="string">&quot;2h&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">stream_ollama</span>(<span class="params">prompt: <span class="built_in">str</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;流式请求Ollama API&quot;&quot;&quot;</span></span><br><span class="line">    payload = &#123;</span><br><span class="line">        <span class="string">&quot;model&quot;</span>: OLLAMA_MODEL,</span><br><span class="line">        <span class="string">&quot;prompt&quot;</span>: <span class="string">f&quot;请先输出思考过程（用THINKING:开头），再输出最终答案（用ANSWER:开头）：\n\n<span class="subst">&#123;prompt&#125;</span>&quot;</span>,</span><br><span class="line">        <span class="string">&quot;stream&quot;</span>: <span class="literal">True</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    response = requests.post(OLLAMA_ENDPOINT, json=payload, stream=<span class="literal">True</span>)</span><br><span class="line">    response.raise_for_status()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> response.iter_lines():</span><br><span class="line">        <span class="keyword">if</span> line:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                chunk = json.loads(line.decode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">                <span class="keyword">yield</span> chunk.get(<span class="string">&#x27;response&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">            <span class="keyword">except</span> json.JSONDecodeError:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">format_streaming_response</span>(<span class="params">thinking: <span class="built_in">str</span>, answer: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;构建流式响应消息&quot;&quot;&quot;</span></span><br><span class="line">    message = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> thinking:</span><br><span class="line">        message += <span class="string">f&quot;*🤔 思考过程*：\n```<span class="subst">&#123;thinking.strip()&#125;</span>```\n\n&quot;</span></span><br><span class="line">    <span class="keyword">if</span> answer:</span><br><span class="line">        message += <span class="string">f&quot;*💡 最终回答*：\n```<span class="subst">&#123;answer.strip()&#125;</span>```&quot;</span></span><br><span class="line">    <span class="keyword">return</span> message <span class="keyword">if</span> message <span class="keyword">else</span> <span class="string">&quot;正在生成响应...&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">process_stream</span>(<span class="params">query: <span class="built_in">str</span>, channel: <span class="built_in">str</span>, message_ts: <span class="built_in">str</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;处理流式响应的线程函数&quot;&quot;&quot;</span></span><br><span class="line">    buffer = <span class="string">&quot;&quot;</span></span><br><span class="line">    thinking = <span class="string">&quot;&quot;</span></span><br><span class="line">    answer = <span class="string">&quot;&quot;</span></span><br><span class="line">    state = <span class="string">&quot;wait_thinking&quot;</span>  <span class="comment"># 状态机: wait_thinking, in_thinking, in_answer</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">for</span> chunk <span class="keyword">in</span> stream_ollama(query):</span><br><span class="line">            <span class="comment"># 检查停止请求</span></span><br><span class="line">            <span class="keyword">with</span> stop_lock:</span><br><span class="line">                <span class="keyword">if</span> stop_requests.get(channel, <span class="literal">False</span>):</span><br><span class="line">                    client.chat_update(</span><br><span class="line">                        channel=channel,</span><br><span class="line">                        ts=message_ts,</span><br><span class="line">                        text=<span class="string">&quot;❌ 生成已停止&quot;</span></span><br><span class="line">                    )</span><br><span class="line">                    stop_requests[channel] = <span class="literal">False</span></span><br><span class="line">                    <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">            buffer += chunk</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">                <span class="keyword">if</span> state == <span class="string">&quot;wait_thinking&quot;</span>:</span><br><span class="line">                    idx = buffer.find(<span class="string">&quot;THINKING:&quot;</span>)</span><br><span class="line">                    <span class="keyword">if</span> idx != -<span class="number">1</span>:</span><br><span class="line">                        thinking_start = idx + <span class="number">9</span>  <span class="comment"># len(&quot;THINKING:&quot;)</span></span><br><span class="line">                        buffer = buffer[thinking_start:].lstrip()</span><br><span class="line">                        state = <span class="string">&quot;in_thinking&quot;</span></span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">                </span><br><span class="line">                <span class="keyword">elif</span> state == <span class="string">&quot;in_thinking&quot;</span>:</span><br><span class="line">                    idx = buffer.find(<span class="string">&quot;ANSWER:&quot;</span>)</span><br><span class="line">                    <span class="keyword">if</span> idx != -<span class="number">1</span>:</span><br><span class="line">                        thinking += buffer[:idx].strip() + <span class="string">&quot; &quot;</span></span><br><span class="line">                        answer_start = idx + <span class="number">7</span>  <span class="comment"># len(&quot;ANSWER:&quot;)</span></span><br><span class="line">                        buffer = buffer[answer_start:].lstrip()</span><br><span class="line">                        state = <span class="string">&quot;in_answer&quot;</span></span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        thinking += buffer.strip() + <span class="string">&quot; &quot;</span></span><br><span class="line">                        buffer = <span class="string">&quot;&quot;</span></span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">                </span><br><span class="line">                <span class="keyword">elif</span> state == <span class="string">&quot;in_answer&quot;</span>:</span><br><span class="line">                    answer += buffer.strip() + <span class="string">&quot; &quot;</span></span><br><span class="line">                    buffer = <span class="string">&quot;&quot;</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># 更新消息（限流处理）</span></span><br><span class="line">            current_message = format_streaming_response(thinking, answer)</span><br><span class="line">            client.chat_update(</span><br><span class="line">                channel=channel,</span><br><span class="line">                ts=message_ts,</span><br><span class="line">                text=current_message</span><br><span class="line">            )</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 处理剩余buffer</span></span><br><span class="line">        <span class="keyword">if</span> buffer:</span><br><span class="line">            <span class="keyword">if</span> state == <span class="string">&quot;in_thinking&quot;</span>:</span><br><span class="line">                thinking += buffer.strip()</span><br><span class="line">            <span class="keyword">elif</span> state == <span class="string">&quot;in_answer&quot;</span>:</span><br><span class="line">                answer += buffer.strip()</span><br><span class="line">            </span><br><span class="line">            final_message = format_streaming_response(thinking, answer)</span><br><span class="line">            client.chat_update(</span><br><span class="line">                channel=channel,</span><br><span class="line">                ts=message_ts,</span><br><span class="line">                text=final_message</span><br><span class="line">            )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        client.chat_update(</span><br><span class="line">            channel=channel,</span><br><span class="line">            ts=message_ts,</span><br><span class="line">            text=<span class="string">f&quot;⚠️ 生成出错: <span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.event(<span class="params"><span class="string">&quot;app_mention&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handle_mention</span>(<span class="params">event, say</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;处理提及事件&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 清理查询内容</span></span><br><span class="line">    query = re.sub(<span class="string">f&#x27;&lt;@<span class="subst">&#123;app.client.auth_test()[<span class="string">&quot;user_id&quot;</span>]&#125;</span>&gt;&#x27;</span>, <span class="string">&#x27;&#x27;</span>, event[<span class="string">&quot;text&quot;</span>]).strip()</span><br><span class="line">    channel = event[<span class="string">&quot;channel&quot;</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 发送初始消息</span></span><br><span class="line">    response = say(text=<span class="string">f&quot;🧠 <span class="subst">&#123;MODEL_NAME&#125;</span> 思考中...&quot;</span>, channel=channel)</span><br><span class="line">    message_ts = response[<span class="string">&quot;ts&quot;</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 启动流处理线程</span></span><br><span class="line">    thread = threading.Thread(</span><br><span class="line">        target=process_stream,</span><br><span class="line">        args=(query, channel, message_ts)</span><br><span class="line">    )</span><br><span class="line">    thread.start()</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.message(<span class="params"><span class="string">&quot;停止&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handle_stop</span>(<span class="params">message, say</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;处理停止命令&quot;&quot;&quot;</span></span><br><span class="line">    channel = message[<span class="string">&quot;channel&quot;</span>]</span><br><span class="line">    <span class="keyword">with</span> stop_lock:</span><br><span class="line">        stop_requests[channel] = <span class="literal">True</span></span><br><span class="line">    say(text=<span class="string">&quot;⏹️ 正在停止生成...&quot;</span>, channel=channel)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    SocketModeHandler(app, os.environ[<span class="string">&quot;SLACK_APP_TOKEN&quot;</span>]).start()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2024.cnblogs.com/blog/2277440/202503/2277440-20250310145722549-1449184317.png"><br><img src="https://img2024.cnblogs.com/blog/2277440/202503/2277440-20250310145729826-710469191.png"><br><img src="https://img2024.cnblogs.com/blog/2277440/202503/2277440-20250310145738115-1880014607.png"><br><img src="https://img2024.cnblogs.com/blog/2277440/202503/2277440-20250310145745185-2023049931.png"><br><img src="https://img2024.cnblogs.com/blog/2277440/202503/2277440-20250310145755936-334628519.png"><br><img src="https://img2024.cnblogs.com/blog/2277440/202503/2277440-20250310145803048-104720722.png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> dateutil <span class="keyword">import</span> parser</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">from</span> slack_bolt <span class="keyword">import</span> App</span><br><span class="line"><span class="keyword">from</span> slack_bolt.adapter.socket_mode <span class="keyword">import</span> SocketModeHandler</span><br><span class="line"><span class="keyword">from</span> slack_sdk <span class="keyword">import</span> WebClient</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载环境变量</span></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化 Slack 应用</span></span><br><span class="line">app = App(</span><br><span class="line">    token=os.environ[<span class="string">&quot;SLACK_BOT_TOKEN&quot;</span>],</span><br><span class="line">    signing_secret=os.environ[<span class="string">&quot;SLACK_SIGNING_SECRET&quot;</span>]</span><br><span class="line">)</span><br><span class="line">client = WebClient(token=os.environ[<span class="string">&quot;SLACK_BOT_TOKEN&quot;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 全局停止请求跟踪</span></span><br><span class="line">stop_requests = &#123;&#125;</span><br><span class="line">stop_lock = threading.Lock()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Ollama 配置</span></span><br><span class="line">MODEL_NAME = <span class="string">&quot;deepseek-r1:32b-q40&quot;</span></span><br><span class="line">OLLAMA_ENDPOINT = os.getenv(<span class="string">&quot;OLLAMA_ENDPOINT&quot;</span>, <span class="string">&quot;http://localhost:11434/api/generate&quot;</span>)</span><br><span class="line">OLLAMA_MODEL = os.getenv(<span class="string">&quot;OLLAMA_MODEL&quot;</span>, MODEL_NAME)</span><br><span class="line"><span class="comment"># OLLAMA_PARAMS = &#123;</span></span><br><span class="line"><span class="comment">#     &quot;num_ctx&quot;: int(os.getenv(&quot;OLLAMA_NUM_CTX&quot;, 2048)),</span></span><br><span class="line"><span class="comment">#     &quot;num_gpu&quot;: int(os.getenv(&quot;OLLAMA_NUM_GPU&quot;, 56)),</span></span><br><span class="line"><span class="comment">#     &quot;keep_alive&quot;: os.getenv(&quot;OLLAMA_KEEP_ALIVE&quot;, &quot;2h&quot;)</span></span><br><span class="line"><span class="comment"># &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PerformanceMetrics</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.start_time = <span class="literal">None</span></span><br><span class="line">        <span class="variable language_">self</span>.total_tokens = <span class="number">0</span></span><br><span class="line">        <span class="variable language_">self</span>.total_duration = <span class="number">0.0</span></span><br><span class="line">        <span class="variable language_">self</span>.last_update = <span class="literal">None</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">start_timing</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.start_time = time.time()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_chunk</span>(<span class="params">self, chunk_data: <span class="built_in">dict</span></span>):</span><br><span class="line">        <span class="comment"># if self.start_time is None:</span></span><br><span class="line">        <span class="comment">#     self.start_time = chunk_data.get(&quot;created_at&quot;, time.time()*1000)/1000</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.start_time <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            created_at_str = chunk_data.get(<span class="string">&quot;created_at&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">            <span class="keyword">if</span> created_at_str:</span><br><span class="line">                <span class="comment"># 使用 dateutil 解析 ISO 8601 字符串</span></span><br><span class="line">                created_at = parser.parse(created_at_str).timestamp()</span><br><span class="line">                <span class="variable language_">self</span>.start_time = created_at</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="variable language_">self</span>.start_time = time.time()</span><br><span class="line">        <span class="comment"># 不同模型返回字段可能不同，需要根据实际情况调整</span></span><br><span class="line">        <span class="variable language_">self</span>.total_tokens += chunk_data.get(<span class="string">&quot;eval_count&quot;</span>, <span class="number">0</span>)</span><br><span class="line">        <span class="variable language_">self</span>.total_duration = chunk_data.get(<span class="string">&quot;eval_duration&quot;</span>, <span class="number">0</span>) / <span class="number">1e9</span>  <span class="comment"># 纳秒转秒</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_metrics</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.total_duration &gt; <span class="number">0</span>:</span><br><span class="line">            speed = <span class="variable language_">self</span>.total_tokens / <span class="variable language_">self</span>.total_duration</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            speed = <span class="number">0</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="string">f&quot;\n\n_性能统计：生成 <span class="subst">&#123;self.total_tokens&#125;</span> tokens | &quot;</span></span><br><span class="line">            <span class="string">f&quot;速度 <span class="subst">&#123;speed:<span class="number">.1</span>f&#125;</span> tokens/s | &quot;</span></span><br><span class="line">            <span class="string">f&quot;总耗时 <span class="subst">&#123;self.total_duration:<span class="number">.1</span>f&#125;</span>s_&quot;</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"><span class="comment"># class PerformanceMetrics:</span></span><br><span class="line"><span class="comment">#     def __init__(self):</span></span><br><span class="line"><span class="comment">#         self.start_time = time.time()</span></span><br><span class="line"><span class="comment">#         self.total_tokens = 0</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">#     def add_chunk(self, content: str):</span></span><br><span class="line"><span class="comment">#         self.total_tokens += len(content.split())  # 近似统计</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">#     def get_metrics(self) -&gt; str:</span></span><br><span class="line"><span class="comment">#         duration = time.time() - self.start_time</span></span><br><span class="line"><span class="comment">#         speed = self.total_tokens / duration if duration &gt;0 else 0</span></span><br><span class="line"><span class="comment">#         return f&quot;\n\n_统计：生成约&#123;self.total_tokens&#125;词 | 速度&#123;speed:.1f&#125;词/秒_&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">stream_ollama</span>(<span class="params">prompt: <span class="built_in">str</span></span>):</span><br><span class="line">    payload = &#123;</span><br><span class="line">        <span class="string">&quot;model&quot;</span>: OLLAMA_MODEL,</span><br><span class="line">        <span class="string">&quot;prompt&quot;</span>: <span class="string">f&quot;请先输出思考过程（用THINKING:开头），再输出最终答案（用ANSWER:开头）：\n\n<span class="subst">&#123;prompt&#125;</span>&quot;</span>,</span><br><span class="line">        <span class="string">&quot;stream&quot;</span>: <span class="literal">True</span>,</span><br><span class="line">        <span class="string">&quot;verbose&quot;</span>: <span class="literal">True</span>  <span class="comment"># 需要Ollama API支持verbose模式</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    response = requests.post(OLLAMA_ENDPOINT, json=payload, stream=<span class="literal">True</span>)</span><br><span class="line">    response.raise_for_status()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> response.iter_lines():</span><br><span class="line">        <span class="keyword">if</span> line:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                chunk = json.loads(line.decode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line">                <span class="keyword">yield</span> chunk  <span class="comment"># 返回完整数据而不仅是response</span></span><br><span class="line">            <span class="keyword">except</span> json.JSONDecodeError:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># def format_streaming_response(thinking: str, answer: str) -&gt; str:</span></span><br><span class="line"><span class="comment">#     &quot;&quot;&quot;构建流式响应消息（优化版）&quot;&quot;&quot;</span></span><br><span class="line"><span class="comment">#     message = &quot;&quot;</span></span><br><span class="line"><span class="comment">#     if thinking:</span></span><br><span class="line"><span class="comment">#         # 使用rstrip() 避免末尾换行</span></span><br><span class="line"><span class="comment">#         message += f&quot;*🤔 思考过程*：\n```&#123;thinking.rstrip()&#125;```\n\n&quot;  </span></span><br><span class="line"><span class="comment">#     if answer:</span></span><br><span class="line"><span class="comment">#         message += f&quot;*💡 最终回答*：\n```&#123;answer.rstrip()&#125;```&quot;</span></span><br><span class="line"><span class="comment">#     return message if message else &quot;正在生成响应...&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">format_streaming_response</span>(<span class="params">thinking: <span class="built_in">str</span>, answer: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    message = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> thinking:</span><br><span class="line">        message += <span class="string">f&quot;*🤔 思考过程*：\n```<span class="subst">&#123;thinking.rstrip()&#125;</span>```\n\n&quot;</span></span><br><span class="line">    <span class="keyword">if</span> answer:</span><br><span class="line">        message += <span class="string">f&quot;*💡 最终回答*：\n```<span class="subst">&#123;answer.rstrip()&#125;</span>```&quot;</span></span><br><span class="line">    <span class="keyword">return</span> message</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">process_stream</span>(<span class="params">query: <span class="built_in">str</span>, channel: <span class="built_in">str</span>, message_ts: <span class="built_in">str</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;处理流式响应的线程函数（修改空格问题版本）&quot;&quot;&quot;</span></span><br><span class="line">    buffer = <span class="string">&quot;&quot;</span></span><br><span class="line">    thinking = <span class="string">&quot;&quot;</span></span><br><span class="line">    answer = <span class="string">&quot;&quot;</span></span><br><span class="line">    state = <span class="string">&quot;wait_thinking&quot;</span></span><br><span class="line">    metrics = PerformanceMetrics()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">for</span> chunk <span class="keyword">in</span> stream_ollama(query):</span><br><span class="line">            <span class="comment"># ... [原有停止检查逻辑保持不变] ...</span></span><br><span class="line">            metrics.add_chunk(chunk)</span><br><span class="line">            chunk_content = chunk.get(<span class="string">&#x27;response&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            buffer += chunk_content</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">                <span class="keyword">if</span> state == <span class="string">&quot;wait_thinking&quot;</span>:</span><br><span class="line">                    idx = buffer.find(<span class="string">&quot;THINKING:&quot;</span>)</span><br><span class="line">                    <span class="keyword">if</span> idx != -<span class="number">1</span>:</span><br><span class="line">                        thinking_start = idx + <span class="number">9</span>  <span class="comment"># len(&quot;THINKING:&quot;)</span></span><br><span class="line">                        buffer = buffer[thinking_start:].lstrip(<span class="string">&#x27;\n &#x27;</span>)  <span class="comment"># 增加清理前缀空白</span></span><br><span class="line">                        state = <span class="string">&quot;in_thinking&quot;</span></span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">                </span><br><span class="line">                <span class="keyword">elif</span> state == <span class="string">&quot;in_thinking&quot;</span>:</span><br><span class="line">                    idx = buffer.find(<span class="string">&quot;ANSWER:&quot;</span>)</span><br><span class="line">                    <span class="keyword">if</span> idx != -<span class="number">1</span>:</span><br><span class="line">                        <span class="comment"># 修改点1：直接拼接（去掉末尾空格）</span></span><br><span class="line">                        thinking += buffer[:idx].strip(<span class="string">&#x27;\n &#x27;</span>)  </span><br><span class="line">                        answer_start = idx + <span class="number">7</span>  <span class="comment"># len(&quot;ANSWER:&quot;)</span></span><br><span class="line">                        buffer = buffer[answer_start:].lstrip(<span class="string">&#x27;\n &#x27;</span>)  <span class="comment"># 清理前缀空白</span></span><br><span class="line">                        state = <span class="string">&quot;in_answer&quot;</span></span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        <span class="comment"># 修改点2：直接拼接当前buffer</span></span><br><span class="line">                        thinking += buffer</span><br><span class="line">                        buffer = <span class="string">&quot;&quot;</span></span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">                </span><br><span class="line">                <span class="keyword">elif</span> state == <span class="string">&quot;in_answer&quot;</span>:</span><br><span class="line">                    <span class="comment"># 修改点3：直接拼接当前buffer</span></span><br><span class="line">                    answer += buffer</span><br><span class="line">                    buffer = <span class="string">&quot;&quot;</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># 更新消息（保持原有逻辑）</span></span><br><span class="line">            current_message = format_streaming_response(thinking, answer)</span><br><span class="line">            client.chat_update(</span><br><span class="line">                channel=channel,</span><br><span class="line">                ts=message_ts,</span><br><span class="line">                text=current_message</span><br><span class="line">            )</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 处理剩余buffer（修改点4）</span></span><br><span class="line">        <span class="keyword">if</span> buffer:</span><br><span class="line">            <span class="keyword">if</span> state == <span class="string">&quot;in_thinking&quot;</span>:</span><br><span class="line">                thinking += buffer.strip(<span class="string">&#x27;\n &#x27;</span>)</span><br><span class="line">            <span class="keyword">elif</span> state == <span class="string">&quot;in_answer&quot;</span>:</span><br><span class="line">                answer += buffer.strip(<span class="string">&#x27;\n &#x27;</span>)</span><br><span class="line">            </span><br><span class="line">            final_message = format_streaming_response(thinking, answer) + metrics.get_metrics()</span><br><span class="line">            client.chat_update(</span><br><span class="line">                channel=channel,</span><br><span class="line">                ts=message_ts,</span><br><span class="line">                text=final_message</span><br><span class="line">            )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        client.chat_update(</span><br><span class="line">            channel=channel,</span><br><span class="line">            ts=message_ts,</span><br><span class="line">            text=<span class="string">f&quot;⚠️ 生成出错: <span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.event(<span class="params"><span class="string">&quot;app_mention&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handle_mention</span>(<span class="params">event, say</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;处理提及事件&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 清理查询内容</span></span><br><span class="line">    query = re.sub(<span class="string">f&#x27;&lt;@<span class="subst">&#123;app.client.auth_test()[<span class="string">&quot;user_id&quot;</span>]&#125;</span>&gt;&#x27;</span>, <span class="string">&#x27;&#x27;</span>, event[<span class="string">&quot;text&quot;</span>]).strip()</span><br><span class="line">    channel = event[<span class="string">&quot;channel&quot;</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 发送初始消息</span></span><br><span class="line">    response = say(text=<span class="string">f&quot;🧠 <span class="subst">&#123;MODEL_NAME&#125;</span> 思考中...&quot;</span>, channel=channel)</span><br><span class="line">    message_ts = response[<span class="string">&quot;ts&quot;</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 启动流处理线程</span></span><br><span class="line">    thread = threading.Thread(</span><br><span class="line">        target=process_stream,</span><br><span class="line">        args=(query, channel, message_ts)</span><br><span class="line">    )</span><br><span class="line">    thread.start()</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.message(<span class="params"><span class="string">&quot;停止&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handle_stop</span>(<span class="params">message, say</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;处理停止命令&quot;&quot;&quot;</span></span><br><span class="line">    channel = message[<span class="string">&quot;channel&quot;</span>]</span><br><span class="line">    <span class="keyword">with</span> stop_lock:</span><br><span class="line">        stop_requests[channel] = <span class="literal">True</span></span><br><span class="line">    say(text=<span class="string">&quot;⏹️ 正在停止生成...&quot;</span>, channel=channel)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    SocketModeHandler(app, os.environ[<span class="string">&quot;SLACK_APP_TOKEN&quot;</span>]).start()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2024.cnblogs.com/blog/2277440/202503/2277440-20250310170715448-2027536590.png"><br><img src="https://img2024.cnblogs.com/blog/2277440/202503/2277440-20250310170728762-387592938.png"></p>
+
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2025-03-10T06:56:29.000Z" itemprop="datePublished">2025-03-10</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-Ollama+DeepSeek+SlackBot"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2025/03/04/Ollama+DeepSeek+SlackBot/">Ollama+DeepSeek+SlackBot</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了一种使用Slack聊天工具中的机器人SlackBot的API接口，实现本地化部署Ollama的DeepSeek大模型的远程通讯方案。相比于调用公网的API接口，数据隐私稍微好一点点。最终的方案应该是自建加密聊天工具+Ollama本地化部署，但是这个时间成本有点高，用户可以自行尝试。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2025-03-04T08:38:20.000Z" itemprop="datePublished">2025-03-04</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-Cython与CUDA之Add"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2025/03/04/Cython%E4%B8%8ECUDA%E4%B9%8BAdd/">Cython与CUDA之Add</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了使用CUDA和Cython来实现一个CUDA加法算子的方法，并介绍了使用CUDA参数来估算性能极限的算法。经过实际测试，核函数部分的算法性能优化空间已经不是很大了，更多时候可以考虑使用Stream来优化Host和Device之间的数据传输。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2025-03-04T02:28:40.000Z" itemprop="datePublished">2025-03-04</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-Cython与CUDA之BatchGather"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2025/03/03/Cython%E4%B8%8ECUDA%E4%B9%8BBatchGather/">Cython与CUDA之BatchGather</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>以学习CUDA为目的，接上一篇关于Cython与CUDA架构下的Gather算子实现，这里我们加一个Batch的维度，做一个BatchGather的简单实现。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2025-03-03T07:21:04.000Z" itemprop="datePublished">2025-03-03</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+
+  
+    <nav class="pagination">
+        <a class="extend prev" rel="prev" href="/page/3/">Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><a class="extend next" rel="next" href="/page/5/">Next</a>
+    </nav>
+  
+</div>
+
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>Linux命令行从x度网盘下载数据 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文介绍了详细的在Linux机器上使用wget命令行下载某度网盘中共享的加密文件，用这种相对低成本的平台来存放一些大文件，相比于免费的Gitee和Github等大型开源管理平台还是要稳定一些。因为可以直接命令行下载，那么就可以直接把下载脚本写到python开源库的setup文件中，便于实现自动化的安装。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "Linux命令行从x度网盘下载数据 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文介绍了详细的在Linux机器上使用wget命令行下载某度网盘中共享的加密文件，用这种相对低成本的平台来存放一些大文件，相比于免费的Gitee和Github等大型开源管理平台还是要稳定一些。因为可以直接命令行下载，那么就可以直接把下载脚本写到python开源库的setup文件中，便于实现自动化的安装。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2024/01/26/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%BB%8Ex%E5%BA%A6%E7%BD%91%E7%9B%98%E4%B8%8B%E8%BD%BD%E6%95%B0%E6%8D%AE/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文介绍了详细的在Linux机器上使用wget命令行下载某度网盘中共享的加密文件，用这种相对低成本的平台来存放一些大文件，相比于免费的Gitee和Github等大型开源管理平台还是要稳定一些。因为可以直接命令行下载，那么就可以直接把下载脚本写到python开源库的setup文件中，便于实现自动化的安装。&lt;/p&gt;" />
+    <meta name="twitter:title" content="Linux命令行从x度网盘下载数据 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文介绍了详细的在Linux机器上使用wget命令行下载某度网盘中共享的加密文件，用这种相对低成本的平台来存放一些大文件，相比于免费的Gitee和Github等大型开源管理平台还是要稳定一些。因为可以直接命令行下载，那么就可以直接把下载脚本写到python开源库的setup文件中，便于实现自动化的安装。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文介绍了详细的在Linux机器上使用wget命令行下载某度网盘中共享的加密文件，用这种相对低成本的平台来存放一些大文件，相比于免费的Gitee和Github等大型开源管理平台还是要稳定一些。因为可以直接命令行下载，那么就可以直接把下载脚本写到python开源库的setup文件中，便于实现自动化的安装。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2024/01/26/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%BB%8Ex%E5%BA%A6%E7%BD%91%E7%9B%98%E4%B8%8B%E8%BD%BD%E6%95%B0%E6%8D%AE/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "Linux命令行从x度网盘下载数据 | Hexo",
+            "datePublished": "2024-01-26T07:24:38.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2024/01/26/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%BB%8Ex%E5%BA%A6%E7%BD%91%E7%9B%98%E4%B8%8B%E8%BD%BD%E6%95%B0%E6%8D%AE/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidzVKvcl5faBB-4EKIhvyJA" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      Linux命令行从x度网盘下载数据
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2024-01-26T07:24:38.000Z" itemprop="datePublished">2024-01-26</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文介绍了详细的在Linux机器上使用wget命令行下载某度网盘中共享的加密文件，用这种相对低成本的平台来存放一些大文件，相比于免费的Gitee和Github等大型开源管理平台还是要稳定一些。因为可以直接命令行下载，那么就可以直接把下载脚本写到python开源库的setup文件中，便于实现自动化的安装。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>做开源项目的时候，尤其是现在的数据量越来越大，经常会面临到数据往哪里存放的问题。因为自己刚好有一个某度云的会员，看了一下还有几十个TB的空间还没用上。于是考虑把这个网盘变成一个定向共享数据的平台，当然，传输文件容易，为了更加方便使用，需要从Linux平台上直接下载这些共享文件就最好了。</p>
+<h1 id="上传文件到网盘"><a href="#上传文件到网盘" class="headerlink" title="上传文件到网盘"></a>上传文件到网盘</h1><p>首先在主页面上创建一个新的目录，找到<code>上传</code>按钮：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202401/2277440-20240126170250011-1218131684.png">
+</div>
+
+<p>将所需共享的文件传到这个目录下：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202401/2277440-20240126170256405-1150731882.png">
+</div>
+
+<p>传输完成：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202401/2277440-20240126170307080-1706038804.png">
+</div>
+
+<h1 id="共享文件"><a href="#共享文件" class="headerlink" title="共享文件"></a>共享文件</h1><p>当鼠标移动到相应的文件上面时，点击<code>共享小图标</code>，选择永久有效的链接分享。为了避免文件下载被滥用，最好加上一个密码：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202401/2277440-20240126170315507-1816214736.png">
+</div>
+
+<p>然后就可以分享链接：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202401/2277440-20240126170320878-1539808393.png">
+</div>
+
+<p>我们记得需要把页面上的这个链接保存下来。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://pan.baidu.com/s/1PTORWTa07OQDLpXgc0XS7Q?pwd=abcd</span><br></pre></td></tr></table></figure>
+<p>如果不嫌麻烦，也可以把整串的字符串发给别人让别人手动下载：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">链接: https://pan.baidu.com/s/1PTORWTa07OQDLpXgc0XS7Q?pwd=abcd 提取码: abcd 复制这段内容后打开百度网盘手机App，操作更方便哦 </span><br><span class="line">--来自百度网盘超级会员v6的分享</span><br></pre></td></tr></table></figure>
+
+<p>但是本着程序猿的心态，能自动就不手动，wget命令给我们提供了这样一个脚本自动下载的选项。</p>
+<h1 id="wget下载网盘文件"><a href="#wget下载网盘文件" class="headerlink" title="wget下载网盘文件"></a>wget下载网盘文件</h1><p>首先看一下wget下载网盘文件的命令行格式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -c --referer=https://link1 -O filename <span class="string">&quot;https://link2&quot;</span></span><br></pre></td></tr></table></figure>
+<p>其中需要用到两个链接，第一个链接用的就是上一步我们保存的，带有提取码的那个链接。而第二个链接，需要通过浏览器解析下载链接来获得。首先在网盘页面里面找到需要用wget下载的文件，点击下载。然后进入到浏览器的下载管理界面，一般用<code>ctrl+j</code>的快捷键可以直接进入到下载界面，然后将鼠标挪到对应文件上面的https那一行：</p>
+<div align=center>
+	<img src="https://img2024.cnblogs.com/blog/2277440/202401/2277440-20240126171418415-1090876251.png">
+</div>
+
+<p>右键，选择复制下载链接，然后就会得到这样的一大串的字符串：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://xafj-ct11.baidupcs.com/file/06177e3c0pa3770a0c332f898ab41c49?bkt=en-1d4f88d1767dc1375afb7733549ee1379e6e9003942413d289bf5118003b362c09e117258022dcc515d9ede26038254097199ebf029b6e681df3802c307ab0e0&amp;fid=967557698-250528-846865290141541&amp;time=1706259163&amp;sign=FDTAXUbGERQlBHSKfWqiu-DCb740ccc5511e5e8fedcff06b081203-z1j3G7%2F2hC9Z3ytahqmaz1bb%2FCA%3D&amp;to=417&amp;size=62394&amp;sta_dx=62394&amp;sta_cs=0&amp;sta_ft=png&amp;sta_ct=0&amp;sta_mt=0&amp;fm2=MH%2CXian%2CAnywhere%2C%2C%E5%B9%BF%E4%B8%9C%2Cct&amp;ctime=1706258856&amp;mtime=1706258856&amp;resv0=-1&amp;resv1=0&amp;resv2=rlim&amp;resv3=5&amp;resv4=62394&amp;vuk=967557698&amp;iv=2&amp;htype=&amp;randtype=&amp;tkbind_id=0&amp;newver=1&amp;newfm=1&amp;secfm=1&amp;flow_ver=3&amp;pkey=en-bb4c93b4ecd5168d20122d4bf363501ad65b5c98f24b1ed5937695c9724059823e0ed169983a1002e6edc1d400fa1c97d77066d1e5128c43305a5e1275657320&amp;expires=8h&amp;rt=sh&amp;r=307230644&amp;vbdid=3102369438&amp;fin=resolutions1.png&amp;fn=resolutions1.png&amp;rtype=1&amp;dp-logid=8666582024145371477&amp;dp-callid=0.1&amp;hps=1&amp;tsl=0&amp;csl=0&amp;fsl=-1&amp;csign=233UgcuF7Q4Ii7gcfO4CbWvFTvk%3D&amp;so=0&amp;ut=1&amp;uter=4&amp;serv=0&amp;uc=2415001276&amp;ti=05df9239daa40647f5c4859715e42a25f70c977995285b90&amp;hflag=30&amp;from_type=1&amp;adg=c_384dcd1e4c95d1375f21f0d922f55368&amp;reqlabel=250528_f_c3591ac93a3dd9bf0ff819f2b5fb0cc1_-1_40c5c25ca3c3f111f69a72c03c9571d9&amp;fpath=Share_20240126_164651&amp;by=themis&amp;resvsflag=1-0-0-1-1-1</span><br></pre></td></tr></table></figure>
+<p>我们把它放到前面的双引号里面就可以了，得到的完整的命令行如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ wget -c --referer=https://pan.baidu.com/s/1PTORWTa07OQDLpXgc0XS7Q?<span class="built_in">pwd</span>=abcd -O custum_file.png <span class="string">&quot;https://xafj-ct11.baidupcs.com/file/06177e3c0pa3770a0c332f898ab41c49?bkt=en-1d4f88d1767dc1375afb7733549ee1379e6e9003942413d289bf5118003b362c09e117258022dcc515d9ede26038254097199ebf029b6e681df3802c307ab0e0&amp;fid=967557698-250528-846865290141541&amp;time=1706259163&amp;sign=FDTAXUbGERQlBHSKfWqiu-DCb740ccc5511e5e8fedcff06b081203-z1j3G7%2F2hC9Z3ytahqmaz1bb%2FCA%3D&amp;to=417&amp;size=62394&amp;sta_dx=62394&amp;sta_cs=0&amp;sta_ft=png&amp;sta_ct=0&amp;sta_mt=0&amp;fm2=MH%2CXian%2CAnywhere%2C%2C%E5%B9%BF%E4%B8%9C%2Cct&amp;ctime=1706258856&amp;mtime=1706258856&amp;resv0=-1&amp;resv1=0&amp;resv2=rlim&amp;resv3=5&amp;resv4=62394&amp;vuk=967557698&amp;iv=2&amp;htype=&amp;randtype=&amp;tkbind_id=0&amp;newver=1&amp;newfm=1&amp;secfm=1&amp;flow_ver=3&amp;pkey=en-bb4c93b4ecd5168d20122d4bf363501ad65b5c98f24b1ed5937695c9724059823e0ed169983a1002e6edc1d400fa1c97d77066d1e5128c43305a5e1275657320&amp;expires=8h&amp;rt=sh&amp;r=307230644&amp;vbdid=3102369438&amp;fin=resolutions1.png&amp;fn=resolutions1.png&amp;rtype=1&amp;dp-logid=8666582024145371477&amp;dp-callid=0.1&amp;hps=1&amp;tsl=0&amp;csl=0&amp;fsl=-1&amp;csign=233UgcuF7Q4Ii7gcfO4CbWvFTvk%3D&amp;so=0&amp;ut=1&amp;uter=4&amp;serv=0&amp;uc=2415001276&amp;ti=05df9239daa40647f5c4859715e42a25f70c977995285b90&amp;hflag=30&amp;from_type=1&amp;adg=c_384dcd1e4c95d1375f21f0d922f55368&amp;reqlabel=250528_f_c3591ac93a3dd9bf0ff819f2b5fb0cc1_-1_40c5c25ca3c3f111f69a72c03c9571d9&amp;fpath=Share_20240126_164651&amp;by=themis&amp;resvsflag=1-0-0-1-1-1&quot;</span></span><br></pre></td></tr></table></figure>
+<p>下载完成后，会在当前目录下生成一个命名好的文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ ll</span><br><span class="line">总用量 76</span><br><span class="line">drwxrwxr-x 2 dechin dechin  4096 1月  26 16:55 ./</span><br><span class="line">drwxrwxr-x 4 dechin dechin  4096 1月  22 10:56 ../</span><br><span class="line">-rw-rw-r-- 1 dechin dechin 62394 1月  26 16:47 custum_file.png</span><br></pre></td></tr></table></figure>
+<h1 id="特别说明"><a href="#特别说明" class="headerlink" title="特别说明"></a>特别说明</h1><p>前面章节用到的link1和link2，在任何一台可以用wget命令行下载的计算机上都可以直接下载，不需要再用浏览器解析一遍。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了详细的在Linux机器上使用wget命令行下载某度网盘中共享的加密文件，用这种相对低成本的平台来存放一些大文件，相比于免费的Gitee和Github等大型开源管理平台还是要稳定一些。因为可以直接命令行下载，那么就可以直接把下载脚本写到python开源库的setup文件中，便于实现自动化的安装。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/wget-baidu.html">https://www.cnblogs.com/dechinphy/p/wget-baidu.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/DoReAGON/article/details/107111099">https://blog.csdn.net/DoReAGON/article/details/107111099</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2024/01/31/MindSpore%E5%AF%BC%E5%85%A5CUDA%E7%AE%97%E5%AD%90/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          MindSpore导入CUDA算子
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/01/26/%E5%A4%9A%E8%BF%9B%E7%A8%8B%E4%B8%8EGPU%E5%8A%A0%E9%80%9F%E7%9A%84%E5%8D%8F%E5%90%8C%E8%BF%90%E4%BD%9C/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">多进程与GPU加速的协同运作</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=Linux命令行从x度网盘下载数据 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2024%2F01%2F26%2FLinux%25E5%2591%25BD%25E4%25BB%25A4%25E8%25A1%258C%25E4%25BB%258Ex%25E5%25BA%25A6%25E7%25BD%2591%25E7%259B%2598%25E4%25B8%258B%25E8%25BD%25BD%25E6%2595%25B0%25E6%258D%25AE%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=Linux命令行从x度网盘下载数据 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2024%2F01%2F26%2FLinux%25E5%2591%25BD%25E4%25BB%25A4%25E8%25A1%258C%25E4%25BB%258Ex%25E5%25BA%25A6%25E7%25BD%2591%25E7%259B%2598%25E4%25B8%258B%25E8%25BD%25BD%25E6%2595%25B0%25E6%258D%25AE%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=Linux命令行从x度网盘下载数据 - Hexo&url=http://dechinphy.github.io/2024/01/26/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%BB%8Ex%E5%BA%A6%E7%BD%91%E7%9B%98%E4%B8%8B%E8%BD%BD%E6%95%B0%E6%8D%AE/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

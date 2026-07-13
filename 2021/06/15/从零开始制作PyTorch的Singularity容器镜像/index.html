@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>从零开始制作PyTorch的Singularity容器镜像 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;这篇文章主要介绍Facebook所主导的机器学习框架PyTorch的容器化安装方法，基于HPC环境常用的Singularity高性能容器，并且兼容与结合了Docker容器镜像的生态，非常的友好。在容器化的编程环境中，我们不仅可以避免不同框架对于python库或者系统软件版本的依赖冲突，还可以很大程度上解决因为没有root权限以及网络外访权限的环境下所带来的极大的麻烦，故推荐使用这种方案进行安装和运行。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "从零开始制作PyTorch的Singularity容器镜像 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;这篇文章主要介绍Facebook所主导的机器学习框架PyTorch的容器化安装方法，基于HPC环境常用的Singularity高性能容器，并且兼容与结合了Docker容器镜像的生态，非常的友好。在容器化的编程环境中，我们不仅可以避免不同框架对于python库或者系统软件版本的依赖冲突，还可以很大程度上解决因为没有root权限以及网络外访权限的环境下所带来的极大的麻烦，故推荐使用这种方案进行安装和运行。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2021/06/15/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9CPyTorch%E7%9A%84Singularity%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;这篇文章主要介绍Facebook所主导的机器学习框架PyTorch的容器化安装方法，基于HPC环境常用的Singularity高性能容器，并且兼容与结合了Docker容器镜像的生态，非常的友好。在容器化的编程环境中，我们不仅可以避免不同框架对于python库或者系统软件版本的依赖冲突，还可以很大程度上解决因为没有root权限以及网络外访权限的环境下所带来的极大的麻烦，故推荐使用这种方案进行安装和运行。&lt;/p&gt;" />
+    <meta name="twitter:title" content="从零开始制作PyTorch的Singularity容器镜像 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;这篇文章主要介绍Facebook所主导的机器学习框架PyTorch的容器化安装方法，基于HPC环境常用的Singularity高性能容器，并且兼容与结合了Docker容器镜像的生态，非常的友好。在容器化的编程环境中，我们不仅可以避免不同框架对于python库或者系统软件版本的依赖冲突，还可以很大程度上解决因为没有root权限以及网络外访权限的环境下所带来的极大的麻烦，故推荐使用这种方案进行安装和运行。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;这篇文章主要介绍Facebook所主导的机器学习框架PyTorch的容器化安装方法，基于HPC环境常用的Singularity高性能容器，并且兼容与结合了Docker容器镜像的生态，非常的友好。在容器化的编程环境中，我们不仅可以避免不同框架对于python库或者系统软件版本的依赖冲突，还可以很大程度上解决因为没有root权限以及网络外访权限的环境下所带来的极大的麻烦，故推荐使用这种方案进行安装和运行。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2021/06/15/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9CPyTorch%E7%9A%84Singularity%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "从零开始制作PyTorch的Singularity容器镜像 | Hexo",
+            "datePublished": "2021-06-15T02:53:24.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2021/06/15/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9CPyTorch%E7%9A%84Singularity%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidxy6TY8XkpuFBzVfJq8iIU" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      从零开始制作PyTorch的Singularity容器镜像
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2021-06-15T02:53:24.000Z" itemprop="datePublished">2021-06-15</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>这篇文章主要介绍Facebook所主导的机器学习框架PyTorch的容器化安装方法，基于HPC环境常用的Singularity高性能容器，并且兼容与结合了Docker容器镜像的生态，非常的友好。在容器化的编程环境中，我们不仅可以避免不同框架对于python库或者系统软件版本的依赖冲突，还可以很大程度上解决因为没有root权限以及网络外访权限的环境下所带来的极大的麻烦，故推荐使用这种方案进行安装和运行。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面的博客中，我们大篇幅的使用到了Docker和Singularity这两种常见的容器化编程环境解决方案，使得我们的各个编程环境能够更好的隔离。如果要展开讲解容器化编程环境的重要性的话，我们有可能会发现容器并不是那么的必须：比如解决python库的依赖冲突问题，我们可以选择使用python的virtualenv或者conda的虚拟环境；比如解决gcc的版本依赖冲突，我们可以手动配置和选择对应的版本；比如对于我们没有root权限和对外网络的环境，想要安装一些工具可以采用源码编译安装。那么，这些种种的问题，如果我们采用Singularity的方案，就可以一次性的解决。而且容器化是一个趋势，比如各种的机器学习框架都会提供容器版本的安装方案，像MindSpore和Tensorflow等等。这里我们尝试使用Singularity的容器def文件（类似于Docker的Dockerfile，而且兼容Docker的镜像），去构造一个Pytorch专属的编程环境。</p>
+<h1 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h1><p>这里我们假设本地的容器环境是已经安装完毕的，可以通过如下指令进行检验：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/pytorch$ singularity --version</span><br><span class="line">singularity version 3.8.0-rc.1</span><br></pre></td></tr></table></figure>
+<p>建议至少使用3.5以上版本的Singularity，否则会有编译不兼容的问题。关于Singularity的安装与基本使用，可以参考这篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/sg.html">在Manjaro Linux上安装Singularity的方法</a>、以及<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/singularity-install.html">在CentOS上安装Singularity的方法</a>，还有这篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/ms-sql.html">用Singularity来配置MindSpore环境的博客</a>。</p>
+<h1 id="制作def文件"><a href="#制作def文件" class="headerlink" title="制作def文件"></a>制作def文件</h1><p>Singularity的def文件类似于Docker的Dockerfile，用于定义一个容器镜像，而在这个文件中我们除了指定基础镜像之外，还可以指定下载基础镜像之后要执行的配置项目。我们先看一个简单例子：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/pytorch$ <span class="built_in">cat</span> pytorch.def </span><br><span class="line">Bootstrap: docker</span><br><span class="line">From: ubuntu</span><br><span class="line">%post</span><br><span class="line">    <span class="built_in">cp</span> -a /etc/apt/sources.list /etc/apt/sources.list.bak</span><br><span class="line">    sed -i <span class="string">&quot;s@http://.*archive.ubuntu.com@http://repo.huaweicloud.com@g&quot;</span> /etc/apt/sources.list</span><br><span class="line">    sed -i <span class="string">&quot;s@http://.*security.ubuntu.com@http://repo.huaweicloud.com@g&quot;</span> /etc/apt/sources.list</span><br><span class="line">    apt-get -y update</span><br><span class="line">    apt -y install python</span><br><span class="line">    apt -y install python3-pip</span><br><span class="line">    pip3 install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html</span><br></pre></td></tr></table></figure>
+<p>这个例子就实现了pytorch整个的容器化安装流程，但是这里不建议大家直接使用我写的这个def文件来制作镜像，这里面最后一步安装pytorch的指令，需要适配自己本地的环境进行调整。下面解释一下这些指令的含义：</p>
+<ul>
+<li><code>Bootstrap</code>用于指定下载的仓库类型，建议是选取docker，因为这里面的镜像是最多的。</li>
+<li><code>From</code>用于指定一个基础镜像的版本，因为ubuntu是一个使用比较广泛的发行版，因此我们指定ubuntu的时候，脚本会自动从dockerhub上面寻找最新版本的ubuntu镜像进行下载。当然我们也可以指定一个特殊的版本，比如可以指定为<code>ubuntu:16.04</code>。</li>
+<li><code>%post</code>是在容器镜像中执行的系统指令，这些指令执行完成后生成的文件等会被打包保存到我们的镜像sif文件中。类似的指令还有<code>%environment</code>，可用于配置export环境变量，还有<code>%runscript</code>可用于执行一些脚本命令。</li>
+<li>从<code>cp</code>到<code>apt-get update</code>这4个步骤，是在容器内更新系统镜像源，我们采用的是华为云的镜像源<a target="_blank" rel="noopener" href="https://mirrors.huaweicloud.com/%EF%BC%8C%E4%B8%80%E8%88%AC%E5%9B%BD%E5%86%85%E7%9A%84%E9%95%9C%E5%83%8F%E6%BA%90%E5%9C%A8%E4%BD%BF%E7%94%A8apt%E4%B8%8B%E8%BD%BD%E4%B8%9C%E8%A5%BF%E7%9A%84%E6%97%B6%E5%80%99%E4%BC%9A%E6%9C%89%E6%AF%94%E8%BE%83%E6%98%8E%E6%98%BE%E7%9A%84%E5%8A%A0%E9%80%9F%E6%95%88%E6%9E%9C%EF%BC%8C%E5%BD%93%E7%84%B6%E8%BF%99%E4%B8%AA%E9%95%9C%E5%83%8F%E6%BA%90%E4%BB%93%E5%BA%93%E8%BF%98%E6%9C%89%E5%BE%88%E5%A4%9A%E5%85%B6%E4%BB%96%E7%9A%84%E6%BA%90%EF%BC%8C%E6%AF%94%E5%A6%82pip%E6%BA%90%E7%AD%89%E7%AD%89%E3%80%82">https://mirrors.huaweicloud.com/，一般国内的镜像源在使用apt下载东西的时候会有比较明显的加速效果，当然这个镜像源仓库还有很多其他的源，比如pip源等等。</a></li>
+<li>在这个镜像文件中我们可以直接使用<code>apt</code>来安装python和pip，但是注意安装的时候要加上<code>-y</code>的选项，这个选项可以帮助我们默认跳过需要手动确认的项目，我们知道在apt安装的过程经常会暂停下来，要求输入一个<code>y</code>之后才能继续往下安装，但是这个在使用镜像的时候是没办法支持手动的输入的。</li>
+<li>最后我们按照参考链接1中给出的安装指令进行安装，注意要匹配好自己的环境，本文采用的配置项目如下截图所示：<br><img src="https://img2020.cnblogs.com/blog/2277440/202106/2277440-20210615103155656-9141875.png"></li>
+</ul>
+<h1 id="构建sif文件"><a href="#构建sif文件" class="headerlink" title="构建sif文件"></a>构建sif文件</h1><p>在完成上述步骤的镜像配置文件后，可以用如下的指令进行镜像的构建：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> singularity build pytorch.sif pytorch.def</span><br></pre></td></tr></table></figure>
+<p>在执行的过程中会有大量的信息弹出，我们只关注下开头和结尾即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">INFO:    Starting build...</span><br><span class="line">Getting image <span class="built_in">source</span> signatures</span><br><span class="line">Copying blob 345e3491a907 skipped: already exists  </span><br><span class="line">Copying blob 57671312ef6f skipped: already exists  </span><br><span class="line">Copying blob 5e9250ddb7d0 [--------------------------------------] 0.0b / 0.0b</span><br><span class="line">Copying config 7c6bc52068 <span class="keyword">done</span>  </span><br><span class="line">Writing manifest to image destination</span><br><span class="line">Storing signatures</span><br><span class="line">2021/06/15 09:44:57  info unpack layer: sha256:345e3491a907bb7c6f1bdddcf4a94284b8b6ddd77eb7d93f09432b17b20f2bbe</span><br><span class="line">2021/06/15 09:44:58  info unpack layer: sha256:57671312ef6fdbecf340e5fed0fb0863350cd806c92b1fdd7978adbd02afc5c3</span><br><span class="line">2021/06/15 09:44:58  info unpack layer: sha256:5e9250ddb7d0fa6d13302c7c3e6a0aa40390e42424caed1e5289077ee4054709</span><br><span class="line">INFO:    Running post scriptlet</span><br><span class="line">+ <span class="built_in">cp</span> -a /etc/apt/sources.list /etc/apt/sources.list.bak</span><br><span class="line">...</span><br><span class="line">Successfully installed numpy-1.20.3 pillow-8.2.0 torch-1.8.1+cu111 torchaudio-0.8.1 torchvision-0.9.1+cu111 typing-extensions-3.10.0.0</span><br><span class="line">INFO:    Creating SIF file...</span><br><span class="line">INFO:    Build complete: pytorch.sif</span><br></pre></td></tr></table></figure>
+<p>一般如果有报错的话中途就会停下来，如果看到上面的这个指令，基本就构建成功了，并且可以在当前目录下看到一个新生成的sif文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/pytorch$ ll</span><br><span class="line">总用量 4086900</span><br><span class="line">drwxrwxr-x 2 dechin dechin       4096 6月  15 09:53 ./</span><br><span class="line">drwxrwxr-x 8 dechin dechin       4096 6月  15 09:34 ../</span><br><span class="line">-rw-rw-r-- 1 dechin dechin        498 6月  15 09:44 pytorch.def</span><br><span class="line">-rwxr-xr-x 1 dechin dechin 4184969216 6月  15 09:53 pytorch.sif*</span><br></pre></td></tr></table></figure>
+<p>这个就是我们构建好的pytorch的镜像了。</p>
+<h1 id="PyTorch镜像测试"><a href="#PyTorch镜像测试" class="headerlink" title="PyTorch镜像测试"></a>PyTorch镜像测试</h1><p>首先我们看一下镜像中python的版本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/pytorch$ singularity <span class="built_in">exec</span> pytorch.sif python3 --version</span><br><span class="line">Python 3.8.5</span><br></pre></td></tr></table></figure>
+<p>因为pytorch对python的版本没有比较特殊的要求，所以这里3.7或3.8或3.9都是可以的。接下来执行一个pytorch官方给出的测试示例，生成一个随机数矩阵：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/pytorch$ singularity <span class="built_in">exec</span> pytorch.sif python3 -c <span class="string">&quot;import torch;x = torch.rand(5, 3);print(x)&quot;</span></span><br><span class="line">tensor([[0.2045, 0.2268, 0.2132],</span><br><span class="line">        [0.4473, 0.3536, 0.8075],</span><br><span class="line">        [0.0951, 0.0261, 0.5950],</span><br><span class="line">        [0.7112, 0.0449, 0.4564],</span><br><span class="line">        [0.8697, 0.7536, 0.7823]])</span><br></pre></td></tr></table></figure>
+<p>上述运行的方式是采用了<code>python3 -c</code>的方式，省去了再写一个py文件的繁琐，只是需要注意的地方，在于我们要将正常py文件中的换行符替换成这里的分号，这里执行成功了，那么就代表我们的容器化安装是成功了。但是我们需要进一步的确认下，torch能否正常的使用cuda环境，因为这是GPU加速的重点配置。测试可以使用官方给出的这个运行指令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/pytorch$ singularity <span class="built_in">exec</span> pytorch.sif python3 -c <span class="string">&quot;import torch;print(torch.cuda.is_available())&quot;</span></span><br><span class="line">False</span><br></pre></td></tr></table></figure>
+<p>第一次看到这个结果的时候，我优先考虑的是，是否cudatoolkits没有安装的原因？因为在MindSpore中对于这个cudatoolkits是有依赖的，并且使用的是conda来安装，但是这里我们直接装的python没有采取conda的方法。但是转念一想，这里的Singularity运行指令上没有指定GPU环境，更有可能是这个问题。因此加上了<code>--nv</code>的选项，运行结果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/pytorch$ singularity <span class="built_in">exec</span> --nv pytorch.sif python3 -c <span class="string">&quot;import torch;print(torch.cuda.is_available())&quot;</span></span><br><span class="line">True</span><br></pre></td></tr></table></figure>
+<p>可以看到pytorch的GPU版本是运行成功了的，或者应该说成功调用到了GPU。</p>
+<h1 id="Tricky的配置"><a href="#Tricky的配置" class="headerlink" title="Tricky的配置"></a>Tricky的配置</h1><p>使用容器化的方案来运行的话，在运行环境的隔离上面是做的非常好的，但是有一个缺点就是运行的指令太长了，虽然容器镜像的位置是固定不变的，但是每次执行这么一大串指令总觉得麻烦，因此就想到了在环境变量配置文件<code>.bashrc</code>中加上一个声明，用更加简短的语句来替代长指令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alias mindspore=&#x27;singularity exec --nv /home/dechin/tools/singularity/mindspore-gpu_1.2.0.sif python&#x27;</span><br><span class="line">alias pytorch=&#x27;singularity exec --nv /home/dechin/projects/pytorch/pytorch.sif python3&#x27;</span><br></pre></td></tr></table></figure>
+<p>写入到<code>.bashrc</code>文件后，需要<code>source ~/.bashrc</code>指令来使得配置生效，然后我们就可以使用pytorch这样的指令来运行一些pytorch的代码或者命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dechin@ubuntu2004:~/projects/pytorch$ pytorch -c <span class="string">&quot;import torch;print(&#x27;import success&#x27;)&quot;</span></span><br><span class="line">import success</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>这篇文章主要介绍Facebook所主导的机器学习框架PyTorch的容器化安装方法，基于HPC环境常用的Singularity高性能容器，并且兼容与结合了Docker容器镜像的生态，非常的友好。在容器化的编程环境中，我们不仅可以避免不同框架对于python库或者系统软件版本的依赖冲突，还可以很大程度上解决因为没有root权限以及网络外访权限的环境下所带来的极大的麻烦，故推荐使用这种方案进行安装和运行。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/pytorch.html">https://www.cnblogs.com/dechinphy/p/pytorch.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>打赏专用链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<p>腾讯云专栏同步：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/91958">https://cloud.tencent.com/developer/column/91958</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://pytorch.org/get-started/locally/">https://pytorch.org/get-started/locally/</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2021/06/21/MindSpore%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          MindSpore自定义模型损失函数
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/06/10/Python%E5%AE%9E%E7%8E%B0GPU%E5%8A%A0%E9%80%9F%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">Python实现GPU加速的基本操作</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=从零开始制作PyTorch的Singularity容器镜像 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F06%2F15%2F%25E4%25BB%258E%25E9%259B%25B6%25E5%25BC%2580%25E5%25A7%258B%25E5%2588%25B6%25E4%25BD%259CPyTorch%25E7%259A%2584Singularity%25E5%25AE%25B9%25E5%2599%25A8%25E9%2595%259C%25E5%2583%258F%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=从零开始制作PyTorch的Singularity容器镜像 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2021%2F06%2F15%2F%25E4%25BB%258E%25E9%259B%25B6%25E5%25BC%2580%25E5%25A7%258B%25E5%2588%25B6%25E4%25BD%259CPyTorch%25E7%259A%2584Singularity%25E5%25AE%25B9%25E5%2599%25A8%25E9%2595%259C%25E5%2583%258F%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=从零开始制作PyTorch的Singularity容器镜像 - Hexo&url=http://dechinphy.github.io/2021/06/15/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9CPyTorch%E7%9A%84Singularity%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

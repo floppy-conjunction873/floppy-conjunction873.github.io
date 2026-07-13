@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>Latex中也能展示动态图？ | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;本文介绍了一个可以在Latex生成的PDF中展示动态图的解决方案，该方案依赖于三个东西：Python+Pillow的环境（或者其他可以将Gif拆分成众多png图片的工具&amp;#x2F;网站）、Overleaf的账号（或者具备animate的Latex环境）以及Acrobat Reader阅读器（或者其他可以支持pdf中的动态演示功能的阅读器）。虽然一系列的操作下来非常的麻烦，但是最终我们还是可以在Latex生成的PDF中成功的进行了动态展示。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "Latex中也能展示动态图？ | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;本文介绍了一个可以在Latex生成的PDF中展示动态图的解决方案，该方案依赖于三个东西：Python+Pillow的环境（或者其他可以将Gif拆分成众多png图片的工具&amp;#x2F;网站）、Overleaf的账号（或者具备animate的Latex环境）以及Acrobat Reader阅读器（或者其他可以支持pdf中的动态演示功能的阅读器）。虽然一系列的操作下来非常的麻烦，但是最终我们还是可以在Latex生成的PDF中成功的进行了动态展示。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2022/09/21/Latex%E4%B8%AD%E4%B9%9F%E8%83%BD%E5%B1%95%E7%A4%BA%E5%8A%A8%E6%80%81%E5%9B%BE%EF%BC%9F/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;本文介绍了一个可以在Latex生成的PDF中展示动态图的解决方案，该方案依赖于三个东西：Python+Pillow的环境（或者其他可以将Gif拆分成众多png图片的工具&amp;#x2F;网站）、Overleaf的账号（或者具备animate的Latex环境）以及Acrobat Reader阅读器（或者其他可以支持pdf中的动态演示功能的阅读器）。虽然一系列的操作下来非常的麻烦，但是最终我们还是可以在Latex生成的PDF中成功的进行了动态展示。&lt;/p&gt;" />
+    <meta name="twitter:title" content="Latex中也能展示动态图？ | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;本文介绍了一个可以在Latex生成的PDF中展示动态图的解决方案，该方案依赖于三个东西：Python+Pillow的环境（或者其他可以将Gif拆分成众多png图片的工具&amp;#x2F;网站）、Overleaf的账号（或者具备animate的Latex环境）以及Acrobat Reader阅读器（或者其他可以支持pdf中的动态演示功能的阅读器）。虽然一系列的操作下来非常的麻烦，但是最终我们还是可以在Latex生成的PDF中成功的进行了动态展示。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;本文介绍了一个可以在Latex生成的PDF中展示动态图的解决方案，该方案依赖于三个东西：Python+Pillow的环境（或者其他可以将Gif拆分成众多png图片的工具&amp;#x2F;网站）、Overleaf的账号（或者具备animate的Latex环境）以及Acrobat Reader阅读器（或者其他可以支持pdf中的动态演示功能的阅读器）。虽然一系列的操作下来非常的麻烦，但是最终我们还是可以在Latex生成的PDF中成功的进行了动态展示。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2022/09/21/Latex%E4%B8%AD%E4%B9%9F%E8%83%BD%E5%B1%95%E7%A4%BA%E5%8A%A8%E6%80%81%E5%9B%BE%EF%BC%9F/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "Latex中也能展示动态图？ | Hexo",
+            "datePublished": "2022-09-21T02:13:36.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2022/09/21/Latex%E4%B8%AD%E4%B9%9F%E8%83%BD%E5%B1%95%E7%A4%BA%E5%8A%A8%E6%80%81%E5%9B%BE%EF%BC%9F/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidDWRqNfk-NS6Eh6IpjwB0S" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      Latex中也能展示动态图？
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2022-09-21T02:13:36.000Z" itemprop="datePublished">2022-09-21</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>本文介绍了一个可以在Latex生成的PDF中展示动态图的解决方案，该方案依赖于三个东西：Python+Pillow的环境（或者其他可以将Gif拆分成众多png图片的工具&#x2F;网站）、Overleaf的账号（或者具备animate的Latex环境）以及Acrobat Reader阅读器（或者其他可以支持pdf中的动态演示功能的阅读器）。虽然一系列的操作下来非常的麻烦，但是最终我们还是可以在Latex生成的PDF中成功的进行了动态展示。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在学术领域，很多文档是用Latex做的，甚至有很多人用Latex Beamer来做PPT演示文稿。虽然在易用性和美观等角度来说，Latex Beamer很大程度上不如PowerPoint，但是Beamer这种浓厚的学术色彩还是受到了很多人的喜好。但是我们知道Latex生成的文档一般是用pdf格式来存储的，如果放一个gif动态图进去，就可能会变成一个静态图，那就没办法展示整个动态的过程了。幸运的是，Latex还有一种比较麻烦的方法，对动态图也做了一定的支持。本文所使用的案例，是一个比较热门的<a target="_blank" rel="noopener" href="https://gitee.com/mindspore/mindscience/raw/master/MindSPONGE/docs/Q8V4Y0.gif">猴痘病毒蛋白的松弛过程</a>。碍于动态图比较大，在博客里面放不下，故只能用这种链接索引+静态图展示的方案。</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220921105140247-2098064589.png" style="zoom:100%">
+</div>
+
+<h1 id="图片拆分"><a href="#图片拆分" class="headerlink" title="图片拆分"></a>图片拆分</h1><p>第一步，我们需要使用工具将一个Gif图片拆解成一系列的png图片。在Windows下有很多拆解工具可以使用，需要的童鞋可以自行搜索。但是对于一个Coder而言，用Python来进行拆解，可能是最方便的操作，也是这里我们比较推荐的方案——pillow。我们可以先用pip安装更新一下本地的pillow：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install pillow --upgrade</span><br><span class="line">Requirement already satisfied: pillow <span class="keyword">in</span> /home/dechin/miniconda3/lib/python3.9/site-packages (8.4.0)</span><br><span class="line">Collecting pillow</span><br><span class="line">  Downloading Pillow-9.2.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.1 MB)</span><br><span class="line">     ━━━━━━━━━━━━━━━━━━━━━━ 3.1/3.1 MB 2.2 MB/s eta 0:00:00</span><br><span class="line">Installing collected packages: pillow</span><br><span class="line">  Attempting uninstall: pillow</span><br><span class="line">    Found existing installation: Pillow 8.4.0</span><br><span class="line">    Uninstalling Pillow-8.4.0:</span><br><span class="line">      Successfully uninstalled Pillow-8.4.0</span><br><span class="line">Successfully installed pillow-9.2.0</span><br></pre></td></tr></table></figure>
+<p>安装完成后，直接在Ipython或者普通python的终端命令行调用即可，如果确实需要比较复杂操作的话，也可以写成脚本来运行：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: gif_name = <span class="string">&#x27;Q8V4Y0.gif&#x27;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: img = Image.<span class="built_in">open</span>(gif_name)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: os.mkdir(<span class="string">&#x27;pngs&#x27;</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: !ls -l</span><br><span class="line">total <span class="number">15836</span></span><br><span class="line">-rwxr-xr-x <span class="number">1</span> dechin dechin <span class="number">16211906</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">11</span> Q8V4Y0.gif</span><br><span class="line">drwxr-xr-x <span class="number">2</span> dechin dechin     <span class="number">4096</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">17</span> pngs</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">   ...:     current = img.tell()</span><br><span class="line">   ...:     img.save(<span class="string">&#x27;pngs/&#x27;</span>+<span class="built_in">str</span>(current)+<span class="string">&#x27;.png&#x27;</span>)</span><br><span class="line">   ...:     img.seek(current+<span class="number">1</span>)</span><br><span class="line">   ...:</span><br><span class="line">-----------------------------------------------------------</span><br><span class="line">EOFError                  Traceback (most recent call last)</span><br><span class="line">~/miniconda3/lib/python3<span class="number">.9</span>/site-packages/PIL/GifImagePlugin.py <span class="keyword">in</span> seek(<span class="variable language_">self</span>, frame)</span><br><span class="line">    <span class="number">151</span>             <span class="keyword">try</span>:</span><br><span class="line">--&gt; <span class="number">152</span>                 <span class="variable language_">self</span>._seek(f)</span><br><span class="line">    <span class="number">153</span>             <span class="keyword">except</span> EOFError <span class="keyword">as</span> e:</span><br><span class="line"></span><br><span class="line">~/miniconda3/lib/python3<span class="number">.9</span>/site-packages/PIL/GifImagePlugin.py <span class="keyword">in</span> _seek(<span class="variable language_">self</span>, frame, update_image)</span><br><span class="line">    <span class="number">185</span>         <span class="keyword">if</span> <span class="keyword">not</span> s <span class="keyword">or</span> s == <span class="string">b&quot;;&quot;</span>:</span><br><span class="line">--&gt; <span class="number">186</span>             <span class="keyword">raise</span> EOFError</span><br><span class="line">    <span class="number">187</span></span><br><span class="line"></span><br><span class="line">EOFError:</span><br><span class="line"></span><br><span class="line">The above exception was the direct cause of the following exception:</span><br><span class="line"></span><br><span class="line">EOFError                  Traceback (most recent call last)</span><br><span class="line">&lt;ipython-<span class="built_in">input</span>-<span class="number">7</span>-45000e59c5e9&gt; <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">      <span class="number">2</span>     current = img.tell()</span><br><span class="line">      <span class="number">3</span>     img.save(<span class="string">&#x27;pngs/&#x27;</span>+<span class="built_in">str</span>(current)+<span class="string">&#x27;.png&#x27;</span>)</span><br><span class="line">----&gt; <span class="number">4</span>     img.seek(current+<span class="number">1</span>)</span><br><span class="line">      <span class="number">5</span></span><br><span class="line"></span><br><span class="line">~/miniconda3/lib/python3<span class="number">.9</span>/site-packages/PIL/GifImagePlugin.py <span class="keyword">in</span> seek(<span class="variable language_">self</span>, frame)</span><br><span class="line">    <span class="number">153</span>             <span class="keyword">except</span> EOFError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="number">154</span>                 <span class="variable language_">self</span>.seek(last_frame)</span><br><span class="line">--&gt; <span class="number">155</span>                 <span class="keyword">raise</span> EOFError(<span class="string">&quot;no more images in GIF file&quot;</span>) <span class="keyword">from</span> e</span><br><span class="line">    <span class="number">156</span></span><br><span class="line">    <span class="number">157</span>     <span class="keyword">def</span> <span class="title function_">_seek</span>(<span class="params">self, frame, update_image=<span class="literal">True</span></span>):</span><br><span class="line"></span><br><span class="line">EOFError: no more images <span class="keyword">in</span> GIF file</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: !ls -l pngs/</span><br><span class="line">total <span class="number">37276</span></span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">277605</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">0.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">766892</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">1.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">770417</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">10.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">773093</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">11.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">773101</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">12.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">768060</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">13.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">772558</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">14.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">767242</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">15.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">768024</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">16.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">766089</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">17.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">771081</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">18.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">768937</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">19.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">771098</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">2.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">768942</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">20.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">774666</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">21.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">769060</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">22.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">768860</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">23.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">774749</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">24.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">769303</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">25.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">770692</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">26.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">773657</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">27.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">772078</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">28.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">769908</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">29.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">771034</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">3.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">771412</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">30.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">771772</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">31.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">771312</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">32.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">771232</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">33.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">768273</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">34.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">772945</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">35.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">775270</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">36.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">772346</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">37.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">770087</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">38.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">768827</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">39.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">771078</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">4.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">771802</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">40.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">773822</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">41.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">770597</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">42.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">771889</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">43.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">774457</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">44.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">771072</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">45.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">773136</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">46.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">771072</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">47.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">771411</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">48.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">773853</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">49.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">771607</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">5.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">771951</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">6.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">774519</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">7.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">768478</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">8.</span>png</span><br><span class="line">-rw-r--r-- <span class="number">1</span> dechin dechin <span class="number">769771</span> Sep <span class="number">21</span> <span class="number">10</span>:<span class="number">18</span> <span class="number">9.</span>png</span><br></pre></td></tr></table></figure>
+<p>这个运行的过程中有一处报错，但是可以不用在意，有条件的童鞋可以加一个try-except即可。而这里我们最终是在指定路径下成功生成了一系列的png图片文件，接下来可以考虑放到Latex里面去。</p>
+<h1 id="Latex加载动态图"><a href="#Latex加载动态图" class="headerlink" title="Latex加载动态图"></a>Latex加载动态图</h1><p>先看一下加载这个动态图的Latex案例，其实非常简单，就是用<code>animate</code>来加载一系列带数字的png图片，用来动态展示：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\documentclass</span>&#123;beamer&#125;</span><br><span class="line"><span class="keyword">\usepackage</span>&#123;graphicx&#125; <span class="comment">% Allows including images</span></span><br><span class="line"><span class="keyword">\usepackage</span>&#123;animate&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">\begin</span>&#123;document&#125;</span><br><span class="line"><span class="keyword">\animategraphics</span>[width=0.5<span class="keyword">\linewidth</span>, autoplay=True]&#123;24&#125;&#123;imgs/&#125;&#123;0&#125;&#123;49&#125;</span><br><span class="line"><span class="keyword">\end</span>&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p>其中<code>imgs/</code>需要替换为你自己的图片存储路径，<code>{0}{49}</code>是图片后缀编号，我这里Gif拆完之后是有50张，<code>width=0.5\linewidth</code>是用来调整图片大小的，一般调节这几个参数就够了。不过，为了避免Latex使用中可能出现的各种环境依赖问题，推荐测试的时候使用Overleaf自带的环境，这样可以避免很多的麻烦：</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220921103811462-1854307618.png" style="zoom:100%">
+</div>
+
+<p>这里还有一个问题是，不是所有的pdf阅读器都支持这样的插件，即使是生成了动态图，在一部分的阅读器下可能也无法正常播放，推荐使用Adobe Acrobat Reader DC，具体的安装方法这里就不过多的介绍，大家可以自行搜索。</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220921104303158-922713783.png" style="zoom:100%">
+</div>
+
+<p>打开之后是可以正常播放的，这里还是放了一个截图用来展示功能。还有一个比较酷的功能是，Latex的animate还可以附带一些控制组件：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\documentclass</span>&#123;beamer&#125;</span><br><span class="line"><span class="keyword">\usepackage</span>&#123;graphicx&#125; <span class="comment">% Allows including images</span></span><br><span class="line"><span class="keyword">\usepackage</span>&#123;animate&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">\begin</span>&#123;document&#125;</span><br><span class="line"><span class="keyword">\animategraphics</span>[width=0.5<span class="keyword">\linewidth</span>, autoplay=True, loop, controls]&#123;24&#125;&#123;imgs/&#125;&#123;0&#125;&#123;49&#125;</span><br><span class="line"><span class="keyword">\end</span>&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p>加上控制组件之后，不仅可以循环播放，还可以暂停、逐帧控制、加速、慢放、回放等等，依然是先用Overleaf的环境进行编译：</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220921104451186-1531512271.png" style="zoom:100%">
+</div>
+
+<p>然后下载到本地使用Acrobat Reader打开：</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202209/2277440-20220921104650844-239402091.png" style="zoom:100%">
+</div>
+
+<p>虽然比PowerPoint麻烦了许多，但是Latex也能够实现这样的功能，还是很让人欣慰的。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>本文介绍了一个可以在Latex生成的PDF中展示动态图的解决方案，该方案依赖于三个东西：Python+Pillow的环境（或者其他可以将Gif拆分成众多png图片的工具&#x2F;网站）、Overleaf的账号（或者具备animate的Latex环境）以及Acrobat Reader阅读器（或者其他可以支持pdf中的动态演示功能的阅读器）。虽然一系列的操作下来非常的麻烦，但是最终我们还是可以在Latex生成的PDF中成功的进行了动态展示。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/latex-gif.html">https://www.cnblogs.com/dechinphy/p/latex-gif.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>打赏专用链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<p>腾讯云专栏同步：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/91958">https://cloud.tencent.com/developer/column/91958</a></p>
+<p>CSDN同步链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/baidu_37157624?spm=1008.2028.3001.5343">https://blog.csdn.net/baidu_37157624?spm=1008.2028.3001.5343</a></p>
+<p>51CTO同步链接：<a target="_blank" rel="noopener" href="https://blog.51cto.com/u_15561675">https://blog.51cto.com/u_15561675</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/easyidea/p/10520354.html">https://www.cnblogs.com/easyidea/p/10520354.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://liam.page/2017/08/10/importing-animate-in-LaTeX/">https://liam.page/2017/08/10/importing-animate-in-LaTeX/</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2022/09/22/%E5%9F%BA%E4%BA%8E%E5%9B%9B%E5%85%83%E6%95%B0Quaternion%E6%94%B9%E8%BF%9B%E7%9A%84SETTLE%E7%BA%A6%E6%9D%9F%E7%AE%97%E6%B3%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          基于四元数Quaternion改进的SETTLE约束算法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/09/19/%E5%9B%9B%E5%85%83%E6%95%B0Quaternion%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">四元数Quaternion的基本运算</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=Latex中也能展示动态图？ - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F09%2F21%2FLatex%25E4%25B8%25AD%25E4%25B9%259F%25E8%2583%25BD%25E5%25B1%2595%25E7%25A4%25BA%25E5%258A%25A8%25E6%2580%2581%25E5%259B%25BE%25EF%25BC%259F%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=Latex中也能展示动态图？ - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2022%2F09%2F21%2FLatex%25E4%25B8%25AD%25E4%25B9%259F%25E8%2583%25BD%25E5%25B1%2595%25E7%25A4%25BA%25E5%258A%25A8%25E6%2580%2581%25E5%259B%25BE%25EF%25BC%259F%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=Latex中也能展示动态图？ - Hexo&url=http://dechinphy.github.io/2022/09/21/Latex%E4%B8%AD%E4%B9%9F%E8%83%BD%E5%B1%95%E7%A4%BA%E5%8A%A8%E6%80%81%E5%9B%BE%EF%BC%9F/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

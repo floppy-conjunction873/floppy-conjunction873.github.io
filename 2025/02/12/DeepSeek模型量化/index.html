@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>DeepSeek模型量化 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;这篇文章主要介绍了llama.cpp这一大模型工具的使用。因为已经使用Ollama来run大模型，因此仅介绍了llama.cpp在HF模型转GGUF模型中的应用，及其在大模型量化中的使用。大模型的参数量化技术，使得我们可以在本地有限预算的硬件条件下，也能够运行DeepSeek的蒸馏模型。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "DeepSeek模型量化 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;这篇文章主要介绍了llama.cpp这一大模型工具的使用。因为已经使用Ollama来run大模型，因此仅介绍了llama.cpp在HF模型转GGUF模型中的应用，及其在大模型量化中的使用。大模型的参数量化技术，使得我们可以在本地有限预算的硬件条件下，也能够运行DeepSeek的蒸馏模型。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2025/02/12/DeepSeek%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;这篇文章主要介绍了llama.cpp这一大模型工具的使用。因为已经使用Ollama来run大模型，因此仅介绍了llama.cpp在HF模型转GGUF模型中的应用，及其在大模型量化中的使用。大模型的参数量化技术，使得我们可以在本地有限预算的硬件条件下，也能够运行DeepSeek的蒸馏模型。&lt;/p&gt;" />
+    <meta name="twitter:title" content="DeepSeek模型量化 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;这篇文章主要介绍了llama.cpp这一大模型工具的使用。因为已经使用Ollama来run大模型，因此仅介绍了llama.cpp在HF模型转GGUF模型中的应用，及其在大模型量化中的使用。大模型的参数量化技术，使得我们可以在本地有限预算的硬件条件下，也能够运行DeepSeek的蒸馏模型。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;这篇文章主要介绍了llama.cpp这一大模型工具的使用。因为已经使用Ollama来run大模型，因此仅介绍了llama.cpp在HF模型转GGUF模型中的应用，及其在大模型量化中的使用。大模型的参数量化技术，使得我们可以在本地有限预算的硬件条件下，也能够运行DeepSeek的蒸馏模型。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2025/02/12/DeepSeek%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "DeepSeek模型量化 | Hexo",
+            "datePublished": "2025-02-12T02:35:12.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2025/02/12/DeepSeek%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidADDrBW0MQY5_2NhdAmnst" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      DeepSeek模型量化
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2025-02-12T02:35:12.000Z" itemprop="datePublished">2025-02-12</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>这篇文章主要介绍了llama.cpp这一大模型工具的使用。因为已经使用Ollama来run大模型，因此仅介绍了llama.cpp在HF模型转GGUF模型中的应用，及其在大模型量化中的使用。大模型的参数量化技术，使得我们可以在本地有限预算的硬件条件下，也能够运行DeepSeek的蒸馏模型。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>大语言模型（Large Language Model，LLM），可以通过量化（Quantization）操作来节约内存&#x2F;显存的使用，并且降低了通讯开销，进而达到加速模型推理的效果。常见的就是把Float16的浮点数，转换成低精度的整数，例如Int4整数。最极限的情况下，可以把参数转化成二值Bool变量，也就是只有0和1，但是这种大幅度的量化有可能导致模型的推理效果不佳。常用的是，在70B以下的模型用Q8，70B以上可以用Q4。具体的原理，包括对称量化和非对称量化等，这里就不作介绍了，主要看看工程上怎么实现，主要使用了<code>llama.cpp</code>来完成量化。</p>
+<h1 id="安装llama-cpp"><a href="#安装llama-cpp" class="headerlink" title="安装llama.cpp"></a>安装llama.cpp</h1><p>这里我们在Ubuntu上使用本地编译构建的方法进行安装，首先从github上面clone下来：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/ggerganov/llama.cpp.git</span><br><span class="line">正克隆到 <span class="string">&#x27;llama.cpp&#x27;</span>...</span><br><span class="line">remote: Enumerating objects: 43657, <span class="keyword">done</span>.</span><br><span class="line">remote: Counting objects: 100% (15/15), <span class="keyword">done</span>.</span><br><span class="line">remote: Compressing objects: 100% (14/14), <span class="keyword">done</span>.</span><br><span class="line">remote: Total 43657 (delta 3), reused 5 (delta 1), pack-reused 43642 (from 3)</span><br><span class="line">接收对象中: 100% (43657/43657), 88.26 MiB | 8.30 MiB/s, 完成.</span><br><span class="line">处理 delta 中: 100% (31409/31409), 完成.</span><br></pre></td></tr></table></figure>
+<p>最好创建一个虚拟环境，以避免各种软件依赖的问题，推荐Python3.10：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建虚拟环境</span></span><br><span class="line">$ conda create -n llama python=3.10</span><br><span class="line"><span class="comment"># 激活虚拟环境</span></span><br><span class="line">$ conda activate llama</span><br></pre></td></tr></table></figure>
+<p>进入下载好的llama.cpp路径，安装所有的依赖项：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> llama.cpp/</span><br><span class="line">$ python3 -m pip install -e .</span><br></pre></td></tr></table></figure>
+<p>创建一个编译目录，执行编译指令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">mkdir</span> build</span><br><span class="line">$ <span class="built_in">cd</span> build/</span><br><span class="line">$ cmake ..</span><br><span class="line">-- The C compiler identification is GNU 7.5.0</span><br><span class="line">-- The CXX compiler identification is GNU 9.4.0</span><br><span class="line">-- Detecting C compiler ABI info</span><br><span class="line">-- Detecting C compiler ABI info - <span class="keyword">done</span></span><br><span class="line">-- Check <span class="keyword">for</span> working C compiler: /usr/bin/cc - skipped</span><br><span class="line">-- Detecting C compile features</span><br><span class="line">-- Detecting C compile features - <span class="keyword">done</span></span><br><span class="line">-- Detecting CXX compiler ABI info</span><br><span class="line">-- Detecting CXX compiler ABI info - <span class="keyword">done</span></span><br><span class="line">-- Check <span class="keyword">for</span> working CXX compiler: /usr/bin/c++ - skipped</span><br><span class="line">-- Detecting CXX compile features</span><br><span class="line">-- Detecting CXX compile features - <span class="keyword">done</span></span><br><span class="line">-- Found Git: /usr/bin/git (found version <span class="string">&quot;2.25.1&quot;</span>) </span><br><span class="line">-- Looking <span class="keyword">for</span> pthread.h</span><br><span class="line">-- Looking <span class="keyword">for</span> pthread.h - found</span><br><span class="line">-- Performing Test CMAKE_HAVE_LIBC_PTHREAD</span><br><span class="line">-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed</span><br><span class="line">-- Check <span class="keyword">if</span> compiler accepts -pthread</span><br><span class="line">-- Check <span class="keyword">if</span> compiler accepts -pthread - <span class="built_in">yes</span></span><br><span class="line">-- Found Threads: TRUE  </span><br><span class="line">-- Warning: ccache not found - consider installing it <span class="keyword">for</span> faster compilation or <span class="built_in">disable</span> this warning with GGML_CCACHE=OFF</span><br><span class="line">-- CMAKE_SYSTEM_PROCESSOR: x86_64</span><br><span class="line">-- Including CPU backend</span><br><span class="line">-- Found OpenMP_C: -fopenmp (found version <span class="string">&quot;4.5&quot;</span>) </span><br><span class="line">-- Found OpenMP_CXX: -fopenmp (found version <span class="string">&quot;4.5&quot;</span>) </span><br><span class="line">-- Found OpenMP: TRUE (found version <span class="string">&quot;4.5&quot;</span>)  </span><br><span class="line">-- x86 detected</span><br><span class="line">-- Adding CPU backend variant ggml-cpu: -march=native </span><br><span class="line">-- Configuring <span class="keyword">done</span></span><br><span class="line">-- Generating <span class="keyword">done</span></span><br><span class="line">-- Build files have been written to: /datb/DeepSeek/llama/llama.cpp/build</span><br><span class="line">$ cmake --build . --config Release</span><br><span class="line">Scanning dependencies of target ggml-base</span><br><span class="line">[  0%] Building C object ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o</span><br><span class="line">[  1%] Building C object ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o</span><br><span class="line">[100%] Linking CXX executable ../../bin/llama-vdot</span><br><span class="line">[100%] Built target llama-vdot</span><br></pre></td></tr></table></figure>
+<p>到这里，就成功构建了cpu版本的llama.cpp，可以直接使用了。如果需要安装gpu加速的版本，可以参考下面这一小节，如果嫌麻烦建议直接跳过。</p>
+<h2 id="llama-cpp之CUDA加速"><a href="#llama-cpp之CUDA加速" class="headerlink" title="llama.cpp之CUDA加速"></a>llama.cpp之CUDA加速</h2><p>安装GPU版本llama.cpp需要先安装一些依赖：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">sudo</span> apt install curl libcurl4-openssl-dev</span><br></pre></td></tr></table></figure>
+<p>跟cpu版本不同的地方，主要在于cmake的编译指令（如果已经编译了cpu的版本，最好先清空<code>build</code>路径下的文件）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cmake .. -DCMAKE_CUDA_COMPILER=/usr/bin/nvcc -DGGML_CUDA=ON -DBUILD_SHARED_LIBS=OFF -DLLAMA_CURL=ON -DCMAKE_CUDA_STANDARD=17</span><br></pre></td></tr></table></figure>
+<p>这里加的一个FLAG：<code>-DCMAKE_CUDA_STANDARD=17</code>可以解决<a target="_blank" rel="noopener" href="https://github.com/ggerganov/llama.cpp/issues/11725">Llama.cpp仓库里面的Issue</a>，如果不加这个Flag，有可能出现下面这种报错：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Make Error <span class="keyword">in</span> ggml/src/ggml-cuda/CMakeLists.txt:</span><br><span class="line">  Target <span class="string">&quot;ggml-cuda&quot;</span> requires the language dialect <span class="string">&quot;CUDA17&quot;</span> (with compiler</span><br><span class="line">  extensions), but CMake does not know the compile flags to use to <span class="built_in">enable</span> it.</span><br></pre></td></tr></table></figure>
+<p>如果顺利的话，执行下面这个指令，成功编译通过的话就是成功了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cmake --build . --config Release</span><br></pre></td></tr></table></figure>
+<p>但是如果像我这样有报错信息，那就得单独处理以下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/datb/DeepSeek/llama/llama.cpp/ggml/src/ggml-cuda/vendors/cuda.h:6:10: fatal error: cuda_bf16.h: 没有那个文件或目录</span><br><span class="line"> <span class="comment">#include &lt;cuda_bf16.h&gt;</span></span><br><span class="line">          ^~~~~~~~~~~~~</span><br><span class="line">compilation terminated.</span><br></pre></td></tr></table></figure>
+<p>这个报错是说找不到头文件，于是在环境里面<code>find / -name cuda_bf16.h</code>了一下，发现其实是有这个头文件的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/home/dechin/anaconda3/envs/llama/lib/python3.10/site-packages/nvidia/cuda_runtime/include/cuda_bf16.h</span><br><span class="line">/home/dechin/anaconda3/envs/llama/lib/python3.10/site-packages/triton/backends/nvidia/include/cuda_bf16.h</span><br></pre></td></tr></table></figure>
+<p>处理方式是把这个路径加到<code>CPATH</code>里面：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">export</span> CPATH=<span class="variable">$CPATH</span>:/home/dechin/anaconda3/envs/llama/lib/python3.10/site-packages/nvidia/cuda_runtime/include/</span><br></pre></td></tr></table></figure>
+<p>如果是出现这个报错：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/home/dechin/anaconda3/envs/llama/lib/python3.10/site-packages/nvidia/cuda_runtime/include/cuda_fp16.h:4100:10: fatal error: nv/target: 没有那个文件或目录</span><br><span class="line"> <span class="comment">#include &lt;nv/target&gt;</span></span><br><span class="line">          ^~~~~~~~~~~</span><br><span class="line">compilation terminated.</span><br></pre></td></tr></table></figure>
+<p>那就是找不到target目录的路径，如果本地有target路径的话，也可以直接配置到<code>CPATH</code>里面：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">export</span> CPATH=/home/dechin/anaconda3/pkgs/cupy-core-13.3.0-py310h5da974a_2/lib/python3.10/site-packages/cupy/_core/include/cupy/_cccl/libcudacxx/:<span class="variable">$CPATH</span></span><br></pre></td></tr></table></figure>
+<p>如果是下面这些报错：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/datb/DeepSeek/llama/llama.cpp/ggml/src/ggml-cuda/common.cuh(138): error: identifier <span class="string">&quot;cublasGetStatusString&quot;</span> is undefined</span><br><span class="line"></span><br><span class="line">/datb/DeepSeek/llama/llama.cpp/ggml/src/ggml-cuda/common.cuh(417): error: A __device__ variable cannot be marked constexpr</span><br><span class="line"></span><br><span class="line">/datb/DeepSeek/llama/llama.cpp/ggml/src/ggml-cuda/common.cuh(745): error: identifier <span class="string">&quot;CUBLAS_TF32_TENSOR_OP_MATH&quot;</span> is undefined</span><br><span class="line"></span><br><span class="line">3 errors detected <span class="keyword">in</span> the compilation of <span class="string">&quot;/tmp/tmpxft_000a126f_00000000-9_acc.compute_75.cpp1.ii&quot;</span>.</span><br><span class="line">make[2]: *** [ggml/src/ggml-cuda/CMakeFiles/ggml-cuda.dir/build.make:82：ggml/src/ggml-cuda/CMakeFiles/ggml-cuda.dir/acc.cu.o] 错误 1</span><br><span class="line">make[1]: *** [CMakeFiles/Makefile2:1964：ggml/src/ggml-cuda/CMakeFiles/ggml-cuda.dir/all] 错误 2</span><br><span class="line">make: *** [Makefile:160：all] 错误 2</span><br></pre></td></tr></table></figure>
+<p>那么很有可能是<code>cuda-toolkit</code>的版本问题，尝试安装cuda-12：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ conda install nvidia::cuda-toolkit</span><br></pre></td></tr></table></figure>
+<p>如果使用conda安装过程有这种问题：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Collecting package metadata (current_repodata.json): failed</span><br><span class="line"></span><br><span class="line"><span class="comment"># &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; ERROR REPORT &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span></span><br><span class="line"></span><br><span class="line">    Traceback (most recent call last):</span><br><span class="line">      File <span class="string">&quot;/home/dechin/anaconda3/lib/python3.8/site-packages/conda/gateways/repodata/__init__.py&quot;</span>, line 132, <span class="keyword">in</span> conda_http_errors</span><br><span class="line">        yield</span><br><span class="line">      File <span class="string">&quot;/home/dechin/anaconda3/lib/python3.8/site-packages/conda/gateways/repodata/__init__.py&quot;</span>, line 101, <span class="keyword">in</span> repodata</span><br><span class="line">        response.raise_for_status()</span><br><span class="line">      File <span class="string">&quot;/home/dechin/anaconda3/lib/python3.8/site-packages/requests/models.py&quot;</span>, line 1024, <span class="keyword">in</span> raise_for_status</span><br><span class="line">        raise HTTPError(http_error_msg, response=self)</span><br><span class="line">    requests.exceptions.HTTPError: 404 Client Error: Not Found <span class="keyword">for</span> url: https://conda.anaconda.org/defaults/linux-64/current_repodata.json</span><br></pre></td></tr></table></figure>
+<p>那应该是conda源的问题，可以删掉旧的channels，使用默认channels或者找一个国内可以用的镜像源进行配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ conda config --remove-key channels</span><br><span class="line">$ conda config --remove-key default_channels</span><br><span class="line">$ conda config --append channels conda-forge</span><br></pre></td></tr></table></figure>
+<p>重新安装以后，nvcc的路径发生了变化，要注意修改下编译时的<code>DCMAKE_CUDA_COMPILER</code>参数配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cmake .. -DCMAKE_CUDA_COMPILER=/home/dechin/anaconda3/envs/llama/bin/nvcc -DGGML_CUDA=ON -DBUILD_SHARED_LIBS=OFF -DLLAMA_CURL=ON -DCMAKE_CUDA_STANDARD=17</span><br></pre></td></tr></table></figure>
+<p>如果出现如下报错：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-- Unable to find cuda_runtime.h <span class="keyword">in</span> <span class="string">&quot;/home/dechin/anaconda3/envs/llama/include&quot;</span> <span class="keyword">for</span> CUDAToolkit_INCLUDE_DIR.</span><br><span class="line">-- Could NOT find CUDAToolkit (missing: CUDAToolkit_INCLUDE_DIR) </span><br><span class="line">CMake Error at ggml/src/ggml-cuda/CMakeLists.txt:151 (message):</span><br><span class="line">  CUDA Toolkit not found</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-- Configuring incomplete, errors occurred!</span><br><span class="line">See also <span class="string">&quot;/datb/DeepSeek/llama/llama.cpp/build/CMakeFiles/CMakeOutput.log&quot;</span>.</span><br><span class="line">See also <span class="string">&quot;/datb/DeepSeek/llama/llama.cpp/build/CMakeFiles/CMakeError.log&quot;</span>.</span><br></pre></td></tr></table></figure>
+<p>这是找不到<code>CUDAToolkit_INCLUDE_DIR</code>的路径配置，只要在cmake的指令里面加上一个include路径即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cmake .. -DCMAKE_CUDA_COMPILER=/home/dechin/anaconda3/envs/llama/bin/nvcc -DGGML_CUDA=ON -DBUILD_SHARED_LIBS=OFF -DLLAMA_CURL=ON -DCMAKE_CUDA_STANDARD=17 -DCUDAToolkit_INCLUDE_DIR=/home/dechin/anaconda3/envs/llama/targets/x86_64-linux/include/ -DCURL_LIBRARY=/usr/lib/x86_64-linux-gnu/</span><br></pre></td></tr></table></figure>
+<p>如果经过以上的一串处理，依然有报错信息，那我建议还是用个Docker吧，或者直接用CPU版本执行quantize，模型调用使用Ollama，这样方便一些。</p>
+<h1 id="下载Hugging-Face模型"><a href="#下载Hugging-Face模型" class="headerlink" title="下载Hugging Face模型"></a>下载Hugging Face模型</h1><p>由于很多已经完成量化的GGUF模型文件，无法被二次量化，所以建议直接从Hugging Face下载safetensors模型文件。然后用llama.cpp里面的一个Python脚本将hf模型转为gguf模型，然后再使用llama.cpp进行模型quantize。</p>
+<p>关于模型下载这部分，因为Hugging Face的访问有时候也会受限，所以这里首推的还是国内的ModelScope平台。从ModelScope平台下载模型，可以装一个这种Python形式的modelscope：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m pip install modelscope</span><br><span class="line">Looking <span class="keyword">in</span> indexes: https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line">Requirement already satisfied: modelscope <span class="keyword">in</span> /home/dechin/anaconda3/lib/python3.8/site-packages (1.22.3)</span><br><span class="line">Requirement already satisfied: requests&gt;=2.25 <span class="keyword">in</span> /home/dechin/.local/lib/python3.8/site-packages (from modelscope) (2.25.1)</span><br><span class="line">Requirement already satisfied: urllib3&gt;=1.26 <span class="keyword">in</span> /home/dechin/.local/lib/python3.8/site-packages (from modelscope) (1.26.5)</span><br><span class="line">Requirement already satisfied: tqdm&gt;=4.64.0 <span class="keyword">in</span> /home/dechin/anaconda3/lib/python3.8/site-packages (from modelscope) (4.67.1)</span><br><span class="line">Requirement already satisfied: certifi&gt;=2017.4.17 <span class="keyword">in</span> /home/dechin/.local/lib/python3.8/site-packages (from requests&gt;=2.25-&gt;modelscope) (2021.5.30)</span><br><span class="line">Requirement already satisfied: chardet&lt;5,&gt;=3.0.2 <span class="keyword">in</span> /home/dechin/.local/lib/python3.8/site-packages (from requests&gt;=2.25-&gt;modelscope) (4.0.0)</span><br><span class="line">Requirement already satisfied: idna&lt;3,&gt;=2.5 <span class="keyword">in</span> /home/dechin/.local/lib/python3.8/site-packages (from requests&gt;=2.25-&gt;modelscope) (2.10)</span><br></pre></td></tr></table></figure>
+<p>然后使用modelcope下载模型：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ modelscope download --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B</span><br></pre></td></tr></table></figure>
+<p>如果出现报错（如果没有报错就不用理会，等待模型下载完成即可）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">safetensors integrity check failed, expected sha256 signature is xxx</span><br></pre></td></tr></table></figure>
+<p>可以尝试另一种安装方式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">sudo</span> apt install git-lfs</span><br></pre></td></tr></table></figure>
+<p>下载模型：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://www.modelscope.cn/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B.git</span><br><span class="line">正克隆到 <span class="string">&#x27;DeepSeek-R1-Distill-Qwen-32B&#x27;</span>...</span><br><span class="line">remote: Enumerating objects: 52, <span class="keyword">done</span>.</span><br><span class="line">remote: Counting objects: 100% (52/52), <span class="keyword">done</span>.</span><br><span class="line">remote: Compressing objects: 100% (37/37), <span class="keyword">done</span>.</span><br><span class="line">remote: Total 52 (delta 17), reused 42 (delta 13), pack-reused 0</span><br><span class="line">展开对象中: 100% (52/52), 2.27 MiB | 2.62 MiB/s, 完成.</span><br><span class="line">过滤内容: 100% (8/8), 5.02 GiB | 912.00 KiB/s, 完成.</span><br><span class="line">Encountered 8 file(s) that may not have been copied correctly on Windows:</span><br><span class="line">	model-00005-of-000008.safetensors</span><br><span class="line">	model-00004-of-000008.safetensors</span><br><span class="line">	model-00008-of-000008.safetensors</span><br><span class="line">	model-00002-of-000008.safetensors</span><br><span class="line">	model-00007-of-000008.safetensors</span><br><span class="line">	model-00003-of-000008.safetensors</span><br><span class="line">	model-00006-of-000008.safetensors</span><br><span class="line">	model-00001-of-000008.safetensors</span><br><span class="line"></span><br><span class="line">See: `git lfs <span class="built_in">help</span> smudge` <span class="keyword">for</span> more details.</span><br></pre></td></tr></table></figure>
+<p>这个过程会消耗很多时间，请耐心等待模型下载完成为止。下载完成后查看路径：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> DeepSeek-R1-Distill-Qwen-32B/</span><br><span class="line">$ ll</span><br><span class="line">总用量 63999072</span><br><span class="line">drwxrwxr-x 4 dechin dechin       4096 2月  12 19:22 ./</span><br><span class="line">drwxrwxr-x 3 dechin dechin       4096 2月  12 17:46 ../</span><br><span class="line">-rw-rw-r-- 1 dechin dechin        664 2月  12 17:46 config.json</span><br><span class="line">-rw-rw-r-- 1 dechin dechin         73 2月  12 17:46 configuration.json</span><br><span class="line">drwxrwxr-x 2 dechin dechin       4096 2月  12 17:46 figures/</span><br><span class="line">-rw-rw-r-- 1 dechin dechin        181 2月  12 17:46 generation_config.json</span><br><span class="line">drwxrwxr-x 9 dechin dechin       4096 2月  12 19:22 .git/</span><br><span class="line">-rw-rw-r-- 1 dechin dechin       1519 2月  12 17:46 .gitattributes</span><br><span class="line">-rw-rw-r-- 1 dechin dechin       1064 2月  12 17:46 LICENSE</span><br><span class="line">-rw-rw-r-- 1 dechin dechin 8792578462 2月  12 19:22 model-00001-of-000008.safetensors</span><br><span class="line">-rw-rw-r-- 1 dechin dechin 8776906899 2月  12 19:03 model-00002-of-000008.safetensors</span><br><span class="line">-rw-rw-r-- 1 dechin dechin 8776906927 2月  12 19:18 model-00003-of-000008.safetensors</span><br><span class="line">-rw-rw-r-- 1 dechin dechin 8776906927 2月  12 18:56 model-00004-of-000008.safetensors</span><br><span class="line">-rw-rw-r-- 1 dechin dechin 8776906927 2月  12 18:38 model-00005-of-000008.safetensors</span><br><span class="line">-rw-rw-r-- 1 dechin dechin 8776906927 2月  12 19:19 model-00006-of-000008.safetensors</span><br><span class="line">-rw-rw-r-- 1 dechin dechin 8776906927 2月  12 19:15 model-00007-of-000008.safetensors</span><br><span class="line">-rw-rw-r-- 1 dechin dechin 4073821536 2月  12 19:02 model-00008-of-000008.safetensors</span><br><span class="line">-rw-rw-r-- 1 dechin dechin      64018 2月  12 17:46 model.safetensors.index.json</span><br><span class="line">-rw-rw-r-- 1 dechin dechin      18985 2月  12 17:46 README.md</span><br><span class="line">-rw-rw-r-- 1 dechin dechin       3071 2月  12 17:46 tokenizer_config.json</span><br><span class="line">-rw-rw-r-- 1 dechin dechin    7031660 2月  12 17:46 tokenizer.json</span><br></pre></td></tr></table></figure>
+<p>这就是下载成功了。</p>
+<h1 id="HF模型转GGUF模型"><a href="#HF模型转GGUF模型" class="headerlink" title="HF模型转GGUF模型"></a>HF模型转GGUF模型</h1><p>找到编译好的<code>llama/llama.cpp/</code>下的python脚本文件，可以先看下其用法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">$ python3 convert_hf_to_gguf.py --<span class="built_in">help</span></span><br><span class="line">usage: convert_hf_to_gguf.py [-h] [--vocab-only] [--outfile OUTFILE] [--outtype &#123;f32,f16,bf16,q8_0,tq1_0,tq2_0,auto&#125;] [--bigendian] [--use-temp-file] [--no-lazy]</span><br><span class="line">                             [--model-name MODEL_NAME] [--verbose] [--split-max-tensors SPLIT_MAX_TENSORS] [--split-max-size SPLIT_MAX_SIZE] [--dry-run]</span><br><span class="line">                             [--no-tensor-first-split] [--metadata METADATA] [--print-supported-models]</span><br><span class="line">                             [model]</span><br><span class="line"></span><br><span class="line">Convert a huggingface model to a GGML compatible file</span><br><span class="line"></span><br><span class="line">positional arguments:</span><br><span class="line">  model                 directory containing model file</span><br><span class="line"></span><br><span class="line">options:</span><br><span class="line">  -h, --<span class="built_in">help</span>            show this <span class="built_in">help</span> message and <span class="built_in">exit</span></span><br><span class="line">  --vocab-only          extract only the vocab</span><br><span class="line">  --outfile OUTFILE     path to write to; default: based on input. &#123;ftype&#125; will be replaced by the outtype.</span><br><span class="line">  --outtype &#123;f32,f16,bf16,q8_0,tq1_0,tq2_0,auto&#125;</span><br><span class="line">                        output format - use f32 <span class="keyword">for</span> float32, f16 <span class="keyword">for</span> float16, bf16 <span class="keyword">for</span> bfloat16, q8_0 <span class="keyword">for</span> Q8_0, tq1_0 or tq2_0 <span class="keyword">for</span> ternary, and auto <span class="keyword">for</span> the highest-</span><br><span class="line">                        fidelity 16-bit <span class="built_in">float</span> <span class="built_in">type</span> depending on the first loaded tensor <span class="built_in">type</span></span><br><span class="line">  --bigendian           model is executed on big endian machine</span><br><span class="line">  --use-temp-file       use the tempfile library <span class="keyword">while</span> processing (helpful when running out of memory, process killed)</span><br><span class="line">  --no-lazy             use more RAM by computing all outputs before writing (use <span class="keyword">in</span> <span class="keyword">case</span> lazy evaluation is broken)</span><br><span class="line">  --model-name MODEL_NAME</span><br><span class="line">                        name of the model</span><br><span class="line">  --verbose             increase output verbosity</span><br><span class="line">  --split-max-tensors SPLIT_MAX_TENSORS</span><br><span class="line">                        max tensors <span class="keyword">in</span> each <span class="built_in">split</span></span><br><span class="line">  --split-max-size SPLIT_MAX_SIZE</span><br><span class="line">                        max size per <span class="built_in">split</span> N(M|G)</span><br><span class="line">  --dry-run             only <span class="built_in">print</span> out a <span class="built_in">split</span> plan and <span class="built_in">exit</span>, without writing any new files</span><br><span class="line">  --no-tensor-first-split</span><br><span class="line">                        <span class="keyword">do</span> not add tensors to the first <span class="built_in">split</span> (disabled by default)</span><br><span class="line">  --metadata METADATA   Specify the path <span class="keyword">for</span> an authorship metadata override file</span><br><span class="line">  --print-supported-models</span><br><span class="line">                        Print the supported models</span><br></pre></td></tr></table></figure>
+<p>然后执行构建GGUF：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ python3 convert_hf_to_gguf.py /datb/DeepSeek/models/DeepSeek-R1-Distill-Qwen-32B --outfile /datb/DeepSeek/models/DeepSeek-R1-Distill-Qwen-32B.gguf</span><br><span class="line">INFO:hf-to-gguf:Set model quantization version</span><br><span class="line">INFO:gguf.gguf_writer:Writing the following files:</span><br><span class="line">INFO:gguf.gguf_writer:/datb/DeepSeek/models/DeepSeek-R1-Distill-Qwen-32B.gguf: n_tensors = 771, total_size = 65.5G</span><br><span class="line">Writing: 100%|██████████████████████████████████████████████████████████████| 65.5G/65.5G [19:42&lt;00:00, 55.4Mbyte/s]</span><br><span class="line">INFO:hf-to-gguf:Model successfully exported to /datb/DeepSeek/models/DeepSeek-R1-Distill-Qwen-32B.gguf</span><br></pre></td></tr></table></figure>
+<p>完成转化后，会在指定的路径下生成一个gguf文件，也就是all-in-one的模型文件。默认是fp32的精度，可以用于执行下一步的量化操作。</p>
+<h1 id="GGUF模型量化"><a href="#GGUF模型量化" class="headerlink" title="GGUF模型量化"></a>GGUF模型量化</h1><p>在编译好的<code>llama.cpp</code>的<code>build/bin/</code>路径下，可以找到量化的可执行文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">$ ./llama-quantize --<span class="built_in">help</span></span><br><span class="line">usage: ./llama-quantize [--<span class="built_in">help</span>] [--allow-requantize] [--leave-output-tensor] [--pure] [--imatrix] [--include-weights] [--exclude-weights] [--output-tensor-type] [--token-embedding-type] [--override-kv] model-f32.gguf [model-quant.gguf] <span class="built_in">type</span> [nthreads]</span><br><span class="line"></span><br><span class="line">  --allow-requantize: Allows requantizing tensors that have already been quantized. Warning: This can severely reduce quality compared to quantizing from 16bit or 32bit</span><br><span class="line">  --leave-output-tensor: Will leave output.weight un(re)quantized. Increases model size but may also increase quality, especially when requantizing</span><br><span class="line">  --pure: Disable k-quant mixtures and quantize all tensors to the same <span class="built_in">type</span></span><br><span class="line">  --imatrix file_name: use data <span class="keyword">in</span> file_name as importance matrix <span class="keyword">for</span> quant optimizations</span><br><span class="line">  --include-weights tensor_name: use importance matrix <span class="keyword">for</span> this/these tensor(s)</span><br><span class="line">  --exclude-weights tensor_name: use importance matrix <span class="keyword">for</span> this/these tensor(s)</span><br><span class="line">  --output-tensor-type ggml_type: use this ggml_type <span class="keyword">for</span> the output.weight tensor</span><br><span class="line">  --token-embedding-type ggml_type: use this ggml_type <span class="keyword">for</span> the token embeddings tensor</span><br><span class="line">  --keep-split: will generate quantized model <span class="keyword">in</span> the same shards as input</span><br><span class="line">  --override-kv KEY=TYPE:VALUE</span><br><span class="line">      Advanced option to override model metadata by key <span class="keyword">in</span> the quantized model. May be specified multiple <span class="built_in">times</span>.</span><br><span class="line">Note: --include-weights and --exclude-weights cannot be used together</span><br><span class="line"></span><br><span class="line">Allowed quantization types:</span><br><span class="line">   2  or  Q4_0    :  4.34G, +0.4685 ppl @ Llama-3-8B</span><br><span class="line">   3  or  Q4_1    :  4.78G, +0.4511 ppl @ Llama-3-8B</span><br><span class="line">   8  or  Q5_0    :  5.21G, +0.1316 ppl @ Llama-3-8B</span><br><span class="line">   9  or  Q5_1    :  5.65G, +0.1062 ppl @ Llama-3-8B</span><br><span class="line">  19  or  IQ2_XXS :  2.06 bpw quantization</span><br><span class="line">  20  or  IQ2_XS  :  2.31 bpw quantization</span><br><span class="line">  28  or  IQ2_S   :  2.5  bpw quantization</span><br><span class="line">  29  or  IQ2_M   :  2.7  bpw quantization</span><br><span class="line">  24  or  IQ1_S   :  1.56 bpw quantization</span><br><span class="line">  31  or  IQ1_M   :  1.75 bpw quantization</span><br><span class="line">  36  or  TQ1_0   :  1.69 bpw ternarization</span><br><span class="line">  37  or  TQ2_0   :  2.06 bpw ternarization</span><br><span class="line">  10  or  Q2_K    :  2.96G, +3.5199 ppl @ Llama-3-8B</span><br><span class="line">  21  or  Q2_K_S  :  2.96G, +3.1836 ppl @ Llama-3-8B</span><br><span class="line">  23  or  IQ3_XXS :  3.06 bpw quantization</span><br><span class="line">  26  or  IQ3_S   :  3.44 bpw quantization</span><br><span class="line">  27  or  IQ3_M   :  3.66 bpw quantization mix</span><br><span class="line">  12  or  Q3_K    : <span class="built_in">alias</span> <span class="keyword">for</span> Q3_K_M</span><br><span class="line">  22  or  IQ3_XS  :  3.3 bpw quantization</span><br><span class="line">  11  or  Q3_K_S  :  3.41G, +1.6321 ppl @ Llama-3-8B</span><br><span class="line">  12  or  Q3_K_M  :  3.74G, +0.6569 ppl @ Llama-3-8B</span><br><span class="line">  13  or  Q3_K_L  :  4.03G, +0.5562 ppl @ Llama-3-8B</span><br><span class="line">  25  or  IQ4_NL  :  4.50 bpw non-linear quantization</span><br><span class="line">  30  or  IQ4_XS  :  4.25 bpw non-linear quantization</span><br><span class="line">  15  or  Q4_K    : <span class="built_in">alias</span> <span class="keyword">for</span> Q4_K_M</span><br><span class="line">  14  or  Q4_K_S  :  4.37G, +0.2689 ppl @ Llama-3-8B</span><br><span class="line">  15  or  Q4_K_M  :  4.58G, +0.1754 ppl @ Llama-3-8B</span><br><span class="line">  17  or  Q5_K    : <span class="built_in">alias</span> <span class="keyword">for</span> Q5_K_M</span><br><span class="line">  16  or  Q5_K_S  :  5.21G, +0.1049 ppl @ Llama-3-8B</span><br><span class="line">  17  or  Q5_K_M  :  5.33G, +0.0569 ppl @ Llama-3-8B</span><br><span class="line">  18  or  Q6_K    :  6.14G, +0.0217 ppl @ Llama-3-8B</span><br><span class="line">   7  or  Q8_0    :  7.96G, +0.0026 ppl @ Llama-3-8B</span><br><span class="line">   1  or  F16     : 14.00G, +0.0020 ppl @ Mistral-7B</span><br><span class="line">  32  or  BF16    : 14.00G, -0.0050 ppl @ Mistral-7B</span><br><span class="line">   0  or  F32     : 26.00G              @ 7B</span><br><span class="line">          COPY    : only copy tensors, no quantizing</span><br></pre></td></tr></table></figure>
+<p>这里可以看到完整的可以执行量化操作的精度。例如我们可以量化一个<code>q4_0</code>精度的32B模型：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./llama-quantize /datb/DeepSeek/models/DeepSeek-R1-Distill-Qwen-32B.gguf /datb/DeepSeek/models/DeepSeek-R1-Distill-Qwen-32B-Q4_0.gguf q4_0</span><br></pre></td></tr></table></figure>
+<p>输出结果对比（这里的Q8_0是直接从模型仓库里面下载的别人量化出来的Q8_0模型）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-rw-rw-r-- 1 dechin dechin 65535969184 2月  13 09:33 DeepSeek-R1-Distill-Qwen-32B.gguf</span><br><span class="line">-rw-rw-r-- 1 dechin dechin 18640230304 2月  13 09:51 DeepSeek-R1-Distill-Qwen-32B-Q4_0.gguf</span><br><span class="line">-rw-rw-r-- 1 dechin dechin 34820884384 2月   9 01:44 DeepSeek-R1-Distill-Qwen-32B-Q8_0.gguf</span><br></pre></td></tr></table></figure>
+<p>从F32到Q8再到Q4，可以看到有一个很明显的内存占用的下降。我们可以根据自己本地的计算机资源来决定要做多少精度的量化操作。</p>
+<p>量化完成后，可以参考<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/18702523/deepseek2#%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA%E9%85%8D%E7%BD%AE">这篇文章</a>的内容构建模型，导入模型成功以后，可以用<code>ollama list</code>查看到所有的本地模型：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ ollama list</span><br><span class="line">NAME                            ID              SIZE      MODIFIED      </span><br><span class="line">deepseek-r1:32b-q2k             8d2a0c19f6e0    12 GB     5 seconds ago    </span><br><span class="line">deepseek-r1:32b-q40             13c7c287f615    18 GB     3 minutes ago    </span><br><span class="line">deepseek-r1:32b                 91f2de3dd7fd    34 GB     42 hours ago     </span><br><span class="line">nomic-embed-text-v1.5:latest    5b3683392ccb    274 MB    43 hours ago     </span><br><span class="line">deepseek-r1:14b                 ea35dfe18182    9.0 GB    7 days ago  </span><br></pre></td></tr></table></figure>
+<p>这里q2k也是本地量化的<code>Q2_K</code>的模型。只是从<code>Q4_0</code>到<code>Q2_k</code>已经没有太大的参数内存缩减了，所以很多人量化一般就到<code>Q4_0</code>这个级别，可以兼具性能与精确性。</p>
+<h1 id="其他报错处理"><a href="#其他报错处理" class="headerlink" title="其他报错处理"></a>其他报错处理</h1><p>如果运行<code>llama-quantize</code>这个可执行文件出现这种报错：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./xxx/llama-quantize: error while loading shared libraries: libllama.so: cannot open shared object file: No such file or directory</span><br></pre></td></tr></table></figure>
+<p>动态链接库路径<code>LD_LIBRARY_PATH</code>没有设置，也可以选择直接进入到<code>bin/</code>路径下运行该可执行文件。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>这篇文章主要介绍了llama.cpp这一大模型工具的使用。因为已经使用Ollama来run大模型，因此仅介绍了llama.cpp在HF模型转GGUF模型中的应用，及其在大模型量化中的使用。大模型的参数量化技术，使得我们可以在本地有限预算的硬件条件下，也能够运行DeepSeek的蒸馏模型。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/quantize.html">https://www.cnblogs.com/dechinphy/p/quantize.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_73365120/article/details/141901884">https://blog.csdn.net/m0_73365120/article/details/141901884</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2025/02/14/DeepSeek+PageAssist%E5%AE%9E%E7%8E%B0%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%81%94%E7%BD%91/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          DeepSeek+PageAssist实现本地大模型联网
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/02/10/DeepSeek+Zotero/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">DeepSeek+Zotero</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=DeepSeek模型量化 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2025%2F02%2F12%2FDeepSeek%25E6%25A8%25A1%25E5%259E%258B%25E9%2587%258F%25E5%258C%2596%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=DeepSeek模型量化 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2025%2F02%2F12%2FDeepSeek%25E6%25A8%25A1%25E5%259E%258B%25E9%2587%258F%25E5%258C%2596%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=DeepSeek模型量化 - Hexo&url=http://dechinphy.github.io/2025/02/12/DeepSeek%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

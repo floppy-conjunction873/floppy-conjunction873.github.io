@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>创建ortools的Dockerfile | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;在本地构建基于Docker的编程环境是一个兼容性和可用性非常强的解决方案，这里我们介绍了一个使用Dockerfile来构建Docker容器镜像的简单实例。同时也用谷歌所主导的开源线性规划求解器ortools来测试这个容器化的编程环境解决方案，最终我们用ortools成功的求解了一个单背包问题，并且跟前面一篇博客中所介绍的IBM主导的cplex一样都得到了问题的最优解。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "创建ortools的Dockerfile | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;在本地构建基于Docker的编程环境是一个兼容性和可用性非常强的解决方案，这里我们介绍了一个使用Dockerfile来构建Docker容器镜像的简单实例。同时也用谷歌所主导的开源线性规划求解器ortools来测试这个容器化的编程环境解决方案，最终我们用ortools成功的求解了一个单背包问题，并且跟前面一篇博客中所介绍的IBM主导的cplex一样都得到了问题的最优解。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2021/03/29/%E5%88%9B%E5%BB%BAortools%E7%9A%84Dockerfile/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;在本地构建基于Docker的编程环境是一个兼容性和可用性非常强的解决方案，这里我们介绍了一个使用Dockerfile来构建Docker容器镜像的简单实例。同时也用谷歌所主导的开源线性规划求解器ortools来测试这个容器化的编程环境解决方案，最终我们用ortools成功的求解了一个单背包问题，并且跟前面一篇博客中所介绍的IBM主导的cplex一样都得到了问题的最优解。&lt;/p&gt;" />
+    <meta name="twitter:title" content="创建ortools的Dockerfile | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;在本地构建基于Docker的编程环境是一个兼容性和可用性非常强的解决方案，这里我们介绍了一个使用Dockerfile来构建Docker容器镜像的简单实例。同时也用谷歌所主导的开源线性规划求解器ortools来测试这个容器化的编程环境解决方案，最终我们用ortools成功的求解了一个单背包问题，并且跟前面一篇博客中所介绍的IBM主导的cplex一样都得到了问题的最优解。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;在本地构建基于Docker的编程环境是一个兼容性和可用性非常强的解决方案，这里我们介绍了一个使用Dockerfile来构建Docker容器镜像的简单实例。同时也用谷歌所主导的开源线性规划求解器ortools来测试这个容器化的编程环境解决方案，最终我们用ortools成功的求解了一个单背包问题，并且跟前面一篇博客中所介绍的IBM主导的cplex一样都得到了问题的最优解。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2021/03/29/%E5%88%9B%E5%BB%BAortools%E7%9A%84Dockerfile/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "创建ortools的Dockerfile | Hexo",
+            "datePublished": "2021-03-29T10:39:02.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2021/03/29/%E5%88%9B%E5%BB%BAortools%E7%9A%84Dockerfile/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidmakcLOasCbwIEe5g1RICa" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      创建ortools的Dockerfile
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2021-03-29T10:39:02.000Z" itemprop="datePublished">2021-03-29</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>在本地构建基于Docker的编程环境是一个兼容性和可用性非常强的解决方案，这里我们介绍了一个使用Dockerfile来构建Docker容器镜像的简单实例。同时也用谷歌所主导的开源线性规划求解器ortools来测试这个容器化的编程环境解决方案，最终我们用ortools成功的求解了一个单背包问题，并且跟前面一篇博客中所介绍的IBM主导的cplex一样都得到了问题的最优解。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>基于已有的Docker容器镜像，去创建一个本地的镜像，有两种方法：一种是在之前的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cplex.html#">博客</a>中提到过的，使用<code>docker commit</code>的方案，也就是先进去基础系统镜像内部完成所需的修改，然后commit到一个新的容器内部;还有另外一种也非常常用的方法，就是写一个Dockerfile，在本文中会作简单介绍。</p>
+<p>另外我们在上一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cplex.html#">博客</a>中介绍了如何部署与使用IBM主导的Cplex线性规划求解器的一些基本使用方法。在本文中我们会介绍另外一套由Google主导的开源线性规划求解器ortools的部署与基本使用方法。</p>
+<h1 id="Dockerfile的创建"><a href="#Dockerfile的创建" class="headerlink" title="Dockerfile的创建"></a>Dockerfile的创建</h1><p>对于简单的场景而言，尤其是别人已经把基础容器镜像做的比较完善的情况下，使得我们减少了大量的工作量。比如这里我们直接使用一个别人做好的python3.7的基础镜像，而获得该镜像的方法在上一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cplex.html#">博客</a>中也作了介绍。那么我们在dockerfile里面只需要安装好我们所需要的ortools的python包即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root ortools]# <span class="built_in">cat</span> Dockerfile </span><br><span class="line">FROM rackspacedot/python37</span><br><span class="line">RUN python3 -m pip install pip --upgrade \</span><br><span class="line">        &amp;&amp; python3 -m pip install ortools</span><br></pre></td></tr></table></figure>
+<p>这里<code>FROM</code>后面所跟随的基础镜像是必须在本地所具备的，可以在<code>docker images</code>里面看到的才行。最好也在本地通过运行<code>docker run your_iamge</code>来测试一下这个容器镜像是否正常工作，因为有些容器镜像必须要跟随版本号才能正常使用。在上述dockerfile中我们先对<code>pip</code>管理工具做了一个升级，然后才安装<code>ortools</code>工具包。有一个需要注意的点是，我们也可以选择使用多次的RUN来制作一个dockerfile，但是这会导致添加了多层的镜像，因此最好我们是可以用命令拼接的方式一次性完成所有的任务，这样只会增加一层镜像（截图来自于参考链接2）：</p>
+<p><img src="https://img2020.cnblogs.com/blog/2277440/202103/2277440-20210329190523824-1981099693.png"></p>
+<p>按照上述流程编写好dockerfile之后，我们就可以使用<code>docker build</code>来构建一个本地的容器镜像：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root ortools]# docker build -t dechin/ortools:v1 .</span><br><span class="line">Sending build context to Docker daemon  2.048kB</span><br><span class="line">Step 1/2 : FROM rackspacedot/python37</span><br><span class="line"> ---&gt; ab7083b6c7c4</span><br><span class="line">Step 2/2 : RUN python3 -m pip install pip --upgrade     &amp;&amp; python3 -m pip install ortools</span><br><span class="line"> ---&gt; Running <span class="keyword">in</span> ff6b1971bdc9</span><br><span class="line">Requirement already satisfied: pip <span class="keyword">in</span> /usr/local/lib/python3.7/site-packages (20.3.1)</span><br><span class="line">Collecting pip</span><br><span class="line">  Downloading pip-21.0.1-py3-none-any.whl (1.5 MB)</span><br><span class="line">Installing collected packages: pip</span><br><span class="line">  Attempting uninstall: pip</span><br><span class="line">    Found existing installation: pip 20.3.1</span><br><span class="line">    Uninstalling pip-20.3.1:</span><br><span class="line">      Successfully uninstalled pip-20.3.1</span><br><span class="line">Successfully installed pip-21.0.1</span><br><span class="line">Collecting ortools</span><br><span class="line">  Downloading ortools-8.2.8710-cp37-cp37m-manylinux1_x86_64.whl (14.2 MB)</span><br><span class="line">Collecting protobuf&gt;=3.14.0</span><br><span class="line">  Downloading protobuf-3.15.6-cp37-cp37m-manylinux1_x86_64.whl (1.0 MB)</span><br><span class="line">Collecting absl-py&gt;=0.11</span><br><span class="line">  Downloading absl_py-0.12.0-py3-none-any.whl (129 kB)</span><br><span class="line">Requirement already satisfied: six <span class="keyword">in</span> /usr/local/lib/python3.7/site-packages (from absl-py&gt;=0.11-&gt;ortools) (1.15.0)</span><br><span class="line">Installing collected packages: protobuf, absl-py, ortools</span><br><span class="line">Successfully installed absl-py-0.12.0 ortools-8.2.8710 protobuf-3.15.6</span><br><span class="line">Removing intermediate container ff6b1971bdc9</span><br><span class="line"> ---&gt; b9ff988385a5</span><br><span class="line">Successfully built b9ff988385a5</span><br><span class="line">Successfully tagged dechin/ortools:v1</span><br></pre></td></tr></table></figure>
+<p>我们可以看到2条dockerfile的指令的运行结果都在屏幕上输出，显示是成功安装了的。在执行完build之后，我们可以在本地的images仓库里面看到这个新的容器镜像：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root ortools]# docker images</span><br><span class="line">REPOSITORY                                                 TAG       IMAGE ID       CREATED          SIZE</span><br><span class="line">dechin/ortools                                             v1        b9ff988385a5   35 seconds ago   1.09GB</span><br></pre></td></tr></table></figure>
+<p>我们也可以测试一下这个容器镜像的功能是否正常：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root ortools]# docker run -it dechin/ortools:v1 /bin/bash</span><br><span class="line">root@198255eacb30:/# python3</span><br><span class="line">Python 3.7.9 (default, Nov 18 2020, 14:29:12) </span><br><span class="line">[GCC 6.3.0 20170516] on linux</span><br><span class="line">Type <span class="string">&quot;help&quot;</span>, <span class="string">&quot;copyright&quot;</span>, <span class="string">&quot;credits&quot;</span> or <span class="string">&quot;license&quot;</span> <span class="keyword">for</span> more information.</span><br><span class="line">&gt;&gt;&gt; import ortools</span><br><span class="line">&gt;&gt;&gt; </span><br></pre></td></tr></table></figure>
+<p>通过执行一个简单的python指令我们可以看到<code>ortools</code>这个工具已经被成功的部署在容器镜像内，在下一个章节中我们会介绍如何使用<code>ortools</code>来解决一个实际问题。当然，上述测试方案也有一个更加简单的方法，使用<code>-c</code>标签来运行代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root ortools]# docker run dechin/ortools:v1 python3 -c <span class="string">&quot;import ortools;print(&#x27;hello&#x27;)&quot;</span></span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
+
+<p>这里再补充介绍一下在docker中如何删除一个容器镜像的方法，那就是使用<code>rmi</code>和<code>rm</code>指令。这两个指令也容易区分，如果是在<code>docker images</code>指令下找到的容器镜像，那就用<code>rmi</code>来进行删除，如果是在<code>docker ps</code>里面看到的容器，那就用<code>rm</code>来删除，以下是两个示例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root ortools]# docker rmi cplex-py37</span><br><span class="line">Error response from daemon: conflict: unable to remove repository reference <span class="string">&quot;cplex-py37&quot;</span> (must force) - container 7ce9dbee3e55 is using its referenced image 34e272969701</span><br><span class="line">[dechin-root ortools]# docker rmi -f cplex-py37</span><br><span class="line">Untagged: cplex-py37:latest</span><br><span class="line">Deleted: sha256:34e2729697010b1320c2f7dbfd1fc45004e9ffae6a1d26ffb8748b5627cb2224</span><br></pre></td></tr></table></figure>
+<p>上面这个用例是表示我们在<code>docker images</code>中有一个名为<code>cplex-py37</code>的容器镜像，其实也是在上一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cplex.html#">博客</a>中制作的产物。假如我们需要删除这个镜像，就用删除的<code>rmi</code>指令。当我们第一次尝试删除的时候，我们收到一个提示，关于一些冲突的提示。假如我们认定了这个冲突并不影响我们的操作，那么我们可以强制删除，也就是加上<code>-f</code>指令。</p>
+<p>另外也展示一下<code>rm</code>指令的使用场景。假如我们使用<code>docker ps -n 5</code>查看过去执行的最近5条指令，并且需要删除第一条镜像id为<code>2df3</code>的容器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root ortools]# docker ps -n 5</span><br><span class="line">CONTAINER ID   IMAGE                   COMMAND       CREATED        STATUS                      PORTS     NAMES</span><br><span class="line">2df3fcc803e0   34e272969701            <span class="string">&quot;/bin/bash&quot;</span>   20 hours ago   Exited (0) 20 hours ago               bold_colden</span><br><span class="line">c766ed62d149   rackspacedot/python37   <span class="string">&quot;/bin/bash&quot;</span>   20 hours ago   Exited (0) 20 hours ago               xenodochial_ardinghelli</span><br><span class="line">af037db88540   cplex                   <span class="string">&quot;/bin/bash&quot;</span>   21 hours ago   Exited (0) 12 minutes ago             magical_cori</span><br><span class="line">e8c49c211039   cplex                   <span class="string">&quot;/bin/bash&quot;</span>   21 hours ago   Exited (0) 21 hours ago               gracious_babbage</span><br><span class="line">1e053a1b6330   cplex                   <span class="string">&quot;/bin/bash&quot;</span>   21 hours ago   Exited (0) 21 hours ago               suspicious_ride</span><br><span class="line">[dechin-root ortools]# docker <span class="built_in">rm</span> 2df3</span><br><span class="line">2df3</span><br><span class="line">[dechin-root ortools]# docker ps -n 5</span><br><span class="line">CONTAINER ID   IMAGE                   COMMAND                  CREATED        STATUS                      PORTS     NAMES</span><br><span class="line">c766ed62d149   rackspacedot/python37   <span class="string">&quot;/bin/bash&quot;</span>              20 hours ago   Exited (0) 20 hours ago               xenodochial_ardinghelli</span><br><span class="line">af037db88540   cplex                   <span class="string">&quot;/bin/bash&quot;</span>              21 hours ago   Exited (0) 12 minutes ago             magical_cori</span><br><span class="line">e8c49c211039   cplex                   <span class="string">&quot;/bin/bash&quot;</span>              21 hours ago   Exited (0) 21 hours ago               gracious_babbage</span><br><span class="line">1e053a1b6330   cplex                   <span class="string">&quot;/bin/bash&quot;</span>              21 hours ago   Exited (0) 21 hours ago               suspicious_ride</span><br><span class="line">de7f22ac259b   cplex                   <span class="string">&quot;python3 -m pip inst…&quot;</span>   21 hours ago   Exited (0) 21 hours ago               hardcore_meitner</span><br></pre></td></tr></table></figure>
+<p>可以看到用<code>rm</code>删除之后就不会在最新的结果查询中出现这个容器，这也方便我们释放不需要的容器资源给本地环境。</p>
+<h1 id="ortools案例"><a href="#ortools案例" class="headerlink" title="ortools案例"></a>ortools案例</h1><p>这里我们还是使用上一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cplex.html#">博客</a>中所提到的<code>单背包问题（Knapsack Problem）</code>来进行测试。相关问题的定义如下：<br><img src="https://img2020.cnblogs.com/blog/2277440/202103/2277440-20210329193208718-1923918071.png"><br>当然在ortools的案例中我们不需要写lp文件，只是借用这个lp文件来展示一下我们的约束条件和目标函数。这个问题的含义也在上一篇博客中介绍过了，这里我们直接截图引用：<br><img src="https://img2020.cnblogs.com/blog/2277440/202103/2277440-20210329193331977-1295939402.png"></p>
+<h2 id="ortools求解器的使用"><a href="#ortools求解器的使用" class="headerlink" title="ortools求解器的使用"></a>ortools求解器的使用</h2><p>在了解清楚问题的背景之后，现在我们就可以开始写测试代码了，首先我们也是从进入docker容器开始，然后出于方便我们直接在python指令中执行相关的测试（这里的测试代码我们参考了官方文档，也就是本文的参考链接1）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[dechin-root ortools]<span class="comment"># docker run -it dechin/ortools:v1 /bin/bash</span></span><br><span class="line">root@3882b83959c8:/<span class="comment"># python3</span></span><br><span class="line">Python <span class="number">3.7</span><span class="number">.9</span> (default, Nov <span class="number">18</span> <span class="number">2020</span>, <span class="number">14</span>:<span class="number">29</span>:<span class="number">12</span>) </span><br><span class="line">[GCC <span class="number">6.3</span><span class="number">.0</span> <span class="number">20170516</span>] on linux</span><br><span class="line"><span class="type">Type</span> <span class="string">&quot;help&quot;</span>, <span class="string">&quot;copyright&quot;</span>, <span class="string">&quot;credits&quot;</span> <span class="keyword">or</span> <span class="string">&quot;license&quot;</span> <span class="keyword">for</span> more information.</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> ortools.linear_solver <span class="keyword">import</span> pywraplp</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>solver = pywraplp.Solver.CreateSolver(<span class="string">&#x27;SCIP&#x27;</span>) <span class="comment"># 这里使用了第三方后端SCIP</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x1 = solver.IntVar(<span class="number">0.0</span>, <span class="number">1.0</span>, <span class="string">&#x27;x1&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x2 = solver.IntVar(<span class="number">0.0</span>, <span class="number">1.0</span>, <span class="string">&#x27;x2&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x3 = solver.IntVar(<span class="number">0.0</span>, <span class="number">1.0</span>, <span class="string">&#x27;x3&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> (<span class="string">&#x27;Number of variables = &#x27;</span>, solver.NumVariables()) <span class="comment"># 参数数量</span></span><br><span class="line">Number of variables =  <span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>solver.Add(<span class="number">3</span> * x1 + <span class="number">4</span> * x2 + <span class="number">5</span> * x3 &lt;= <span class="number">8</span>)</span><br><span class="line">&lt;ortools.linear_solver.pywraplp.Constraint; proxy of &lt;Swig Object of <span class="built_in">type</span> <span class="string">&#x27;operations_research::MPConstraint *&#x27;</span> at <span class="number">0x7f9013411de0</span>&gt; &gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>solver.Maximize(<span class="number">2</span> * x1 + <span class="number">3</span> * x2 + <span class="number">4</span> * x3)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>status = solver.Solve()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(<span class="string">&#x27;Number of constraints =&#x27;</span>, solver.NumConstraints()) <span class="comment"># 约束条件数量</span></span><br><span class="line">Number of constraints = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(<span class="string">&#x27;Objective value =&#x27;</span>, solver.Objective().Value()) <span class="comment"># 最终解的函数值</span></span><br><span class="line">Objective value = <span class="number">6.0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(<span class="string">&#x27;x1 =&#x27;</span>, x1.solution_value())</span><br><span class="line">x1 = <span class="number">1.0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(<span class="string">&#x27;x2 =&#x27;</span>, x2.solution_value())</span><br><span class="line">x2 = <span class="number">0.0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(<span class="string">&#x27;x3 =&#x27;</span>, x3.solution_value())</span><br><span class="line">x3 = <span class="number">1.0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> (status == pywraplp.Solver.OPTIMAL) <span class="comment"># 是否最优解？</span></span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p>在这个案例中我们使用了一个第三方的求解器后端来进行计算，叫<code>SCIP</code>。我们得到的最终解已经达到了最优解，这个我们在上一篇博客中也分析过了。到这里为止，我们就成功的使用ortools提供的框架求解了一个实际的背包问题。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>在本地构建基于Docker的编程环境是一个兼容性和可用性非常强的解决方案，这里我们介绍了一个使用Dockerfile来构建Docker容器镜像的简单实例。同时也用谷歌所主导的开源线性规划求解器ortools来测试这个容器化的编程环境解决方案，最终我们用ortools成功的求解了一个单背包问题，并且跟前面一篇博客中所介绍的IBM主导的cplex一样都得到了问题的最优解。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/ortools.html">https://www.cnblogs.com/dechinphy/p/ortools.html</a><br>作者ID：DechinPhy<br>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://developers.google.cn/optimization/mip/integer_opt?hl=zh-cn">https://developers.google.cn/optimization/mip/integer_opt?hl=zh-cn</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.runoob.com/docker/docker-dockerfile.html">https://www.runoob.com/docker/docker-dockerfile.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/cplex.html#">https://www.cnblogs.com/dechinphy/p/cplex.html#</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2021/03/29/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E5%AE%9A%E4%B9%89/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          Python基础之异常定义
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/03/28/%E5%9C%A8docker%E5%AE%B9%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8cplex-python37/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">在docker容器中使用cplex-python37</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=创建ortools的Dockerfile - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2021%2F03%2F29%2F%25E5%2588%259B%25E5%25BB%25BAortools%25E7%259A%2584Dockerfile%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=创建ortools的Dockerfile - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2021%2F03%2F29%2F%25E5%2588%259B%25E5%25BB%25BAortools%25E7%259A%2584Dockerfile%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=创建ortools的Dockerfile - Hexo&url=http://dechinphy.github.io/2021/03/29/%E5%88%9B%E5%BB%BAortools%E7%9A%84Dockerfile/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

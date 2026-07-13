@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>为R Markdown配置TinyTex编译环境 | Hexo</title>
+
+    <meta name="description" content="&lt;p&gt;上一篇博客《通过R Studio用Markdown写Beamer》的最后遗留了一个问题，那就是如何在本地win11的系统环境下快捷方便的构建一个pdflatex的环境。常规方案都是安装一个TexLive和下载一大堆的扩展文件，或者用Docker的方案去构建一个完整的环境，但是都很费时间精力。偶然的情况下看到了益辉大神基于TexLive修改了一个R的扩展包TinyTex。经过测试，这毫无疑问是目前在本地构建R Markdown完整环境的最佳解决方案。&lt;/p&gt;">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "为R Markdown配置TinyTex编译环境 | Hexo"  />
+    <meta property="og:description" content= "&lt;p&gt;上一篇博客《通过R Studio用Markdown写Beamer》的最后遗留了一个问题，那就是如何在本地win11的系统环境下快捷方便的构建一个pdflatex的环境。常规方案都是安装一个TexLive和下载一大堆的扩展文件，或者用Docker的方案去构建一个完整的环境，但是都很费时间精力。偶然的情况下看到了益辉大神基于TexLive修改了一个R的扩展包TinyTex。经过测试，这毫无疑问是目前在本地构建R Markdown完整环境的最佳解决方案。&lt;/p&gt;" />
+    <meta property="og:url" content="http://dechinphy.github.io/2022/03/30/%E4%B8%BAR-Markdown%E9%85%8D%E7%BD%AETinyTex%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="John Doe" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="&lt;p&gt;上一篇博客《通过R Studio用Markdown写Beamer》的最后遗留了一个问题，那就是如何在本地win11的系统环境下快捷方便的构建一个pdflatex的环境。常规方案都是安装一个TexLive和下载一大堆的扩展文件，或者用Docker的方案去构建一个完整的环境，但是都很费时间精力。偶然的情况下看到了益辉大神基于TexLive修改了一个R的扩展包TinyTex。经过测试，这毫无疑问是目前在本地构建R Markdown完整环境的最佳解决方案。&lt;/p&gt;" />
+    <meta name="twitter:title" content="为R Markdown配置TinyTex编译环境 | Hexo"/>
+    <meta name="twitter:description" content="&lt;p&gt;上一篇博客《通过R Studio用Markdown写Beamer》的最后遗留了一个问题，那就是如何在本地win11的系统环境下快捷方便的构建一个pdflatex的环境。常规方案都是安装一个TexLive和下载一大堆的扩展文件，或者用Docker的方案去构建一个完整的环境，但是都很费时间精力。偶然的情况下看到了益辉大神基于TexLive修改了一个R的扩展包TinyTex。经过测试，这毫无疑问是目前在本地构建R Markdown完整环境的最佳解决方案。&lt;/p&gt;"/>
+    <script type="application/ld+json">
+        {
+            "description": "&lt;p&gt;上一篇博客《通过R Studio用Markdown写Beamer》的最后遗留了一个问题，那就是如何在本地win11的系统环境下快捷方便的构建一个pdflatex的环境。常规方案都是安装一个TexLive和下载一大堆的扩展文件，或者用Docker的方案去构建一个完整的环境，但是都很费时间精力。偶然的情况下看到了益辉大神基于TexLive修改了一个R的扩展包TinyTex。经过测试，这毫无疑问是目前在本地构建R Markdown完整环境的最佳解决方案。&lt;/p&gt;",
+            "author": { "@type": "Person", "name": "John Doe" },
+            "@type": "BlogPosting",
+            "url": "http://dechinphy.github.io/2022/03/30/%E4%B8%BAR-Markdown%E9%85%8D%E7%BD%AETinyTex%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://dechinphy.github.io/images/avatar.jpg"
+            },
+            "name": "John Doe"
+            },
+            "headline": "为R Markdown配置TinyTex编译环境 | Hexo",
+            "datePublished": "2022-03-30T09:07:07.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://dechinphy.github.io/2022/03/30/%E4%B8%BAR-Markdown%E9%85%8D%E7%BD%AETinyTex%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-avatar avatar avatar-sm">
+                <img src="/images/avatar.jpg" alt="John Doe">
+            </div>
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/">Hexo</a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+                <a href="/">Home</a>
+                
+                <a href="/archives">Archives</a>
+                
+                <a href="/categories">Categories</a>
+                
+                <a href="/tags">Tags</a>
+                
+                <a href="/about">About</a>
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                    <a href="/">Home</a>
+                    
+                    <a href="/archives">Archives</a>
+                    
+                    <a href="/categories">Categories</a>
+                    
+                    <a href="/tags">Tags</a>
+                    
+                    <a href="/about">About</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-cuidMJWkPUkMPYqpK_oAQ-RpQ" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      为R Markdown配置TinyTex编译环境
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2022-03-30T09:07:07.000Z" itemprop="datePublished">2022-03-30</time>
+</div>
+
+            
+            <div class="article-category">
+                <a class="article-category-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a>
+            </div>
+            
+
+            
+
+            
+            <div class="article-busuanzi">
+                <span id="busuanzi_value_page_pv">N</span> 人看过
+            </div>
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>上一篇博客《通过R Studio用Markdown写Beamer》的最后遗留了一个问题，那就是如何在本地win11的系统环境下快捷方便的构建一个pdflatex的环境。常规方案都是安装一个TexLive和下载一大堆的扩展文件，或者用Docker的方案去构建一个完整的环境，但是都很费时间精力。偶然的情况下看到了益辉大神基于TexLive修改了一个R的扩展包TinyTex。经过测试，这毫无疑问是目前在本地构建R Markdown完整环境的最佳解决方案。</p>
+<span id="more"></span>
+
+<h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在前面一篇<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/rmarkdown.html">博客</a>中，我们介绍了一些关于在Windows系统上安装R Studio来编写R Markdown，最后编译成Beamer的演示文档的过程。而在Windows系统的使用过程中发现，编译过程还是要依赖于pdflatex的，而根据以往的经验，在Windows上搞Latex还是略显麻烦。所以在前一篇博客中，才给出了本地编译成Tex文件，最后切换到Overleaf上去编译成pdf的下策。这里我们将给出另外一套解决方案：通过TinyTex来部署R Markdown环境，TinyTeX 是益辉大神基于 TeX Live 管理工具修改的 R 拓展包。</p>
+<p>在写一些学术演示文档时，经常有可能用到Beamer——一种Latex的学术风PPT模板，比如下图所示的这种：</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220329161005136-1694474482.png">
+</div>
+
+<p>这种风格的演示文档有几个明显的优点：简约、严肃、可以用Latex敲公式和推导、可微调、定制化程度高，而且一般都是免费的。当然也有一些明显的缺点：写Latex麻烦，部署Latex环境更麻烦。因此，更多的人都是硬着头皮在Overleaf上写Latex，这也是被逼无奈。但是我们看到在各大平台用Markdown写博客，或者在开源代码仓库中用Markdown写说明文档，都是非常的美观，那有没有可能用Markdown替代Latex，至少在演示文档上用Markdown替代Latex呢？对于这个问题，R Markdown给出了肯定的回答。</p>
+<h1 id="TinyTex环境搭建"><a href="#TinyTex环境搭建" class="headerlink" title="TinyTex环境搭建"></a>TinyTex环境搭建</h1><p>打开R Studio的R语言终端窗口，输入如下指令：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">install.packages<span class="punctuation">(</span><span class="string">&#x27;tinytex&#x27;</span><span class="punctuation">)</span></span><br><span class="line">tinytex<span class="operator">::</span>install_tinytex<span class="punctuation">(</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<p>安装完成后，在R Studio界面点击Preview-&gt;Beamer，就可以直接弹出编译好的pdf的预览：</p>
+<div align=center>
+	<img src="https://img2022.cnblogs.com/blog/2277440/202203/2277440-20220331091819752-1465135796.png">
+</div>
+
+<p>这样我们就完成了本地的完整R Markdown的环境搭建，可以通过Markdown来写Beamer了。</p>
+<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><p>上一篇博客《通过R Studio用Markdown写Beamer》的最后遗留了一个问题，那就是如何在本地win11的系统环境下快捷方便的构建一个pdflatex的环境。常规方案都是安装一个TexLive和下载一大堆的扩展文件，或者用Docker的方案去构建一个完整的环境，但是都很费时间精力。偶然的情况下看到了益辉大神基于TexLive修改了一个R的扩展包TinyTex。经过测试，这毫无疑问是目前在本地构建R Markdown完整环境的最佳解决方案。</p>
+<h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/tinytex.html">https://www.cnblogs.com/dechinphy/p/tinytex.html</a></p>
+<p>作者ID：DechinPhy</p>
+<p>更多原著文章请参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
+<p>打赏专用链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
+<p>腾讯云专栏同步：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/column/91958">https://cloud.tencent.com/developer/column/91958</a></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/rmarkdown.html">https://www.cnblogs.com/dechinphy/p/rmarkdown.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/4fa7c107fe9c">https://www.jianshu.com/p/4fa7c107fe9c</a></li>
+<li><a target="_blank" rel="noopener" href="https://yihui.org/tinytex/cn/">https://yihui.org/tinytex/cn/</a></li>
+</ol>
+
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+  <div class="article-copyright hairline">
+    <p>
+      本作品采用  <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 (CC BY-NC-ND 4.0)</a> 进行许可。
+    </p>
+  </div>
+  
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2022/04/01/Python3%E9%80%9A%E8%BF%87%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%AE%BF%E9%97%AE%E4%B8%8E%E4%BF%AE%E6%94%B9%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">下一篇</div>
+      <div class="article-nav-title">
+        
+          Python3通过字符串访问与修改局部变量
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/03/29/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9F%A9%E9%98%B5%E8%AF%AD%E8%A8%80/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">上一篇</div>
+      <div class="article-nav-title">量子计算基础——矩阵语言</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">分享</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=为R Markdown配置TinyTex编译环境 - Hexo&url=http%3A%2F%2Fdechinphy.github.io%2F2022%2F03%2F30%2F%25E4%25B8%25BAR-Markdown%25E9%2585%258D%25E7%25BD%25AETinyTex%25E7%25BC%2596%25E8%25AF%2591%25E7%258E%25AF%25E5%25A2%2583%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=为R Markdown配置TinyTex编译环境 - Hexo&u=http%3A%2F%2Fdechinphy.github.io%2F2022%2F03%2F30%2F%25E4%25B8%25BAR-Markdown%25E9%2585%258D%25E7%25BD%25AETinyTex%25E7%25BC%2596%25E8%25AF%2591%25E7%258E%25AF%25E5%25A2%2583%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=为R Markdown配置TinyTex编译环境 - Hexo&url=http://dechinphy.github.io/2022/03/30/%E4%B8%BAR-Markdown%E9%85%8D%E7%BD%AETinyTex%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-cate">
+    <div class="widget-title"><span>Categories</span></div>
+    <div class="widget-inner">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/CUDA%E7%BC%96%E7%A8%8B/">CUDA编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2026/07/13/hello-world-1/">hello-world</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/07/%E7%94%A8Zettlr%E5%86%99Latex-Beamer%E9%A3%8E%E6%A0%BC%E7%9A%84%E6%BC%94%E7%A4%BA%E6%96%87%E6%A1%A3/">用Zettlr写Latex Beamer风格的演示文档</a>
+          </li>
+        
+          <li>
+            <a href="/2026/07/02/SGLang%E6%9C%AC%E5%9C%B0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9C%8D%E5%8A%A1%E7%BC%93%E5%AD%98%E6%B8%85%E7%90%86/">SGLang本地大模型服务缓存清理</a>
+          </li>
+        
+          <li>
+            <a href="/2026/06/24/%E5%9F%BA%E4%BA%8EQwen3-Code-Next+KTransformer%E7%9A%84%E6%9C%AC%E5%9C%B0Vibe-Coding/">基于Qwen3-Code-Next+KTransformer的本地Vibe Coding</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+            Hexo &copy; 2026<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
