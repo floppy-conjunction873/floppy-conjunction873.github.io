@@ -151,7 +151,7 @@
   
     
       <article
-id="post-Python实现GPU加速的基本操作"
+id="post-使用MindSpore的线性神经网络拟合非线性函数"
 class="article article-type-post"
 >
 
@@ -162,11 +162,11 @@ class="article article-type-post"
 
     <div class="article-body">
     <header class="article-title">
-        <a href="/2021/06/10/Python%E5%AE%9E%E7%8E%B0GPU%E5%8A%A0%E9%80%9F%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">Python实现GPU加速的基本操作</a>
+        <a href="/2021/05/14/%E4%BD%BF%E7%94%A8MindSpore%E7%9A%84%E7%BA%BF%E6%80%A7%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%8B%9F%E5%90%88%E9%9D%9E%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0/">使用MindSpore的线性神经网络拟合非线性函数</a>
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>本文针对于Python中使用Numba的GPU加速程序的一些基本概念和实现的方法，比如GPU中的线程和模块的概念，以及给出了一个矢量加法的代码案例，进一步说明了GPU加速的效果。需要注意的是，由于Python中的Numba实现是一种即时编译的技术，因此第一次运算时的时间会明显较长，所以我们一般说GPU加速是指从第二步开始的运行时间。对于一些工业和学界常见的场景，比如分子动力学模拟中的系统演化，或者是深度学习与量子计算中的参数优化，都是相同维度参数多步运算的一个过程，非常适合使用即时编译的技术，配合以GPU高度并行化的加速效果，能够在实际工业和学术界的各种场景下发挥巨大的作用。</p>
+        <p>基于前面所介绍的MindSpore框架使用线性神经网络来拟合线性函数的一个方案，这里我们将其推广到多参数、多幂次的函数，甚至是一些初等的函数。但是对于更加复杂的嵌套函数，可能还要思考一下更加普适的解决方案。</p>
         
     </div>
     </div>
@@ -181,7 +181,289 @@ class="article article-type-post"
 <footer class="article-footer">
     <div class="article-more-info">
     <div class="article-date">
-  <time datetime="2021-06-10T07:34:00.000Z" itemprop="datePublished">2021-06-10</time>
+  <time datetime="2021-05-14T09:29:40.000Z" itemprop="datePublished">2021-05-14</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-Open-Babel的安装与使用"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/05/10/Open-Babel%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/">Open Babel的安装与使用</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文主要介绍了在化学领域中常用的文件格式转化工具Open Babel的两种安装方法，与基本的使用案例。其中如果选择手动编译安装可以使用最新的release版本，如果使用conda就只能使用老旧的稳定版本，但是可以很大程度上简化安装的步骤。在基本的案例中我们演示了使用obabel来将一个xyz坐标格式的文件转化成一个SMILES表达式。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-05-10T03:09:15.000Z" itemprop="datePublished">2021-05-10</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-pysmiles：一个用于读写SMILES表达式的python库"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/05/10/pysmiles%EF%BC%9A%E4%B8%80%E4%B8%AA%E7%94%A8%E4%BA%8E%E8%AF%BB%E5%86%99SMILES%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84python%E5%BA%93/">pysmiles：一个用于读写SMILES表达式的python库</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了一款基于python语言的SMILES化学表达式的读写SDK，使用openSMILES表达式所定义的分子结构是非常精简的，但是其中的规则又非常的多，因此使用一款友好的SMILES表达式能够大大的缩减解析的成本。并且pysmiles结合了一款非常常用的python的拓扑网络结构表示SDK——networkx，使得对SMILES表达式的结果分析更加的人性化。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-05-10T01:32:41.000Z" itemprop="datePublished">2021-05-10</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-Ubuntu-Linux下的PDF阅读器推荐——Okular"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/05/08/Ubuntu-Linux%E4%B8%8B%E7%9A%84PDF%E9%98%85%E8%AF%BB%E5%99%A8%E6%8E%A8%E8%8D%90%E2%80%94%E2%80%94Okular/">Ubuntu Linux下的PDF阅读器推荐——Okular</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>推荐一款在Ubuntu Linux下挺好用的PDF阅读器——Okular</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-05-08T03:20:22.000Z" itemprop="datePublished">2021-05-08</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-分子动力学模拟软件VMD的安装与使用"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/05/07/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6%E6%A8%A1%E6%8B%9F%E8%BD%AF%E4%BB%B6VMD%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/">分子动力学模拟软件VMD的安装与使用</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文重点介绍了VMD分子动力学模拟可视化软件的安装与基本使用方法，VMD是一款非常小而精致的可视化工具，在业界也备受推崇。如果只是用于做分子模型的展示，功能是完全足够的，如果要执行更多的操作，需要掌握tcl语言，当然这也是一个坑点。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-05-07T06:34:16.000Z" itemprop="datePublished">2021-05-07</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-基于Docker安装的MindSpore-1.2-GPU版本"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/05/06/%E5%9F%BA%E4%BA%8EDocker%E5%AE%89%E8%A3%85%E7%9A%84MindSpore-1.2-GPU%E7%89%88%E6%9C%AC/">基于Docker安装的MindSpore-1.2 GPU版本</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>继上一篇文章介绍了MindSpore的CPU版本的Docker容器化部署之后，MindSpore官方团队推出了MindSpore的GPU版本的Docker容器化部署方案，本文针对这一方案进行了安装测试，并且对于其中一些安装的时候可以遇到的问题的细节进行了处理。之所以采用容器化的解决方案，主要是为了做到SDK环境与编程环境的隔离，释放本地环境配置与部署的压力。当然，也使得本地的开发环境更加的“干净”。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-05-06T08:26:20.000Z" itemprop="datePublished">2021-05-06</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-python3之lambda表达式"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/05/04/python3%E4%B9%8Blambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/">python3之lambda表达式</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文主要展示了一些lambda表达式的使用示例，通过这些示例，我们可以了解到lambda表达式的常用语法以及使用的场景。在一般情况下，其最大的意义还是简化了python中函数的定义方式，在可读性上远不如def所定义的函数。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-05-04T13:16:50.000Z" itemprop="datePublished">2021-05-04</time>
 </div>
     
         <div class="article-category">
@@ -198,7 +480,7 @@ class="article article-type-post"
   
     
       <article
-id="post-用华为MindSpore进行分布式训练"
+id="post-python3使用迭代生成器yield减少内存占用"
 class="article article-type-post"
 >
 
@@ -209,11 +491,11 @@ class="article article-type-post"
 
     <div class="article-body">
     <header class="article-title">
-        <a href="/2021/06/08/%E7%94%A8%E5%8D%8E%E4%B8%BAMindSpore%E8%BF%9B%E8%A1%8C%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83/">用华为MindSpore进行分布式训练</a>
+        <a href="/2021/05/04/python3%E4%BD%BF%E7%94%A8%E8%BF%AD%E4%BB%A3%E7%94%9F%E6%88%90%E5%99%A8yield%E5%87%8F%E5%B0%91%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8/">python3使用迭代生成器yield减少内存占用</a>
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>这篇文章我们主要探讨如何去部署一个基于MindSpore框架的分布式训练环境，在MindSpore环境已经配置好的情况下，我们只需要安装好openmpi和nccl这两个工具就可以实现分布式的训练，在文中我们已经给出了相应的示例。虽然分布式与并行技术的目的是为了提升性能，但不是说对所有的场景都能够起到加速的作用，比如文章中的案例就没有加速的效果。这其实是因为我们的用例场景太简单了，纵观整个训练过程，GPU的使用率不到10%，在这种情况下还要考虑上通信的开销，自然是没有放在同一个卡上去训练来得快。这也给我们一个启发，考虑使用分布式和并行计算的技术时，一定也要先评估好问题本身是否适用于并行化的处理，否则是达不到预期的加速的目的的。</p>
+        <p>本文介绍了python的迭代器yield，其实关于yield，我们可以简单的将其理解为单个元素的return。这样不仅就初步理解了yield的使用语法，也能够大概了解到yield的优势，也就是在计算过程中每次只占用一个元素的内存，而不需要一直存储大量的元素在内存中。</p>
         
     </div>
     </div>
@@ -228,148 +510,7 @@ class="article article-type-post"
 <footer class="article-footer">
     <div class="article-more-info">
     <div class="article-date">
-  <time datetime="2021-06-08T03:21:07.000Z" itemprop="datePublished">2021-06-08</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-用华为MindSpore框架训练数据库类型的数据集"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/06/01/%E7%94%A8%E5%8D%8E%E4%B8%BAMindSpore%E6%A1%86%E6%9E%B6%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%95%B0%E6%8D%AE%E9%9B%86/">用华为MindSpore框架训练数据库类型的数据集</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文按照数据流的顺序，分别介绍了：使用sqlite3数据库存储数据、从sqlite3数据库中读取数据、使用从sqlite3数据库中的数据构造MindSpore可识别的训练数据集。对于输入的数据量比较大的场景，我们不太可能将全部的数据都加载到内存中，这就要考虑各种可以快速存储和读取的方案，数据库就是一种比较常见的方案。而sqlite3作为一款非常轻量级的数据库，在大部分的Python3中都是内置的，省去了很多编译安装的繁琐。当然性能表现可能不如其他的数据库，但是在我们这边给定的场景下，表现还是非常优秀的！</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-06-01T07:51:37.000Z" itemprop="datePublished">2021-06-01</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-MindSpore激活函数总结与测试"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/05/26/MindSpore%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93%E4%B8%8E%E6%B5%8B%E8%AF%95/">MindSpore激活函数总结与测试</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>这篇文章主要介绍了Softplus、Sigmoid、Softmax和Tanh这4种激活函数，激活函数在机器学习领域中主要起到的是一个决策性质的作用，在分类器中有重要的应用价值。而除了这4种激活函数之外，MindSpore还实现了Softsign的激活函数，但是目前只能在昇腾平台上使用，其他的除了Softplus只能在GPU和昇腾平台运行之外，都是全平台支持的（CPU、GPU、昇腾）。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-05-26T06:35:18.000Z" itemprop="datePublished">2021-05-26</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-python3读取文件指定行的三种方案"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/05/24/python3%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E6%8C%87%E5%AE%9A%E8%A1%8C%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%A1%88/">python3读取文件指定行的三种方案</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文通过4个测试案例分析了在python中读取文件指定行内容的方案，并得到了一些运行耗时的数据。从需求上来说，如果是对于小规模的数据，比如几百行规模的数据，建议使用readline循环遍历来操作，速度也相当不错，或者是linecache中的函数实现也是可以的，甚至可以直接用readlines将整个文本内容加载到内存中。但是对于数据规模比较大的场景，比如超过了千万行的级别，那么使用sed指令的方式对指定行内容进行读取的方式，应该是所有方式中最快速的。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-05-24T02:15:37.000Z" itemprop="datePublished">2021-05-24</time>
+  <time datetime="2021-05-04T08:58:47.000Z" itemprop="datePublished">2021-05-04</time>
 </div>
     
         <div class="article-category">
@@ -386,7 +527,7 @@ class="article article-type-post"
   
     
       <article
-id="post-在C++中调用Python"
+id="post-基于Docker配置本地Gitlab"
 class="article article-type-post"
 >
 
@@ -397,11 +538,11 @@ class="article article-type-post"
 
     <div class="article-body">
     <header class="article-title">
-        <a href="/2021/05/20/%E5%9C%A8C++%E4%B8%AD%E8%B0%83%E7%94%A8Python/">在C++中调用Python</a>
+        <a href="/2021/05/04/%E5%9F%BA%E4%BA%8EDocker%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0Gitlab/">基于Docker配置本地Gitlab</a>
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>本文介绍了一个在C++内部调用Python中封装的函数或者接口的方法，从环境配置到具体示例都有讲解，并且在其中包含有不少的坑点，需要一步一步去踩。不同的编程语言具有不同的优势，Python轮子众多而语法简单，上手容易，但是性能比较首先，C++的最明显优势就是在于其性能的天然优越性。但是我们不需要对哪一种编程语言有所偏倚，都有所掌握，并且能够有所互通，利用好各自的优势，才能够发挥最大的价值。</p>
+        <p>本文按照操作流程的时间顺序，分别介绍了Gitlab的Docker容器部署、Gitlab平台的基本配置以及基于Git的代码仓基本管理与同步方法。通过掌握这一套的流程，就可以实现在本地构建一个类似于Github的代码托管系统，在企业内网更好的管理私有代码仓库，避免因为在Github上进行代码开发而被其他企业窃取核心技术。</p>
         
     </div>
     </div>
@@ -416,11 +557,11 @@ class="article article-type-post"
 <footer class="article-footer">
     <div class="article-more-info">
     <div class="article-date">
-  <time datetime="2021-05-20T09:20:09.000Z" itemprop="datePublished">2021-05-20</time>
+  <time datetime="2021-05-04T08:07:19.000Z" itemprop="datePublished">2021-05-04</time>
 </div>
     
         <div class="article-category">
-        <a class="article-category-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a>
+        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
         </div>
     
     
@@ -433,7 +574,7 @@ class="article article-type-post"
   
     
       <article
-id="post-C++基础——文件逐行读取与字符匹配"
+id="post-python3函数可变输入参量"
 class="article article-type-post"
 >
 
@@ -444,11 +585,11 @@ class="article article-type-post"
 
     <div class="article-body">
     <header class="article-title">
-        <a href="/2021/05/19/C++%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E9%80%90%E8%A1%8C%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%AD%97%E7%AC%A6%E5%8C%B9%E9%85%8D/">C++基础——文件逐行读取与字符匹配</a>
+        <a href="/2021/05/03/python3%E5%87%BD%E6%95%B0%E5%8F%AF%E5%8F%98%E8%BE%93%E5%85%A5%E5%8F%82%E9%87%8F/">python3函数可变输入参量</a>
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>本文简单的介绍了C++中的三种基础操作：逐行读取文件内容、字符串匹配以及运行时间的统计，并且通过一个简单的范例来实现了这三种基本的功能。相比于python而言，C++的代码编写量肯定要多一些，但是考虑到C++可能带来的效率增益，我们也应当了解其基本的用法以及功能实现。</p>
+        <p>为了使得输入参数的可扩展性更好，python中自带了args和kwargs两种方法，可以用于表示一个tuple类型的可变长度入参。其中args是一系列的一元变量的输入，kwargs是一系列键值对的输入，可以认为是一个二元变量的输入。虽然这两种方案也都可以用自行实现的tuple来替代，但是直接使用这两种定义会节省很多自定义可变入参的繁琐。</p>
         
     </div>
     </div>
@@ -463,152 +604,11 @@ class="article article-type-post"
 <footer class="article-footer">
     <div class="article-more-info">
     <div class="article-date">
-  <time datetime="2021-05-19T09:46:53.000Z" itemprop="datePublished">2021-05-19</time>
+  <time datetime="2021-05-03T10:48:34.000Z" itemprop="datePublished">2021-05-03</time>
 </div>
     
         <div class="article-category">
-        <a class="article-category-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-MindSpore模型验证"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/05/18/MindSpore%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/">MindSpore模型验证</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>在这篇文章中，我们接着前面的博客继续讲MindSpore在训练好机器学习的模型并且保存成文件之后，如何加载并使用测试集加以验证。从测试结果中我们得到的启发是，机器学习的模型的有效性会很大程度上收到训练集的影响，因此最好是能够保障训练集的广泛性。如果测试集的范围大大超出了训练集所能够表示的范围，那么训练的结果误差就会很大。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-05-18T03:49:45.000Z" itemprop="datePublished">2021-05-18</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-MindSpore保存与加载模型"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/05/16/MindSpore%E4%BF%9D%E5%AD%98%E4%B8%8E%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9E%8B/">MindSpore保存与加载模型</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文主要从工程实现的角度测试了一下MindSpore的机器学习模型保存与加载的功能，通过这个功能，我们可以将自己训练好的机器学习模型发布出去供更多的人使用，我们也可以直接使用别人在更好的硬件体系上训练好的模型，或者应用于迁移学习。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-05-16T14:36:04.000Z" itemprop="datePublished">2021-05-16</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-使用ProjectQ生成量子算法指令集"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/05/15/%E4%BD%BF%E7%94%A8ProjectQ%E7%94%9F%E6%88%90%E9%87%8F%E5%AD%90%E7%AE%97%E6%B3%95%E6%8C%87%E4%BB%A4%E9%9B%86/">使用ProjectQ生成量子算法指令集</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文主要从工程实现的角度，讲解在ProjectQ开源量子计算模拟器框架中，实现量子门操作分解与输出的方法。通过这个方法，可以限制量子指令集的范围，将量子算法中不被支持的量子门操作等价（或近似地）变化到量子硬件体系所支持的量子指令集上。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-05-15T02:59:51.000Z" itemprop="datePublished">2021-05-15</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a>
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
         </div>
     
     
@@ -622,7 +622,7 @@ class="article article-type-post"
 
   
     <nav class="pagination">
-        <a class="extend prev" rel="prev" href="/page/23/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="page-number" href="/page/23/">23</a><span class="page-number current">24</span><a class="page-number" href="/page/25/">25</a><a class="page-number" href="/page/26/">26</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><a class="extend next" rel="next" href="/page/25/">Next</a>
+        <a class="extend prev" rel="prev" href="/page/23/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="page-number" href="/page/23/">23</a><span class="page-number current">24</span><a class="page-number" href="/page/25/">25</a><a class="page-number" href="/page/26/">26</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/25/">Next</a>
     </nav>
   
 </div>

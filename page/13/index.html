@@ -151,241 +151,6 @@
   
     
       <article
-id="post-MindSpore报错处理：TypeError--For-&#39;set_context&#39;,-the-pa"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2024/03/22/MindSpore%E6%8A%A5%E9%94%99%E5%A4%84%E7%90%86%EF%BC%9ATypeError--For-'set_context',-the-pa/">MindSpore报错处理：TypeError: For &#39;set_context&#39;, the parameter device_id can not be set repeatedly, origin value [0] has been in effect.</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文主要介绍了一个在使用MindSpore框架进行编程的时候遇到的一个小问题--重复设定运算设备的编号。之所以会出现这个问题，是因为在调用的包里面有对MindSpore的引用，里面还包含了一些基于MindSpore的运算和即时编译，因此如果不给定设备编号的话，MindSpore内部会默认分配一个设备编号。而如果我们在自己的测试案例中又希望指定一个设备编号，那么就要把这个set_context句柄放在引用的最前面。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2024-03-22T01:59:38.000Z" itemprop="datePublished">2024-03-22</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-MindSpore自定义算子中的张量维度问题"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2024/03/12/MindSpore%E8%87%AA%E5%AE%9A%E4%B9%89%E7%AE%97%E5%AD%90%E4%B8%AD%E7%9A%84%E5%BC%A0%E9%87%8F%E7%BB%B4%E5%BA%A6%E9%97%AE%E9%A2%98/">MindSpore自定义算子中的张量维度问题</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>当我们使用GPU进行快速运算时，虽然可以用成熟的深度学习框架如MindSpore和PyTorch等进行实现，但其实从速度上来说，最快不过直接使用C/C++的CUDA来实现。也正是因为如此，在MindSpore框架中支持了对CUDA实现的算子的直接调用，只是在格式规范上有一定的要求。本文主要介绍MindSpore调用本地CUDA算子的一些规范化和技巧。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2024-03-12T02:28:28.000Z" itemprop="datePublished">2024-03-12</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-Python定位函数定义地址"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2024/03/11/Python%E5%AE%9A%E4%BD%8D%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89%E5%9C%B0%E5%9D%80/">Python定位函数定义地址</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>Python众多的第三方库，为我们的日常代码开发带来了极大的便利性，同时在开发过程中也需要注意这样的一个问题：开发的代码中有些命名可能跟第三方库冲突，例如本文介绍的基于MindSpore框架开发的过程中，定义一个本地的Cell类之后，发现本地的函数get<em>parameters跟Cell类本身的get<em>parameters冲突，因此可以使用Python的内置函数__code</em></em>对冲突函数的地址进行定位，然后进行修改。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2024-03-11T07:34:42.000Z" itemprop="datePublished">2024-03-11</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-将MindSpore运行结果输出到log文件"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2024/03/11/%E5%B0%86MindSpore%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C%E8%BE%93%E5%87%BA%E5%88%B0log%E6%96%87%E4%BB%B6/">将MindSpore运行结果输出到log文件</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>在Linux运行程序时，正确输出和错误输出会分成两条路线分别输出到不同的位置，默认输出是将两者按照顺序分别输出到屏幕上，而我们也可以通过设定将二者按照顺序输出到一个指定的log文件中。同时为了避免受到窗口交互的影响，我们可以使用Linux挂起的方式来运行一个程序，这样我们既不用担心任务被中断，也可以同时不断的通过log文件内容来查看任务的运行情况，还可以通过ps指令来查看任务进程运行的时长等信息。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2024-03-11T01:45:15.000Z" itemprop="datePublished">2024-03-11</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-CUDA指针数组Kernel函数"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2024/03/07/CUDA%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84Kernel%E5%87%BD%E6%95%B0/">CUDA指针数组Kernel函数</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>继上一篇文章学习使用C++存储一个不规则二维数组之后，这里介绍如何在C语言版的CUDA中实现一个不规则的二维数组。总体的实现思路跟前面一篇文章一样，使用了一个二维的指针数组来存储。其中主要的不同点大概就是在Host和Device之间的内存交互上，需要不断的分配、拷贝和释放内存，最终我们还是用一个CUDA的Kernel函数实现了一个不规则数组的输出。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2024-03-07T09:01:06.000Z" itemprop="datePublished">2024-03-07</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
 id="post-C++中的不规则二维数组"
 class="article article-type-post"
 >
@@ -619,10 +384,245 @@ class="article article-type-post"
 
     
   
+    
+      <article
+id="post-MindSpore导入CUDA算子"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2024/01/31/MindSpore%E5%AF%BC%E5%85%A5CUDA%E7%AE%97%E5%AD%90/">MindSpore导入CUDA算子</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了在MindSpore标准格式下进行CUDA算子开发的方法和流程，可以让开发者在现有的AI框架下仍然可以调用基于CUDA实现的高性能的算子。并且，除了常规的数值计算之外，在MindSpore框架下，我们还可以通过实现一个bprop函数，使得我们手写的这个CUDA算子也可以使用MindSpore框架本身自带的自动微分-端到端微分技术。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2024-01-31T02:46:29.000Z" itemprop="datePublished">2024-01-31</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-Linux命令行从x度网盘下载数据"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2024/01/26/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%BB%8Ex%E5%BA%A6%E7%BD%91%E7%9B%98%E4%B8%8B%E8%BD%BD%E6%95%B0%E6%8D%AE/">Linux命令行从x度网盘下载数据</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了详细的在Linux机器上使用wget命令行下载某度网盘中共享的加密文件，用这种相对低成本的平台来存放一些大文件，相比于免费的Gitee和Github等大型开源管理平台还是要稳定一些。因为可以直接命令行下载，那么就可以直接把下载脚本写到python开源库的setup文件中，便于实现自动化的安装。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2024-01-26T07:24:38.000Z" itemprop="datePublished">2024-01-26</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-无法访问Github仓库的极简治标法"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2024/01/22/%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AEGithub%E4%BB%93%E5%BA%93%E7%9A%84%E6%9E%81%E7%AE%80%E6%B2%BB%E6%A0%87%E6%B3%95/">无法访问Github仓库的极简治标法</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>Github访问受限，是国内众多IP所经常面临的问题。这里我经过大量的踩坑之后，还是认为使用Gitee将Github的仓库直接同步过来，作为一个私有的镜像，是最便利高效的方法。当然，这个只能满足日常使用第三方库的需求，治标但不治本，对于那些仅仅只是想使用某些Github仓库代码的童鞋来说，也是完全够用了。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2024-01-22T03:13:32.000Z" itemprop="datePublished">2024-01-22</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-Julia编程基础"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2024/01/16/Julia%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">Julia编程基础</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了Julia这一主要面向自然科学的编程语言的基本安装与使用，建议读者最好在熟练使用Python的前提下再阅读本文。如果是对Python的语法非常熟悉的人，应该很容易看懂本文并初步掌握Julia的基本语法和使用逻辑。Julia最吸引人的地方在于他简单如Python的语法，但兼具了C++和Fortran的高性能。但是缺点也非常明显，作为一门新的编程语言，受众又少，没有太多的轮子可以用。反过来想，也很适合用来开发一些新的轮子。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2024-01-16T08:53:51.000Z" itemprop="datePublished">2024-01-16</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-Numpy计算近邻表时间对比"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2024/01/09/Numpy%E8%AE%A1%E7%AE%97%E8%BF%91%E9%82%BB%E8%A1%A8%E6%97%B6%E9%97%B4%E5%AF%B9%E6%AF%94/">Numpy计算近邻表时间对比</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了在Python的numpy框架下计算近邻表的两种不同算法的原理以及复杂度，另有分别对应的两种代码实现。在实际使用中，我们更偏向于第二种算法的使用。因为对于第一种算法来说，哪怕是一个10000个原子的小体系，如果要计算两两间距，也会变成10000*10000这么大的一个张量的运算。可想而知，这样计算的效率肯定是比较低下的。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2024-01-09T07:47:47.000Z" itemprop="datePublished">2024-01-09</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
 
   
     <nav class="pagination">
-        <a class="extend prev" rel="prev" href="/page/12/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><a class="extend next" rel="next" href="/page/14/">Next</a>
+        <a class="extend prev" rel="prev" href="/page/12/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/14/">Next</a>
     </nav>
   
 </div>

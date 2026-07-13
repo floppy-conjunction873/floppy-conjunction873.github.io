@@ -151,431 +151,6 @@
   
     
       <article
-id="post-Python3获取5000个元素的单字符表"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2022/05/09/Python3%E8%8E%B7%E5%8F%965000%E4%B8%AA%E5%85%83%E7%B4%A0%E7%9A%84%E5%8D%95%E5%AD%97%E7%AC%A6%E8%A1%A8/">Python3获取5000个元素的单字符表</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文只是通过一个实例来讲述如何获得python中所有的单字符的字母表，不仅仅是局限于英文的abcd，可能还有其他语言如ᵝᵞᵟᵠ等。在实际写python的过程中可能不一定用得到，但是不失为一个挺有趣的功能探索。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2022-05-09T09:02:01.000Z" itemprop="datePublished">2022-05-09</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-基于张量缩并的量子计算简单模拟"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2022/05/07/%E5%9F%BA%E4%BA%8E%E5%BC%A0%E9%87%8F%E7%BC%A9%E5%B9%B6%E7%9A%84%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97%E7%AE%80%E5%8D%95%E6%A8%A1%E6%8B%9F/">基于张量缩并的量子计算简单模拟</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在早期的文章中，我们也曾经介绍过一些<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/magic.html">量子计算简单模拟</a>的工作，不过这篇文章还只是基于一些常用的矩阵乘积来做的。虽然在功能上已经是完全足够的了，但是如果我们希望能够更进一步优化量子计算模拟的话，就有可能需要借用到<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/tensor.html">张量网络技术</a>。比如京东最新发布的工作QUDIO和腾讯最新发布的TensorCircuit，都是基于张量网络技术的量子计算模拟。通过张量网络技术，甚至可以在量子霸权/量子优越性的证明上，进一步抬高经典算力的上限。</p>
-<h1 id="量子计算基础概念"><a href="#量子计算基础概念" class="headerlink" title="量子计算基础概念"></a>量子计算基础概念</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># qc.py</span><br><span class="line">import numpy as np</span><br><span class="line">from opt_einsum import contract</span><br><span class="line"></span><br><span class="line">H = np.array([[1,1],</span><br><span class="line">              [1,-1]],np.float32)/np.sqrt(2)</span><br><span class="line">CX = np.array([[[[1,0],[0,0]],</span><br><span class="line">                [[0,1],[0,0]]],</span><br><span class="line">               [[[0,0],[0,1]],</span><br><span class="line">                [[0,0],[1,0]]]],np.float32)</span><br><span class="line">q0 = np.array([1,0],np.float32)</span><br><span class="line">q1 = np.array([0,1],np.float32)</span><br><span class="line"></span><br><span class="line">print (contract(&#x27;i,j,ki,lmkj-&gt;lm&#x27;,q0,q0,H,CX))</span><br><span class="line"># [[0.70710677 0.        ]</span><br><span class="line">#  [0.         0.70710677]]</span><br><span class="line">print (contract(&#x27;i,j,ki,lmkj-&gt;lm&#x27;,q0,q1,H,CX))</span><br><span class="line"># [[0.         0.70710677]</span><br><span class="line">#  [0.70710677 0.        ]]</span><br><span class="line">print (contract(&#x27;i,j,ki,lmkj-&gt;lm&#x27;,q1,q0,H,CX))</span><br><span class="line"># [[ 0.70710677  0.        ]</span><br><span class="line">#  [ 0.         -0.70710677]]</span><br><span class="line">print (contract(&#x27;i,j,ki,lmkj-&gt;lm&#x27;,q1,q1,H,CX))</span><br><span class="line"># [[ 0.          0.70710677]</span><br><span class="line">#  [-0.70710677  0.        ]]</span><br></pre></td></tr></table></figure>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2022-05-07T09:16:41.000Z" itemprop="datePublished">2022-05-07</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-蛋白质基础组成结构"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2022/05/06/%E8%9B%8B%E7%99%BD%E8%B4%A8%E5%9F%BA%E7%A1%80%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84/">蛋白质基础组成结构</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文通过对Xponge+VMD的工具对蛋白质进行建模，然后总结了20种氨基酸的具体信息，也就是蛋白质的基本组成单元。通过对这些氨基酸的组合，就可以得到一个具有生物活性的蛋白质。同时本文还介绍了常用的存储蛋白质结构的文件格式pdb的具体格式化定义，总体来说是一个总结性的文章。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2022-05-06T09:17:02.000Z" itemprop="datePublished">2022-05-06</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-Linux系统创建可执行文件软链接"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2022/05/06/Linux%E7%B3%BB%E7%BB%9F%E5%88%9B%E5%BB%BA%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E8%BD%AF%E9%93%BE%E6%8E%A5/">Linux系统创建可执行文件软链接</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>编译安装源代码为可执行文件时，有时候会遇到想把可执行文件放在特定的路径下的问题，比如放到<code>/usr/bin</code>目录下，这样可以全局可调用，又不需要手动添加各种乱七八糟的系统路径。这就需要使用到Linux中的软链接的功能，通常使用<code>ln -s</code>的指令即可。本文顺带介绍了蛋白质结构评分软件TMalign的源码下载和安装使用的基本方法，编译成一个可执行文件后，可以建立一个软链接，在系统各处都可以使用，是一个比较基础的操作。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2022-05-06T08:43:40.000Z" itemprop="datePublished">2022-05-06</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-MindSpore尝鲜之爱因斯坦求和"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2022/05/05/MindSpore%E5%B0%9D%E9%B2%9C%E4%B9%8B%E7%88%B1%E5%9B%A0%E6%96%AF%E5%9D%A6%E6%B1%82%E5%92%8C/">MindSpore尝鲜之爱因斯坦求和</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>张量网络计算，已经在众多的领域中得到了应用，不仅仅是传统的计算化学，当下医药研发领域的分子动力学模拟、计算化学和材料模拟，甚至是未来的量子计算，张量网络技术都在当中发挥重要作用。本文介绍的是MindSpore最新对张量网络计算的支持的第一步：用爱因斯坦求和计算张量网络缩并。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2022-05-05T01:39:00.000Z" itemprop="datePublished">2022-05-05</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-将python脚本打包为exe可执行文件"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2022/04/20/%E5%B0%86python%E8%84%9A%E6%9C%AC%E6%89%93%E5%8C%85%E4%B8%BAexe%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6/">将python脚本打包为exe可执行文件</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>在完成一个软件或者程序的实现之后，最后的一步就是发布，发布的目的是为了让更多的人来使用这个项目，而大部分的人是没有相应的编程环境的，因此我们必须考虑将代码编译成各个平台的可执行文件，再发布给用户去使用。本文主要介绍通过pyinstaller在linux和windows上分别打包python脚本为可执行文件，想要跨平台的编译软件就目前而言实现起来还比较困难，博主本地使用的是Win11+WSL2 Ubuntu Linux的环境，能够在一定的程度上解决跨平台发布的问题。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2022-04-20T09:20:30.000Z" itemprop="datePublished">2022-04-20</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-控制Python浮点数输出位数"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2022/04/06/%E6%8E%A7%E5%88%B6Python%E6%B5%AE%E7%82%B9%E6%95%B0%E8%BE%93%E5%87%BA%E4%BD%8D%E6%95%B0/">控制Python浮点数输出位数</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>在python的输出结果中，尤其是浮点数的输出，当我们需要写入文本文件时，最好是采用统一的输出格式，这样也能够增强结果的可读性。而对于浮点数输出位数的控制，可以通过{:.4f}、%.4f来指定打印或者输出时的字符串占据空间，也可以通过round函数来对输出前的结果进行转化。而如果是取有效数字，需要用到{:.4}，这几种方法没有优劣，只有看不同的场景，选取不同的精度控制方案。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2022-04-06T09:24:37.000Z" itemprop="datePublished">2022-04-06</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-二次量子化与量子计算化学"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2022/04/05/%E4%BA%8C%E6%AC%A1%E9%87%8F%E5%AD%90%E5%8C%96%E4%B8%8E%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97%E5%8C%96%E5%AD%A6/">二次量子化与量子计算化学</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>量子计算机，是由基本单元量子比特所组成的新型计算体系，通过量子叠加和量子纠缠的特性，来完成对量子态的操纵，最终再通过量子测量获得到想要的计算结果。而在量子计算机上面执行量子化学的任务，被认为是一个非常promising的应用场景，不论是从最初费曼的想法与设计，还是这几年所发展起来的近期量子计算（NISQ）的技术，都对量子计算化学这一新兴研究方向进行了阐述。本文通过最基础的谐振波，讲解到薛定谔方程和动量算符的由来，最终介绍了两种量子化的变换。其实所谓的量子化，都是对表征体系进行了调整。一次量子化将哈密顿量从电子的粒子性带到了量子力学中的波粒二象性，引入了动量算符。二次量子化将动量表象和位置表象变换到粒子数表象，通过统计平均的方法去研究电子在不同轨道之间跃迁时的能量吸收与产生，用于表示体系总能量。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2022-04-05T01:52:09.000Z" itemprop="datePublished">2022-04-05</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-变分量子本征求解器"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2022/04/02/%E5%8F%98%E5%88%86%E9%87%8F%E5%AD%90%E6%9C%AC%E5%BE%81%E6%B1%82%E8%A7%A3%E5%99%A8/">变分量子本征求解器</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p><img src="https://img2022.cnblogs.com/blog/2277440/202204/2277440-20220402202819448-1551702393.png" alt=""></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> openfermionpyscf <span class="keyword">import</span> run_pyscf</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: <span class="keyword">from</span> openfermion.chem <span class="keyword">import</span> MolecularData, geometry_from_pubchem</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: <span class="keyword">from</span> openfermion.transforms <span class="keyword">import</span> get_fermion_operator, jordan_wigner</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: multiplicity=<span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: basis=<span class="string">&quot;sto-3g&quot;</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: geometry=geometry_from_pubchem(<span class="string">&#x27;h2o&#x27;</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: geometry</span><br><span class="line">Out[<span class="number">7</span>]:</span><br><span class="line">[(<span class="string">&#x27;O&#x27;</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)),</span><br><span class="line"> (<span class="string">&#x27;H&#x27;</span>, (<span class="number">0.2774</span>, <span class="number">0.8929</span>, <span class="number">0.2544</span>)),</span><br><span class="line"> (<span class="string">&#x27;H&#x27;</span>, (<span class="number">0.6068</span>, -<span class="number">0.2383</span>, -<span class="number">0.7169</span>))]</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: molecule = MolecularData(geometry, basis, multiplicity)</span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: molecule = run_pyscf(molecule ,run_mp2=<span class="literal">True</span>, run_cisd=<span class="literal">True</span> ,run_ccsd=<span class="literal">True</span>, run_fci=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">10</span>]: <span class="built_in">print</span>(molecule.fci_energy, molecule.ccsd_energy, molecule.hf_energy)</span><br><span class="line">-<span class="number">75.01553018949156</span> -<span class="number">75.01540899923555</span> -<span class="number">74.96444758276995</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: mh = molecule.get_molecular_hamiltonian()</span><br><span class="line"></span><br><span class="line">In [<span class="number">12</span>]: fh = get_fermion_operator(mh)</span><br><span class="line"><span class="number">9.08436451197603</span> [] +</span><br><span class="line">-<span class="number">32.68991541360028</span> [<span class="number">0</span>^ <span class="number">0</span>] +</span><br><span class="line"><span class="number">2.3723529797919625</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">0</span>] +</span><br><span class="line">-<span class="number">0.20870450678118344</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">2</span>] +</span><br><span class="line">-<span class="number">1.3696880086319053e-07</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">4</span>] +</span><br><span class="line"><span class="number">0.09152338506995344</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">6</span>] +</span><br><span class="line">-<span class="number">0.11727907659025232</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">10</span>] +</span><br><span class="line"><span class="number">4.994906556311282e-07</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">0</span> <span class="number">12</span>] +</span><br><span class="line">-<span class="number">0.2087045067811834</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">2</span> <span class="number">0</span>] +</span><br><span class="line"><span class="number">0.02917682895944584</span> [<span class="number">0</span>^ <span class="number">0</span>^ <span class="number">2</span> <span class="number">2</span>] + ...</span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: jw = jordan_wigner(fh)</span><br><span class="line">(-<span class="number">46.46560078195154</span>+<span class="number">0j</span>) [] +</span><br><span class="line">(-<span class="number">0.01458841447972292</span>+<span class="number">0j</span>) [X0 X1 Y2 Y3] +</span><br><span class="line">(<span class="number">0.005639816627633215</span>+<span class="number">0j</span>) [X0 X1 Y2 Z3 Z4 Z5 Z6 Y7] +</span><br><span class="line">(-<span class="number">0.008830198814313132</span>+<span class="number">0j</span>) [X0 X1 Y2 Z3 Z4 Z5 Z6 Z7 Z8 Z9 Z10 Y11] +</span><br><span class="line">(<span class="number">0.005639816627633215</span>+<span class="number">0j</span>) [X0 X1 X3 Z4 Z5 X6] +</span><br><span class="line">(-<span class="number">0.008830198814313132</span>+<span class="number">0j</span>) [X0 X1 X3 Z4 Z5 Z6 Z7 Z8 Z9 X10] +</span><br><span class="line">(-<span class="number">0.002741354103185628</span>+<span class="number">0j</span>) [X0 X1 Y4 Y5] + ...</span><br></pre></td></tr></table></figure>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2022-04-02T12:28:43.000Z" itemprop="datePublished">2022-04-02</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
 id="post-量子计算基础——量子测量"
 class="article article-type-post"
 >
@@ -621,10 +196,433 @@ class="article article-type-post"
 
     
   
+    
+      <article
+id="post-Python3通过字符串访问与修改局部变量"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2022/04/01/Python3%E9%80%9A%E8%BF%87%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%AE%BF%E9%97%AE%E4%B8%8E%E4%BF%AE%E6%94%B9%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F/">Python3通过字符串访问与修改局部变量</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>Python本身是一门比较灵活便捷的编程语言，但是便捷往往有可能伴随着一些风险，比如exec和eval等内置函数的实现，有可能导致sandbox escaping的问题。而有时候我们又需要一些批量化的操作，比如批量化的创建或者修改局部、全局或者是成员变量，这样就需要我们首先要把所有的变量名存成字符串，在需要的时候再作为变量名去调用。在这篇文章中，我们介绍了一系列非exec和eval的操作（并不是说没有风险，也引用了ctype和sys定义的数据帧），来查看和定义、修改所需的各种变量。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2022-04-01T03:39:30.000Z" itemprop="datePublished">2022-04-01</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-为R-Markdown配置TinyTex编译环境"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2022/03/30/%E4%B8%BAR-Markdown%E9%85%8D%E7%BD%AETinyTex%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83/">为R Markdown配置TinyTex编译环境</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>上一篇博客《通过R Studio用Markdown写Beamer》的最后遗留了一个问题，那就是如何在本地win11的系统环境下快捷方便的构建一个pdflatex的环境。常规方案都是安装一个TexLive和下载一大堆的扩展文件，或者用Docker的方案去构建一个完整的环境，但是都很费时间精力。偶然的情况下看到了益辉大神基于TexLive修改了一个R的扩展包TinyTex。经过测试，这毫无疑问是目前在本地构建R Markdown完整环境的最佳解决方案。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2022-03-30T09:07:07.000Z" itemprop="datePublished">2022-03-30</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-量子计算基础——矩阵语言"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2022/03/29/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%9F%A9%E9%98%B5%E8%AF%AD%E8%A8%80/">量子计算基础——矩阵语言</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>量子计算是一门当下非常火热的技术，抛开个别企业对量子计算的过分吹嘘不谈，其本身是一门非常有意义的跨学科研究领域。本文仅从非物理科班专业的角度——用矩阵的语言去描述量子计算的基础单元和基础操作，包含量子态的含义、单比特量子门操作以及两比特量子门操作的矩阵形式。并且附带一定的物理图像，这一点其实非常重要，如果不断的推导公式，最终有可能迷失了其物理图像，这就脱离了我们做研究的初衷。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2022-03-29T09:54:08.000Z" itemprop="datePublished">2022-03-29</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-通过R-Studio用Markdown写Beamer"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2022/03/29/%E9%80%9A%E8%BF%87R-Studio%E7%94%A8Markdown%E5%86%99Beamer/">通过R Studio用Markdown写Beamer</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>虽说在科研和工程中，最重要的还应该聚焦于研究的内容本身，但是如何去更好更严肃的展示自己的研究成果，并且不耗费太多的时间成本，这也是一个长期被讨论的话题。本文中介绍了R Markdown这样的一个解决方案，可以用于构建Beamer演示文档，用更少的工作量去构建一个效果更好的演示文档，对科学研究而言也是一个值得称道的工作。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2022-03-29T07:27:32.000Z" itemprop="datePublished">2022-03-29</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-Python中将字典转为成员变量"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2022/03/28/Python%E4%B8%AD%E5%B0%86%E5%AD%97%E5%85%B8%E8%BD%AC%E4%B8%BA%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F/">Python中将字典转为成员变量</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文所解决的问题场景是这样的：如果给定一个字典，比如一般从json文件或者npz文件中加载出来的数据都是字典的数据结构，如果我们希望把这个字典赋值给一个类，且使得字典的key和value分别作为类的成员变量名和成员变量值，那么该如何实现呢？对于一个展平的字典而言（没有嵌套字典），我们直接使用update就可以将字典中的所有key和value转变为当前类的成员变量。比较麻烦的是包含有嵌套字典的层级结构字典，此时我们只能使用循环，并且递归的对类的成员变量进行赋值。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2022-03-28T09:06:25.000Z" itemprop="datePublished">2022-03-28</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-MindSpore尝鲜之Vmap功能"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2022/03/24/MindSpore%E5%B0%9D%E9%B2%9C%E4%B9%8BVmap%E5%8A%9F%E8%83%BD/">MindSpore尝鲜之Vmap功能</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了华为推出的深度学习框架MindSpore中最新支持的vmap功能函数，可以用于向量化的计算，本质上的主要作用是替代并加速python中的for循环的操作。最早是在numba和pytroch、jax中对vmap功能进行了支持，其实numpy中的底层计算也用到了向量化的运算，因此速度才如此之快。vmap在python中更多的是与即时编译功能jit一同使用，能够起到简化编程的同时对性能进行极大程度的优化，尤其是python中的for循环的优化。但是对于一些numpy、jax或者MindSpore中已有的算子而言，还是建议直接使用其已经实现的算子，而不是vmap再手写一个。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2022-03-24T08:18:34.000Z" itemprop="datePublished">2022-03-24</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-python中的super是什么？"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2022/03/22/python%E4%B8%AD%E7%9A%84super%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/">python中的super是什么？</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文通过一个python的实际案例的设计，来讲解python面向对象的技术——类的继承中必用的super函数的逻辑。其实我们可以把python中类的继承理解成这样的一个过程：当我们在括号中明确了父类时，其实已经引用了父类的成员函数，但是并没有执行父类的初始化函数。在执行子类的初始化函数的同时，会检查是否重载了父类的成员函数，如果重载则会直接覆盖。而只有在执行了super之后，才相当于执行了父类的初始化函数，此时才可以访问父类的成员变量。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2022-03-22T07:27:06.000Z" itemprop="datePublished">2022-03-22</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-从经典动力学理解勒让德变换"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2022/03/21/%E4%BB%8E%E7%BB%8F%E5%85%B8%E5%8A%A8%E5%8A%9B%E5%AD%A6%E7%90%86%E8%A7%A3%E5%8B%92%E8%AE%A9%E5%BE%B7%E5%8F%98%E6%8D%A2/">从经典动力学理解勒让德变换</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>为了通过一些实际问题来理解勒让德变换，我们假定了这样的一个场景：一个叫勒让德的人在足球场边上被不知来源的球砸中了脑袋，只能够判断足球砸到脑袋的一瞬间的速度方向。而通过勒让德变换的函数值，结合足球旋转的角速度，我们就可以得出足球的真实来源。同时，通过勒让德变换，我们还可以从拉格朗日力学推导到哈密顿力学。而且勒让德变换在热力学系统也有非常重要的应用场景。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2022-03-21T02:54:29.000Z" itemprop="datePublished">2022-03-21</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-分子动力学模拟算法框架"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2022/03/17/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6%E6%A8%A1%E6%8B%9F%E7%AE%97%E6%B3%95%E6%A1%86%E6%9E%B6/">分子动力学模拟算法框架</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>分子动力学模拟是一个跨越众多学科领域的强大工具，从物理学的角度来看分子动力学模拟的话，其基于量子力学（量子化学）构建模型，通过牛顿力学进行演化迭代，最后能够在时间平均上等同于统计力学的系综平均，是一个堪比复变函数欧拉公式的优美过程。本文就当前分子动力学模拟的框架进行了整体介绍，其中并不展开讲解各项技术内容，但是也为感兴趣的研究人员提供一个简单的入口。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2022-03-17T00:33:47.000Z" itemprop="datePublished">2022-03-17</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
 
   
     <nav class="pagination">
-        <a class="extend prev" rel="prev" href="/page/18/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><a class="page-number" href="/page/21/">21</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><a class="extend next" rel="next" href="/page/20/">Next</a>
+        <a class="extend prev" rel="prev" href="/page/18/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><a class="page-number" href="/page/21/">21</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/20/">Next</a>
     </nav>
   
 </div>

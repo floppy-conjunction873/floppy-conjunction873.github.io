@@ -151,154 +151,6 @@
   
     
       <article
-id="post-初始化特定温度的分子体系"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2025/11/26/%E5%88%9D%E5%A7%8B%E5%8C%96%E7%89%B9%E5%AE%9A%E6%B8%A9%E5%BA%A6%E7%9A%84%E5%88%86%E5%AD%90%E4%BD%93%E7%B3%BB/">初始化特定温度的分子体系</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在分子动力学模拟中，温度的初始化有时候也是一个很重要的环节，因为初始温度很大程度上决定了一个体系的“活跃性”。那么初始化一个体系的温度，是通过调控各个原子的速度来实现的。</p>
-<h1 id="温度计算"><a href="#温度计算" class="headerlink" title="温度计算"></a>温度计算</h1><p>根据能均分定理可以得到非刚性体系的动能与体系温度之间的关系为：</p>
-<script type="math/tex; mode=display">
-\sum_i\frac{1}{2}mv_i^2=\frac{1}{2}kN_{DOF}T</script><p>考虑到我们对质心的约束，那么这里自由度会少一个dimension的大小。相应的温度计算函数如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">v = np.array([[[-<span class="number">0.43412265181541443</span>, -<span class="number">0.1109275221824646</span>, -<span class="number">1.0637625455856323</span>], </span><br><span class="line">               [<span class="number">0.014879786409437656</span>, <span class="number">0.024877967312932014</span>, -<span class="number">0.20376907289028168</span>], </span><br><span class="line">               [-<span class="number">0.33513566851615906</span>, -<span class="number">0.06969506293535233</span>, -<span class="number">0.4292709231376648</span>], </span><br><span class="line">               [-<span class="number">0.21677972376346588</span>, -<span class="number">0.6815852522850037</span>, <span class="number">1.092883825302124</span>], </span><br><span class="line">               [<span class="number">0.08456911891698837</span>, -<span class="number">0.012704499065876007</span>, <span class="number">0.5533732175827026</span>], </span><br><span class="line">               [<span class="number">0.4547587037086487</span>, <span class="number">0.014933102764189243</span>, <span class="number">0.5652663707733154</span>], </span><br><span class="line">               [<span class="number">0.6028317213058472</span>, <span class="number">0.5632424354553223</span>, -<span class="number">0.16476143896579742</span>], </span><br><span class="line">               [-<span class="number">0.7004157304763794</span>, -<span class="number">0.2501852214336395</span>, -<span class="number">0.5307760834693909</span>], </span><br><span class="line">               [-<span class="number">0.019524993374943733</span>, <span class="number">0.07658486068248749</span>, <span class="number">0.9249221086502075</span>], </span><br><span class="line">               [<span class="number">0.26215553283691406</span>, <span class="number">0.04443708062171936</span>, -<span class="number">0.32114386558532715</span>], </span><br><span class="line">               [<span class="number">0.5259386301040649</span>, -<span class="number">0.052941564470529556</span>, -<span class="number">0.1999029517173767</span>], </span><br><span class="line">               [-<span class="number">0.20088185369968414</span>, -<span class="number">0.33411693572998047</span>, -<span class="number">0.3068599998950958</span>], </span><br><span class="line">               [-<span class="number">0.3564856946468353</span>, <span class="number">0.04728545993566513</span>, <span class="number">0.28112083673477173</span>], </span><br><span class="line">               [<span class="number">0.5952886343002319</span>, <span class="number">0.07450367510318756</span>, <span class="number">0.24302925169467926</span>], </span><br><span class="line">               [<span class="number">0.6937912702560425</span>, <span class="number">0.4046178162097931</span>, -<span class="number">0.021861471235752106</span>], </span><br><span class="line">               [<span class="number">0.366300106048584</span>, -<span class="number">0.5172914862632751</span>, -<span class="number">0.25289463996887207</span>], </span><br><span class="line">               [-<span class="number">0.12144963443279266</span>, <span class="number">0.2298932522535324</span>, <span class="number">0.21710924804210663</span>], </span><br><span class="line">               [-<span class="number">0.08910597860813141</span>, <span class="number">0.48880481719970703</span>, -<span class="number">0.44646233320236206</span>], </span><br><span class="line">               [-<span class="number">0.00040439344593323767</span>, <span class="number">0.30157071352005005</span>, -<span class="number">0.19019363820552826</span>], </span><br><span class="line">               [-<span class="number">0.19852547347545624</span>, -<span class="number">0.16927222907543182</span>, <span class="number">0.4728095531463623</span>], </span><br><span class="line">               [<span class="number">0.07351405173540115</span>, <span class="number">0.10780877619981766</span>, <span class="number">0.23210543394088745</span>], </span><br><span class="line">               [-<span class="number">0.5006303191184998</span>, <span class="number">0.05443301796913147</span>, -<span class="number">0.3589373826980591</span>], </span><br><span class="line">               [<span class="number">0.3843569755554199</span>, -<span class="number">0.4575502276420593</span>, -<span class="number">0.39822015166282654</span>], </span><br><span class="line">               [<span class="number">0.001576312119141221</span>, <span class="number">0.39220964908599854</span>, -<span class="number">0.1275099366903305</span>], </span><br><span class="line">               [-<span class="number">0.3583613932132721</span>, -<span class="number">0.16633568704128265</span>, <span class="number">0.37481212615966797</span>], </span><br><span class="line">               [-<span class="number">0.6511558890342712</span>, <span class="number">0.21026578545570374</span>, <span class="number">0.028151700273156166</span>], </span><br><span class="line">               [<span class="number">0.10354256629943848</span>, -<span class="number">0.13907954096794128</span>, -<span class="number">0.07724742591381073</span>]]], np.float32)</span><br><span class="line">mass = np.array([[<span class="number">14.010000228881836</span>, <span class="number">12.010000228881836</span>, <span class="number">12.010000228881836</span>, </span><br><span class="line">                  <span class="number">12.010000228881836</span>, <span class="number">16.0</span>, <span class="number">14.010000228881836</span>, <span class="number">12.010000228881836</span>, </span><br><span class="line">                  <span class="number">12.010000228881836</span>, <span class="number">12.010000228881836</span>, <span class="number">12.010000228881836</span>, </span><br><span class="line">                  <span class="number">14.010000228881836</span>, <span class="number">12.010000228881836</span>, <span class="number">14.010000228881836</span>, </span><br><span class="line">                  <span class="number">14.010000228881836</span>, <span class="number">12.010000228881836</span>, <span class="number">16.0</span>, <span class="number">14.010000228881836</span>, </span><br><span class="line">                  <span class="number">12.010000228881836</span>, <span class="number">12.010000228881836</span>, <span class="number">12.010000228881836</span>, <span class="number">16.0</span>, </span><br><span class="line">                  <span class="number">14.010000228881836</span>, <span class="number">12.010000228881836</span>, <span class="number">12.010000228881836</span>, </span><br><span class="line">                  <span class="number">12.010000228881836</span>, <span class="number">16.0</span>, <span class="number">16.0</span>]], np.float32)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_kin</span>(<span class="params">m, v</span>):</span><br><span class="line">    <span class="keyword">return</span> np.<span class="built_in">sum</span>(<span class="number">0.5</span> * m[..., <span class="literal">None</span>] * v ** <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_temp</span>(<span class="params">m, v, k=<span class="number">8.31446261815324e-3</span></span>):</span><br><span class="line">    kin = get_kin(m, v)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span> * kin / k / (v.shape[-<span class="number">1</span>] * v.shape[-<span class="number">2</span>] - v.shape[-<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (get_temp(mass, v))</span><br><span class="line"><span class="comment"># 241.2113620621657241.2113620621657</span></span><br></pre></td></tr></table></figure></p>
-<h1 id="速度产生器"><a href="#速度产生器" class="headerlink" title="速度产生器"></a>速度产生器</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Optional</span>, <span class="type">Tuple</span>, <span class="type">Union</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_kin</span>(<span class="params">m, v</span>):</span><br><span class="line">    <span class="keyword">return</span> np.<span class="built_in">sum</span>(<span class="number">0.5</span> * m[..., <span class="literal">None</span>] * v ** <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_temp</span>(<span class="params">m, v, k=<span class="number">8.31446261815324e-3</span></span>):</span><br><span class="line">    kin = get_kin(m, v)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span> * kin / k / (v.shape[<span class="number">1</span>]-<span class="number">1</span>) / <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_velocities</span>(<span class="params"></span></span><br><span class="line"><span class="params">    temperature: <span class="type">Union</span>[<span class="built_in">float</span>, np.ndarray],</span></span><br><span class="line"><span class="params">    atom_mass: np.ndarray,</span></span><br><span class="line"><span class="params">    shape: <span class="type">Tuple</span>[<span class="built_in">int</span>, <span class="built_in">int</span>, <span class="built_in">int</span>],</span></span><br><span class="line"><span class="params">    remove_translation: <span class="built_in">bool</span> = <span class="literal">True</span>,</span></span><br><span class="line"><span class="params">    seed: <span class="type">Optional</span>[<span class="built_in">int</span>] = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">    mask: <span class="type">Optional</span>[np.ndarray] = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">    boltzmann_constant: <span class="built_in">float</span> = <span class="number">8.31446261815324e-3</span>,</span></span><br><span class="line"><span class="params">    kinetic_ref: <span class="built_in">float</span> = <span class="number">1.0</span></span></span><br><span class="line"><span class="params">    </span>) -&gt; np.ndarray:</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> seed <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        np.random.seed(seed)</span><br><span class="line"></span><br><span class="line">    temperature = np.asarray(temperature, dtype=np.float32)</span><br><span class="line">    atom_mass = np.asarray(atom_mass, dtype=np.float32)</span><br><span class="line">    B, A = atom_mass.shape</span><br><span class="line">    <span class="keyword">assert</span> shape == (B, A, shape[<span class="number">2</span>]), <span class="string">f&quot;形状<span class="subst">&#123;shape&#125;</span>与atom_mass形状(B,A)=(<span class="subst">&#123;B&#125;</span>,<span class="subst">&#123;A&#125;</span>)不匹配&quot;</span></span><br><span class="line"></span><br><span class="line">    temperature = temperature.reshape(-<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)  <span class="comment"># (B,1,1)</span></span><br><span class="line">    atom_mass = atom_mass[..., np.newaxis]  <span class="comment"># (B,A,1)</span></span><br><span class="line"></span><br><span class="line">    kbT = boltzmann_constant * temperature  <span class="comment"># (B,1,1)</span></span><br><span class="line">    inv_mass = <span class="number">1.0</span> / atom_mass  <span class="comment"># (B,A,1)</span></span><br><span class="line">    std = np.sqrt(kbT * inv_mass / kinetic_ref)  <span class="comment"># (B,A,1)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        mask = np.asarray(mask, dtype=<span class="built_in">bool</span>)</span><br><span class="line">        std = np.where(mask[..., np.newaxis], std, <span class="number">0.0</span>)</span><br><span class="line"></span><br><span class="line">    velocity = np.random.normal(<span class="number">0.0</span>, <span class="number">1.0</span>, shape) * std  <span class="comment"># (B,A,D)</span></span><br><span class="line">   </span><br><span class="line">    <span class="comment"># 移除平动</span></span><br><span class="line">    <span class="keyword">if</span> remove_translation:</span><br><span class="line">        momentum = atom_mass * velocity  <span class="comment"># 动量(B,A,D)</span></span><br><span class="line">        <span class="keyword">if</span> mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 仅对有效原子求平均动量</span></span><br><span class="line">            valid_mask = mask[..., np.newaxis]  <span class="comment"># (B,A,1)</span></span><br><span class="line">            sp = np.<span class="built_in">sum</span>(momentum * valid_mask, axis=-<span class="number">2</span>, keepdims=<span class="literal">True</span>)  <span class="comment"># 总动量(B,1,D)</span></span><br><span class="line">            n_valid = np.<span class="built_in">sum</span>(valid_mask, axis=-<span class="number">2</span>, keepdims=<span class="literal">True</span>)  <span class="comment"># 有效原子数(B,1,1)</span></span><br><span class="line">            n_valid = np.maximum(n_valid, <span class="number">1e-10</span>)  <span class="comment"># 避免除零</span></span><br><span class="line">            dp = sp / n_valid  <span class="comment"># 平均动量(B,1,D)</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            dp = np.mean(momentum, axis=-<span class="number">2</span>, keepdims=<span class="literal">True</span>)  <span class="comment"># (B,1,D)</span></span><br><span class="line">        momentum -= dp  <span class="comment"># 移除平动</span></span><br><span class="line">        velocity = momentum * inv_mass  <span class="comment"># 更新速度</span></span><br><span class="line">   </span><br><span class="line">    <span class="keyword">return</span> velocity.astype(np.float32)</span><br><span class="line"></span><br><span class="line">v = np.array([[[-<span class="number">0.43412265181541443</span>, -<span class="number">0.1109275221824646</span>, -<span class="number">1.0637625455856323</span>], </span><br><span class="line">               [<span class="number">0.014879786409437656</span>, <span class="number">0.024877967312932014</span>, -<span class="number">0.20376907289028168</span>], </span><br><span class="line">               [-<span class="number">0.33513566851615906</span>, -<span class="number">0.06969506293535233</span>, -<span class="number">0.4292709231376648</span>], </span><br><span class="line">               [-<span class="number">0.21677972376346588</span>, -<span class="number">0.6815852522850037</span>, <span class="number">1.092883825302124</span>], </span><br><span class="line">               [<span class="number">0.08456911891698837</span>, -<span class="number">0.012704499065876007</span>, <span class="number">0.5533732175827026</span>], </span><br><span class="line">               [<span class="number">0.4547587037086487</span>, <span class="number">0.014933102764189243</span>, <span class="number">0.5652663707733154</span>], </span><br><span class="line">               [<span class="number">0.6028317213058472</span>, <span class="number">0.5632424354553223</span>, -<span class="number">0.16476143896579742</span>], </span><br><span class="line">               [-<span class="number">0.7004157304763794</span>, -<span class="number">0.2501852214336395</span>, -<span class="number">0.5307760834693909</span>], </span><br><span class="line">               [-<span class="number">0.019524993374943733</span>, <span class="number">0.07658486068248749</span>, <span class="number">0.9249221086502075</span>], </span><br><span class="line">               [<span class="number">0.26215553283691406</span>, <span class="number">0.04443708062171936</span>, -<span class="number">0.32114386558532715</span>], </span><br><span class="line">               [<span class="number">0.5259386301040649</span>, -<span class="number">0.052941564470529556</span>, -<span class="number">0.1999029517173767</span>], </span><br><span class="line">               [-<span class="number">0.20088185369968414</span>, -<span class="number">0.33411693572998047</span>, -<span class="number">0.3068599998950958</span>], </span><br><span class="line">               [-<span class="number">0.3564856946468353</span>, <span class="number">0.04728545993566513</span>, <span class="number">0.28112083673477173</span>], </span><br><span class="line">               [<span class="number">0.5952886343002319</span>, <span class="number">0.07450367510318756</span>, <span class="number">0.24302925169467926</span>], </span><br><span class="line">               [<span class="number">0.6937912702560425</span>, <span class="number">0.4046178162097931</span>, -<span class="number">0.021861471235752106</span>], </span><br><span class="line">               [<span class="number">0.366300106048584</span>, -<span class="number">0.5172914862632751</span>, -<span class="number">0.25289463996887207</span>], </span><br><span class="line">               [-<span class="number">0.12144963443279266</span>, <span class="number">0.2298932522535324</span>, <span class="number">0.21710924804210663</span>], </span><br><span class="line">               [-<span class="number">0.08910597860813141</span>, <span class="number">0.48880481719970703</span>, -<span class="number">0.44646233320236206</span>], </span><br><span class="line">               [-<span class="number">0.00040439344593323767</span>, <span class="number">0.30157071352005005</span>, -<span class="number">0.19019363820552826</span>], </span><br><span class="line">               [-<span class="number">0.19852547347545624</span>, -<span class="number">0.16927222907543182</span>, <span class="number">0.4728095531463623</span>], </span><br><span class="line">               [<span class="number">0.07351405173540115</span>, <span class="number">0.10780877619981766</span>, <span class="number">0.23210543394088745</span>], </span><br><span class="line">               [-<span class="number">0.5006303191184998</span>, <span class="number">0.05443301796913147</span>, -<span class="number">0.3589373826980591</span>], </span><br><span class="line">               [<span class="number">0.3843569755554199</span>, -<span class="number">0.4575502276420593</span>, -<span class="number">0.39822015166282654</span>], </span><br><span class="line">               [<span class="number">0.001576312119141221</span>, <span class="number">0.39220964908599854</span>, -<span class="number">0.1275099366903305</span>], </span><br><span class="line">               [-<span class="number">0.3583613932132721</span>, -<span class="number">0.16633568704128265</span>, <span class="number">0.37481212615966797</span>], </span><br><span class="line">               [-<span class="number">0.6511558890342712</span>, <span class="number">0.21026578545570374</span>, <span class="number">0.028151700273156166</span>], </span><br><span class="line">               [<span class="number">0.10354256629943848</span>, -<span class="number">0.13907954096794128</span>, -<span class="number">0.07724742591381073</span>]]], np.float32)</span><br><span class="line">mass = np.array([[<span class="number">14.010000228881836</span>, <span class="number">12.010000228881836</span>, <span class="number">12.010000228881836</span>, </span><br><span class="line">                  <span class="number">12.010000228881836</span>, <span class="number">16.0</span>, <span class="number">14.010000228881836</span>, <span class="number">12.010000228881836</span>, </span><br><span class="line">                  <span class="number">12.010000228881836</span>, <span class="number">12.010000228881836</span>, <span class="number">12.010000228881836</span>, </span><br><span class="line">                  <span class="number">14.010000228881836</span>, <span class="number">12.010000228881836</span>, <span class="number">14.010000228881836</span>, </span><br><span class="line">                  <span class="number">14.010000228881836</span>, <span class="number">12.010000228881836</span>, <span class="number">16.0</span>, <span class="number">14.010000228881836</span>, </span><br><span class="line">                  <span class="number">12.010000228881836</span>, <span class="number">12.010000228881836</span>, <span class="number">12.010000228881836</span>, <span class="number">16.0</span>, </span><br><span class="line">                  <span class="number">14.010000228881836</span>, <span class="number">12.010000228881836</span>, <span class="number">12.010000228881836</span>, </span><br><span class="line">                  <span class="number">12.010000228881836</span>, <span class="number">16.0</span>, <span class="number">16.0</span>]], np.float32)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (get_temp(mass, v))</span><br><span class="line">vel = generate_velocities(<span class="number">400</span>, mass, v.shape)</span><br><span class="line"><span class="built_in">print</span> (get_temp(mass, vel))</span><br><span class="line"><span class="comment"># 241.2113620621657</span></span><br><span class="line"><span class="comment"># 367.6277665609212</span></span><br></pre></td></tr></table></figure>
-<h1 id="热力学熵"><a href="#热力学熵" class="headerlink" title="热力学熵"></a>热力学熵</h1><p>在热力学中，熵的定义是：</p>
-<script type="math/tex; mode=display">
-\Delta S=\frac{\Delta Q}{T}</script>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2025-11-26T06:10:13.000Z" itemprop="datePublished">2025-11-26</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-弹簧的弹力为什么沿着弹簧？"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2025/11/13/%E5%BC%B9%E7%B0%A7%E7%9A%84%E5%BC%B9%E5%8A%9B%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B2%BF%E7%9D%80%E5%BC%B9%E7%B0%A7%EF%BC%9F/">弹簧的弹力为什么沿着弹簧？</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文通过一个简单的微分计算，说明了为什么弹簧对两头的作用力方向总是沿着弹簧方向的。虽然是一个固有的认知，但其实也可以通过简单的计算来进行论证。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2025-11-13T07:05:17.000Z" itemprop="datePublished">2025-11-13</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-关于分子力场中二面角项的思考"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2025/11/13/%E5%85%B3%E4%BA%8E%E5%88%86%E5%AD%90%E5%8A%9B%E5%9C%BA%E4%B8%AD%E4%BA%8C%E9%9D%A2%E8%A7%92%E9%A1%B9%E7%9A%84%E6%80%9D%E8%80%83/">关于分子力场中二面角项的思考</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>接前面一篇关于键长和键角的相互作用力计算的文章，本文简单的计算了一下传统分子力场项中常见的二面角项的相互作用力。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2025-11-13T03:20:05.000Z" itemprop="datePublished">2025-11-13</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
 id="post-使用conda安装gcc和g++"
 class="article article-type-post"
 >
@@ -534,60 +386,6 @@ class="article article-type-post"
   
     
       <article
-id="post-PyTorch中的floor_divide"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2025/08/01/PyTorch%E4%B8%AD%E7%9A%84floor_divide/">PyTorch中的floor_divide</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <h1 id="技术背景"><a href="#技术背景" class="headerlink" title="技术背景"></a>技术背景</h1><p>在各大深度学习框架中，对于自动微分这项技术有了比较广泛的应用。但在使用自动微分时，一定要注意不同框架下对于非可导函数，或者是可导函数的非可导区域的特殊处理。最典型的就是本文将要提到的，向下取整的函数。</p>
-<h1 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> torch <span class="keyword">as</span> tc</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: a = tc.arange(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: a</span><br><span class="line">Out[<span class="number">3</span>]: tensor([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: a//<span class="number">2</span></span><br><span class="line">Out[<span class="number">4</span>]: tensor([<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: b = tc.tensor([<span class="number">0.1</span>, <span class="number">0.3</span>, <span class="number">0.5</span>, <span class="number">0.7</span>, <span class="number">0.9</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: c = a+b</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: c</span><br><span class="line">Out[<span class="number">7</span>]: tensor([<span class="number">0.1000</span>, <span class="number">1.3000</span>, <span class="number">2.5000</span>, <span class="number">3.7000</span>, <span class="number">4.9000</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: c//<span class="number">2</span></span><br><span class="line">Out[<span class="number">8</span>]: tensor([<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">2.</span>])</span><br></pre></td></tr></table></figure>
-<p><img src="https://img2024.cnblogs.com/blog/2277440/202509/2277440-20250929133945020-1404916418.png" alt="2025-09-29 13-39-07 的屏幕截图"></p>
-<h1 id="总结概要"><a href="#总结概要" class="headerlink" title="总结概要"></a>总结概要</h1><h1 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h1><p>本文首发链接为：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/p/floor_divide.html">https://www.cnblogs.com/dechinphy/p/floor_divide.html</a></p>
-<p>作者ID：DechinPhy</p>
-<p>更多原著文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/">https://www.cnblogs.com/dechinphy/</a></p>
-<p>请博主喝咖啡：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/dechinphy/gallery/image/379634.html">https://www.cnblogs.com/dechinphy/gallery/image/379634.html</a></p>
-
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2025-08-01T08:10:13.000Z" itemprop="datePublished">2025-08-01</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
 id="post-VSCode手动版本更新"
 class="article article-type-post"
 >
@@ -633,10 +431,198 @@ class="article article-type-post"
 
     
   
+    
+      <article
+id="post-关于nan的大小判定规则"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2025/07/18/%E5%85%B3%E4%BA%8Enan%E7%9A%84%E5%A4%A7%E5%B0%8F%E5%88%A4%E5%AE%9A%E8%A7%84%E5%88%99/">关于nan的大小判定规则</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文通过几个简单的代码示例，展示了一下NAN在PyTorch框架下形成的原因。通过了解这个原因和规则，有助于解决在深度学习开发和训练过程中出现的NAN的问题。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2025-07-18T09:42:59.000Z" itemprop="datePublished">2025-07-18</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-PyTorch中的take_along_dim"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2025/07/16/PyTorch%E4%B8%AD%E7%9A%84take_along_dim/">PyTorch中的take_along_dim</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>接前面一篇take_along_axis的文章，本文主要介绍在PyTorch框架下，功能基本一样的函数take_along_dim。二者除了命名和一些关键词参数不一致之外，用法是一样的。需要注意的是，两者都要求输入的数组和索引数组维度数量一致。在特定场景下，需要手动进行扩维。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2025-07-16T08:03:15.000Z" itemprop="datePublished">2025-07-16</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-PyTorch中的张量逆序问题"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2025/07/08/PyTorch%E4%B8%AD%E7%9A%84%E5%BC%A0%E9%87%8F%E9%80%86%E5%BA%8F%E9%97%AE%E9%A2%98/">PyTorch中的张量逆序问题</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文简单的介绍了一个在Pytorch中对张量进行逆序操作的方法相比于其他的框架，例如numpy和mindspore等的区别。在其他框架中我们可以直接使用slice的方法对一个张量做逆序，但是在Pytorch中，可能需要使用到一个flip函数。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2025-07-08T07:33:48.000Z" itemprop="datePublished">2025-07-08</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-PyTorch中实现开立方"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2025/06/25/PyTorch%E4%B8%AD%E5%AE%9E%E7%8E%B0%E5%BC%80%E7%AB%8B%E6%96%B9/">PyTorch中实现开立方</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了在PyTorch中直接使用幂次函数计算有可能导致的计算结果异常的问题。由于PyTorch中并未像Numpy和MindSpore一样直接支持cbrt开立方函数，因此这里也提供了一个在PyTorch中计算开立方的函数。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2025-06-25T08:24:11.000Z" itemprop="datePublished">2025-06-25</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
 
   
     <nav class="pagination">
-        <a class="extend prev" rel="prev" href="/">Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><a class="extend next" rel="next" href="/page/3/">Next</a>
+        <a class="extend prev" rel="prev" href="/">Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/3/">Next</a>
     </nav>
   
 </div>

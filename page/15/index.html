@@ -151,288 +151,6 @@
   
     
       <article
-id="post-双二面角耦合力场项的计算"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2023/12/05/%E5%8F%8C%E4%BA%8C%E9%9D%A2%E8%A7%92%E8%80%A6%E5%90%88%E5%8A%9B%E5%9C%BA%E9%A1%B9%E7%9A%84%E8%AE%A1%E7%AE%97/">双二面角耦合力场项的计算</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文介绍了最新的一些分子力场中有可能使用到的1-5相互作用——双二面角耦合项的计算。而常规的计算方式是，通过量化的计算得到每一个Residue的α碳对应的两个二面角的数值在空间中的离散化数值。然后在分子模拟的过程中使用插值的方案，对相关的条目进行计算，例如使用双三次样条插值。但其实这种插值算法的使用有可能导致一些其他的问题，比如深度学习中可能会经常提到的“过拟合”问题。由于这个条目本身就只是一个修正项，从数值大小上来说并不算大，因此这些细节是否需要优化还有待商榷。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2023-12-05T02:41:19.000Z" itemprop="datePublished">2023-12-05</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-Jupyter-Notebook报错&#39;500---Internal-Server-Error&#39;的解决"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2023/11/21/Jupyter-Notebook%E6%8A%A5%E9%94%99'500---Internal-Server-Error'%E7%9A%84%E8%A7%A3%E5%86%B3/">Jupyter Notebook报错&#39;500 : Internal Server Error&#39;的解决方法</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>解决使用Jupyter Notebook打开ipynb文件时报错&#39;500 : Internal Server Error&#39;的问题，亲测可用。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2023-11-21T06:42:52.000Z" itemprop="datePublished">2023-11-21</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-MindSpore简要性能分析"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2023/09/11/MindSpore%E7%AE%80%E8%A6%81%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/">MindSpore简要性能分析</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>当我们需要优化程序性能的时候，首先我们就需要了解程序的主要耗时模块在哪里，也就是通常所谓的决速步，或者瓶颈模块，这样就可以有针对性的去进行优化。在MindSpore相关的程序中，我们可以使用MindInsight这一强力的性能分析可视化工具来进行分析。该工具会给出每个算子的调用次数以及总耗时等参数，能够给性能优化带来不少重要的参考。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2023-09-11T02:55:53.000Z" itemprop="datePublished">2023-09-11</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-MindSponge分子动力学模拟——定义Collective-Variables（2024.02）"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2023/09/07/MindSponge%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6%E6%A8%A1%E6%8B%9F%E2%80%94%E2%80%94%E5%AE%9A%E4%B9%89Collective-Variables%EF%BC%882024.02%EF%BC%89/">MindSponge分子动力学模拟——定义Collective Variables（2024.02）</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>随着分子动力学模拟技术的应用推广、AI软件的发展和硬件算力水平的提升，我们可以更快的在分子层面去观察和研究分子体系内的相互作用。但是分子模拟的性能再好，也不一定可以复现一些在自然宏观状态下有可能发生的化学反应或者是物质相变。因此我们需要通过定义一些对反应路径有决定性影响的物理量，然后结合增强采样技术，去更快的复现和推导我们所需要的反应机理。本文主要介绍分子动力学模拟软件MindSponge在这一领域的应用和代码实现。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2023-09-07T09:49:28.000Z" itemprop="datePublished">2023-09-07</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-MindSponge分子动力学模拟——Constraint约束（2023.09）"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2023/09/05/MindSponge%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6%E6%A8%A1%E6%8B%9F%E2%80%94%E2%80%94Constraint%E7%BA%A6%E6%9D%9F%EF%BC%882023.09%EF%BC%89/">MindSponge分子动力学模拟——Constraint约束（2023.09）</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文主要介绍了在MindSponge中使用SETTLE和Lincs约束算法的方法，以及相关算法的简单原理。SETTLE约束算法主要应用于水分子体系，限制的是一个等腰三角形的拓扑结构，特点是可并行，性能较好。Lincs约束算法更多的被应用在蛋白质体系，主要限制的是每一个共价键的键长，特点是适用体系比较灵活，但总体计算量较大，且不可并行化。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2023-09-05T07:46:37.000Z" itemprop="datePublished">2023-09-05</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-MindSponge分子动力学模拟——使用迭代器进行系统演化（2023.09）"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2023/09/04/MindSponge%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6%E6%A8%A1%E6%8B%9F%E2%80%94%E2%80%94%E4%BD%BF%E7%94%A8%E8%BF%AD%E4%BB%A3%E5%99%A8%E8%BF%9B%E8%A1%8C%E7%B3%BB%E7%BB%9F%E6%BC%94%E5%8C%96%EF%BC%882023.09%EF%BC%89/">MindSponge分子动力学模拟——使用迭代器进行系统演化（2023.09）</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>在经过前面几篇博客的介绍之后，我们可以定义一些目标的分子体系，并且计算其单点能。而分子模拟的精髓就在于快速的迭代和演化，也就是本文所要介绍的迭代器相关的内容。在具备了分子系统、单点能和迭代器这三者之后，就可以正式开始进行分子动力学模拟。常见的模拟过程有：能量极小化、NVT恒温恒容过程、NPT恒温恒压过程以及NVE微正则系综，本文所涉及的主要是能量极小化以及NVT恒温恒容过程，更多的模拟方法有待大家一起研究探讨。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2023-09-04T05:51:36.000Z" itemprop="datePublished">2023-09-04</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
 id="post-MindSponge分子动力学模拟——计算单点能（2023.08）"
 class="article article-type-post"
 >
@@ -619,10 +337,292 @@ class="article article-type-post"
 
     
   
+    
+      <article
+id="post-在Python中使用LooseVersion进行软件版本号比对"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2023/08/10/%E5%9C%A8Python%E4%B8%AD%E4%BD%BF%E7%94%A8LooseVersion%E8%BF%9B%E8%A1%8C%E8%BD%AF%E4%BB%B6%E7%89%88%E6%9C%AC%E5%8F%B7%E6%AF%94%E5%AF%B9/">在Python中使用LooseVersion进行软件版本号比对</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>在软件版本快速迭代的过程中，经常会遇到一些接口变化问题。而如果需要兼容旧版本的话，就需要使用到版本判断的方法。判断清楚版本号属于哪一个区间，再对不同的版本号区间采取不同的算法或者执行策略。Python中预先内置的LooseVersion就是一个很好的版本号比对工具，不仅仅可以对相同位数或者相同类型的版本号进行比对，还可以进行错位的版本号比对。当然，需要注意的是，LooseVersion中对于输入的版本号类型还是有要求的，比如版本号中的每一位的开头必须是一个数字，版本号的每一位都不能以字母开头，否则无法进行比对。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2023-08-10T06:53:36.000Z" itemprop="datePublished">2023-08-10</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-在Linux上安装和使用免费版本的PyMol"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2023/06/26/%E5%9C%A8Linux%E4%B8%8A%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8%E5%85%8D%E8%B4%B9%E7%89%88%E6%9C%AC%E7%9A%84PyMol/">在Linux上安装和使用免费版本的PyMol</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>这篇文章主要介绍在Linux平台下安装开源版PyMol的简单方法。由于官方主要提供商业版的安装方法，而提供whl安装包的平台也只有Windows系统下的编译包。其实在Anaconda的库中是有提供pymol的开源版本的，这里借这篇文章顺便推广一下。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2023-06-26T01:05:17.000Z" itemprop="datePublished">2023-06-26</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-使用numpy计算分子内坐标"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2023/06/08/%E4%BD%BF%E7%94%A8numpy%E8%AE%A1%E7%AE%97%E5%88%86%E5%AD%90%E5%86%85%E5%9D%90%E6%A0%87/">使用numpy计算分子内坐标</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文主要介绍了在numpy的框架下实现的分子内坐标的计算，类似的方法可以应用于MindSpore和Pytorch、Jax等深度学习相关的框架中。分子的内坐标，可以更加直观的描述分子内的相对运动，通过键长键角和二面角这三个参数。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2023-06-08T08:53:39.000Z" itemprop="datePublished">2023-06-08</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-使用Amber计算单点能三步走"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2023/05/09/%E4%BD%BF%E7%94%A8Amber%E8%AE%A1%E7%AE%97%E5%8D%95%E7%82%B9%E8%83%BD%E4%B8%89%E6%AD%A5%E8%B5%B0/">使用Amber计算单点能三步走</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文主要介绍了如何使用Amber来计算一个给定分子构象的pdb文件的单点势能值。基本流程可以分为三个步骤：首先从力场文件中去寻找对应于输入构象的力场参数，然后配置一个执行参数文件，最后使用这些保存下来的文件来计算分子单点能。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2023-05-09T08:40:53.000Z" itemprop="datePublished">2023-05-09</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%88%86%E5%AD%90%E5%8A%A8%E5%8A%9B%E5%AD%A6/">分子动力学</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-PyCharm解决Git冲突"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2023/04/06/PyCharm%E8%A7%A3%E5%86%B3Git%E5%86%B2%E7%AA%81/">PyCharm解决Git冲突</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>使用Git工具进行异步开发的优点是非常显而易见的，在开发效率和版本管理上得到非常大的进步。当然异步开发过程中也难免会遇到一些开发冲突，比如两个人同时修改了同一个文件，那最终仓库上的版本肯定只能保留一个版本，因此在pull下来的过程中就会提示合并冲突。此时可以使用PyCharm中的专业合并冲突解决工具来进行处理，该工具首先可以在界面上列举出来所有包含冲突的文件，其次是支持diff的界面，并且可以直接在界面上进行代码修改。通过三个界面上的代码可以清晰的看到异步开发过程中的不同修改，以及冲突发生前的最后一个版本，使用起来逻辑清晰操作简单，十分推荐。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2023-04-06T01:36:34.000Z" itemprop="datePublished">2023-04-06</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-Git链接上游仓库"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2023/04/04/Git%E9%93%BE%E6%8E%A5%E4%B8%8A%E6%B8%B8%E4%BB%93%E5%BA%93/">Git链接上游仓库</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>通常来说，一个Git仓库由内部组织者和外部协作者共同维护。对于内部开发者而言，他们可以通过master-develop-feature模型进行代码开发，在仓库中创建相应的特性分支和开发分支，最后再合入到主分支供大家使用。而对于外部开发者而言，最好的方式是Fork一个仓库到自己本地，然后使用本文介绍的方法二去定期跟远程remote仓库进行同步，避免在长时间的开发周期中遇到一些冲突。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2023-04-04T08:41:22.000Z" itemprop="datePublished">2023-04-04</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
 
   
     <nav class="pagination">
-        <a class="extend prev" rel="prev" href="/page/14/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><a class="page-number" href="/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><a class="extend next" rel="next" href="/page/16/">Next</a>
+        <a class="extend prev" rel="prev" href="/page/14/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><a class="page-number" href="/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/16/">Next</a>
     </nav>
   
 </div>

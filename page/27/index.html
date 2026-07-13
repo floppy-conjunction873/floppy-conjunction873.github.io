@@ -151,7 +151,7 @@
   
     
       <article
-id="post-python3使用kivy生成安卓程序"
+id="post-配置docker的pdflatex环境"
 class="article article-type-post"
 >
 
@@ -162,11 +162,11 @@ class="article article-type-post"
 
     <div class="article-body">
     <header class="article-title">
-        <a href="/2021/04/03/python3%E4%BD%BF%E7%94%A8kivy%E7%94%9F%E6%88%90%E5%AE%89%E5%8D%93%E7%A8%8B%E5%BA%8F/">python3使用kivy生成安卓程序</a>
+        <a href="/2021/03/28/%E9%85%8D%E7%BD%AEdocker%E7%9A%84pdflatex%E7%8E%AF%E5%A2%83/">配置docker的pdflatex环境</a>
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>基于python也可以开发安卓APP，这需要使用到kivy库来进行开发，再通过buildozer来编译构建。这两个库的安装和使用方式都相对比较简单，我们推荐直接在本地的系统环境下直接部署使用，最大的困难其实在于部署的过程以及配置文件的修改，这也都是比较基础的操作了。最后我们演示了使用文本框和按钮事件，加上python的eval()函数和math数学仓库，实现了一个可以在移动端调用math库中的函数执行数学计算的简单APP，并提供了apk下载网盘地址。</p>
+        <p>为了在本地构建一个可用性强、易于部署的环境，我们选择了放弃直接安装pdflatex的方案，以及线上的overleaf的方案。这些方案各有利弊，但是综合起来看，对于个人使用的环境而言，还是在本地使用docker镜像直接部署一个tex编译环境是最方便、最人性化的。</p>
         
     </div>
     </div>
@@ -181,383 +181,7 @@ class="article article-type-post"
 <footer class="article-footer">
     <div class="article-more-info">
     <div class="article-date">
-  <time datetime="2021-04-03T14:53:43.000Z" itemprop="datePublished">2021-04-03</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-python3使用cv2对图像进行基本操作"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/04/03/python3%E4%BD%BF%E7%94%A8cv2%E5%AF%B9%E5%9B%BE%E5%83%8F%E8%BF%9B%E8%A1%8C%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">python3使用cv2对图像进行基本操作</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文介绍了使用opencv-python对输入图像进行处理的基本操作，包括图像读取、图像变换等。有了这些基础的操作支撑后，我们可以执行跟高层次的图像处理，比如常用于深度学习的卷积和池化操作，这里我们也作了简单介绍，并给出了使用示例。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-04-03T04:06:14.000Z" itemprop="datePublished">2021-04-03</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-使用python的虚拟环境virtualenv"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/04/01/%E4%BD%BF%E7%94%A8python%E7%9A%84%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83virtualenv/">使用python的虚拟环境virtualenv</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>在前面几篇博客中我们介绍过docker等容器的编程环境解决方案，但是容器作为一个系统级的隔离方案，其实更加强调的是用户间的隔离，这一点也得益其对NameSpace技术的推广和使用。但是在一部分的场景下，比如快速构造一个纯净的python环境、轻量级的操作实现不同python包的共存，容器技术虽然也可以完成，但是功能显得过于冗余，这就需要使用到本文所介绍的virtualenv这样的一个python依赖管理解决方案。文中我们介绍了virtualenv的安装与基本的使用方法，做了一遍比较完整的演示。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-04-01T13:15:19.000Z" itemprop="datePublished">2021-04-01</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-为科学计算而生的Julia——基于Manjaro-Linux的安装与入门"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/03/31/%E4%B8%BA%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97%E8%80%8C%E7%94%9F%E7%9A%84Julia%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8EManjaro-Linux%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E5%85%A5%E9%97%A8/">为科学计算而生的Julia——基于Manjaro Linux的安装与入门</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>在这篇文章中我们介绍了julia编程语言的一些基本特点，这是一门兼顾了高性能与高效开发的编程语言，而且开源免费。不仅具备有python的便捷性，还有接近于C语言的高性能特性，是一门为科学计算而生的编程语言。我们介绍了其在Manjaro Linux平台下的安装方法，及其基本使用方法，如变量定义、函数定义和调用、包的管理以及与python编程语言的协同工作。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-03-31T04:52:16.000Z" itemprop="datePublished">2021-03-31</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/Julia%E7%BC%96%E7%A8%8B/">Julia编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-Python基础之告警定义与告警抑制"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/03/30/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%91%8A%E8%AD%A6%E5%AE%9A%E4%B9%89%E4%B8%8E%E5%91%8A%E8%AD%A6%E6%8A%91%E5%88%B6/">Python基础之告警定义与告警抑制</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>告警和异常信息的定义与处理，在网络编程项目和各种实际计算的场景中都会被用到。这里我们通过两篇博客进行了比较简单的介绍，对于没有特殊要求的用户而言，按照示例中给出的样板直接修改就能够使用。更多的时候是规范的要求，我们可能需要修改异常和告警所继承的类型。同时对于异常和告警信息，我们也能够有方案去进行抑制，更加适配各种不同的场景需求。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-03-30T14:30:46.000Z" itemprop="datePublished">2021-03-30</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-Python3基础之构建setup.py"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/03/30/Python3%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%9E%84%E5%BB%BAsetup.py/">Python3基础之构建setup.py</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>一个完善的python项目，不仅需要梳理好核心代码的软件架构，还需要定义好依赖文件、编译构建文件、API接口文档、编码规范门禁等。这里我们介绍了如何用setup.py文件来完善一个最简单的python项目，这也是每一个python开源项目所必须要具备的条件。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-03-30T04:15:56.000Z" itemprop="datePublished">2021-03-30</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-Manjaro-Linux平台用pyinstaller打包python可执行文件"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/03/29/Manjaro-Linux%E5%B9%B3%E5%8F%B0%E7%94%A8pyinstaller%E6%89%93%E5%8C%85python%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6/">Manjaro Linux平台用pyinstaller打包python可执行文件</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>通过pyinstaller我们可以将一个python项目打包编译构建成一个可执行文件，然后将该可执行文件放置到一个系统路径下，使得系统可以不需要路径也能够识别到这个可执行文件，这样我们就可以仅配置一些输入文件或者命令行的入参，来运行我们的项目。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-03-29T14:44:44.000Z" itemprop="datePublished">2021-03-29</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-Python基础之异常定义"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/03/29/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%82%E5%B8%B8%E5%AE%9A%E4%B9%89/">Python基础之异常定义</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>本文中介绍了常规python中的异常的定义方法，可以在自己的python项目中定制化的实现一些异常类。在定制化的类中我们可以给打印信息加上一些醒目的颜色，用于提醒用户以促进问题的修改。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-03-29T13:55:59.000Z" itemprop="datePublished">2021-03-29</time>
-</div>
-    
-        <div class="article-category">
-        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
-        </div>
-    
-    
-    </div>
-</footer>
-
-</article>
-
-    
-  
-    
-      <article
-id="post-创建ortools的Dockerfile"
-class="article article-type-post"
->
-
-
-
-<div class="article-inner">
-    
-
-    <div class="article-body">
-    <header class="article-title">
-        <a href="/2021/03/29/%E5%88%9B%E5%BB%BAortools%E7%9A%84Dockerfile/">创建ortools的Dockerfile</a>
-    </header>
-    <div class="article-entry post-inner-html">
-        
-        <p>在本地构建基于Docker的编程环境是一个兼容性和可用性非常强的解决方案，这里我们介绍了一个使用Dockerfile来构建Docker容器镜像的简单实例。同时也用谷歌所主导的开源线性规划求解器ortools来测试这个容器化的编程环境解决方案，最终我们用ortools成功的求解了一个单背包问题，并且跟前面一篇博客中所介绍的IBM主导的cplex一样都得到了问题的最优解。</p>
-        
-    </div>
-    </div>
-
-    <div class="article-badge">
-        
-        
-    </div>
-
-</div>
-
-<footer class="article-footer">
-    <div class="article-more-info">
-    <div class="article-date">
-  <time datetime="2021-03-29T10:39:02.000Z" itemprop="datePublished">2021-03-29</time>
+  <time datetime="2021-03-28T10:52:44.000Z" itemprop="datePublished">2021-03-28</time>
 </div>
     
         <div class="article-category">
@@ -574,7 +198,7 @@ class="article article-type-post"
   
     
       <article
-id="post-在docker容器中使用cplex-python37"
+id="post-python3表格数据处理"
 class="article article-type-post"
 >
 
@@ -585,11 +209,11 @@ class="article article-type-post"
 
     <div class="article-body">
     <header class="article-title">
-        <a href="/2021/03/28/%E5%9C%A8docker%E5%AE%B9%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8cplex-python37/">在docker容器中使用cplex-python37</a>
+        <a href="/2021/03/27/python3%E8%A1%A8%E6%A0%BC%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/">python3表格数据处理</a>
     </header>
     <div class="article-entry post-inner-html">
         
-        <p>在这篇文章中我们介绍了如何使用docker去搭建一个cplex线性规划求解器的编程环境，制作完docker容器，我们也展示了如何写一个线性规划问题定义的文件，并使用cplex对给定一个背包问题的线性规划（实际上是一个二元规划问题）文件进行求解。</p>
+        <p>在这篇文章中我们介绍了三种不同的python库对表格数据进行处理，分别是xlrd、pandas和vaex，其中特别着重的强调了一下vaex的优越性能以及在大数据中的应用价值。配合一些简单的示例，我们可以初步的了解到这些库各自的特点，在实际场景中可以斟酌使用。</p>
         
     </div>
     </div>
@@ -604,11 +228,387 @@ class="article article-type-post"
 <footer class="article-footer">
     <div class="article-more-info">
     <div class="article-date">
-  <time datetime="2021-03-28T14:31:44.000Z" itemprop="datePublished">2021-03-28</time>
+  <time datetime="2021-03-27T15:44:00.000Z" itemprop="datePublished">2021-03-27</time>
 </div>
     
         <div class="article-category">
-        <a class="article-category-link" href="/categories/%E5%AE%B9%E5%99%A8/">容器</a>
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-Git基本操作流程"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/03/26/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B/">Git基本操作流程</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>在本文中我们通过一个实例来介绍了Git的基本用法，包括提交代码、远程链接以及变基等，这使得我们可以更美观更简洁的去维护我们自己的开源代码仓库。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-03-26T04:11:44.000Z" itemprop="datePublished">2021-03-26</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-python3查看文件是否存在，以及读、写与执行的属性"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/03/22/python3%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%EF%BC%8C%E4%BB%A5%E5%8F%8A%E8%AF%BB%E3%80%81%E5%86%99%E4%B8%8E%E6%89%A7%E8%A1%8C%E7%9A%84%E5%B1%9E%E6%80%A7/">python3查看文件是否存在，以及读、写与执行的属性</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文介绍了如何使用os.access的方法来判断系统文件的存在性与读、写和可执行权限等。这在日常文件操作中有着比较重要的意义，意味着我们可以先判断文件是否存在再决定是否删除系统文件，而不是直接用os.remove进行删除操作，如果有异常再进行捕获，这种的操作非常的不符合操作逻辑，而且不优雅。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-03-22T02:55:35.000Z" itemprop="datePublished">2021-03-22</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-python3使用pycuda执行简单GPU计算任务"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/03/21/python3%E4%BD%BF%E7%94%A8pycuda%E6%89%A7%E8%A1%8C%E7%AE%80%E5%8D%95GPU%E8%AE%A1%E7%AE%97%E4%BB%BB%E5%8A%A1/">python3使用pycuda执行简单GPU计算任务</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>使用GPU来进行计算，可以极大程度上的加速我们所需要计算的任务，这得益于GPU强大的自带的并行化技术。pycuda的出现，使得我们不需要手工去写GPU的C或者C++代码也可以调用GPU来进行计算，还提供了众多的python接口可以直接使用。经过测试，本文给出了一些pycuda的基本使用方法示例，以及初步的测试结果，从测试结果中我们进一步明确了pycuda的高性能特性。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-03-21T12:44:04.000Z" itemprop="datePublished">2021-03-21</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-python3使用concurrent执行多进程任务"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/03/21/python3%E4%BD%BF%E7%94%A8concurrent%E6%89%A7%E8%A1%8C%E5%A4%9A%E8%BF%9B%E7%A8%8B%E4%BB%BB%E5%8A%A1/">python3使用concurrent执行多进程任务</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>多进程技术是独立于算法任务本身的一种优化技术，通过python中的concurrent库，我们可以非常容易的实现多进程的任务，用来优化已有的算法。这里我们也给出了一些多进程配置信息的参考方案，在GPU和超算相关的领域上，都能够发挥较大的用途。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-03-21T03:28:17.000Z" itemprop="datePublished">2021-03-21</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-python3使用json、pickle和sqlite3持久化存储字典对象"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/03/20/python3%E4%BD%BF%E7%94%A8json%E3%80%81pickle%E5%92%8Csqlite3%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8%E5%AD%97%E5%85%B8%E5%AF%B9%E8%B1%A1/">python3使用json、pickle和sqlite3持久化存储字典对象</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>介绍了三种python中的持久化存储对象的解决方案，包含json、pickle和轻量级的数据库sqlite3。三种方案各有优劣，通过一些解决方案的介绍我们可以了解这些解决方案的使用方法，以及最后的总结概要中，我们也定性的给出了不同场景下适合使用的解决方案。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-03-20T04:37:14.000Z" itemprop="datePublished">2021-03-20</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/python%E7%BC%96%E7%A8%8B/">python编程</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-基于Docker的MindSpore安装与使用基础介绍"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/03/14/%E5%9F%BA%E4%BA%8EDocker%E7%9A%84MindSpore%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8%E5%9F%BA%E7%A1%80%E4%BB%8B%E7%BB%8D/">基于Docker的MindSpore安装与使用基础介绍</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文主要讲解了由华为主导的MindSpore开源AI训练框架的基本特性与容器化的安装方案，顺带也介绍了一下Docker的基本使用方法，最后用两个测试案例：Tensor的基本运算、自动微分计算来验证了MindSpore的基本特性。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-03-14T13:32:21.000Z" itemprop="datePublished">2021-03-14</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-使用python模块plotdigitizer抠取论文图片中的数据"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/03/05/%E4%BD%BF%E7%94%A8python%E6%A8%A1%E5%9D%97plotdigitizer%E6%8A%A0%E5%8F%96%E8%AE%BA%E6%96%87%E5%9B%BE%E7%89%87%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE/">使用python模块plotdigitizer抠取论文图片中的数据</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>一般需要非常专业的工具，才能够实现从论文图片中获取数据的功能，而且大部分软件的适配性还非常差。这里我们推荐一款基于python的工具plotdigitizer，可以适配全平台来使用，直接获取图像中的数据，简直是科研人员的福音。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-03-05T12:32:48.000Z" itemprop="datePublished">2021-03-05</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E5%A5%BD%E7%89%A9%E6%8E%A8%E8%8D%90/">好物推荐</a>
+        </div>
+    
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-使用pycallgraph分析python代码函数调用流程以及框架"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2021/03/01/%E4%BD%BF%E7%94%A8pycallgraph%E5%88%86%E6%9E%90python%E4%BB%A3%E7%A0%81%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B%E4%BB%A5%E5%8F%8A%E6%A1%86%E6%9E%B6/">使用pycallgraph分析python代码函数调用流程以及框架</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>本文通过一个量子计算模拟器产生随机数的案例，介绍了python函数调用关系图绘制的工具pycallgraph的安装和使用。该工具可以帮助我们更快的梳理一个全新的python软件，从调用关系和架构图来入手对一个软件的分析，会使得我们事半功倍。</p>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2021-03-01T09:40:25.000Z" itemprop="datePublished">2021-03-01</time>
+</div>
+    
+        <div class="article-category">
+        <a class="article-category-link" href="/categories/%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97/">量子计算</a>
         </div>
     
     
@@ -622,7 +622,7 @@ class="article article-type-post"
 
   
     <nav class="pagination">
-        <a class="extend prev" rel="prev" href="/page/26/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="page-number" href="/page/26/">26</a><span class="page-number current">27</span><a class="page-number" href="/page/28/">28</a><a class="page-number" href="/page/29/">29</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><a class="extend next" rel="next" href="/page/28/">Next</a>
+        <a class="extend prev" rel="prev" href="/page/26/">Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="page-number" href="/page/26/">26</a><span class="page-number current">27</span><a class="page-number" href="/page/28/">28</a><a class="page-number" href="/page/29/">29</a><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/28/">Next</a>
     </nav>
   
 </div>
